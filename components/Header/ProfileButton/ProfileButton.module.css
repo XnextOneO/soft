@@ -1,0 +1,10 @@
+.profile {
+	height: 60px;
+	padding-left: 10px;
+	
+}
+
+.profile:hover {
+	background-color: #004830;
+	cursor: pointer;
+}
