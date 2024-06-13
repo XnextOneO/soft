@@ -1,6 +1,7 @@
 import "@mantine/core/styles.css";
 import { Providers } from "../providers";
 import Header from "@/components/Header/Header";
+import "../globals.css"
 
 export const metadata = {
 	title: "IIS Беларусбанк",
@@ -17,7 +18,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 					name="viewport"
 					content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
 				/>
-				<link rel="stylesheet" href="globals.css" />
 			</head>
 			<body>
 				<Providers>

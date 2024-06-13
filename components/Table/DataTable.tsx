@@ -7,6 +7,7 @@ import {
 	Group,
 	useMantineColorScheme,
 	Checkbox,
+	Flex,
 } from "@mantine/core";
 
 const elements = [
@@ -180,7 +181,7 @@ const elements = [
 	},
 ];
 
-const DataTable = ({ height }: { height: string }) => {
+const DataTable = () => {
 	const colorScheme = useMantineColorScheme();
 
 	const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -228,44 +229,47 @@ const DataTable = ({ height }: { height: string }) => {
 	));
 
 	return (
-		<Stack align="center" h={height} gap={0}>
-			<Table.ScrollContainer minWidth="1000px" w="100%">
-				<ScrollArea maw="100%">
-					<Table
-						striped
-						highlightOnHover
-						withTableBorder
-						withColumnBorders
-					>
-						<Table.Thead pos="sticky" top={0}>
-							<Table.Tr>
-								<Table.Th w={36} miw={36}>
-									<Checkbox
-										size="xs"
-										color="#007458"
-										aria-label="Select row"
-									/>
-								</Table.Th>
-								<Table.Th w={150} miw={150}>
-									№
-								</Table.Th>
-								<Table.Th w={280} miw={280}>
-									Номер учреждения банка
-								</Table.Th>
-								<Table.Th w={760} miw={760}>
-									Наименование отчета
-								</Table.Th>
-								<Table.Th w={310} miw={310}>
-									Дата
-								</Table.Th>
-								<Table.Th w={150} miw={150}></Table.Th>
-							</Table.Tr>
-						</Table.Thead>
+		<>
+			<Table
+				style={{ borderTop: "1px solid #DFDFDF" }}
+				striped
+				highlightOnHover
+				withColumnBorders
+				miw="800px"
+			>
+				<Table.Thead top={0}>
+					<Table.Tr>
+						<Table.Th w={36} miw={36}>
+							<Checkbox
+								size="xs"
+								color="#007458"
+								aria-label="Select row"
+							/>
+						</Table.Th>
+						<Table.Th w={150} miw={150}>
+							№
+						</Table.Th>
+						<Table.Th w={280} miw={280}>
+							Номер учреждения банка
+						</Table.Th>
+						<Table.Th w={760} miw={760}>
+							Наименование отчета
+						</Table.Th>
+						<Table.Th w={310} miw={310}>
+							Дата
+						</Table.Th>
+						<Table.Th w={150} miw={150}></Table.Th>
+					</Table.Tr>
+				</Table.Thead>
+			</Table>
+			<Table.ScrollContainer minWidth="600px" w="100%">
+				<ScrollArea maw="100%" w="100%">
+					<Table striped highlightOnHover withColumnBorders>
 						<Table.Tbody>{rows}</Table.Tbody>
 					</Table>
 				</ScrollArea>
 			</Table.ScrollContainer>
-		</Stack>
+		</>
 	);
 };
 

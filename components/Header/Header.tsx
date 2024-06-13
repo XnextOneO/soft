@@ -28,9 +28,8 @@ const Header: React.FC = observer(() => {
 	useEffect(() => {
 		if (pathname === "/directories") {
 			burgerStore.setOpened(opened);
-			console.log(burgerStore.opened);
 		}
-	}, [opened]);
+	}, [burgerStore, opened, pathname]);
 
 	return (
 		<Container className={classes.headerContainer} fluid p={0}>
@@ -39,6 +38,7 @@ const Header: React.FC = observer(() => {
 					justify="center"
 					align="center"
 					className={classes.buttonContainer}
+					onClick={toggle}
 				>
 					<Burger
 						w={60}
@@ -49,13 +49,17 @@ const Header: React.FC = observer(() => {
 							alignItems: "center",
 						}}
 						opened={opened}
-						onClick={toggle}
 						aria-label="Навигация"
 					/>
 				</Flex>
 				<Group justify="space-between" w="100%" pl="md">
 					<Group gap="xs">
-						<Image src="../../favicon.png" w={30} h={30} />
+						<Image
+							src="../../favicon.png"
+							w={30}
+							h={30}
+							alt="logo"
+						/>
 						<Text
 							c="white"
 							size="24px"

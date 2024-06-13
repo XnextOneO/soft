@@ -8,3 +8,13 @@
 	background-color: #004830;
 	cursor: pointer;
 }
+
+.nickname {
+	display: block;
+}
+
+@media screen and (width < 700px) {
+	.nickname {
+		display: none;
+	}
+}

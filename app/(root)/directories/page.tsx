@@ -19,7 +19,6 @@ import classes from "./Directories.module.css";
 import DataTable from "@/components/Table/DataTable";
 import NavMenu from "@/components/NavMenu/NavMenu";
 
-
 const DirectoriesPage: React.FC = () => {
 	const breadcrumbs = [
 		{ title: "Главная страница IIS Беларусбанк", href: "/" },
@@ -32,34 +31,39 @@ const DirectoriesPage: React.FC = () => {
 	));
 
 	return (
-		<Container fluid className={classes.tableContainer} mah="100vh">
-			<Flex w="100%" h="100%" direction="row">
+		<Container
+			fluid
+			className={classes.tableContainer}
+			mah="100vh"
+			maw="100vw"
+		>
+			<Flex maw="100%" w="100%" h="100%" direction="row">
 				<NavMenu />
-				<Stack px="sm" w="100%" gap={0} h="100%" mah="100%">
+				<Stack p={0} gap={0} w="100%">
 					<Breadcrumbs
 						separator=">"
 						separatorMargin="5px"
-						py="xs"
+						p="xs"
 						style={{ borderBottom: "1px solid #DFDFDF" }}
 					>
 						{breadcrumbs}
 					</Breadcrumbs>
 
-					<Group justify="space-between" py="xs">
+					<Group
+						justify="space-between"
+						p="xs"
+						w="100%"
+						wrap="nowrap"
+					>
 						<TextInput
-							w={300}
+							w={250}
 							miw={150}
 							rightSectionPointerEvents="none"
 							rightSection={<IconSearch />}
 							placeholder="Поиск по таблице"
 						/>
-						<Group w="100%">
-							<Button
-								size="sm"
-								px="xs"
-								radius="xs"
-								color="#007458"
-							>
+						<Group gap="xs">
+							<Button w={36} p={0} radius="xs" color="#007458">
 								<svg
 									width="32"
 									height="32"
@@ -79,18 +83,17 @@ const DirectoriesPage: React.FC = () => {
 						</Group>
 					</Group>
 					{/* </Container> */}
-					<DataTable height="85%" />
-					<Container fluid px={0} w="100%">
-						<Group justify="space-between" w="100%">
-							<Text>Отображены записи 1000-1099 из 4567</Text>
-							<Pagination
-								color="#007458"
-								total={20}
-								siblings={1}
-								defaultValue={10}
-							/>
-						</Group>
-					</Container>
+					
+					<DataTable />
+					<Group justify="space-between" w="100%" p="xs" style={{borderTop: "1px solid #DFDFDF"}}>
+						<Text>Отображены записи 1000-1099 из 4567</Text>
+						<Pagination
+							color="#007458"
+							total={20}
+							siblings={1}
+							defaultValue={10}
+						/>
+					</Group>
 				</Stack>
 			</Flex>
 		</Container>

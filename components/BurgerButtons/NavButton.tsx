@@ -10,7 +10,6 @@ const NavButton = ({ children, className, ...rest }: NavButtonProps) => {
 	return (
 		<Flex
 			p="sm"
-			justify="flex-start"
 			align="center"
 			className={className}
 			{...rest}

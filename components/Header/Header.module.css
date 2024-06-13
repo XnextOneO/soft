@@ -6,6 +6,7 @@
 	width: 100%;
 	height: 60px;
 	background-color: #006040;
+	min-width: 270px;
 }
 
 .buttonContainer {

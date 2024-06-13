@@ -19,7 +19,7 @@ const ProfileButton = () => {
 					size="md"
 				/>
 
-				<Text size="md" fw={600} c="white">
+				<Text size="md" fw={600} c="white" className={classes.nickname}>
 					Иванов Иван Иванович
 				</Text>
 

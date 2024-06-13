@@ -1,5 +1,5 @@
 import "@mantine/core/styles.css";
-
+import "../globals.css"
 import { Providers } from "../providers";
 
 export const metadata = {
@@ -21,7 +21,6 @@ export default function AuthLayout({
 					name="viewport"
 					content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
 				/>
-				<link rel="stylesheet" href="../globals.css" />
 			</head>
 			<body>
 				<Providers>{children}</Providers>
