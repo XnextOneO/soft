@@ -39,7 +39,7 @@ const DirectoriesPage: React.FC = () => {
 		>
 			<Flex maw="100%" w="100%" h="100%" direction="row">
 				<NavMenu />
-				<Stack p={0} gap={0} w="100%">
+				<Stack p={0} gap={0} w="100%" style={{overflow: "hidden"}}>
 					<Breadcrumbs
 						separator=">"
 						separatorMargin="5px"

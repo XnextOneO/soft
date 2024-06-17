@@ -1,4 +1,4 @@
-import { Flex } from "@mantine/core";
+import { Flex, UnstyledButton } from "@mantine/core";
 import React from "react";
 
 interface NavButtonProps {
@@ -8,12 +8,7 @@ interface NavButtonProps {
 
 const NavButton = ({ children, className, ...rest }: NavButtonProps) => {
 	return (
-		<Flex
-			p="sm"
-			align="center"
-			className={className}
-			{...rest}
-		>
+		<Flex p="sm" align="center" className={className} {...rest}>
 			{children}
 		</Flex>
 	);

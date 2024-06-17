@@ -236,6 +236,7 @@ const DataTable = () => {
 				highlightOnHover
 				withColumnBorders
 				miw="800px"
+				maw="100%"
 			>
 				<Table.Thead top={0}>
 					<Table.Tr>

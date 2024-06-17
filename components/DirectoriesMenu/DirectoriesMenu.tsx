@@ -1,5 +1,5 @@
 import { theme } from "@/theme";
-import { Menu, ActionIcon, rem } from "@mantine/core";
+import { Menu, ActionIcon, rem, TextInput, ScrollArea } from "@mantine/core";
 import {
 	IconChevronDown,
 	IconCalendar,
@@ -7,7 +7,7 @@ import {
 	IconTrash,
 } from "@tabler/icons-react";
 import React from "react";
-import classes from "./Directoriesmenu.module.css"
+import classes from "./DirectoriesMenu.module.css";
 
 const directories = [
 	{ name: "Справочник 1" },
@@ -22,20 +22,32 @@ const directories = [
 	{ name: "Справочник 10" },
 ];
 
-const DirectoriesMenu = ({children} : {children: React.ReactNode}) => {
+const DirectoriesMenu = ({ children }: { children: React.ReactNode }) => {
+	const handleItemClick = (e: React.MouseEvent) => {
+		e.stopPropagation();
+	  };
+
 	return (
 		<Menu
-			transitionProps={{ transition: "pop" }}
+			width={450}
+			transitionProps={{ transition: "rotate-right", duration: 150 }}
 			position="right-start"
-			withinPortal
 		>
-			<Menu.Target>
-				{children}
-			</Menu.Target>
+			<Menu.Target>{children}</Menu.Target>
+
 			<Menu.Dropdown>
-				{directories.map((directory, index) => (
-					<Menu.Item key={index}>{directory.name}</Menu.Item>
-				))}
+				<Menu.Item onClick={handleItemClick}>
+					<TextInput
+						w="400px"
+						placeholder="Поиск по справочникам"
+						onClick={handleItemClick}
+					></TextInput>
+				</Menu.Item>
+				<ScrollArea h={300}>
+					{directories.map((directory, index) => (
+						<Menu.Item key={index}>{directory.name}</Menu.Item>
+					))}
+				</ScrollArea>
 			</Menu.Dropdown>
 		</Menu>
 	);
