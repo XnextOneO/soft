@@ -13,6 +13,7 @@ import {
 	Flex,
 	Stack,
 	Button,
+	useMantineColorScheme,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import classes from "./Directories.module.css";
@@ -20,12 +21,14 @@ import DataTable from "@/components/Table/DataTable";
 import NavMenu from "@/components/NavMenu/NavMenu";
 
 const DirectoriesPage: React.FC = () => {
+	const colorScheme = useMantineColorScheme();
+
 	const breadcrumbs = [
 		{ title: "Главная страница IIS Беларусбанк", href: "/" },
 		{ title: "Справочники", href: "#" },
 		{ title: "Справочник отчетов", href: "#" },
 	].map((item, index) => (
-		<Anchor c="#006040" href={item.href} key={index} size="sm">
+		<Anchor c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#006040"} href={item.href} key={index} size="sm" className={classes.breadcrumbsItem}>
 			{item.title}
 		</Anchor>
 	));

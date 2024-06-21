@@ -8,7 +8,7 @@ interface NavButtonProps {
 
 const NavButton = ({ children, className, ...rest }: NavButtonProps) => {
 	return (
-		<Flex p="sm" align="center" className={className} {...rest}>
+		<Flex align="center" className={className} {...rest}>
 			{children}
 		</Flex>
 	);

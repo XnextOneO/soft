@@ -183,8 +183,17 @@ const elements = [
 
 const DataTable = () => {
 	const colorScheme = useMantineColorScheme();
-
+	let scrollLeft;
 	const [selectedRows, setSelectedRows] = useState<number[]>([]);
+	const secondTableRef = useRef<HTMLTableElement | null>(null);
+
+	const handleSecondTableScroll = () => {
+		if (secondTableRef.current) {
+			scrollLeft = secondTableRef.current.scrollLeft;
+			// Примените значение scrollLeft к первой таблице
+			// Например, используйте CSS свойство transform: translateX(-${scrollLeft}px);
+		}
+	};
 
 	const rows = elements.map((element) => (
 		<Table.Tr
@@ -230,39 +239,43 @@ const DataTable = () => {
 
 	return (
 		<>
-			<Table
-				style={{ borderTop: "1px solid #DFDFDF" }}
-				striped
-				highlightOnHover
-				withColumnBorders
-				miw="800px"
-				maw="100%"
-			>
-				<Table.Thead top={0}>
-					<Table.Tr>
-						<Table.Th w={36} miw={36}>
-							<Checkbox
-								size="xs"
-								color="#007458"
-								aria-label="Select row"
-							/>
-						</Table.Th>
-						<Table.Th w={150} miw={150}>
-							№
-						</Table.Th>
-						<Table.Th w={280} miw={280}>
-							Номер учреждения банка
-						</Table.Th>
-						<Table.Th w={760} miw={760}>
-							Наименование отчета
-						</Table.Th>
-						<Table.Th w={310} miw={310}>
-							Дата
-						</Table.Th>
-						<Table.Th w={150} miw={150}></Table.Th>
-					</Table.Tr>
-				</Table.Thead>
-			</Table>
+			<Table.ScrollContainer minWidth="600px" w="100%">
+				<Table
+					style={{ borderTop: "1px solid #DFDFDF", transform: `translateX(-${scrollLeft}px);`}}
+					striped
+					highlightOnHover
+					withColumnBorders
+					miw="800px"
+					maw="100%"
+					ref={secondTableRef}
+					onScroll={handleSecondTableScroll}
+				>
+					<Table.Thead top={0}>
+						<Table.Tr>
+							<Table.Th w={36} miw={36}>
+								<Checkbox
+									size="xs"
+									color="#007458"
+									aria-label="Select row"
+								/>
+							</Table.Th>
+							<Table.Th w={150} miw={150}>
+								№
+							</Table.Th>
+							<Table.Th w={280} miw={280}>
+								Номер учреждения банка
+							</Table.Th>
+							<Table.Th w={760} miw={760}>
+								Наименование отчета
+							</Table.Th>
+							<Table.Th w={310} miw={310}>
+								Дата
+							</Table.Th>
+							<Table.Th w={150} miw={150}></Table.Th>
+						</Table.Tr>
+					</Table.Thead>
+				</Table>
+			</Table.ScrollContainer>
 			<Table.ScrollContainer minWidth="600px" w="100%">
 				<ScrollArea maw="100%" w="100%">
 					<Table striped highlightOnHover withColumnBorders>

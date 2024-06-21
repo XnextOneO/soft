@@ -25,10 +25,11 @@ const directories = [
 const DirectoriesMenu = ({ children }: { children: React.ReactNode }) => {
 	const handleItemClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
-	  };
+	};
 
 	return (
 		<Menu
+			radius="xs"
 			width={450}
 			transitionProps={{ transition: "rotate-right", duration: 150 }}
 			position="right-start"
@@ -36,13 +37,14 @@ const DirectoriesMenu = ({ children }: { children: React.ReactNode }) => {
 			<Menu.Target>{children}</Menu.Target>
 
 			<Menu.Dropdown>
-				<Menu.Item onClick={handleItemClick}>
-					<TextInput
-						w="400px"
-						placeholder="Поиск по справочникам"
-						onClick={handleItemClick}
-					></TextInput>
-				</Menu.Item>
+				<TextInput
+					style={{ width: "100%" }}
+					p="xs"
+					w="400px"
+					placeholder="Поиск по справочникам"
+					onClick={handleItemClick}
+				></TextInput>
+
 				<ScrollArea h={300}>
 					{directories.map((directory, index) => (
 						<Menu.Item key={index}>{directory.name}</Menu.Item>

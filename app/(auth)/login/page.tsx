@@ -68,7 +68,7 @@ const LoginPage: React.FC = () => {
 					: classes.darkContainer
 			}
 		>
-			<Card w="30%" py={70} miw={350} shadow="xl" withBorder>
+			<Card w="25%" py={70} miw={400} shadow="xl" withBorder>
 				<Group
 					gap="sm"
 					w="100%"
@@ -79,7 +79,7 @@ const LoginPage: React.FC = () => {
 					}}
 				>
 					<Group gap="xs" my={20}>
-						<Image src="../../favicon.png" w={40} h={40} />
+						<Image src="../../favicon.png" w={40} h={40} alt="IIS Logo"/>
 						<Text size="44px" fw={700}>
 							IIS
 						</Text>
