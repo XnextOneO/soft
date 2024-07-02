@@ -1,10 +1,29 @@
-import Link from 'next/link'
+"use client";
+import classes from "./NotFound.module.css";
+import { Stack, Image, Title, useMantineColorScheme } from "@mantine/core";
+// import { useRouter } from "next/navigation";
 
 export default function NotFound() {
-  return <div>
-      <h1>Not found – 404! eeeeeeeeeeeeeeeeee</h1>
-      <div>
-        <Link href="/">Go back to Home</Link>
-      </div>
-  </div>
+	// const router = useRouter();
+	const colorScheme = useMantineColorScheme();
+
+	return (
+		<>
+			<div
+				className={
+					colorScheme.colorScheme === "light"
+						? classes.notFoundContainer
+						: classes.notFoundDarkContainer
+				}
+			>
+				<Stack justify="center" align="center">
+					<Image
+						src="../../assets/error404.png"
+						alt="Picture of the author"
+					/>
+					<Title size={48} mt={48}>Страница не найдена</Title>
+				</Stack>
+			</div>
+		</>
+	);
 }

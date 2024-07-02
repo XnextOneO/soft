@@ -1,21 +1,19 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
 	Table,
 	ScrollArea,
-	Button,
-	Stack,
-	Group,
 	useMantineColorScheme,
 	Checkbox,
-	Flex,
+	Container,
 } from "@mantine/core";
+import PopoverCell from "./PopoverCell";
 
 const elements = [
 	{
 		id: 1,
 		bankNumber: 510,
 		reportName:
-			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
+			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
@@ -82,98 +80,98 @@ const elements = [
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 11,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 12,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 13,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 14,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 15,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 16,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 17,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 18,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 19,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 20,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 21,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 22,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 23,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
 		date: "Carbon",
 	},
 	{
-		id: 10,
+		id: 24,
 		bankNumber: 510,
 		reportName:
 			"Информация о Субъектах МСП, профинансированных по продукту «Стабилизационный»",
@@ -183,17 +181,24 @@ const elements = [
 
 const DataTable = () => {
 	const colorScheme = useMantineColorScheme();
-	let scrollLeft;
 	const [selectedRows, setSelectedRows] = useState<number[]>([]);
-	const secondTableRef = useRef<HTMLTableElement | null>(null);
 
-	const handleSecondTableScroll = () => {
-		if (secondTableRef.current) {
-			scrollLeft = secondTableRef.current.scrollLeft;
-			// Примените значение scrollLeft к первой таблице
-			// Например, используйте CSS свойство transform: translateX(-${scrollLeft}px);
-		}
-	};
+	const [scrollPositionTable, onScrollPositionTableChange] = useState({
+		x: 0,
+		y: 0,
+	});
+	const viewport = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		viewport.current!.scrollTo({
+			top: 0,
+			left: scrollPositionTable.x,
+			behavior: "instant"
+		});
+		// viewport.current!.getBoundingClientRect().x = scrollPositionTable.x;
+		// viewport.current!.getBoundingClientRect().y = 0;
+		// console.log(viewport.current!.getBoundingClientRect().x);
+	}, [scrollPositionTable]);
 
 	const rows = elements.map((element) => (
 		<Table.Tr
@@ -206,7 +211,7 @@ const DataTable = () => {
 					: undefined
 			}
 		>
-			<Table.Td w={36} miw={36}>
+			<Table.Td w={36} miw={36} maw={150}>
 				<Checkbox
 					size="xs"
 					color="#007458"
@@ -221,34 +226,42 @@ const DataTable = () => {
 					}
 				/>
 			</Table.Td>
-			<Table.Td w={150} miw={150}>
+			<PopoverCell w={150} miw={150} maw={150}>
 				{element.id}
-			</Table.Td>
-			<Table.Td w={280} miw={280}>
+			</PopoverCell>
+			<PopoverCell w={280} miw={280} maw={280}>
 				{element.date}
-			</Table.Td>
-			<Table.Td w={760} miw={760}>
+			</PopoverCell>
+			<PopoverCell w={760} miw={760} maw={760}>
 				{element.reportName}
-			</Table.Td>
-			<Table.Td w={310} miw={310}>
+			</PopoverCell>
+			<PopoverCell w={310} miw={310} maw={310}>
 				{element.bankNumber}
-			</Table.Td>
-			<Table.Td w={150} miw={150}></Table.Td>
+			</PopoverCell>
+			<PopoverCell w={150} miw={150} maw={150}></PopoverCell>
 		</Table.Tr>
 	));
 
 	return (
 		<>
-			<Table.ScrollContainer minWidth="600px" w="100%">
+			<ScrollArea
+				type="never"
+				w="100%"
+				h="45px"
+				m={0}
+				p={0}
+				viewportRef={viewport}
+			>
 				<Table
-					style={{ borderTop: "1px solid #DFDFDF", transform: `translateX(-${scrollLeft}px);`}}
+					style={{
+						borderTop: "1px solid #DFDFDF",
+						borderBottom: "1px solid #DFDFDF",
+					}}
 					striped
 					highlightOnHover
 					withColumnBorders
 					miw="800px"
 					maw="100%"
-					ref={secondTableRef}
-					onScroll={handleSecondTableScroll}
 				>
 					<Table.Thead top={0}>
 						<Table.Tr>
@@ -275,14 +288,17 @@ const DataTable = () => {
 						</Table.Tr>
 					</Table.Thead>
 				</Table>
-			</Table.ScrollContainer>
-			<Table.ScrollContainer minWidth="600px" w="100%">
-				<ScrollArea maw="100%" w="100%">
-					<Table striped highlightOnHover withColumnBorders>
-						<Table.Tbody>{rows}</Table.Tbody>
-					</Table>
-				</ScrollArea>
-			</Table.ScrollContainer>
+			</ScrollArea>
+			<ScrollArea
+				onScrollPositionChange={onScrollPositionTableChange}
+				miw={600}
+				w="100%"
+				className="data-wrapper"
+			>
+				<Table striped highlightOnHover withColumnBorders>
+					<Table.Tbody>{rows}</Table.Tbody>
+				</Table>
+			</ScrollArea>
 		</>
 	);
 };

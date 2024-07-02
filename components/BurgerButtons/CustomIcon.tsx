@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface IconProps {
     colorScheme: string;
@@ -6,6 +6,12 @@ interface IconProps {
   }
 
 const CustomIcon = ({ colorScheme, path } : IconProps) => {
+	const [iconColorState, setIconColorState] = useState<string>("");
+  useEffect(() => {
+      colorScheme === 'dark' ? setIconColorState('white') : setIconColorState('#333333')
+  }, [colorScheme])
+
+
   return (
     <svg
       width="60"
@@ -14,7 +20,7 @@ const CustomIcon = ({ colorScheme, path } : IconProps) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d={path} fill={colorScheme === 'dark' ? 'white' : '#333333'} />
+      <path d={path} fill={iconColorState} />
     </svg>
   );
 }

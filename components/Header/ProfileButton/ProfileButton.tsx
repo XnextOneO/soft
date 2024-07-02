@@ -10,6 +10,7 @@ const ProfileButton = () => {
 	return (
 		<UnstyledButton
 			className={classes.profile}
+			px={20}
 			onClick={() => router.push("/login")}
 		>
 			<Group>

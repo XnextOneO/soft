@@ -38,9 +38,8 @@ const DirectoriesMenu = ({ children }: { children: React.ReactNode }) => {
 
 			<Menu.Dropdown>
 				<TextInput
-					style={{ width: "100%" }}
 					p="xs"
-					w="400px"
+					w="100%"
 					placeholder="Поиск по справочникам"
 					onClick={handleItemClick}
 				></TextInput>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import classes from "../Auth.module.css";
 
@@ -13,6 +13,7 @@ import {
 	Anchor,
 	Card,
 	useMantineColorScheme,
+	Loader,
 } from "@mantine/core";
 import {
 	IconAt,
@@ -24,6 +25,7 @@ import {
 const LoginPage: React.FC = () => {
 	const router = useRouter();
 	const colorScheme = useMantineColorScheme();
+	const [backgroundState, setBackgroundState] = useState<string>("");
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -60,14 +62,20 @@ const LoginPage: React.FC = () => {
 		setIsLoginClicked(false);
 	};
 
+	useEffect(() => {
+		colorScheme.colorScheme === "light"
+			? setBackgroundState(classes.authContainer)
+			: setBackgroundState(classes.darkContainer);
+	}, [colorScheme.colorScheme]);
+
+	if(!backgroundState) {
+		return (
+			<Loader color="green"/>
+		)
+	}
+
 	return (
-		<div
-			className={
-				colorScheme.colorScheme === "light"
-					? classes.authContainer
-					: classes.darkContainer
-			}
-		>
+		<div className={backgroundState}>
 			<Card w="25%" py={70} miw={400} shadow="xl" withBorder>
 				<Group
 					gap="sm"
@@ -79,7 +87,12 @@ const LoginPage: React.FC = () => {
 					}}
 				>
 					<Group gap="xs" my={20}>
-						<Image src="../../favicon.png" w={40} h={40} alt="IIS Logo"/>
+						<Image
+							src="../../favicon.png"
+							w={40}
+							h={40}
+							alt="IIS Logo"
+						/>
 						<Text size="44px" fw={700}>
 							IIS
 						</Text>
@@ -128,7 +141,9 @@ const LoginPage: React.FC = () => {
 							Войти
 						</Button>
 					</Group>
-					<Text c="dimmed" size="sm">© ОАО «АСБ Беларусбанк», 2024</Text>
+					<Text c="dimmed" size="sm">
+						© ОАО «АСБ Беларусбанк», 2024
+					</Text>
 				</Group>
 			</Card>
 		</div>

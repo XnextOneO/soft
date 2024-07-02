@@ -3,7 +3,6 @@
 import React, { createContext } from "react";
 import { MantineProvider } from "@mantine/core";
 import { theme } from "../theme";
-import Header from "../components/Header/Header";
 import BurgerStore from "../store/burgerStore";
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 
