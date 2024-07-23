@@ -1,5 +1,15 @@
 "use client";
-import { Title, Text, Anchor, Button, Menu, rem, Avatar } from "@mantine/core";
+import {
+	Title,
+	Text,
+	Anchor,
+	Button,
+	Menu,
+	rem,
+	Avatar,
+	Container,
+	Group,
+} from "@mantine/core";
 import classes from "./Welcome.module.css";
 import {
 	IconSettings,
@@ -10,89 +20,19 @@ import {
 	IconTrash,
 } from "@tabler/icons-react";
 import NavButton from "../BurgerButtons/NavButton";
+import Link from "next/link";
 
 export function Welcome() {
 	return (
 		<>
-			<Title className={classes.title} ta="center" mt={100}>
-				Hello World
+			<Title className={classes.title} ta="center" mt={50}>
+				Добро пожаловать
 			</Title>
-			<Menu shadow="md" width={200}>
-				<Menu.Target>
-					<Button w={250}>
-						<Avatar />
-						<Text ml={10}>Справочники</Text>
-					</Button>
-				</Menu.Target>
-
-				<Menu.Dropdown>
-					<Menu.Label>Application</Menu.Label>
-					<Menu.Item
-						leftSection={
-							<IconSettings
-								style={{ width: rem(14), height: rem(14) }}
-							/>
-						}
-					>
-						Settings
-					</Menu.Item>
-					<Menu.Item
-						leftSection={
-							<IconMessageCircle
-								style={{ width: rem(14), height: rem(14) }}
-							/>
-						}
-					>
-						Messages
-					</Menu.Item>
-					<Menu.Item
-						leftSection={
-							<IconPhoto
-								style={{ width: rem(14), height: rem(14) }}
-							/>
-						}
-					>
-						Gallery
-					</Menu.Item>
-					<Menu.Item
-						leftSection={
-							<IconSearch
-								style={{ width: rem(14), height: rem(14) }}
-							/>
-						}
-						rightSection={
-							<Text size="xs" c="dimmed">
-								⌘K
-							</Text>
-						}
-					>
-						Search
-					</Menu.Item>
-
-					<Menu.Divider />
-
-					<Menu.Label>Danger zone</Menu.Label>
-					<Menu.Item
-						leftSection={
-							<IconArrowsLeftRight
-								style={{ width: rem(14), height: rem(14) }}
-							/>
-						}
-					>
-						Transfer my data
-					</Menu.Item>
-					<Menu.Item
-						color="red"
-						leftSection={
-							<IconTrash
-								style={{ width: rem(14), height: rem(14) }}
-							/>
-						}
-					>
-						Delete my account
-					</Menu.Item>
-				</Menu.Dropdown>
-			</Menu>
+			<Group w="100%" justify="center">
+				<Link href="/directories">
+					<Button color="#006040">Справочники</Button>
+				</Link>
+			</Group>
 		</>
 	);
 }

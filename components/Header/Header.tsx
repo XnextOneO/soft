@@ -26,7 +26,7 @@ const Header: React.FC = observer(() => {
 	const pathname = usePathname();
 
 	useEffect(() => {
-		if (pathname === "/directories") {
+		if (pathname.includes("/directories")) {
 			burgerStore.setOpened(opened);
 		}
 	}, [burgerStore, opened, pathname]);

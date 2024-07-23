@@ -1,6 +1,6 @@
 import { Modal, Button, Group, Text, rem } from "@mantine/core";
-import { useRef } from "react";
-import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
+import { useRef, useState } from "react";
+import { Dropzone, FileWithPath, MIME_TYPES } from "@mantine/dropzone";
 import { IconCloudUpload, IconX, IconDownload } from "@tabler/icons-react";
 
 const UpdateTableModal = ({
@@ -11,15 +11,53 @@ const UpdateTableModal = ({
 	close: () => void;
 }) => {
 	const openRef = useRef<() => void>(null);
+	const [file, setFile] = useState<File | null>(null);
+
+	// const uploadFiles = async () => {
+	// 	const formData = new FormData();
+
+	// 	const boundary = "blob_boundary";
+	// 	const config = {
+	// 		headers: {
+	// 			"Content-Type": `multipart/form-data; boundary=${boundary}`,
+	// 		},
+	// 	};
+	// 	if (!file) {
+	// 		return;
+	// 	}
+	// 	try {
+	// 		formData.append(`file`, file);
+
+	// 		const data = await uploadFile(formData, config);
+
+	// 		if (data) {
+	// 			console.log(data);
+	// 		}
+	// 	} catch (err: any) {
+	// 		console.error(err.message);
+	// 	}
+	// };
+
 	return (
-		<Modal opened={opened} onClose={close} title="Обновить таблицу">
+		<Modal
+			opened={opened}
+			onClose={close}
+			title="Обновить таблицу"
+			overlayProps={{
+				backgroundOpacity: 0.55,
+				blur: 3,
+			}}
+			centered
+		>
 			<Dropzone
 				openRef={openRef}
-				onDrop={() => {}}
+				onDrop={(file) => {
+					setFile(file[0]);
+				}}
 				// className={classes.dropzone}
 				radius="md"
-				accept={[MIME_TYPES.pdf]}
-				maxSize={30 * 1024 ** 2}
+				// accept={[MIME_TYPES.]}
+				// maxSize={30 * 1024 ** 2}
 			>
 				<div style={{ pointerEvents: "none" }}>
 					<Group justify="center">
@@ -45,20 +83,21 @@ const UpdateTableModal = ({
 						</Dropzone.Idle>
 					</Group>
 
-					<Text ta="center" fw={700} fz="lg" mt="xl">
-						<Dropzone.Accept>Drop files here</Dropzone.Accept>
-						<Dropzone.Reject>
-							Pdf file less than 30mb
-						</Dropzone.Reject>
-						<Dropzone.Idle>Upload resume</Dropzone.Idle>
+					<Text ta="center" fw={700} fz="lg" mt="md">
+						<Dropzone.Accept>Поместите файл сюда</Dropzone.Accept>
+						<Dropzone.Reject>XML файл</Dropzone.Reject>
+						<Dropzone.Idle>Обновить таблицу</Dropzone.Idle>
 					</Text>
-					<Text ta="center" fz="sm" mt="xs" c="dimmed">
-						Drag&apos;n&apos;drop files here to upload. We can
-						accept only <i>.pdf</i> files that are less than 30mb in
-						size.
+					<Text ta="center" fz="sm" my="md" c="dimmed">
+						Перетащите в данную область файл справочника.
 					</Text>
 				</div>
 			</Dropzone>
+			<Group justify="center">
+				<Button color="#006040">
+					Отправить на загрузку
+				</Button>
+			</Group>
 		</Modal>
 	);
 };

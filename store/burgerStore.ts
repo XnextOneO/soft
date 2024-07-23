@@ -1,12 +1,6 @@
 import { makeAutoObservable } from "mobx";
 
-// export interface GenreInterface {
-//     id: string;
-//     genre: string;
-// }
-
 export default class BurgerStore {
-	// private _genres: GenreInterface[] = [];
 	private _opened: Boolean = false;
 
 	constructor() {
@@ -20,12 +14,4 @@ export default class BurgerStore {
 	get opened(): Boolean {
 		return this._opened;
 	}
-
-	// setGenres(genres: GenreInterface[]) {
-	//     this._genres = genres;
-	// }
-
-	// get genres(): GenreInterface[] {
-	//     return this._genres;
-	// }
 }

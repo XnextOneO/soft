@@ -7,7 +7,7 @@ import {
 	Flex,
 } from "@mantine/core";
 import { observer } from "mobx-react-lite";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CustomIcon from "../BurgerButtons/CustomIcon";
 import NavButton from "../BurgerButtons/NavButton";
 
@@ -19,7 +19,7 @@ const NavMenu = observer(() => {
 	const { burgerStore } = useContext(Context);
 	const colorScheme = useMantineColorScheme();
 
-	const [clicked, setClicked] = useState(false);
+	const [active, setActive] = useState(false);
 
 	return (
 		<>
@@ -29,14 +29,22 @@ const NavMenu = observer(() => {
 					gap={0}
 					style={{ borderRight: "1px solid #DFDFDF" }}
 				>
-					<DirectoriesMenu>
+					<DirectoriesMenu onOpen={setActive}>
 						<UnstyledButton
 							onClick={() => {
-								setClicked(!clicked);
+								setActive(!active);
 							}}
 						>
-							<NavButton className={classes.navIcon} w={250}>
+							<NavButton
+								className={
+									active
+										? classes.navIconActive
+										: classes.navIcon
+								}
+								w={250}
+							>
 								<CustomIcon
+									active={active}
 									colorScheme={colorScheme.colorScheme}
 									path="M16.4444 5.22223H8.9L7.61667 3.45556C7.51323 3.31401 7.37776 3.19894 7.22134 3.11976C7.06492 3.04059 6.89198 2.99955 6.71667 3H3.11111C2.81643 3 2.53381 3.11707 2.32544 3.32544C2.11706 3.53381 2 3.81643 2 4.11111V16.3333C2 16.628 2.11706 16.9106 2.32544 17.119C2.53381 17.3274 2.81643 17.4444 3.11111 17.4444H16.4444C16.7391 17.4444 17.0217 17.3274 17.2301 17.119C17.4385 16.9106 17.5556 16.628 17.5556 16.3333V6.33334C17.5556 6.03865 17.4385 5.75604 17.2301 5.54766C17.0217 5.33929 16.7391 5.22223 16.4444 5.22223ZM3.11111 6.33334V4.11111H6.71667L8.22778 6.33334H3.11111Z"
 								/>
@@ -55,14 +63,22 @@ const NavMenu = observer(() => {
 				</Stack>
 			) : (
 				<Stack gap={0} style={{ borderRight: "1px solid #DFDFDF" }}>
-					<DirectoriesMenu>
+					<DirectoriesMenu onOpen={setActive}>
 						<UnstyledButton
 							onClick={() => {
-								setClicked(!clicked);
+								setActive(!active);
 							}}
 						>
-							<NavButton className={classes.navIcon} w={60}>
+							<NavButton
+								className={
+									active
+										? classes.navIconActive
+										: classes.navIcon
+								}
+								w={60}
+							>
 								<CustomIcon
+									active={active}
 									colorScheme={colorScheme.colorScheme}
 									path="M16.4444 5.22223H8.9L7.61667 3.45556C7.51323 3.31401 7.37776 3.19894 7.22134 3.11976C7.06492 3.04059 6.89198 2.99955 6.71667 3H3.11111C2.81643 3 2.53381 3.11707 2.32544 3.32544C2.11706 3.53381 2 3.81643 2 4.11111V16.3333C2 16.628 2.11706 16.9106 2.32544 17.119C2.53381 17.3274 2.81643 17.4444 3.11111 17.4444H16.4444C16.7391 17.4444 17.0217 17.3274 17.2301 17.119C17.4385 16.9106 17.5556 16.628 17.5556 16.3333V6.33334C17.5556 6.03865 17.4385 5.75604 17.2301 5.54766C17.0217 5.33929 16.7391 5.22223 16.4444 5.22223ZM3.11111 6.33334V4.11111H6.71667L8.22778 6.33334H3.11111Z"
 								/>

@@ -5,13 +5,16 @@ import { MantineProvider } from "@mantine/core";
 import { theme } from "../theme";
 import BurgerStore from "../store/burgerStore";
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
+import DirectoriesStore from "@/store/directoriesStore";
 
 interface AppContextType {
 	burgerStore: BurgerStore;
+	directoriesStore: DirectoriesStore;
 }
 
 export const Context = createContext<AppContextType>({
 	burgerStore: new BurgerStore(),
+	directoriesStore: new DirectoriesStore(),
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -19,6 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 		<Context.Provider
 			value={{
 				burgerStore: new BurgerStore(),
+				directoriesStore: new DirectoriesStore(),
 			}}
 		>
 			<MantineProvider theme={theme}>
