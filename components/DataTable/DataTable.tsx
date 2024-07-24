@@ -1,153 +1,215 @@
-import { useState } from "react";
+import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
+
 import {
-	Table,
-	ScrollArea,
-	useMantineColorScheme,
-	Checkbox,
+	MouseEventHandler,
+	useCallback,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
+import {
+	MantineReactTable,
+	MRT_ShowHideColumnsButton,
+	MRT_ToggleFiltersButton,
+	useMantineReactTable,
+	type MRT_ColumnDef,
+} from "mantine-react-table";
+import { getNsiDirectory } from "@/utils/api/books/nsi/nsiDirectories";
+import { observer } from "mobx-react-lite";
+import { Context } from "@/app/providers";
+import {
 	Text,
+	Button,
+	Group,
+	Pagination,
+	Flex,
+	TextInput,
 } from "@mantine/core";
+import classes from "./DataTable.module.css";
+import { IconSearch } from "@tabler/icons-react";
 import PopoverCell from "./PopoverCell";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { DataGridPremium } from "@mui/x-data-grid-premium";
 
-const DataTable = ({ data }: { data: any }) => {
-	const colorScheme = useMantineColorScheme();
-	const [selectedRows, setSelectedRows] = useState<number[]>([]);
+const DataTable = observer(
+	({
+		slug,
+		onOpen,
+	}: {
+		slug: string;
+		onOpen: MouseEventHandler<HTMLButtonElement>;
+	}) => {
+		const [page, setPage] = useState<number>(1);
+		const [size, setSize] = useState<number>(20);
+		const [data, setData] = useState<[]>([]);
+		const { directoriesStore } = useContext(Context);
 
-	if (!data) {
-		return;
-	}
+		const findDirectory = useCallback(
+			(slug: string) => {
+				return directoriesStore.nsiDirectories.find(
+					(dir) => dir.link === "/" + slug
+				);
+			},
+			[directoriesStore.nsiDirectories]
+		);
 
-	// const rows = data.map((element: any) => (
-	// 	<Table.Tr
-	// 		key={element.id}
-	// 		bg={
-	// 			selectedRows.includes(element.id)
-	// 				? colorScheme.colorScheme === "dark"
-	// 					? "#3F6846"
-	// 					: "#D3F9D9"
-	// 				: undefined
-	// 		}
-	// 	>
-	// 		<Table.Td w={36} miw={36} maw={150}>
-	// 			<Checkbox
-	// 				size="xs"
-	// 				color="#007458"
-	// 				aria-label="Select row"
-	// 				checked={selectedRows.includes(element.id)}
-	// 				onChange={(event) =>
-	// 					setSelectedRows(
-	// 						event.currentTarget.checked
-	// 							? [...selectedRows, element.id]
-	// 							: selectedRows.filter((id) => id !== element.id)
-	// 					)
-	// 				}
-	// 			/>
-	// 		</Table.Td>
+		const getColumnNames = useCallback(
+			(slug: string) => {
+				const directory = findDirectory(slug);
+				return directory ? directory.columns : {};
+			},
+			[findDirectory]
+		);
 
-	// 		{Object.keys(element).map((key) => (
-	// 			<PopoverCell key={key} maw={800}>
-	// 				{element[key]}
-	// 			</PopoverCell>
-	// 		))}
-	// 	</Table.Tr>
-	// ));
+		useEffect(() => {
+			const fetchData = async () => {
+				const response = await getNsiDirectory(slug, page - 1, size);
+				const columnNames = getColumnNames(slug);
+				const interpretedData = response.map((item: Object) => {
+					let newItem: Object = {};
+					for (let key in item) {
+						if (key !== "isDelete") {
+							newItem[columnNames[key] || key] = item[key];
+						}
+						if (key === "data" || key === "additionDate") {
+							const date = new Date(item[key]);
+							newItem[columnNames[key] || key] =
+								date.toLocaleString();
+						}
+					}
+					return newItem;
+				});
+				setData(interpretedData);
+			};
+			fetchData();
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [slug, page, size]);
 
-	const columnsMap = new Map();
+		const columnsMap = new Map();
 
-	data.forEach((element: {}) => {
-		Object.keys(element).forEach((key) => {
-			columnsMap.set(key, true);
+		data.forEach((element: {}) => {
+			Object.keys(element).forEach((key) => {
+				columnsMap.set(key, true);
+			});
 		});
-	});
 
-	const rows = data.map((item: Object, index: number) => ({
-		id: index,
-		...item
-	}));
+		const columns: MRT_ColumnDef[] = data
+			? Array.from(columnsMap.keys()).map((key) => {
+					return {
+						accessorKey: key,
+						header: key,
+						Cell: ({ cell }: { cell: any }) => (
+							<PopoverCell>{cell.getValue()}</PopoverCell>
+							// <>{cell.getValue()}</>
+						),
+						// size: {key.length}
+					};
+				})
+			: [];
 
-	// const columns = Array.from(columnsMap.keys()).map((key) => (
-	// 	<Table.Th key={key} miw={150} maw={700}>
-	// 		<Text fw={600} size="sm">
-	// 			{key}
-	// 		</Text>
-	// 	</Table.Th>
-	// ));
-
-	// const columns: GridColDef[] = [
-	// 	{ field: 'id', headerName: 'ID', width: 70 },
-	// 	{ field: 'firstName', headerName: 'First name', width: 130 },
-	// 	{ field: 'lastName', headerName: 'Last name', width: 130 },
-	// 	{
-	// 	  field: 'age',
-	// 	  headerName: 'Age',
-	// 	  type: 'number',
-	// 	  width: 90,
-	// 	},
-	// 	{
-	// 	  field: 'fullName',
-	// 	  headerName: 'Full name',
-	// 	  description: 'This column has a value getter and is not sortable.',
-	// 	  sortable: false,
-	// 	  width: 160,
-	// 	  valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-	// 	},
-	//   ];
-
-	const columns: GridColDef[] = Array.from(columnsMap.keys()).map((key) => {
-		return {
-			field: key,
-			headerName: key,
-			minWidth: 150,
-			maxWidth: 700
-		};
-	});
-
-	console.log(columns);
-	console.log(data);
-
-	return (
-		<>
-			{/* <ScrollArea w="100%" m={0} p={0}>
-				<Table
-					style={{
-						borderTop: "1px solid #DFDFDF",
-						borderBottom: "1px solid #DFDFDF",
-					}}
-					striped
-					highlightOnHover
-					withColumnBorders
-					miw="800px"
-					maw="100%"
+		const table = useMantineReactTable({
+			columns,
+			data,
+			enablePagination: false,
+			enableGlobalFilterModes: true,
+			enableRowSelection: true,
+			enableStickyHeader: true,
+			enableBottomToolbar: true,
+			enableTopToolbar: false,
+			enableDensityToggle: false,
+			localization: MRT_Localization_RU,
+			enableColumnResizing: true,
+			initialState: { density: "xs", showGlobalFilter: true },
+			mantineTableContainerProps: { className: classes.tableWithToolbar },
+			mantineTableProps: {
+				striped: "even",
+				withColumnBorders: true,
+				withTableBorder: true,
+			},
+			// mantineTableHeadCellProps: {
+			// 	display: "flex",
+			// 	width: "100%",
+			// 	style: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}
+			// },
+			layoutMode: "grid",
+			defaultColumn: {
+				// minSize: 40,
+				// maxSize: 200,
+				// size: 250,
+			},
+			renderBottomToolbarCustomActions: () => (
+				<Group
+					justify="space-between"
+					w="100%"
+					p="xs"
+					style={{ borderTop: "1px solid #DFDFDF" }}
 				>
-					<Table.Thead top={0}>
-						<Table.Tr>
-							<Table.Th w={36} miw={36}>
-								<Checkbox
-									size="xs"
-									color="#007458"
-									aria-label="Select row"
-								/>
-							</Table.Th>
-							{columns}
-						</Table.Tr>
-					</Table.Thead>
-					<Table.Tbody>{rows}</Table.Tbody>
-				</Table>
-			</ScrollArea> */}
-			<DataGridPremium
-				rows={rows}
-				columns={columns}
-				// initialState={{
-				// 	pagination: {
-				// 		paginationModel: { page: 0, pageSize: 20 },
-				// 	},
-				// }}
-				// pageSizeOptions={[5, 10]}
-				checkboxSelection
-			/>
-		</>
-	);
-};
+					<Text>Отображены записи 1000-1099 из ???</Text>
+
+					<Pagination
+						color="#007458"
+						total={20}
+						siblings={1}
+						defaultValue={page}
+						onChange={setPage}
+					/>
+				</Group>
+			),
+		});
+
+		return (
+			<>
+				<Flex
+					style={{
+						borderRadius: "4px",
+						flexDirection: "row",
+						gap: "16px",
+						justifyContent: "space-between",
+						padding: "10px 10px",
+						"@media max-width: 768px": {
+							flexDirection: "column",
+						},
+					}}
+				>
+					<Group gap="xs">
+						<Button w={36} p={0} radius="xs" color="#007458">
+							<svg
+								width="32"
+								height="32"
+								viewBox="0 0 32 32"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M24.0734 13.8074V9.08044C24.0734 8.67834 23.5909 8.48175 23.3139 8.76769L21.7233 10.3582C20.8863 9.52117 19.8749 8.87897 18.7613 8.47739C17.6478 8.07582 16.4593 7.92476 15.2807 8.03497C11.5366 8.37452 8.4538 11.3859 8.04276 15.1299C7.82548 17.2292 8.44217 19.3298 9.75979 20.9786C11.0774 22.6273 12.9903 23.692 15.0859 23.9429C17.1815 24.1939 19.2917 23.611 20.9614 22.32C22.631 21.029 23.7263 19.1334 24.0108 17.0422C24.0734 16.506 23.6534 16.0414 23.1173 16.0414C22.6705 16.0414 22.2952 16.372 22.2416 16.8098C21.8573 19.9284 19.1677 22.341 15.9419 22.2963C12.6268 22.2517 9.8299 19.4548 9.77628 16.1307C9.72267 12.6458 12.5553 9.78636 16.0313 9.78636C17.7559 9.78636 19.3196 10.4923 20.4544 11.6182L18.5869 13.4857C18.3009 13.7717 18.4975 14.2542 18.8996 14.2542H23.6266C23.8768 14.2542 24.0734 14.0576 24.0734 13.8074Z"
+									fill="white"
+								></path>
+							</svg>
+						</Button>
+						<Button
+							color="#007458"
+							size="sm"
+							radius="xs"
+							onClick={onOpen}
+						>
+							Обновить таблицу
+						</Button>
+					</Group>
+
+					<Flex gap="xs" align="center">
+						<TextInput
+							w={250}
+							miw={150}
+							rightSectionPointerEvents="none"
+							rightSection={<IconSearch />}
+							placeholder="Поиск по таблице"
+						/>
+						<MRT_ToggleFiltersButton table={table} />
+						<MRT_ShowHideColumnsButton table={table} />
+					</Flex>
+				</Flex>
+				<MantineReactTable table={table} />
+			</>
+		);
+	}
+);
 
 export default DataTable;

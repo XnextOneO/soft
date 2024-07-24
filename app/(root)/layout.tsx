@@ -1,4 +1,8 @@
-import "@mantine/core/styles.css";
+import '@mantine/core/styles.css'; 
+import '@mantine/dates/styles.css'; 
+import 'mantine-react-table/styles.css';
+
+
 import { Providers } from "../providers";
 import Header from "@/components/Header/Header";
 import "../globals.css"

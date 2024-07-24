@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Text } from "@mantine/core";
+import { Card, Container, Stack, Text } from "@mantine/core";
 import classes from "./Directories.module.css";
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
@@ -18,13 +18,31 @@ const DirectoriesPage = observer(() => {
 				mah="100vh"
 				maw="100vw"
 			>
-				{directoriesStore.nsiDirectories.map((dir, index) => (
-					<Text key={index}>
-						<Link style={{textDecoration: "none"}} href={"/directories/" + dir.link}>
-							{dir.name}
+				<Stack
+					my={20}
+					gap="sm"
+					style={{
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+					}}
+				>
+					{directoriesStore.nsiDirectories.map((dir, index) => (
+						<Link
+							key={index}
+							style={{
+								width: '50%',
+								textDecoration: "none",
+								color: "black",
+							}}
+							href={"/directories/" + dir.link}
+						>
+							<Card withBorder>
+								{dir.name}
+							</Card>
 						</Link>
-					</Text>
-				))}
+					))}
+				</Stack>
 			</Container>
 		</>
 	);
