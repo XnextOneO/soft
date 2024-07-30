@@ -2,41 +2,44 @@ import { Modal, Button, Group, Text, rem } from "@mantine/core";
 import { useRef, useState } from "react";
 import { Dropzone, FileWithPath, MIME_TYPES } from "@mantine/dropzone";
 import { IconCloudUpload, IconX, IconDownload } from "@tabler/icons-react";
+import { uploadDirectory } from "@/utils/api/books/directoryAPI";
 
 const UpdateTableModal = ({
+	link,
 	opened,
 	close,
 }: {
+	link: string,
 	opened: boolean;
 	close: () => void;
 }) => {
 	const openRef = useRef<() => void>(null);
 	const [file, setFile] = useState<File | null>(null);
 
-	// const uploadFiles = async () => {
-	// 	const formData = new FormData();
+	const uploadFiles = async () => {
+		const formData = new FormData();
 
-	// 	const boundary = "blob_boundary";
-	// 	const config = {
-	// 		headers: {
-	// 			"Content-Type": `multipart/form-data; boundary=${boundary}`,
-	// 		},
-	// 	};
-	// 	if (!file) {
-	// 		return;
-	// 	}
-	// 	try {
-	// 		formData.append(`file`, file);
+		const boundary = "blob_boundary";
+		const config = {
+			headers: {
+				"Content-Type": `multipart/form-data; boundary=${boundary}`,
+			},
+		};
+		if (!file) {
+			return;
+		}
+		try {
+			formData.append(`file`, file);
 
-	// 		const data = await uploadFile(formData, config);
-
-	// 		if (data) {
-	// 			console.log(data);
-	// 		}
-	// 	} catch (err: any) {
-	// 		console.error(err.message);
-	// 	}
-	// };
+			const data = await uploadDirectory(link, formData, config);
+			close()
+			if (data) {
+				console.log(data);
+			}
+		} catch (err: any) {
+			console.error(err.message);
+		}
+	};
 
 	return (
 		<Modal
@@ -45,7 +48,7 @@ const UpdateTableModal = ({
 			title="Обновить таблицу"
 			overlayProps={{
 				backgroundOpacity: 0.55,
-				blur: 3,
+				// blur: 3,
 			}}
 			centered
 		>
@@ -54,10 +57,7 @@ const UpdateTableModal = ({
 				onDrop={(file) => {
 					setFile(file[0]);
 				}}
-				// className={classes.dropzone}
 				radius="md"
-				// accept={[MIME_TYPES.]}
-				// maxSize={30 * 1024 ** 2}
 			>
 				<div style={{ pointerEvents: "none" }}>
 					<Group justify="center">
@@ -85,7 +85,7 @@ const UpdateTableModal = ({
 
 					<Text ta="center" fw={700} fz="lg" mt="md">
 						<Dropzone.Accept>Поместите файл сюда</Dropzone.Accept>
-						<Dropzone.Reject>XML файл</Dropzone.Reject>
+						<Dropzone.Reject>Неправильный файл</Dropzone.Reject>
 						<Dropzone.Idle>Обновить таблицу</Dropzone.Idle>
 					</Text>
 					<Text ta="center" fz="sm" my="md" c="dimmed">
@@ -94,7 +94,7 @@ const UpdateTableModal = ({
 				</div>
 			</Dropzone>
 			<Group justify="center">
-				<Button color="#006040">
+				<Button color="#006040" onClick={uploadFiles}>
 					Отправить на загрузку
 				</Button>
 			</Group>

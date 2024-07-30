@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext } from "react";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, useMantineColorScheme } from "@mantine/core";
 import { theme } from "../theme";
 import BurgerStore from "../store/burgerStore";
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
@@ -18,6 +18,7 @@ export const Context = createContext<AppContextType>({
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {
+	
 	return (
 		<Context.Provider
 			value={{

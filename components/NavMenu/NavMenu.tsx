@@ -1,3 +1,4 @@
+'use client'
 import burgerStore from "@/store/burgerStore";
 import {
 	Stack,
@@ -28,6 +29,7 @@ const NavMenu = observer(() => {
 					w={250}
 					gap={0}
 					style={{ borderRight: "1px solid #DFDFDF" }}
+					h="100%"
 				>
 					<DirectoriesMenu onOpen={setActive}>
 						<UnstyledButton

@@ -1,7 +1,8 @@
-import { Flex, UnstyledButton } from "@mantine/core";
+import { Flex, MantineStyleProps, UnstyledButton } from "@mantine/core";
 import React from "react";
 
 interface NavButtonProps {
+	w: number | string; 
 	className?: string;
 	children: React.ReactNode;
 }

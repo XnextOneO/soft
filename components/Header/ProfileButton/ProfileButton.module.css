@@ -11,7 +11,7 @@
 	display: block;
 }
 
-@media screen and (width < 700px) {
+@media screen and (width <= 700px) {
 	.nickname {
 		display: none;
 	}

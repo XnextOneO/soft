@@ -11,7 +11,7 @@ export default class DirectoriesStore {
 	private _nsiDirectories: IDirectory[] = [
 		{
 			name: "Справочник кодов категории назначения перевода",
-			link: "/transfer-destination-category-code",
+			link: "nsi/transfer-destination-category-code",
 			columns: {
 				code: "Код назначения платежа",
 				name: "Наименование кода назначения платежа",
@@ -21,7 +21,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник кодов идентификации организации",
-			link: "/organization-identification-code",
+			link: "nsi/organization-identification-code",
 			columns: {
 				code: "Код идентификации организации",
 				name: "Наименование кода идентификации организации",
@@ -31,7 +31,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник кодов отмены перевода",
-			link: "/transfer-cancellation-code",
+			link: "nsi/transfer-cancellation-code",
 			columns: {
 				code: "Код отмены перевода",
 				name: "Наименование кода отмены перевода",
@@ -41,7 +41,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник кодов статусов перевода",
-			link: "/transfer-status-code",
+			link: "nsi/transfer-status-code",
 			columns: {
 				code: "Код статуса перевода",
 				name: "Наименование кода статуса перевода",
@@ -51,7 +51,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник балансовых счетов Национального банка",
-			link: "/balance-account-nb",
+			link: "nsi/balance-account-nb",
 			columns: {
 				firstOrderBalanceAccountNumber:
 					"Номер балансового счета 1-го порядка (класс)",
@@ -71,7 +71,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник балансовых счетов банков",
-			link: "/balance-account",
+			link: "nsi/balance-account",
 			columns: {
 				firstOrderBalanceAccountNumber:
 					"Номер балансового счета 1-го порядка (класс)",
@@ -91,7 +91,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник кодов и наименований валют",
-			link: "/currency",
+			link: "nsi/currency",
 			columns: {
 				digitalCurrencyCode: "Код валюты цифровой",
 				letterCurrencyCode: "Код валюты буквенный",
@@ -105,7 +105,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник курсов валют",
-			link: "/exchange-rate",
+			link: "nsi/exchange-rate",
 			columns: {
 				digitalCurrencyCode: "Буквенный код валюты",
 				letterCurrencyCode: "Цифровой код валюты",
@@ -121,7 +121,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник банков",
-			link: "/bank",
+			link: "nsi/bank",
 			columns: {
 				bankCode: "Условный номер участника расчетов (УНУР)",
 				name: "Местоположение, наименование участника расчетов",
@@ -136,7 +136,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник кодов обработки",
-			link: "/processing-code",
+			link: "nsi/processing-code",
 			columns: {
 				codeAS: "Код АС использования",
 				code: "Код обработки",
@@ -147,9 +147,8 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник кодов платежей в бюджет",
-			link: "/budget-payment-code",
+			link: "nsi/budget-payment-code",
 			columns: {
-
 				id: "Код платежа в бюджет",
 				name: "Наименование кода платежа в бюджет",
 				isPayRepublicBudget: "Признак уплаты в республиканский бюджет",
@@ -169,7 +168,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Кодификатор стран",
-			link: "/country-codifier",
+			link: "nsi/country-codifier",
 			columns: {
 				code: "Код страны цифровой",
 				codeA2: "Код страны альфа-2",
@@ -189,7 +188,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник банковских идентификационных кодов",
-			link: "/bank-id-code",
+			link: "nsi/bank-id-code",
 			columns: {
 				number: "Условный номер участника расчетов",
 				bankIdentificationCode: "БИК банка",
@@ -208,7 +207,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник участников системы BISS",
-			link: "/biss-member",
+			link: "nsi/biss-member",
 			columns: {
 				number: "Условный номер участника расчетов",
 				bankIdentificationCode: "БИК банка",
@@ -226,7 +225,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник кодов очередностей платежа",
-			link: "/payment-priority-code",
+			link: "nsi/payment-priority-code",
 			columns: {
 				primaryCode: "Код очередности",
 				name: "Наименование кода очередности",
@@ -241,7 +240,7 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник статусов субъектов",
-			link: "/subject-statuses",
+			link: "nsi/subject-statuses",
 			columns: {
 				code: "Код статуса субъекта",
 				name: "Наименование cтатуcа субъекта",
@@ -254,6 +253,72 @@ export default class DirectoriesStore {
 			},
 		},
 	];
+	private _swiftDirectory: IDirectory = {
+		name: "Справочник участников системы SWIFT",
+		link: "swift",
+		columns: {
+			modificationFlag: "Флаг модификации",
+			recordKey: "Ключ записи",
+			officeType: "",
+			parentOfficeKey: "",
+			headOfficeKey: "",
+			legalType: "",
+			legalParentKey: "",
+			groupType: "Тип группы",
+			groupParentKey: "",
+			institutionStatus: "",
+			cooperativeGroupKey: "",
+			isoLeiCode: "",
+			bic8: "",
+			branchBic: "",
+			bic: "",
+			chipsUid: "",
+			nationalId: "",
+			connectedBic: "",
+			institutionName: "",
+			branchInformation: "",
+			pobNumber: "",
+			streetAddress1: "",
+			streetAddress2: "",
+			streetAddress3: "",
+			streetAddress4: "",
+			city: "Город",
+			cps: "",
+			zipCode: "",
+			countryName: "",
+			isoCountryCode: "",
+			timezone: "Часовой пояс",
+			subtypeIndicator: "",
+			networkConnectivity: "",
+			branchQualifiers: "",
+			serviceCodes: "",
+			ssiGroupKey: "",
+			ibanKey: "IBAN ключ",
+			fieldA: "Поле А",
+			fieldB: "Поле Б",
+		},
+	};
+
+	private _rfDirectory: IDirectory = {
+		name: "Справочник БИК Российской Федерации",
+		link: "rf",
+		columns: {
+			bic: "Банковский идентификационный код",
+            name: "Название",
+            engName: "Название на английском языке",
+            registryNumber: "Регистрационный номер",
+            countryCode: "Код страны",
+            regionNumber: "Номер региона",
+            index: "Индекс",
+            typeNp: "Тип населенного пункта",
+            nameNp: "Название населенного пункта",
+            address: "Адрес",
+            parentBic: "Родительский БИК",
+            swbic: "Идентификационный код банка, присвоенный SWIFT",
+            account: "Аккаунт",
+            deleted: "Удален"
+		}
+	};
 
 	constructor() {
 		makeAutoObservable(this);
@@ -269,5 +334,13 @@ export default class DirectoriesStore {
 
 	get nsiDirectories(): IDirectory[] {
 		return this._nsiDirectories;
+	}
+
+	get rfDirectory(): IDirectory {
+		return this._rfDirectory;
+	}
+
+	get swiftDirectory(): IDirectory {
+		return this._swiftDirectory;
 	}
 }

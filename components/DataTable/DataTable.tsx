@@ -5,16 +5,22 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
+	useRef,
 	useState,
 } from "react";
 import {
 	MantineReactTable,
+	MRT_ColumnFiltersState,
 	MRT_ShowHideColumnsButton,
+	MRT_SortingState,
 	MRT_ToggleFiltersButton,
 	useMantineReactTable,
 	type MRT_ColumnDef,
 } from "mantine-react-table";
-import { getNsiDirectory } from "@/utils/api/books/nsi/nsiDirectories";
+import {
+	getDirectory,
+	searchDataInDirectory,
+} from "@/utils/api/books/directoryAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "@/app/providers";
 import {
@@ -29,6 +35,10 @@ import classes from "./DataTable.module.css";
 import { IconSearch } from "@tabler/icons-react";
 import PopoverCell from "./PopoverCell";
 
+interface IStringIndex {
+	[key: string]: any;
+}
+
 const DataTable = observer(
 	({
 		slug,
@@ -37,18 +47,40 @@ const DataTable = observer(
 		slug: string;
 		onOpen: MouseEventHandler<HTMLButtonElement>;
 	}) => {
+		const [isError, setIsError] = useState(false);
+		const [isLoading, setIsLoading] = useState(false);
+		const [isRefetching, setIsRefetching] = useState(false);
+		const [columnFilters, setColumnFilters] =
+			useState<MRT_ColumnFiltersState>([]);
+		const [globalFilter, setGlobalFilter] = useState<string>("");
+		const [sorting, setSorting] = useState<MRT_SortingState>([]);
 		const [page, setPage] = useState<number>(1);
 		const [size, setSize] = useState<number>(20);
 		const [data, setData] = useState<[]>([]);
+		const [countPages, setCountPages] = useState<number>(0);
+		const [totalElements, setTotalElements] = useState<number>(0);
+
+		const timer = useRef(null);
+
 		const { directoriesStore } = useContext(Context);
 
 		const findDirectory = useCallback(
 			(slug: string) => {
-				return directoriesStore.nsiDirectories.find(
-					(dir) => dir.link === "/" + slug
-				);
+				if (slug.startsWith("nsi")) {
+					return directoriesStore.nsiDirectories.find(
+						(dir) => dir.link === slug
+					);
+				} else if (slug.startsWith("rf")) {
+					return directoriesStore.rfDirectory;
+				} else if (slug.startsWith("swift")) {
+					return directoriesStore.swiftDirectory;
+				}
 			},
-			[directoriesStore.nsiDirectories]
+			[
+				directoriesStore.nsiDirectories,
+				directoriesStore.rfDirectory,
+				directoriesStore.swiftDirectory,
+			]
 		);
 
 		const getColumnNames = useCallback(
@@ -58,19 +90,36 @@ const DataTable = observer(
 			},
 			[findDirectory]
 		);
+		const fetchData = async () => {
+			if (!data.length) {
+				setIsLoading(true);
+			} else {
+				setIsRefetching(true);
+			}
 
-		useEffect(() => {
-			const fetchData = async () => {
-				const response = await getNsiDirectory(slug, page - 1, size);
+			try {
+				const response = await getDirectory(
+					slug,
+					page - 1,
+					size,
+					columnFilters,
+					sorting
+				);
+
+				// if(!response) setIsError(true)
+				setTotalElements(response.totalElements);
+				setCountPages(response.totalPages);
 				const columnNames = getColumnNames(slug);
-				const interpretedData = response.map((item: Object) => {
-					let newItem: Object = {};
+				const interpretedData = response.content.map((item: any) => {
+					let newItem: IStringIndex = {};
 					for (let key in item) {
 						if (key !== "isDelete") {
+							// @ts-ignore
 							newItem[columnNames[key] || key] = item[key];
 						}
 						if (key === "data" || key === "additionDate") {
 							const date = new Date(item[key]);
+							// @ts-ignore
 							newItem[columnNames[key] || key] =
 								date.toLocaleString();
 						}
@@ -78,10 +127,81 @@ const DataTable = observer(
 					return newItem;
 				});
 				setData(interpretedData);
-			};
+			} catch (error) {
+				setIsError(true);
+				console.error(error);
+				return;
+			}
+			setIsError(false);
+			setIsLoading(false);
+			setIsRefetching(false);
+		};
+		useEffect(() => {
 			fetchData();
 			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [slug, page, size]);
+		}, [slug, page, size, sorting]);
+
+		useEffect(() => {
+			const fetchData = async () => {
+				try {
+					if (globalFilter.length < 1) {
+						return;
+					}
+					const response = await searchDataInDirectory(
+						slug,
+						page - 1,
+						size,
+						columnFilters,
+						sorting,
+						globalFilter
+					);
+					setTotalElements(response.totalElements);
+					setCountPages(response.totalPages);
+					const columnNames = getColumnNames(slug);
+					const interpretedData = response.content.map(
+						(item: any) => {
+							let newItem: IStringIndex = {};
+							for (let key in item) {
+								if (key !== "isDelete") {
+									// @ts-ignore
+									newItem[columnNames[key] || key] =
+										item[key];
+								}
+								if (key === "data" || key === "additionDate") {
+									const date = new Date(item[key]);
+									// @ts-ignore
+									newItem[columnNames[key] || key] =
+										date.toLocaleString();
+								}
+							}
+							return newItem;
+						}
+					);
+					if (!interpretedData.length) {
+						setIsLoading(true);
+					} else {
+						setIsRefetching(true);
+					}
+					setData(interpretedData);
+				} catch (error) {
+					setIsError(true);
+					console.error(error);
+					return;
+				}
+				setIsError(false);
+				setIsLoading(false);
+				setIsRefetching(false);
+			};
+			fetchData();
+		}, [
+			columnFilters,
+			getColumnNames,
+			globalFilter,
+			page,
+			size,
+			slug,
+			sorting,
+		]);
 
 		const columnsMap = new Map();
 
@@ -91,16 +211,14 @@ const DataTable = observer(
 			});
 		});
 
-		const columns: MRT_ColumnDef[] = data
+		const columns: MRT_ColumnDef<any>[] = data
 			? Array.from(columnsMap.keys()).map((key) => {
 					return {
 						accessorKey: key,
 						header: key,
 						Cell: ({ cell }: { cell: any }) => (
 							<PopoverCell>{cell.getValue()}</PopoverCell>
-							// <>{cell.getValue()}</>
 						),
-						// size: {key.length}
 					};
 				})
 			: [];
@@ -124,17 +242,30 @@ const DataTable = observer(
 				withColumnBorders: true,
 				withTableBorder: true,
 			},
-			// mantineTableHeadCellProps: {
-			// 	display: "flex",
-			// 	width: "100%",
-			// 	style: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}
-			// },
-			layoutMode: "grid",
-			defaultColumn: {
-				// minSize: 40,
-				// maxSize: 200,
-				// size: 250,
+			mantineLoadingOverlayProps: {
+				loaderProps: { color: "#006040", type: "bars" },
 			},
+			mantineSelectCheckboxProps: {
+				color: "#006040",
+			},
+			mantineSelectAllCheckboxProps: {
+				color: "#006040",
+			},
+			onColumnFiltersChange: setColumnFilters,
+			onSortingChange: () => {},
+			manualFiltering: true,
+			layoutMode: "grid",
+			state: {
+				columnFilters,
+				globalFilter,
+				isLoading,
+				showAlertBanner: isError,
+				showProgressBars: isRefetching,
+				sorting,
+			},
+			mantineToolbarAlertBannerProps: isError
+				? { color: "red", children: "Error loading data" }
+				: undefined,
 			renderBottomToolbarCustomActions: () => (
 				<Group
 					justify="space-between"
@@ -142,11 +273,15 @@ const DataTable = observer(
 					p="xs"
 					style={{ borderTop: "1px solid #DFDFDF" }}
 				>
-					<Text>Отображены записи 1000-1099 из ???</Text>
+					<Text>
+						Отображены записи {(page - 1) * size + 1}–
+						{Math.min(page * size, totalElements)} из{" "}
+						{totalElements}
+					</Text>
 
 					<Pagination
 						color="#007458"
-						total={20}
+						total={countPages}
 						siblings={1}
 						defaultValue={page}
 						onChange={setPage}
@@ -170,7 +305,13 @@ const DataTable = observer(
 					}}
 				>
 					<Group gap="xs">
-						<Button w={36} p={0} radius="xs" color="#007458">
+						<Button
+							w={36}
+							p={0}
+							radius="xs"
+							color="#007458"
+							onClick={fetchData}
+						>
 							<svg
 								width="32"
 								height="32"
@@ -201,6 +342,7 @@ const DataTable = observer(
 							rightSectionPointerEvents="none"
 							rightSection={<IconSearch />}
 							placeholder="Поиск по таблице"
+							onChange={(e) => setGlobalFilter(e.target.value)}
 						/>
 						<MRT_ToggleFiltersButton table={table} />
 						<MRT_ShowHideColumnsButton table={table} />

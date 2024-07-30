@@ -1,11 +1,15 @@
-import '@mantine/core/styles.css'; 
-import '@mantine/dates/styles.css'; 
-import 'mantine-react-table/styles.css';
-
+import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
+import "mantine-react-table/styles.css";
 
 import { Providers } from "../providers";
 import Header from "@/components/Header/Header";
-import "../globals.css"
+import "../globals.css";
+import { Container, Flex } from "@mantine/core";
+import classes from "./Root.module.css";
+import NavMenu from "@/components/NavMenu/NavMenu";
+import dotenv from 'dotenv'
+
 
 export const metadata = {
 	title: "IIS Беларусбанк",
@@ -26,7 +30,18 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 			<body>
 				<Providers>
 					<Header />
-					{children}
+					<Container
+						fluid
+						className={classes.mainContainer}
+						m={0}
+						p={0}
+						maw="100vw"
+					>
+						<Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
+							<NavMenu />
+							{children}
+						</Flex>
+					</Container>
 				</Providers>
 			</body>
 		</html>

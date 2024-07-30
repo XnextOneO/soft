@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 interface IconProps {
-	active: boolean;
+	active?: boolean;
 	colorScheme: string;
 	path: string;
 }
