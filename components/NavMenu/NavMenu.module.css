@@ -1,4 +1,4 @@
-.navIcon, .navIconActive {
+.navIcon, .navIconActive, .navIconDark {
 	cursor: pointer;
 	width: 100%;
 	height: 60px;
@@ -8,6 +8,10 @@
 
 .navIcon:hover {
 	background-color: #c7c7c7;
+}
+
+.navIconDark:hover {
+	background-color: #444444;
 }
 
 .navIconActive {

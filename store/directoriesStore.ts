@@ -298,7 +298,6 @@ export default class DirectoriesStore {
 			fieldB: "Поле Б",
 		},
 	};
-
 	private _rfDirectory: IDirectory = {
 		name: "Справочник БИК Российской Федерации",
 		link: "rf",

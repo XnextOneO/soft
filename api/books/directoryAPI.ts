@@ -10,11 +10,12 @@ export const getDirectory = async (
 	sorting: MRT_SortingState
 ) => {
 	// console.log(columnFilters, decodeURIComponent(sorting.))
+	console.log(sorting);
 	const { data } = await $host.get(`reference-book/${link}`, {
 		params: {
 			page,
 			size,
-			sort: sorting,
+			// sort: sorting,
 		},
 	});
 	return data;
@@ -41,12 +42,14 @@ export const searchDataInDirectory = async (
 	sorting: MRT_SortingState,
 	searchValue: string
 ) => {
+	console.log(sorting);
+
 	const { data } = await $host.get(`reference-book/${link}/find`, {
 		params: {
 			page,
 			size,
-			sort: sorting,
-            text: searchValue
+			// sort: sorting,
+			text: searchValue ?? "",
 		},
 	});
 	return data;

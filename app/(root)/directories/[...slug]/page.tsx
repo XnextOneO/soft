@@ -10,13 +10,26 @@ import { useContext } from "react";
 import { Context } from "@/app/providers";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
 
 const DirectoryPage = observer(
 	({ params }: { params: { slug: Array<string> } }) => {
+		const { directoriesStore } = useContext(Context);
+		if (
+			!directoriesStore.nsiDirectories
+				.concat(
+					directoriesStore.rfDirectory,
+					directoriesStore.swiftDirectory
+				)
+				.find((dir) => {
+					return dir.link === params.slug.join("/");
+				})
+		) {
+			redirect("/not-found");
+		}
+
 		const colorScheme = useMantineColorScheme();
 		const [opened, { open, close }] = useDisclosure(false);
-
-		const { directoriesStore } = useContext(Context);
 
 		const breadcrumbs = [
 			{ title: "Главная страница IIS Беларусбанк", href: "/" },
@@ -68,7 +81,7 @@ const DirectoryPage = observer(
 						separator=">"
 						separatorMargin="5px"
 						p="xs"
-						style={{ borderBottom: "1px solid #DFDFDF" }}
+						style={{ borderBottom: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}` }}
 					>
 						{breadcrumbs}
 					</Breadcrumbs>

@@ -11,16 +11,14 @@ import {
 import {
 	MantineReactTable,
 	MRT_ColumnFiltersState,
+	MRT_GlobalFilterTextInput,
 	MRT_ShowHideColumnsButton,
 	MRT_SortingState,
 	MRT_ToggleFiltersButton,
 	useMantineReactTable,
 	type MRT_ColumnDef,
 } from "mantine-react-table";
-import {
-	getDirectory,
-	searchDataInDirectory,
-} from "@/utils/api/books/directoryAPI";
+import { getDirectory, searchDataInDirectory } from "@/api/books/directoryAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "@/app/providers";
 import {
@@ -59,8 +57,7 @@ const DataTable = observer(
 		const [data, setData] = useState<[]>([]);
 		const [countPages, setCountPages] = useState<number>(0);
 		const [totalElements, setTotalElements] = useState<number>(0);
-
-		const timer = useRef(null);
+		const [isSearchEmpty, setIsSearchEmpty] = useState<boolean>(false);
 
 		const { directoriesStore } = useContext(Context);
 
@@ -90,73 +87,25 @@ const DataTable = observer(
 			},
 			[findDirectory]
 		);
-		const fetchData = async () => {
-			if (!data.length) {
-				setIsLoading(true);
-			} else {
-				setIsRefetching(true);
-			}
 
-			try {
-				const response = await getDirectory(
-					slug,
-					page - 1,
-					size,
-					columnFilters,
-					sorting
-				);
-
-				// if(!response) setIsError(true)
-				setTotalElements(response.totalElements);
-				setCountPages(response.totalPages);
-				const columnNames = getColumnNames(slug);
-				const interpretedData = response.content.map((item: any) => {
-					let newItem: IStringIndex = {};
-					for (let key in item) {
-						if (key !== "isDelete") {
-							// @ts-ignore
-							newItem[columnNames[key] || key] = item[key];
-						}
-						if (key === "data" || key === "additionDate") {
-							const date = new Date(item[key]);
-							// @ts-ignore
-							newItem[columnNames[key] || key] =
-								date.toLocaleString();
-						}
-					}
-					return newItem;
-				});
-				setData(interpretedData);
-			} catch (error) {
-				setIsError(true);
-				console.error(error);
-				return;
-			}
-			setIsError(false);
-			setIsLoading(false);
-			setIsRefetching(false);
-		};
-		useEffect(() => {
-			fetchData();
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [slug, page, size, sorting]);
-
-		useEffect(() => {
-			const fetchData = async () => {
+		const fetchData = useCallback(
+			async (apiFunction: Function, params: any) => {
 				try {
-					if (globalFilter.length < 1) {
-						return;
+					if (!data.length) {
+						setIsLoading(true);
+					} else {
+						setIsRefetching(true);
 					}
-					const response = await searchDataInDirectory(
-						slug,
-						page - 1,
-						size,
-						columnFilters,
-						sorting,
-						globalFilter
-					);
+
+					const response = await apiFunction(...params);
 					setTotalElements(response.totalElements);
 					setCountPages(response.totalPages);
+					const currentPage = page;
+
+					// Обработка изменения количества страниц
+					if (currentPage > countPages) {
+						setPage(countPages === 0 ? 1 : countPages);
+					}
 					const columnNames = getColumnNames(slug);
 					const interpretedData = response.content.map(
 						(item: any) => {
@@ -177,31 +126,50 @@ const DataTable = observer(
 							return newItem;
 						}
 					);
-					if (!interpretedData.length) {
-						setIsLoading(true);
-					} else {
-						setIsRefetching(true);
-					}
 					setData(interpretedData);
+					setIsLoading(false);
+					setIsRefetching(false);
 				} catch (error) {
 					setIsError(true);
 					console.error(error);
-					return;
 				}
-				setIsError(false);
-				setIsLoading(false);
-				setIsRefetching(false);
-			};
-			fetchData();
+			},
+			[countPages, data.length, getColumnNames, page, slug]
+		);
+
+		useEffect(() => {
+			if (isSearchEmpty) {
+				fetchData(getDirectory, [
+					slug,
+					page - 1,
+					size,
+					columnFilters,
+					sorting,
+				]);
+			} else {
+				fetchData(searchDataInDirectory, [
+					slug,
+					page - 1,
+					size,
+					columnFilters,
+					sorting,
+					globalFilter,
+				]);
+			}
 		}, [
-			columnFilters,
-			getColumnNames,
-			globalFilter,
+			slug,
 			page,
 			size,
-			slug,
 			sorting,
+			globalFilter,
+			fetchData,
+			columnFilters,
+			isSearchEmpty,
 		]);
+
+		useEffect(() => {
+			!globalFilter ? setIsSearchEmpty(true) : setIsSearchEmpty(false);
+		}, [globalFilter]);
 
 		const columnsMap = new Map();
 
@@ -212,13 +180,14 @@ const DataTable = observer(
 		});
 
 		const columns: MRT_ColumnDef<any>[] = data
-			? Array.from(columnsMap.keys()).map((key) => {
+			? Array.from(columnsMap.keys()).map((key: string) => {
 					return {
 						accessorKey: key,
 						header: key,
 						Cell: ({ cell }: { cell: any }) => (
 							<PopoverCell>{cell.getValue()}</PopoverCell>
 						),
+						size: key.length >= 15 ? 250 : 180,
 					};
 				})
 			: [];
@@ -233,6 +202,7 @@ const DataTable = observer(
 			enableBottomToolbar: true,
 			enableTopToolbar: false,
 			enableDensityToggle: false,
+			enableMultiSort: true,
 			localization: MRT_Localization_RU,
 			enableColumnResizing: true,
 			initialState: { density: "xs", showGlobalFilter: true },
@@ -240,8 +210,12 @@ const DataTable = observer(
 			mantineTableProps: {
 				striped: "even",
 				withColumnBorders: true,
-				withTableBorder: true,
+				// withTableBorder: true,
+				// border: 10
 			},
+			// mantineTableBodyProps: {
+			// 	bd: "1px solid #dee2e6"
+			// },
 			mantineLoadingOverlayProps: {
 				loaderProps: { color: "#006040", type: "bars" },
 			},
@@ -251,12 +225,15 @@ const DataTable = observer(
 			mantineSelectAllCheckboxProps: {
 				color: "#006040",
 			},
-			onColumnFiltersChange: setColumnFilters,
-			onSortingChange: () => {},
-			manualFiltering: true,
+			manualSorting: true,
+			onSortingChange: setSorting,
+			// onColumnFiltersChange: setColumnFilters,
+			// manualFiltering: true,
+			onGlobalFilterChange: setGlobalFilter,
+			isMultiSortEvent: () => true,
 			layoutMode: "grid",
 			state: {
-				columnFilters,
+				// columnFilters,
 				globalFilter,
 				isLoading,
 				showAlertBanner: isError,
@@ -267,12 +244,7 @@ const DataTable = observer(
 				? { color: "red", children: "Error loading data" }
 				: undefined,
 			renderBottomToolbarCustomActions: () => (
-				<Group
-					justify="space-between"
-					w="100%"
-					p="xs"
-					style={{ borderTop: "1px solid #DFDFDF" }}
-				>
+				<Group justify="space-between" w="100%">
 					<Text>
 						Отображены записи {(page - 1) * size + 1}–
 						{Math.min(page * size, totalElements)} из{" "}
@@ -283,11 +255,19 @@ const DataTable = observer(
 						color="#007458"
 						total={countPages}
 						siblings={1}
+						value={page}
 						defaultValue={page}
 						onChange={setPage}
 					/>
 				</Group>
 			),
+			mantineBottomToolbarProps: {
+				px: "4px",
+				style: {
+					alignItems: "center",
+					minHeight: 0,
+				},
+			},
 		});
 
 		return (
@@ -299,9 +279,6 @@ const DataTable = observer(
 						gap: "16px",
 						justifyContent: "space-between",
 						padding: "10px 10px",
-						"@media max-width: 768px": {
-							flexDirection: "column",
-						},
 					}}
 				>
 					<Group gap="xs">
@@ -310,7 +287,16 @@ const DataTable = observer(
 							p={0}
 							radius="xs"
 							color="#007458"
-							onClick={fetchData}
+							onClick={() => {
+								setIsLoading(true);
+								getDirectory(
+									slug,
+									page - 1,
+									size,
+									columnFilters,
+									sorting
+								).then(() => setIsLoading(false));
+							}}
 						>
 							<svg
 								width="32"
@@ -336,14 +322,15 @@ const DataTable = observer(
 					</Group>
 
 					<Flex gap="xs" align="center">
-						<TextInput
+						{/* <TextInput
 							w={250}
 							miw={150}
 							rightSectionPointerEvents="none"
 							rightSection={<IconSearch />}
 							placeholder="Поиск по таблице"
 							onChange={(e) => setGlobalFilter(e.target.value)}
-						/>
+						/> */}
+						<MRT_GlobalFilterTextInput table={table} />
 						<MRT_ToggleFiltersButton table={table} />
 						<MRT_ShowHideColumnsButton table={table} />
 					</Flex>
