@@ -26,7 +26,7 @@ import { IconBook } from "@tabler/icons-react";
 const DirectoriesPage = observer(() => {
 	const { directoriesStore } = useContext(Context);
 	const colorScheme = useMantineColorScheme();
-	const theme = useMantineTheme();
+	console.log(colorScheme);
 
 	const breadcrumbs = [
 		{ title: "Главная страница IIS Беларусбанк", href: "/" },
@@ -49,7 +49,9 @@ const DirectoriesPage = observer(() => {
 				separator=">"
 				separatorMargin="5px"
 				p="xs"
-				style={{ borderBottom: "1px solid #DFDFDF" }}
+				style={{
+					borderBottom: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
+				}}
 			>
 				{breadcrumbs}
 			</Breadcrumbs>

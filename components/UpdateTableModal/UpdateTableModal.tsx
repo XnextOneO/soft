@@ -1,9 +1,18 @@
-import { Modal, Button, Group, Text, rem, UnstyledButton } from "@mantine/core";
+import {
+	Modal,
+	Button,
+	Group,
+	Text,
+	rem,
+	UnstyledButton,
+	LoadingOverlay,
+} from "@mantine/core";
 import { useRef, useState } from "react";
-import { Dropzone, FileWithPath, MIME_TYPES } from "@mantine/dropzone";
-import { IconCloudUpload, IconX, IconDownload } from "@tabler/icons-react";
+import { Dropzone } from "@mantine/dropzone";
+import { IconCloudUpload, IconX, IconUpload } from "@tabler/icons-react";
 import { uploadDirectory } from "@/api/books/directoryAPI";
 import classes from "./UpdateTableModal.module.css";
+import { useDisclosure } from "@mantine/hooks";
 const UpdateTableModal = ({
 	link,
 	opened,
@@ -13,16 +22,30 @@ const UpdateTableModal = ({
 	opened: boolean;
 	close: () => void;
 }) => {
+	const [visible, { toggle }] = useDisclosure(false);
+	const [progress, setProgress] = useState<number>(0);
 	const openRef = useRef<() => void>(null);
 	const [file, setFile] = useState<File | null>(null);
+	const controller = new AbortController();
 
 	const uploadFiles = async () => {
 		const formData = new FormData();
-
 		const boundary = "blob_boundary";
+
 		const config = {
 			headers: {
 				"Content-Type": `multipart/form-data; boundary=${boundary}`,
+			},
+			signal: controller.signal,
+			onUploadProgress: (progressEvent) => {
+				console.log(progressEvent);
+				
+				// const percent = Math.round(
+				// 	(progressEvent.loaded * 100) / progressEvent.total
+				// );
+				// console.log(`Загрузка файла: ${percent}%`);
+				// // Отображение loading overlay и процентов загрузки
+				// setProgress(percent);
 			},
 		};
 		if (!file) {
@@ -31,10 +54,12 @@ const UpdateTableModal = ({
 		try {
 			formData.append(`file`, file);
 
-			const data = await uploadDirectory(link, formData, config);
-			close();
-			if (data) {
-				console.log(data);
+			const status = await uploadDirectory(link, formData, config);
+			console.log(status);
+
+			if (status === 200) {
+				close();
+				toggle();
 			}
 		} catch (err: any) {
 			console.error(err.message);
@@ -44,7 +69,10 @@ const UpdateTableModal = ({
 	return (
 		<Modal
 			opened={opened}
-			onClose={close}
+			onClose={() => {
+				close();
+				controller.abort();
+			}}
 			title="Обновить таблицу"
 			overlayProps={{
 				backgroundOpacity: 0.55,
@@ -57,17 +85,16 @@ const UpdateTableModal = ({
 					openRef={openRef}
 					onDrop={(file) => {
 						setFile(file[0]);
-						if(file[0]) {
-							
-						}
 					}}
-					// onLoad={}
+					// onLoad={(event) => {
+					// 	console.log(`Selected file - ${event.target.files[0].name}`);
+					// }}
 					radius="md"
 				>
-					<div style={{pointerEvents: 'none'}}>
+					<div style={{ pointerEvents: "none" }}>
 						<Group justify="center">
 							<Dropzone.Accept>
-								<IconDownload
+								<IconUpload
 									style={{ width: rem(50), height: rem(50) }}
 									color="#006040"
 									stroke={1.5}
@@ -108,6 +135,12 @@ const UpdateTableModal = ({
 					Отправить на загрузку
 				</Button>
 			</Group>
+			<LoadingOverlay
+				visible={visible}
+				zIndex={1000}
+				loaderProps={{ children: progress }}
+				overlayProps={{ radius: "sm", blur: 2 }}
+			/>
 		</Modal>
 	);
 };

@@ -43,7 +43,7 @@ const HomePage = () => {
 				separator=">"
 				separatorMargin="5px"
 				p="xs"
-				style={{ borderBottom: "1px solid #DFDFDF" }}
+				style={{ borderBottom: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}` }}
 			>
 				{breadcrumbs}
 			</Breadcrumbs>

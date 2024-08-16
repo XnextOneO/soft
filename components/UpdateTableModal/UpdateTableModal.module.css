@@ -10,8 +10,8 @@
 	border-radius: var(--mantine-radius-md);
 	/* height: rem(110px); */
 	background-color: light-dark(
-		var(--mantine-color-white),
-		var(--mantine-color-dark-7)
+		rgb(244, 244, 244),
+		rgb(44, 44, 44)
 	);
 	cursor: pointer;
 

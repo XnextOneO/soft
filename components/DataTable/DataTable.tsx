@@ -52,6 +52,9 @@ const DataTable = observer(
 			useState<MRT_ColumnFiltersState>([]);
 		const [globalFilter, setGlobalFilter] = useState<string>("");
 		const [sorting, setSorting] = useState<MRT_SortingState>([]);
+		const [manualSorting, setManualSorting] = useState<
+			{ id: string; desc: string } | {}
+		>([]);
 		const [page, setPage] = useState<number>(1);
 		const [size, setSize] = useState<number>(20);
 		const [data, setData] = useState<[]>([]);
@@ -111,11 +114,12 @@ const DataTable = observer(
 						(item: any) => {
 							let newItem: IStringIndex = {};
 							for (let key in item) {
-								if (key !== "isDelete") {
+								if (key !== "isDelete" && key !== "deleted") {
 									// @ts-ignore
 									newItem[columnNames[key] || key] =
 										item[key];
 								}
+
 								if (key === "data" || key === "additionDate") {
 									const date = new Date(item[key]);
 									// @ts-ignore
@@ -144,7 +148,7 @@ const DataTable = observer(
 					page - 1,
 					size,
 					columnFilters,
-					sorting,
+					manualSorting,
 				]);
 			} else {
 				fetchData(searchDataInDirectory, [
@@ -152,7 +156,7 @@ const DataTable = observer(
 					page - 1,
 					size,
 					columnFilters,
-					sorting,
+					manualSorting,
 					globalFilter,
 				]);
 			}
@@ -160,7 +164,7 @@ const DataTable = observer(
 			slug,
 			page,
 			size,
-			sorting,
+			manualSorting,
 			globalFilter,
 			fetchData,
 			columnFilters,
@@ -171,8 +175,27 @@ const DataTable = observer(
 			!globalFilter ? setIsSearchEmpty(true) : setIsSearchEmpty(false);
 		}, [globalFilter]);
 
-		const columnsMap = new Map();
+		useEffect(() => {
+			const columnNames = getColumnNames(slug);
+			if (sorting.length) {
+				const sortingValue = sorting[0]?.id;
+				const sortingDirection = sorting[0]?.desc;
+				const sortingKey = Object.keys(columnNames).find(
+					(key) =>
+						// @ts-ignore
+						columnNames[key] === sortingValue
+				);
 
+				setManualSorting({
+					// @ts-ignore
+					id: sortingKey,
+					desc: sortingDirection ? "DESC" : "ASC",
+				});
+			}			
+			else setManualSorting({});
+		}, [getColumnNames, slug, sorting]);
+
+		const columnsMap = new Map();
 		data.forEach((element: {}) => {
 			Object.keys(element).forEach((key) => {
 				columnsMap.set(key, true);
@@ -188,6 +211,7 @@ const DataTable = observer(
 							<PopoverCell>{cell.getValue()}</PopoverCell>
 						),
 						size: key.length >= 15 ? 250 : 180,
+						sortDescFirst: false,
 					};
 				})
 			: [];
@@ -202,7 +226,7 @@ const DataTable = observer(
 			enableBottomToolbar: true,
 			enableTopToolbar: false,
 			enableDensityToggle: false,
-			enableMultiSort: true,
+			enableMultiSort: false,
 			localization: MRT_Localization_RU,
 			enableColumnResizing: true,
 			initialState: { density: "xs", showGlobalFilter: true },
@@ -230,7 +254,7 @@ const DataTable = observer(
 			// onColumnFiltersChange: setColumnFilters,
 			// manualFiltering: true,
 			onGlobalFilterChange: setGlobalFilter,
-			isMultiSortEvent: () => true,
+			// isMultiSortEvent: () => true,
 			layoutMode: "grid",
 			state: {
 				// columnFilters,
@@ -289,13 +313,13 @@ const DataTable = observer(
 							color="#007458"
 							onClick={() => {
 								setIsLoading(true);
-								getDirectory(
+								fetchData(getDirectory, [
 									slug,
 									page - 1,
 									size,
 									columnFilters,
-									sorting
-								).then(() => setIsLoading(false));
+									sorting,
+								]).then(() => setIsLoading(false));
 							}}
 						>
 							<svg
@@ -331,7 +355,7 @@ const DataTable = observer(
 							onChange={(e) => setGlobalFilter(e.target.value)}
 						/> */}
 						<MRT_GlobalFilterTextInput table={table} />
-						<MRT_ToggleFiltersButton table={table} />
+						{/* <MRT_ToggleFiltersButton table={table} /> */}
 						<MRT_ShowHideColumnsButton table={table} />
 					</Flex>
 				</Flex>

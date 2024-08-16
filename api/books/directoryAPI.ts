@@ -7,18 +7,32 @@ export const getDirectory = async (
 	page: number,
 	size: number,
 	columnFilters: MRT_ColumnFiltersState,
-	sorting: MRT_SortingState
+	sorting: { id: string; desc: string } | {}
 ) => {
-	// console.log(columnFilters, decodeURIComponent(sorting.))
-	console.log(sorting);
-	const { data } = await $host.get(`reference-book/${link}`, {
-		params: {
-			page,
-			size,
-			// sort: sorting,
-		},
-	});
-	return data;
+	if (Object.keys(sorting).length !== 0 && sorting) {
+		const { data } = await $host.get(`reference-book/${link}`, {
+			params: {
+				page,
+				size,
+				sort: (sorting as { id: string; desc: string })?.desc,
+				column: (sorting as { id: string; desc: string })?.id
+					.replace(/(?<=[a-z])([A-Z])/gm, (match) =>
+						match.replace(match, `_${match}`)
+					)
+					.replace(/(?<!^)\s/gm, "_")
+					.toUpperCase(),
+			},
+		});
+		return data;
+	} else {
+		const { data } = await $host.get(`reference-book/${link}`, {
+			params: {
+				page,
+				size,
+			},
+		});
+		return data;
+	}
 };
 
 export const uploadDirectory = async (
@@ -26,12 +40,12 @@ export const uploadDirectory = async (
 	formData: FormData,
 	config: AxiosRequestConfig<any> | undefined
 ) => {
-	const { data } = await $host.post(
+	const { status } = await $host.post(
 		`reference-book/${link}`,
 		formData,
 		config
 	);
-	return data;
+	return status;
 };
 
 export const searchDataInDirectory = async (
@@ -39,18 +53,33 @@ export const searchDataInDirectory = async (
 	page: number,
 	size: number,
 	columnFilters: MRT_ColumnFiltersState,
-	sorting: MRT_SortingState,
+	sorting: { id: string; desc: string } | {},
 	searchValue: string
 ) => {
-	console.log(sorting);
-
-	const { data } = await $host.get(`reference-book/${link}/find`, {
-		params: {
-			page,
-			size,
-			// sort: sorting,
-			text: searchValue ?? "",
-		},
-	});
-	return data;
+	if (Object.keys(sorting).length !== 0 && sorting) {
+		const { data } = await $host.get(`reference-book/${link}`, {
+			params: {
+				page,
+				size,
+				sort: (sorting as { id: string; desc: string })?.desc,
+				column: (sorting as { id: string; desc: string })?.id
+					.replace(/(?<=[a-z])([A-Z])/gm, (match) =>
+						match.replace(match, `_${match}`)
+					)
+					.replace(/(?<!^)\s/gm, "_")
+					.toUpperCase(),
+				text: searchValue ?? "",
+			},
+		});
+		return data;
+	} else {
+		const { data } = await $host.get(`reference-book/${link}`, {
+			params: {
+				page,
+				size,
+				text: searchValue ?? "",
+			},
+		});
+		return data;
+	}
 };

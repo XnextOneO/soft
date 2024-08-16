@@ -42,6 +42,11 @@
 		transform: scale(1.05);
 	}
 }
-/* .breadcrumbsItem:hover {
-	color: "#DFDFDF";
+
+/* .breadcrumbsItem {
+	color: #006040;
+}
+
+.dark-theme .breadcrumbsItem {
+	color: #8B8B8B;
 } */

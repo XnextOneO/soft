@@ -18,6 +18,9 @@ export default class DirectoriesStore {
 				additionDate: "Дата добавления",
 				isDelete: "Удален",
 			},
+			// columnsSort: {
+			// 	ID_UNUR: 'code'
+			// }
 		},
 		{
 			name: "Справочник кодов идентификации организации",
@@ -99,6 +102,7 @@ export default class DirectoriesStore {
 				type: "Тип валюты",
 				decimalPlaces:
 					"Число десятичных разрядов у разменной денежной единицы",
+				expirationDate: "	Дата вывода валюты из обращения",
 				additionDate: "Дата добавления",
 				isDelete: "Удален",
 			},
@@ -149,7 +153,7 @@ export default class DirectoriesStore {
 			name: "Справочник кодов платежей в бюджет",
 			link: "nsi/budget-payment-code",
 			columns: {
-				id: "Код платежа в бюджет",
+				paymentCode: "Код платежа в бюджет",
 				name: "Наименование кода платежа в бюджет",
 				isPayRepublicBudget: "Признак уплаты в республиканский бюджет",
 				isPayCustomsPayments:
@@ -190,7 +194,7 @@ export default class DirectoriesStore {
 			name: "Справочник банковских идентификационных кодов",
 			link: "nsi/bank-id-code",
 			columns: {
-				number: "Условный номер участника расчетов",
+				unur: "Условный номер участника расчетов",
 				bankIdentificationCode: "БИК банка",
 				status: "Статус БИК банка (0 – BIК SWIFT; 1 – БИК Республики Беларусь)",
 				correspondentAccountNumber:
@@ -209,7 +213,7 @@ export default class DirectoriesStore {
 			name: "Справочник участников системы BISS",
 			link: "nsi/biss-member",
 			columns: {
-				number: "Условный номер участника расчетов",
+				unur: "Условный номер участника расчетов",
 				bankIdentificationCode: "БИК банка",
 				membersAuthenticationCodeForBISS: "Код статуса банка",
 				status: "Код аутентификации участника расчетов системы BISS",
@@ -244,7 +248,7 @@ export default class DirectoriesStore {
 			columns: {
 				code: "Код статуса субъекта",
 				name: "Наименование cтатуcа субъекта",
-				isUsingBankingInformationSystemOrInterbankSettlementSystem:
+				isUsingBisORIis:
 					"Признак использования АС МБР и АИС ПБИ (1 – используется)",
 				isUsingFulfillingMonetaryObligationsSystem:
 					"Признак использования АИС ИДО (1 – используется)",
