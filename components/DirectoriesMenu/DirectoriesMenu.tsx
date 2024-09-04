@@ -2,7 +2,7 @@ import { Context } from "@/app/providers";
 import { Menu, TextInput, ScrollArea, Divider } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 const DirectoriesMenu = observer(
 	({
@@ -31,9 +31,18 @@ const DirectoriesMenu = observer(
 			);
 		};
 
+		const resetDirectories = () => {
+			setDirectories(allDirectories);
+		};
+
 		return (
 			<Menu
-				onChange={onOpen}
+				onChange={(value) => {
+					onOpen(value);
+					if (!value) {
+						setDirectories(allDirectories);
+					}
+				}}
 				radius="xs"
 				width={450}
 				transitionProps={{ transition: "rotate-right", duration: 150 }}
@@ -58,32 +67,13 @@ const DirectoriesMenu = observer(
 								style={{ textDecoration: "none" }}
 								key={index}
 								href={`/directories/${directory.link}`}
+								onClick={() => {
+									resetDirectories();
+								}}
 							>
 								<Menu.Item>{directory.name}</Menu.Item>
 							</Link>
 						))}
-						{/* <Menu.Label>Справочник Российской Федерации</Menu.Label>
-						<Divider />
-
-						<Link
-							style={{ textDecoration: "none" }}
-							href={`/directories/rf`}
-						>
-							<Menu.Item>
-								{directoriesStore.rfDirectory.name}
-							</Menu.Item>
-						</Link>
-						<Menu.Label>Справочник SWIFT</Menu.Label>
-						<Divider />
-
-						<Link
-							style={{ textDecoration: "none" }}
-							href={`/directories/swift`}
-						>
-							<Menu.Item>
-								{directoriesStore.swiftDirectory.name}
-							</Menu.Item>
-						</Link> */}
 					</ScrollArea>
 				</Menu.Dropdown>
 			</Menu>

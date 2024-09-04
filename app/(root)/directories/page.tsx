@@ -26,7 +26,6 @@ import { IconBook } from "@tabler/icons-react";
 const DirectoriesPage = observer(() => {
 	const { directoriesStore } = useContext(Context);
 	const colorScheme = useMantineColorScheme();
-	console.log(colorScheme);
 
 	const breadcrumbs = [
 		{ title: "Главная страница IIS Беларусбанк", href: "/" },
@@ -167,7 +166,7 @@ const DirectoriesPage = observer(() => {
 									width: "50%",
 									textDecoration: "none",
 								}}
-								href={"/directories/rf"}
+								href={'/directories/' + directoriesStore.rfDirectory.link}
 							>
 								<UnstyledButton className={classes.item}>
 									<IconBook
@@ -198,7 +197,7 @@ const DirectoriesPage = observer(() => {
 									width: "50%",
 									textDecoration: "none",
 								}}
-								href={"/directories/swift"}
+								href={'/directories/' + directoriesStore.swiftDirectory.link}
 							>
 								<UnstyledButton className={classes.item}>
 									<IconBook

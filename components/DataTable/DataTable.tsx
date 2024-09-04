@@ -18,7 +18,10 @@ import {
 	useMantineReactTable,
 	type MRT_ColumnDef,
 } from "mantine-react-table";
-import { getDirectory, searchDataInDirectory } from "@/api/books/directoryAPI";
+import {
+	getDirectory,
+	searchDataInDirectory,
+} from "@/app/api/books/directoryAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "@/app/providers";
 import {
@@ -101,11 +104,11 @@ const DataTable = observer(
 					}
 
 					const response = await apiFunction(...params);
-					setTotalElements(response.totalElements);
-					setCountPages(response.totalPages);
+					setTotalElements(response.page.totalElements);
+					setCountPages(response.page.totalPages);
+					console.log(response.page.totalPages, response)
 					const currentPage = page;
 
-					// Обработка изменения количества страниц
 					if (currentPage > countPages) {
 						setPage(countPages === 0 ? 1 : countPages);
 					}
@@ -143,19 +146,12 @@ const DataTable = observer(
 
 		useEffect(() => {
 			if (isSearchEmpty) {
-				fetchData(getDirectory, [
-					slug,
-					page - 1,
-					size,
-					columnFilters,
-					manualSorting,
-				]);
+				fetchData(getDirectory, [slug, page - 1, size, manualSorting]);
 			} else {
 				fetchData(searchDataInDirectory, [
 					slug,
 					page - 1,
 					size,
-					columnFilters,
 					manualSorting,
 					globalFilter,
 				]);
@@ -191,8 +187,7 @@ const DataTable = observer(
 					id: sortingKey,
 					desc: sortingDirection ? "DESC" : "ASC",
 				});
-			}			
-			else setManualSorting({});
+			} else setManualSorting({});
 		}, [getColumnNames, slug, sorting]);
 
 		const columnsMap = new Map();
@@ -211,7 +206,7 @@ const DataTable = observer(
 							<PopoverCell>{cell.getValue()}</PopoverCell>
 						),
 						size: key.length >= 15 ? 250 : 180,
-						sortDescFirst: false,
+						sortDescFirst: true,
 					};
 				})
 			: [];
@@ -221,6 +216,7 @@ const DataTable = observer(
 			data,
 			enablePagination: false,
 			enableGlobalFilterModes: true,
+			enableColumnFilters: false,
 			enableRowSelection: true,
 			enableStickyHeader: true,
 			enableBottomToolbar: true,
@@ -234,12 +230,8 @@ const DataTable = observer(
 			mantineTableProps: {
 				striped: "even",
 				withColumnBorders: true,
-				// withTableBorder: true,
-				// border: 10
 			},
-			// mantineTableBodyProps: {
-			// 	bd: "1px solid #dee2e6"
-			// },
+
 			mantineLoadingOverlayProps: {
 				loaderProps: { color: "#006040", type: "bars" },
 			},
@@ -251,13 +243,9 @@ const DataTable = observer(
 			},
 			manualSorting: true,
 			onSortingChange: setSorting,
-			// onColumnFiltersChange: setColumnFilters,
-			// manualFiltering: true,
 			onGlobalFilterChange: setGlobalFilter,
-			// isMultiSortEvent: () => true,
 			layoutMode: "grid",
 			state: {
-				// columnFilters,
 				globalFilter,
 				isLoading,
 				showAlertBanner: isError,
@@ -267,7 +255,7 @@ const DataTable = observer(
 			mantineToolbarAlertBannerProps: isError
 				? { color: "red", children: "Error loading data" }
 				: undefined,
-			renderBottomToolbarCustomActions: () => (
+			renderBottomToolbarCustomActions: data && data.length > 0 ? () => (
 				<Group justify="space-between" w="100%">
 					<Text>
 						Отображены записи {(page - 1) * size + 1}–
@@ -284,14 +272,14 @@ const DataTable = observer(
 						onChange={setPage}
 					/>
 				</Group>
-			),
-			mantineBottomToolbarProps: {
+			) : undefined,
+			mantineBottomToolbarProps: data && data.length > 0 ? {
 				px: "4px",
 				style: {
 					alignItems: "center",
 					minHeight: 0,
 				},
-			},
+			} : undefined,
 		});
 
 		return (
@@ -346,16 +334,7 @@ const DataTable = observer(
 					</Group>
 
 					<Flex gap="xs" align="center">
-						{/* <TextInput
-							w={250}
-							miw={150}
-							rightSectionPointerEvents="none"
-							rightSection={<IconSearch />}
-							placeholder="Поиск по таблице"
-							onChange={(e) => setGlobalFilter(e.target.value)}
-						/> */}
 						<MRT_GlobalFilterTextInput table={table} />
-						{/* <MRT_ToggleFiltersButton table={table} /> */}
 						<MRT_ShowHideColumnsButton table={table} />
 					</Flex>
 				</Flex>

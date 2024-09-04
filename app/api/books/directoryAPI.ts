@@ -6,7 +6,6 @@ export const getDirectory = async (
 	link: string,
 	page: number,
 	size: number,
-	columnFilters: MRT_ColumnFiltersState,
 	sorting: { id: string; desc: string } | {}
 ) => {
 	if (Object.keys(sorting).length !== 0 && sorting) {
@@ -52,12 +51,11 @@ export const searchDataInDirectory = async (
 	link: string,
 	page: number,
 	size: number,
-	columnFilters: MRT_ColumnFiltersState,
 	sorting: { id: string; desc: string } | {},
 	searchValue: string
 ) => {
 	if (Object.keys(sorting).length !== 0 && sorting) {
-		const { data } = await $host.get(`reference-book/${link}`, {
+		const { data } = await $host.get(`reference-book/${link}/search`, {
 			params: {
 				page,
 				size,
@@ -73,7 +71,7 @@ export const searchDataInDirectory = async (
 		});
 		return data;
 	} else {
-		const { data } = await $host.get(`reference-book/${link}`, {
+		const { data } = await $host.get(`reference-book/${link}/search`, {
 			params: {
 				page,
 				size,

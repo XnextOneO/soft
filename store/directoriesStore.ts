@@ -187,24 +187,37 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник счетов по учету средств республиканского бюджета",
-			link: "",
-			columns: {},
+			link: "nsi/republican-budget-account",
+			columns: {
+				identificationCode: "БИК банка бенефициара",
+				republicanBudgetAccount:
+					"Счет по учету средств республиканского бюджета",
+				digitalCurrencyCode: "Код валюты цифровой",
+				actualBeneficiaryUNP:
+					"УНП фактического бенефициара (клиента казначейства)",
+				beneficiaryUNP: "УНП бенефициара",
+				actualBeneficiaryName:
+					"Наименование фактического бенефициара (клиента казначейства)",
+				beneficiaryName: "Наименование бенефициара",
+				additionDate: "Дата добавления",
+				isDelete: "Удален",
+			},
 		},
 		{
 			name: "Справочник банковских идентификационных кодов",
 			link: "nsi/bank-id-code",
 			columns: {
-				unur: "Условный номер участника расчетов",
-				bankIdentificationCode: "БИК банка",
+				unu: "Условный номер участника",
+				bic: "БИК банка",
 				status: "Статус БИК банка (0 – BIК SWIFT; 1 – БИК Республики Беларусь)",
-				correspondentAccountNumber:
+				accountNumber:
 					"Номер корреспондентского счета банка",
-				bankIdentificationCodePlus: "БИК банка",
-				shortBankName: "Наименование банка (краткое)",
+				unp: "УНП (при наличии)",
+				bankName: "Наименование участника",
 				city: "Населенный пункт",
 				controlCode: "Код контроля",
 				controlDate: "Дата контроля",
-				successorBankIdentificationCode: "БИК банка преемника",
+				bicPlus: "БИК правопреемника (при наличии)",
 				additionDate: "Дата добавления",
 				isDelete: "Удален",
 			},
@@ -239,8 +252,21 @@ export default class DirectoriesStore {
 		},
 		{
 			name: "Справочник счетов по учету средств местных бюджетов",
-			link: "",
-			columns: {},
+			link: "nsi/local-budget-account",
+			columns: {
+				identificationCode: "БИК банка бенефициара",
+				localBudgetAccount:
+					"Счет по учету средств местного бюджета",
+				digitalCurrencyCode: "Код валюты цифровой",
+				actualBeneficiaryUNP:
+					"УНП фактического бенефициара (местного финансового органа, исполкома)",
+				beneficiaryUNP: "УНП бенефициара",
+				actualBeneficiaryName:
+					"Наименование фактического бенефициара (местного финансового органа, исполкома)",
+				beneficiaryName: "Наименование бенефициара",
+				additionDate: "Дата добавления",
+				isDelete: "Удален",
+			},
 		},
 		{
 			name: "Справочник статусов субъектов",
@@ -307,20 +333,20 @@ export default class DirectoriesStore {
 		link: "rf",
 		columns: {
 			bic: "Банковский идентификационный код",
-            name: "Название",
-            engName: "Название на английском языке",
-            registryNumber: "Регистрационный номер",
-            countryCode: "Код страны",
-            regionNumber: "Номер региона",
-            index: "Индекс",
-            typeNp: "Тип населенного пункта",
-            nameNp: "Название населенного пункта",
-            address: "Адрес",
-            parentBic: "Родительский БИК",
-            swbic: "Идентификационный код банка, присвоенный SWIFT",
-            account: "Аккаунт",
-            deleted: "Удален"
-		}
+			name: "Название",
+			engName: "Название на английском языке",
+			registryNumber: "Регистрационный номер",
+			countryCode: "Код страны",
+			regionNumber: "Номер региона",
+			index: "Индекс",
+			typeNp: "Тип населенного пункта",
+			nameNp: "Название населенного пункта",
+			address: "Адрес",
+			parentBic: "Родительский БИК",
+			swbic: "Идентификационный код банка, присвоенный SWIFT",
+			account: "Аккаунт",
+			deleted: "Удален",
+		},
 	};
 
 	constructor() {
