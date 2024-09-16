@@ -106,7 +106,6 @@ const DataTable = observer(
 					const response = await apiFunction(...params);
 					setTotalElements(response.page.totalElements);
 					setCountPages(response.page.totalPages);
-					console.log(response.page.totalPages, response)
 					const currentPage = page;
 
 					if (currentPage > countPages) {

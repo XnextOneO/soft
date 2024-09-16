@@ -4,16 +4,13 @@ import { useContext, useEffect } from "react";
 import {
 	Container,
 	Burger,
-	Box,
 	Group,
 	Image,
 	Text,
 	Flex,
-	Button,
 	UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 import classes from "./Header.module.css";
 import ProfileButton from "./ProfileButton/ProfileButton";
 import { observer } from "mobx-react-lite";

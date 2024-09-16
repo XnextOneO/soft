@@ -3,14 +3,13 @@
 import { Breadcrumbs, Text, Flex, useMantineColorScheme } from "@mantine/core";
 import classes from "../Directories.module.css";
 import DataTable from "@/components/DataTable/DataTable";
-import NavMenu from "@/components/NavMenu/NavMenu";
 import { useDisclosure } from "@mantine/hooks";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
 import { useContext } from "react";
 import { Context } from "@/app/providers";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const DirectoryPage = observer(
 	({ params }: { params: { slug: Array<string> } }) => {
@@ -28,6 +27,7 @@ const DirectoryPage = observer(
 			redirect("/not-found");
 		}
 
+		// console.log(useRouter().query);
 		const colorScheme = useMantineColorScheme();
 		const [opened, { open, close }] = useDisclosure(false);
 

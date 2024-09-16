@@ -1,8 +1,8 @@
 import { Context } from "@/app/providers";
-import { Menu, TextInput, ScrollArea, Divider } from "@mantine/core";
+import { Menu, TextInput, ScrollArea } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 const DirectoriesMenu = observer(
 	({
@@ -59,9 +59,6 @@ const DirectoriesMenu = observer(
 						onChange={(e) => searchDirectoryByName(e.target.value)}
 					/>
 					<ScrollArea h={300}>
-						{/* <Menu.Label>Справочники ЦВ НСИ НБ РБ</Menu.Label>
-						<Divider /> */}
-
 						{directories.map((directory, index) => (
 							<Link
 								style={{ textDecoration: "none" }}
