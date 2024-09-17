@@ -1,7 +1,7 @@
-import { Breadcrumbs as MantineBreadcrumbs } from '@mantine/core';
+import { Breadcrumbs as MantineBreadcrumbs ,Text} from '@mantine/core';
+import Link from "next/link";
 import { useRouter } from 'next/router';
 import { FC, useEffect,useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 interface Crumb {
   title: string;
@@ -19,6 +19,7 @@ const Breadcrumbs: FC<BreadcrumbsProps> = ({ crumbs }) => {
   useEffect(() => {
     const currentPath = location.pathname;
     const crumb = crumbs.find((crumb) => crumb.href === currentPath);
+    // @ts-ignore
     setCurrentCrumb(crumb);
   }, [location.pathname, crumbs]);
 
