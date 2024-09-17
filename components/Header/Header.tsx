@@ -1,21 +1,23 @@
 "use client";
 
-import { useContext, useEffect } from "react";
 import {
-	Container,
 	Burger,
+	Container,
+	Flex,
 	Group,
 	Image,
 	Text,
-	Flex,
 	UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { observer } from "mobx-react-lite";
+import { usePathname } from "next/navigation";
+import { useContext, useEffect } from "react";
+
+import { Context } from "@/app/providers";
+
 import classes from "./Header.module.css";
 import ProfileButton from "./ProfileButton/ProfileButton";
-import { observer } from "mobx-react-lite";
-import { Context } from "@/app/providers";
-import { usePathname } from "next/navigation";
 
 const Header: React.FC = observer(() => {
 	const [opened, { toggle }] = useDisclosure();

@@ -1,7 +1,7 @@
-import { FC, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Breadcrumbs as MantineBreadcrumbs } from '@mantine/core';
 import { useRouter } from 'next/router';
+import { FC, useEffect,useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface Crumb {
   title: string;

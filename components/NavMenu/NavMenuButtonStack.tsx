@@ -1,7 +1,9 @@
+import { Text } from "@mantine/core";
+
 import CustomIcon from "../BurgerButtons/CustomIcon";
 import NavButton from "../BurgerButtons/NavButton";
 import classes from "./NavMenu.module.css";
-import { Text } from "@mantine/core";
+
 interface INavMenuButtonStackProps {
 	colorScheme: string;
 	active?: boolean;

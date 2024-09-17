@@ -1,8 +1,9 @@
-import { Context } from "@/app/providers";
-import { Menu, TextInput, ScrollArea } from "@mantine/core";
+import { Menu, ScrollArea,TextInput } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
+
+import { Context } from "@/app/providers"; 
 
 const DirectoriesMenu = observer(
 	({

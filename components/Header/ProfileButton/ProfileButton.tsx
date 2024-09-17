@@ -1,9 +1,10 @@
 "use client";
 
-import { Avatar, UnstyledButton, Group, Text } from "@mantine/core";
+import { Avatar, Group, Text,UnstyledButton } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
-import classes from "./ProfileButton.module.css";
 import { useRouter } from "next/navigation";
+
+import classes from "./ProfileButton.module.css";
 
 const ProfileButton = () => {
 	const router = useRouter();

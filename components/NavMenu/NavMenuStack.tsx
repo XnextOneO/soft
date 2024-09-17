@@ -1,7 +1,8 @@
 import { Stack, UnstyledButton } from "@mantine/core";
+import React from "react";
+
 import DirectoriesMenu from "../DirectoriesMenu/DirectoriesMenu";
 import NavMenuButtonStack from "./NavMenuButtonStack";
-import React from "react";
 
 interface INavMenuStackProps {
 	colorScheme: string;

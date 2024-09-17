@@ -1,15 +1,17 @@
 "use client";
 
-import { Breadcrumbs, Text, Flex, useMantineColorScheme } from "@mantine/core";
-import classes from "../Directories.module.css";
-import DataTable from "@/components/DataTable/DataTable";
+import { Breadcrumbs, Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
-import { useContext } from "react";
-import { Context } from "@/app/providers";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { useContext } from "react";
+
+import { Context } from "@/app/providers";
+import DataTable from "@/components/DataTable/DataTable";
+import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
+
+import classes from "../Directories.module.css";
 
 const DirectoryPage = observer(
 	({ params }: { params: { slug: Array<string> } }) => {

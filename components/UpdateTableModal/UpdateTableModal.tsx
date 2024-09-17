@@ -1,30 +1,33 @@
 import {
-	Modal,
-	Button,
-	Group,
-	Text,
-	rem,
-	UnstyledButton,
-	LoadingOverlay,
-	RingProgress,
-	Card,
 	ActionIcon,
+	Button,
+	Card,
 	Center,
+	Group,
+	LoadingOverlay,
+	Modal,
+	rem,
+	RingProgress,
 	Stack,
+	Text,
+	UnstyledButton,
 } from "@mantine/core";
-import { useRef, useState } from "react";
 import { Dropzone } from "@mantine/dropzone";
-import {
-	IconCloudUpload,
-	IconX,
-	IconUpload,
-	IconCheck,
-	IconFile,
-} from "@tabler/icons-react";
-import { uploadDirectory } from "@/app/api/books/directoryAPI";
-import classes from "./UpdateTableModal.module.css";
 import { useDisclosure } from "@mantine/hooks";
+import {
+	IconCheck,
+	IconCloudUpload,
+	IconFile,
+	IconUpload,
+	IconX,
+} from "@tabler/icons-react";
 import { AxiosProgressEvent } from "axios";
+import { useRef, useState } from "react";
+
+import { uploadDirectory } from "@/app/api/books/directoryAPI";
+
+import classes from "./UpdateTableModal.module.css";
+
 const UpdateTableModal = ({
 	link,
 	opened,

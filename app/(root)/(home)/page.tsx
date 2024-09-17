@@ -1,18 +1,20 @@
 "use client";
 import {
-	Stack,
 	Breadcrumbs,
+	Button,
 	Container,
+	Group,
+	Stack,
 	Text,
+	Title,
 	useMantineColorScheme,
 	useMantineTheme,
-	Title,
-	Group,
-	Button,
 } from "@mantine/core";
-import classes from "./HomePage.module.css";
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import classes from "./HomePage.module.css";
+
 const HomePage = () => {
 	const colorScheme = useMantineColorScheme();
 	const [backgroundState, setBackgroundState] = useState<string>("");

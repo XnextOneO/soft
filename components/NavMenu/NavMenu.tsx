@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import React, { useContext, useState } from "react";
 
 import { Context } from "@/app/providers";
+
 import NavMenuStack from "./NavMenuStack";
 
 const NavMenu = observer(() => {

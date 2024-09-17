@@ -1,19 +1,15 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import classes from "../Auth.module.css";
-
 import {
-	Button,
-	Group,
-	TextInput,
-	Text,
-	Image,
 	Anchor,
+	Button,
 	Card,
-	useMantineColorScheme,
+	Group,
+	Image,
 	Loader,
+	Text,
+	TextInput,
+	useMantineColorScheme,
 } from "@mantine/core";
 import {
 	IconAt,
@@ -21,6 +17,10 @@ import {
 	IconLock,
 	IconUser,
 } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import React, { useContext, useEffect, useState } from "react";
+
+import classes from "../Auth.module.css";
 
 const LoginPage: React.FC = () => {
 	const router = useRouter();

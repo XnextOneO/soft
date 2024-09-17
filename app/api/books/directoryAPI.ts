@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from "axios";
-import { $host } from "../index";
 import { MRT_ColumnFiltersState, MRT_SortingState } from "mantine-react-table";
+
+import { $host } from "../index";
 
 export const getDirectory = async (
 	link: string,

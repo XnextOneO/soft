@@ -1,11 +1,13 @@
 "use client";
 
-import React, { createContext } from "react";
 import { MantineProvider, useMantineColorScheme } from "@mantine/core";
-import { theme } from "../theme";
-import BurgerStore from "../store/burgerStore";
+import React, { createContext } from "react";
+
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 import DirectoriesStore from "@/store/directoriesStore";
+
+import BurgerStore from "../store/burgerStore";
+import { theme } from "../theme";
 
 interface AppContextType {
 	burgerStore: BurgerStore;

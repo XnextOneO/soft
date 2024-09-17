@@ -1,5 +1,5 @@
+import { Popover, Table, Text } from "@mantine/core";
 import React from "react";
-import { Table, Popover, Text } from "@mantine/core";
 
 interface ICellProps {
 	children?: number | string;

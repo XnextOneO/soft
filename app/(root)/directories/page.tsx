@@ -16,12 +16,14 @@ import {
 	useMantineColorScheme,
 	useMantineTheme,
 } from "@mantine/core";
-import classes from "./Directories.module.css";
-import { observer } from "mobx-react-lite";
-import { useContext } from "react";
-import { Context } from "@/app/providers";
-import Link from "next/link";
 import { IconBook } from "@tabler/icons-react";
+import { observer } from "mobx-react-lite";
+import Link from "next/link";
+import { useContext } from "react";
+
+import { Context } from "@/app/providers";
+
+import classes from "./Directories.module.css";
 
 const DirectoriesPage = observer(() => {
 	const { directoriesStore } = useContext(Context);
