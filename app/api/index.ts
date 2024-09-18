@@ -1,9 +1,9 @@
-import axios, {InternalAxiosRequestConfig} from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 
 export const $host = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-    timeout: 1800000
-})
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  timeout: 1_800_000,
+});
 // export const $authHost = axios.create({
 //     baseURL: process.env.REACT_APP_API_URL || ''
 // })

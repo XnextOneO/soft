@@ -84,7 +84,19 @@
     "stylelint": "^16.2.1",
     "stylelint-config-standard-scss": "^13.0.0",
     "ts-jest": "^29.1.2",
-    "typescript": "5.4.2"
+    "typescript": "5.4.2",
+    "@jetbrains/eslint-config": "^5.4.2",
+    "eslint-plugin-sonarjs": "^0.25.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-comments": "^1.0.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-no-secrets": "^1.0.2",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-promise": "^7.1.0",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unicorn": "^55.0.0"
   },
   "packageManager": "yarn@4.2.2"
 }

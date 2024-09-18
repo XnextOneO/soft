@@ -1,18 +1,18 @@
-import { Flex, MantineStyleProps, UnstyledButton } from "@mantine/core";
 import React from "react";
+import { Flex, MantineStyleProps, UnstyledButton } from "@mantine/core";
 
-interface NavButtonProps {
-	w: number | string; 
-	className?: string;
-	children: React.ReactNode;
+interface NavButtonProperties {
+  w: number | string;
+  className?: string;
+  children: React.ReactNode;
 }
 
-const NavButton = ({ children, className, ...rest }: NavButtonProps) => {
-	return (
-		<Flex align="center" className={className} {...rest}>
-			{children}
-		</Flex>
-	);
+const NavButton = ({ children, className, ...rest }: NavButtonProperties) => {
+  return (
+    <Flex align="center" className={className} {...rest}>
+      {children}
+    </Flex>
+  );
 };
 
 export default NavButton;

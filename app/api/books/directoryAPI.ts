@@ -4,81 +4,81 @@ import { MRT_ColumnFiltersState, MRT_SortingState } from "mantine-react-table";
 import { $host } from "../index";
 
 export const getDirectory = async (
-	link: string,
-	page: number,
-	size: number,
-	sorting: { id: string; desc: string } | {}
+  link: string,
+  page: number,
+  size: number,
+  sorting: { id: string; desc: string } | {},
 ) => {
-	if (Object.keys(sorting).length !== 0 && sorting) {
-		const { data } = await $host.get(`reference-book/${link}`, {
-			params: {
-				page,
-				size,
-				sort: (sorting as { id: string; desc: string })?.desc,
-				column: (sorting as { id: string; desc: string })?.id
-					.replace(/(?<=[a-z])([A-Z])/gm, (match) =>
-						match.replace(match, `_${match}`)
-					)
-					.replace(/(?<!^)\s/gm, "_")
-					.toUpperCase(),
-			},
-		});
-		return data;
-	} else {
-		const { data } = await $host.get(`reference-book/${link}`, {
-			params: {
-				page,
-				size,
-			},
-		});
-		return data;
-	}
+  if (Object.keys(sorting).length > 0 && sorting) {
+    const { data } = await $host.get(`reference-book/${link}`, {
+      params: {
+        page,
+        size,
+        sort: (sorting as { id: string; desc: string })?.desc,
+        column: (sorting as { id: string; desc: string })?.id
+          .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) =>
+            match.replace(match, `_${match}`),
+          )
+          .replaceAll(/(?<!^)\s/gm, "_")
+          .toUpperCase(),
+      },
+    });
+    return data;
+  } else {
+    const { data } = await $host.get(`reference-book/${link}`, {
+      params: {
+        page,
+        size,
+      },
+    });
+    return data;
+  }
 };
 
 export const uploadDirectory = async (
-	link: string,
-	formData: FormData,
-	config: AxiosRequestConfig<any> | undefined
+  link: string,
+  formData: FormData,
+  config: AxiosRequestConfig<any> | undefined,
 ) => {
-	const { status } = await $host.post(
-		`reference-book/${link}`,
-		formData,
-		config
-	);
-	return status;
+  const { status } = await $host.post(
+    `reference-book/${link}`,
+    formData,
+    config,
+  );
+  return status;
 };
 
 export const searchDataInDirectory = async (
-	link: string,
-	page: number,
-	size: number,
-	sorting: { id: string; desc: string } | {},
-	searchValue: string
+  link: string,
+  page: number,
+  size: number,
+  sorting: { id: string; desc: string } | {},
+  searchValue: string,
 ) => {
-	if (Object.keys(sorting).length !== 0 && sorting) {
-		const { data } = await $host.get(`reference-book/${link}/search`, {
-			params: {
-				page,
-				size,
-				sort: (sorting as { id: string; desc: string })?.desc,
-				column: (sorting as { id: string; desc: string })?.id
-					.replace(/(?<=[a-z])([A-Z])/gm, (match) =>
-						match.replace(match, `_${match}`)
-					)
-					.replace(/(?<!^)\s/gm, "_")
-					.toUpperCase(),
-				text: searchValue ?? "",
-			},
-		});
-		return data;
-	} else {
-		const { data } = await $host.get(`reference-book/${link}/search`, {
-			params: {
-				page,
-				size,
-				text: searchValue ?? "",
-			},
-		});
-		return data;
-	}
+  if (Object.keys(sorting).length > 0 && sorting) {
+    const { data } = await $host.get(`reference-book/${link}/search`, {
+      params: {
+        page,
+        size,
+        sort: (sorting as { id: string; desc: string })?.desc,
+        column: (sorting as { id: string; desc: string })?.id
+          .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) =>
+            match.replace(match, `_${match}`),
+          )
+          .replaceAll(/(?<!^)\s/gm, "_")
+          .toUpperCase(),
+        text: searchValue ?? "",
+      },
+    });
+    return data;
+  } else {
+    const { data } = await $host.get(`reference-book/${link}/search`, {
+      params: {
+        page,
+        size,
+        text: searchValue ?? "",
+      },
+    });
+    return data;
+  }
 };
