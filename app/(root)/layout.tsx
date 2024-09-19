@@ -4,7 +4,7 @@ import "mantine-react-table/styles.css";
 import "../globals.css";
 
 import { Container, Flex } from "@mantine/core";
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 import Header from "@/components/Header/Header";
 import NavMenu from "@/components/NavMenu/NavMenu";

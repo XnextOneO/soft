@@ -71,7 +71,7 @@ const LoginPage: React.FC = () => {
 	if(!backgroundState) {
 		return (
 			<Loader color="green"/>
-		)
+		);
 	}
 
 	return (

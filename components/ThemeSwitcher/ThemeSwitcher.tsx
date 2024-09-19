@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { ActionIcon, useComputedColorScheme,useMantineColorScheme } from '@mantine/core';
 import { IconMoon,IconSun } from '@tabler/icons-react';
@@ -23,5 +23,5 @@ const ThemeSwitcher = () => {
       <IconMoon className={cx(classes.icon, classes.dark)} stroke={1.5} />
     </ActionIcon>
   );
-}
+};
 export default ThemeSwitcher;

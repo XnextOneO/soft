@@ -115,8 +115,8 @@ const DataTable = observer(
                     const columnNames = getColumnNames(slug);
                     const interpretedData = response.content.map(
                         (item: any) => {
-                            let newItem: IStringIndex = {};
-                            for (let key in item) {
+                            const newItem: IStringIndex = {};
+                            for (const key in item) {
                                 if (key !== "isDelete" && key !== "deleted") {
                                     // @ts-ignore
                                     newItem[columnNames[key] || key] =
