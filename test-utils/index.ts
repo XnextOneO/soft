@@ -1,5 +1,4 @@
-import userEvent from '@testing-library/user-event';
+export { render } from "./render";
+export * from "@testing-library/react";
 
-export { render } from './render';
-export * from '@testing-library/react';
-export { userEvent };
+export { default as userEvent } from "@testing-library/user-event";

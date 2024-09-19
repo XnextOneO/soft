@@ -1,17 +1,17 @@
 import { makeAutoObservable } from "mobx";
 
 export default class BurgerStore {
-	private _opened: Boolean = false;
+  private _opened: boolean = false;
 
-	constructor() {
-		makeAutoObservable(this);
-	}
+  constructor() {
+    makeAutoObservable(this);
+  }
 
-	setOpened(opened: Boolean) {
-		this._opened = opened;
-	}
+  setOpened(opened: boolean) {
+    this._opened = opened;
+  }
 
-	get opened(): Boolean {
-		return this._opened;
-	}
+  get opened(): boolean {
+    return this._opened;
+  }
 }
