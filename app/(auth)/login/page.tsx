@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Anchor,
   Button,
   Card,
   Group,
@@ -13,12 +12,8 @@ import {
   TextInput,
   useMantineColorScheme,
 } from "@mantine/core";
-import {
-  IconAt,
-  IconExclamationCircle,
-  IconLock,
-  IconUser,
-} from "@tabler/icons-react";
+import { IconAt, IconLock } from "@tabler/icons-react";
+import makeError from "make-error";
 
 import classes from "../Auth.module.css";
 
@@ -30,9 +25,10 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [, setShowAlert] = useState(false);
+  const [, setAlertMessage] = useState("");
   const [isLoginClicked, setIsLoginClicked] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onLogin = async () => {
     setIsLoginClicked(true);
 
@@ -41,6 +37,8 @@ const LoginPage: React.FC = () => {
       setShowAlert(true);
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     try {
       setAlertMessage("");
       setShowAlert(false);
