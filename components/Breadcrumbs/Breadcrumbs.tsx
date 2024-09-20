@@ -14,12 +14,11 @@ interface BreadcrumbsProperties {
 
 const Breadcrumbs: FC<BreadcrumbsProperties> = ({ crumbs }) => {
   const location = useRouter().query;
-  const [currentCrumb, setCurrentCrumb] = useState<Crumb | null>(null);
+  const [, setCurrentCrumb] = useState<Crumb | null>();
 
   useEffect(() => {
     const currentPath = location.pathname;
-    const crumb = crumbs.find((crumb) => crumb.href === currentPath);
-    // @ts-ignore
+    const crumb = crumbs.find((breadcrumb) => breadcrumb.href === currentPath);
     setCurrentCrumb(crumb);
   }, [location.pathname, crumbs]);
 

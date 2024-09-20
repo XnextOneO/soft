@@ -5,24 +5,25 @@ import {
   Breadcrumbs,
   Button,
   Container,
-  Group,
   Stack,
   Text,
   Title,
   useMantineColorScheme,
-  useMantineTheme,
 } from "@mantine/core";
+import { FC } from "preact/compat";
 
 import classes from "./HomePage.module.css";
 
-const HomePage = () => {
+const HomePage: FC = () => {
   const colorScheme = useMantineColorScheme();
   const [backgroundState, setBackgroundState] = useState<string>("");
 
   useEffect(() => {
-    colorScheme.colorScheme === "light"
-      ? setBackgroundState(classes.mainContainerLight)
-      : setBackgroundState(classes.mainContainerDark);
+    if (colorScheme.colorScheme === "light") {
+      setBackgroundState(classes.mainContainerLight);
+    } else {
+      setBackgroundState(classes.mainContainerDark);
+    }
   }, [colorScheme.colorScheme]);
 
   const breadcrumbs = [

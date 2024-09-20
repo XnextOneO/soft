@@ -3,7 +3,6 @@
 import { useContext } from "react";
 import Link from "next/link";
 import {
-  Anchor,
   Breadcrumbs,
   Card,
   Container,
@@ -16,7 +15,6 @@ import {
   Title,
   UnstyledButton,
   useMantineColorScheme,
-  useMantineTheme,
 } from "@mantine/core";
 import { IconBook } from "@tabler/icons-react";
 import { observer } from "mobx-react-lite";
@@ -87,14 +85,14 @@ const DirectoriesPage = observer(() => {
           </Title>
           <Divider w="100%" mb={20} p={0} />
           <Grid mb={20}>
-            {directoriesStore.nsiDirectories.map((dir, index) => (
+            {directoriesStore.nsiDirectories.map((directory, index) => (
               <Grid.Col key={index} span={2}>
                 <Link
                   style={{
                     width: "50%",
                     textDecoration: "none",
                   }}
-                  href={`/directories/${dir.link}`}
+                  href={`/directories/${directory.link}`}
                 >
                   <UnstyledButton className={classes.item}>
                     <IconBook
@@ -109,7 +107,7 @@ const DirectoriesPage = observer(() => {
                         colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"
                       }
                     >
-                      {dir.name}
+                      {directory.name}
                     </Text>
                   </UnstyledButton>
                 </Link>

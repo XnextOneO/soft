@@ -4,7 +4,7 @@ import { Image, Stack, Title, useMantineColorScheme } from "@mantine/core";
 import classes from "./NotFound.module.css";
 // import { useRouter } from "next/navigation";
 
-export default function NotFound() {
+export default function NotFound(): JSX.Element {
   // const router = useRouter();
   const colorScheme = useMantineColorScheme();
 

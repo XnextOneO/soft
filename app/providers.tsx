@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext } from "react";
-import { MantineProvider, useMantineColorScheme } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 import DirectoriesStore from "@/store/directoriesStore";
@@ -19,7 +19,11 @@ export const Context = createContext<AppContextType>({
   directoriesStore: new DirectoriesStore(),
 });
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
   return (
     <Context.Provider
       value={{

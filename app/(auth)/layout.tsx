@@ -12,7 +12,7 @@ export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}): JSX.Element {
   return (
     <html lang="en" data-mantine-color-scheme="light">
       <head>
