@@ -96,6 +96,7 @@ const DataTable = observer(
           }
 
           const response = await apiFunction(...parameters);
+          console.log(response, "response");
           setTotalElements(response.page.totalElements);
           setCountPages(response.page.totalPages);
           const currentPage = page;
@@ -163,13 +164,10 @@ const DataTable = observer(
         const sortingValue = sorting[0]?.id;
         const sortingDirection = sorting[0]?.desc;
         const sortingKey = Object.keys(columnNames).find(
-          (key) =>
-            // @ts-expect-error
-            columnNames[key] === sortingValue,
+          (key) => columnNames[key] === sortingValue,
         );
 
         setManualSorting({
-          // @ts-expect-error
           id: sortingKey,
           desc: sortingDirection ? "DESC" : "ASC",
         });

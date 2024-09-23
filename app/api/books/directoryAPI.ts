@@ -6,26 +6,24 @@ export const getDirectory = async (
   link: string,
   page: number,
   size: number,
-  sorting: { id: string; desc: string } | unknown,
-): Promise<object | undefined> => {
-  if (typeof sorting === "object" && sorting !== null) {
-    if (Object.keys(sorting).length > 0) {
-      const { data } = await $host.get(`reference-book/${link}`, {
-        params: {
-          page,
-          size,
-          sort: (sorting as { id: string; desc: string })?.desc,
-          column: (sorting as { id: string; desc: string })?.id
-            .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) =>
-              match.replace(match, `_${match}`),
-            )
-            .replaceAll(/(?<!^)\s/gm, "_")
-            .toUpperCase(),
-        },
-      });
-      return data;
-    }
-    return undefined;
+  sorting: { id: string; desc: string } | object,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> => {
+  if (Object.keys(sorting).length > 0 && sorting) {
+    const { data } = await $host.get(`reference-book/${link}`, {
+      params: {
+        page,
+        size,
+        sort: (sorting as { id: string; desc: string })?.desc,
+        column: (sorting as { id: string; desc: string })?.id
+          .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) =>
+            match.replace(match, `_${match}`),
+          )
+          .replaceAll(/(?<!^)\s/gm, "_")
+          .toUpperCase(),
+      },
+    });
+    return data;
   } else {
     const { data } = await $host.get(`reference-book/${link}`, {
       params: {
@@ -40,7 +38,8 @@ export const getDirectory = async (
 export const uploadDirectory = async (
   link: string,
   formData: FormData,
-  config: AxiosRequestConfig<undefined> | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  config: AxiosRequestConfig<any> | undefined,
 ): Promise<number> => {
   const { status } = await $host.post(
     `reference-book/${link}`,
@@ -56,7 +55,8 @@ export const searchDataInDirectory = async (
   size: number,
   sorting: { id: string; desc: string } | object,
   searchValue: string,
-): Promise<object | undefined> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> => {
   if (Object.keys(sorting).length > 0 && sorting) {
     const { data } = await $host.get(`reference-book/${link}/search`, {
       params: {
