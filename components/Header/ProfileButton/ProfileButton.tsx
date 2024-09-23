@@ -6,7 +6,7 @@ import { IconChevronRight } from "@tabler/icons-react";
 
 import classes from "./ProfileButton.module.css";
 
-const ProfileButton = () => {
+const ProfileButton = (): JSX.Element => {
   const router = useRouter();
   return (
     <UnstyledButton

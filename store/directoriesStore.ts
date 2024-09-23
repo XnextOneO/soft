@@ -14,6 +14,7 @@ export default class DirectoriesStore {
       columns: {
         code: "Код назначения платежа",
         name: "Наименование кода назначения платежа",
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         additionDate: "Дата добавления",
         isDelete: "Удален",
       },
@@ -86,6 +87,7 @@ export default class DirectoriesStore {
       name: "Справочник кодов и наименований валют",
       link: "nsi/currency",
       columns: {
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         digitalCurrencyCode: "Код валюты цифровой",
         letterCurrencyCode: "Код валюты буквенный",
         name: "Наименование валюты",

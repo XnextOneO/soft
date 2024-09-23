@@ -36,20 +36,20 @@ const UpdateTableModal = ({
   link: string;
   opened: boolean;
   close: () => void;
-}) => {
+}): JSX.Element => {
   const [visible, { toggle }] = useDisclosure(false);
   const [progress, setProgress] = useState<number>(0);
   const [uploaded, setUploaded] = useState<boolean>(false);
   const openReference = useRef<() => void>(null);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>();
   const controller = new AbortController();
 
-  const uploadFiles = async () => {
+  const uploadFiles = async (): Promise<void> => {
     const formData = new FormData();
 
     const config = {
       signal: controller.signal,
-      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+      onUploadProgress: (progressEvent: AxiosProgressEvent): void => {
         console.log(progressEvent);
         const percentCompleted = Math.round(
           (progressEvent.loaded * 100) / (progressEvent.total ?? 1),
@@ -69,6 +69,7 @@ const UpdateTableModal = ({
       if (status === 200) {
         setUploaded(true);
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(error.message);
     }
@@ -98,7 +99,7 @@ const UpdateTableModal = ({
                 variant="subtle"
                 color="red"
                 onClick={() => {
-                  setFile(null);
+                  setFile(undefined);
                 }}
               >
                 <IconX />
@@ -108,8 +109,8 @@ const UpdateTableModal = ({
         ) : (
           <Dropzone
             openRef={openReference}
-            onDrop={(file) => {
-              setFile(file[0]);
+            onDrop={(droppedFile) => {
+              setFile(droppedFile[0]);
             }}
             radius="md"
           >
@@ -177,7 +178,7 @@ const UpdateTableModal = ({
                     <Center
                       onClick={() => {
                         close();
-                        setFile(null);
+                        setFile(undefined);
                         setUploaded(false);
                         setProgress(0);
                         toggle();

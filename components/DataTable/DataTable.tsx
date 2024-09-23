@@ -3,28 +3,23 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
-import {
-  Button,
-  Flex,
-  Group,
-  Pagination,
-  Text,
-  TextInput,
-} from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
+import { Button, Flex, Group, Pagination, Text } from "@mantine/core";
 import {
   MantineReactTable,
-  type MRT_ColumnDef,
+  // type MRT_ColumnDef,
+  // eslint-disable-next-line camelcase
   MRT_ColumnFiltersState,
+  // eslint-disable-next-line camelcase
   MRT_GlobalFilterTextInput,
+  // eslint-disable-next-line camelcase
   MRT_ShowHideColumnsButton,
+  // eslint-disable-next-line camelcase
   MRT_SortingState,
-  MRT_ToggleFiltersButton,
   useMantineReactTable,
 } from "mantine-react-table";
+// eslint-disable-next-line camelcase
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 import { observer } from "mobx-react-lite";
 
@@ -38,6 +33,7 @@ import classes from "./DataTable.module.css";
 import PopoverCell from "./PopoverCell";
 
 interface IStringIndex {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -52,16 +48,16 @@ const DataTable = observer(
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isRefetching, setIsRefetching] = useState(false);
-    const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
-      [],
-    );
+    // eslint-disable-next-line camelcase
+    const [columnFilters] = useState<MRT_ColumnFiltersState>([]);
     const [globalFilter, setGlobalFilter] = useState<string>("");
+    // eslint-disable-next-line camelcase
     const [sorting, setSorting] = useState<MRT_SortingState>([]);
     const [manualSorting, setManualSorting] = useState<
-      { id: string; desc: string } | {}
+      { id: string; desc: string } | object
     >([]);
     const [page, setPage] = useState<number>(1);
-    const [size, setSize] = useState<number>(20);
+    const [size] = useState<number>(20);
     const [data, setData] = useState<[]>([]);
     const [countPages, setCountPages] = useState<number>(0);
     const [totalElements, setTotalElements] = useState<number>(0);
@@ -70,24 +66,25 @@ const DataTable = observer(
     const { directoriesStore } = useContext(Context);
 
     const findDirectory = useCallback(
-      (slug: string) => {
+      (directorySlug: string) => {
         return directoriesStore.directories.find(
-          (directory) => directory.link === slug,
+          (directory) => directory.link === directorySlug,
         );
       },
       [directoriesStore.directories],
     );
 
     const getColumnNames = useCallback(
-      (slug: string) => {
-        const directory = findDirectory(slug);
+      (directorySlug: string) => {
+        const directory = findDirectory(directorySlug);
         return directory ? directory.columns : {};
       },
       [findDirectory],
     );
 
     const fetchData = useCallback(
-      async (apiFunction: Function, parameters: any) => {
+      // eslint-disable-next-line @typescript-eslint/ban-types,@typescript-eslint/no-explicit-any
+      async (apiFunction: Function, parameters: any): Promise<void> => {
         try {
           if (data.length === 0) {
             setIsLoading(true);
@@ -104,18 +101,23 @@ const DataTable = observer(
             setPage(countPages === 0 ? 1 : countPages);
           }
           const columnNames = getColumnNames(slug);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const interpretedData = response.content.map((item: any) => {
             const newItem: IStringIndex = {};
             for (const key in item) {
-              if (key !== "isDelete" && key !== "deleted") {
-                // @ts-ignore
-                newItem[columnNames[key] || key] = item[key];
-              }
+              if (Object.prototype.hasOwnProperty.call(item, key)) {
+                if (key !== "isDelete" && key !== "deleted") {
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  newItem[columnNames[key] || key] = item[key];
+                }
 
-              if (key === "data" || key === "additionDate") {
-                const date = new Date(item[key]);
-                // @ts-ignore
-                newItem[columnNames[key] || key] = date.toLocaleString();
+                if (key === "data" || key === "additionDate") {
+                  const date = new Date(item[key]);
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  newItem[columnNames[key] || key] = date.toLocaleString();
+                }
               }
             }
             return newItem;
@@ -155,11 +157,12 @@ const DataTable = observer(
     ]);
 
     useEffect(() => {
+      // eslint-disable-next-line no-unused-expressions
       globalFilter ? setIsSearchEmpty(false) : setIsSearchEmpty(true);
     }, [globalFilter]);
 
     useEffect(() => {
-      const columnNames = getColumnNames(slug);
+      const columnNames = getColumnNames(slug) as { [key: string]: string };
       if (sorting.length > 0) {
         const sortingValue = sorting[0]?.id;
         const sortingDirection = sorting[0]?.desc;
@@ -175,18 +178,20 @@ const DataTable = observer(
     }, [getColumnNames, slug, sorting]);
 
     const columnsMap = new Map();
-    data.forEach((element: {}) => {
+    // eslint-disable-next-line unicorn/no-array-for-each
+    data.forEach((element: object) => {
       for (const key of Object.keys(element)) {
         columnsMap.set(key, true);
       }
     });
 
-    const columns: MRT_ColumnDef<any>[] = data
+    const columns = data
       ? [...columnsMap.keys()].map((key: string) => {
           return {
             accessorKey: key,
             header: key,
-            Cell: ({ cell }: { cell: any }) => (
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            Cell: ({ cell }: { cell: any }): JSX.Element => (
               <PopoverCell>{cell.getValue()}</PopoverCell>
             ),
             size: key.length >= 15 ? 250 : 180,
@@ -207,6 +212,7 @@ const DataTable = observer(
       enableTopToolbar: false,
       enableDensityToggle: false,
       enableMultiSort: false,
+      // eslint-disable-next-line camelcase
       localization: MRT_Localization_RU,
       enableColumnResizing: true,
       initialState: { density: "xs", showGlobalFilter: true },
@@ -241,7 +247,7 @@ const DataTable = observer(
         : undefined,
       renderBottomToolbarCustomActions:
         data && data.length > 0
-          ? () => (
+          ? (): JSX.Element => (
               <Group justify="space-between" w="100%">
                 <Text>
                   Отображены записи {(page - 1) * size + 1}–
@@ -290,7 +296,7 @@ const DataTable = observer(
               color="#007458"
               onClick={() => {
                 setIsLoading(true);
-                fetchData(getDirectory, [
+                return fetchData(getDirectory, [
                   slug,
                   page - 1,
                   size,
@@ -318,7 +324,9 @@ const DataTable = observer(
           </Group>
 
           <Flex gap="xs" align="center">
+            {/* eslint-disable-next-line camelcase */}
             <MRT_GlobalFilterTextInput table={table} />
+            {/* eslint-disable-next-line camelcase */}
             <MRT_ShowHideColumnsButton table={table} />
           </Flex>
         </Flex>

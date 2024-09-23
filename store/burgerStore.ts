@@ -7,7 +7,7 @@ export default class BurgerStore {
     makeAutoObservable(this);
   }
 
-  setOpened(opened: boolean) {
+  setOpened(opened: boolean): void {
     this._opened = opened;
   }
 
