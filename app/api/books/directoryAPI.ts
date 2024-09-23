@@ -1,5 +1,4 @@
-import { AxiosRequestConfig } from "axios";
-import { MRT_ColumnFiltersState, MRT_SortingState } from "mantine-react-table";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 
 import { $host } from "../index";
 
@@ -7,8 +6,8 @@ export const getDirectory = async (
   link: string,
   page: number,
   size: number,
-  sorting: { id: string; desc: string } | {},
-) => {
+  sorting: { id: string; desc: string } | object,
+): Promise<AxiosResponse> => {
   if (Object.keys(sorting).length > 0 && sorting) {
     const { data } = await $host.get(`reference-book/${link}`, {
       params: {
@@ -38,7 +37,7 @@ export const getDirectory = async (
 export const uploadDirectory = async (
   link: string,
   formData: FormData,
-  config: AxiosRequestConfig<any> | undefined,
+  config: AxiosRequestConfig<unknown> | undefined,
 ) => {
   const { status } = await $host.post(
     `reference-book/${link}`,

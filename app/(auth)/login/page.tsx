@@ -24,7 +24,6 @@ const LoginPage: React.FC = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [, setShowAlert] = useState(false);
   const [, setAlertMessage] = useState("");
   const [isLoginClicked, setIsLoginClicked] = useState(false);

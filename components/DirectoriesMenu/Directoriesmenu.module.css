@@ -2,5 +2,5 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border: 0;
-    border-left: rem(1px) solid var(--mantine-color-body);
+    border-left: rem(5px) solid var(--mantine-color-body);
   }

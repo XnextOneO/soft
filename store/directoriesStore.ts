@@ -3,11 +3,10 @@ import { makeAutoObservable } from "mobx";
 export interface IDirectory {
   name: string;
   link: string;
-  columns: Object;
+  columns: object;
 }
 
 export default class DirectoriesStore {
-  private _activeDirectory: Object = false;
   private _nsiDirectories: IDirectory[] = [
     {
       name: "Справочник кодов категории назначения перевода",
@@ -341,14 +340,6 @@ export default class DirectoriesStore {
 
   constructor() {
     makeAutoObservable(this);
-  }
-
-  setActiveDirectory(activeDirectory: Object) {
-    this._activeDirectory = activeDirectory;
-  }
-
-  get activeDirectory(): Object {
-    return this._activeDirectory;
   }
 
   get nsiDirectories(): IDirectory[] {

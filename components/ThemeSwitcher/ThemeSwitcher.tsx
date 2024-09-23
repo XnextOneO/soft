@@ -10,7 +10,7 @@ import cx from "clsx";
 
 import classes from "./ThemeSwitcher.module.css";
 
-const ThemeSwitcher = () => {
+const ThemeSwitcher: React.FC = () => {
   const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
@@ -37,8 +37,5 @@ const ThemeSwitcher = () => {
     </ActionIcon>
   );
 };
-<<<<<<< HEAD
+
 export default ThemeSwitcher;
-=======
-export default ThemeSwitcher;
->>>>>>> 2d93cc64e027ec9e924fbf635d1c6c356f347724
