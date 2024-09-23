@@ -7,7 +7,7 @@ export interface IDirectory {
 }
 
 export default class DirectoriesStore {
-  private _nsiDirectories: IDirectory[] = [
+  private _directories: IDirectory[] = [
     {
       name: "Справочник кодов категории назначения перевода",
       link: "nsi/transfer-destination-category-code",
@@ -17,9 +17,6 @@ export default class DirectoriesStore {
         additionDate: "Дата добавления",
         isDelete: "Удален",
       },
-      // columnsSort: {
-      // 	ID_UNUR: 'code'
-      // }
     },
     {
       name: "Справочник кодов идентификации организации",
@@ -271,86 +268,78 @@ export default class DirectoriesStore {
         isDelete: "Удален",
       },
     },
+    {
+      name: "Справочник участников системы SWIFT",
+      link: "swift",
+      columns: {
+        modificationFlag: "Флаг модификации",
+        recordKey: "Ключ записи",
+        officeType: "",
+        parentOfficeKey: "",
+        headOfficeKey: "",
+        legalType: "",
+        legalParentKey: "",
+        groupType: "Тип группы",
+        groupParentKey: "",
+        institutionStatus: "",
+        cooperativeGroupKey: "",
+        isoLeiCode: "",
+        bic8: "",
+        branchBic: "",
+        bic: "",
+        chipsUid: "",
+        nationalId: "",
+        connectedBic: "",
+        institutionName: "",
+        branchInformation: "",
+        pobNumber: "",
+        streetAddress1: "",
+        streetAddress2: "",
+        streetAddress3: "",
+        streetAddress4: "",
+        city: "Город",
+        cps: "",
+        zipCode: "",
+        countryName: "",
+        isoCountryCode: "",
+        timezone: "Часовой пояс",
+        subtypeIndicator: "",
+        networkConnectivity: "",
+        branchQualifiers: "",
+        serviceCodes: "",
+        ssiGroupKey: "",
+        ibanKey: "IBAN ключ",
+        fieldA: "Поле А",
+        fieldB: "Поле Б",
+      },
+    },
+    {
+      name: "Справочник БИК Российской Федерации",
+      link: "rf",
+      columns: {
+        bic: "Банковский идентификационный код",
+        name: "Название",
+        engName: "Название на английском языке",
+        registryNumber: "Регистрационный номер",
+        countryCode: "Код страны",
+        regionNumber: "Номер региона",
+        index: "Индекс",
+        typeNp: "Тип населенного пункта",
+        nameNp: "Название населенного пункта",
+        address: "Адрес",
+        parentBic: "Родительский БИК",
+        swbic: "Идентификационный код банка, присвоенный SWIFT",
+        account: "Аккаунт",
+        deleted: "Удален",
+      },
+    },
   ];
-  private _swiftDirectory: IDirectory = {
-    name: "Справочник участников системы SWIFT",
-    link: "swift",
-    columns: {
-      modificationFlag: "Флаг модификации",
-      recordKey: "Ключ записи",
-      officeType: "",
-      parentOfficeKey: "",
-      headOfficeKey: "",
-      legalType: "",
-      legalParentKey: "",
-      groupType: "Тип группы",
-      groupParentKey: "",
-      institutionStatus: "",
-      cooperativeGroupKey: "",
-      isoLeiCode: "",
-      bic8: "",
-      branchBic: "",
-      bic: "",
-      chipsUid: "",
-      nationalId: "",
-      connectedBic: "",
-      institutionName: "",
-      branchInformation: "",
-      pobNumber: "",
-      streetAddress1: "",
-      streetAddress2: "",
-      streetAddress3: "",
-      streetAddress4: "",
-      city: "Город",
-      cps: "",
-      zipCode: "",
-      countryName: "",
-      isoCountryCode: "",
-      timezone: "Часовой пояс",
-      subtypeIndicator: "",
-      networkConnectivity: "",
-      branchQualifiers: "",
-      serviceCodes: "",
-      ssiGroupKey: "",
-      ibanKey: "IBAN ключ",
-      fieldA: "Поле А",
-      fieldB: "Поле Б",
-    },
-  };
-  private _rfDirectory: IDirectory = {
-    name: "Справочник БИК Российской Федерации",
-    link: "rf",
-    columns: {
-      bic: "Банковский идентификационный код",
-      name: "Название",
-      engName: "Название на английском языке",
-      registryNumber: "Регистрационный номер",
-      countryCode: "Код страны",
-      regionNumber: "Номер региона",
-      index: "Индекс",
-      typeNp: "Тип населенного пункта",
-      nameNp: "Название населенного пункта",
-      address: "Адрес",
-      parentBic: "Родительский БИК",
-      swbic: "Идентификационный код банка, присвоенный SWIFT",
-      account: "Аккаунт",
-      deleted: "Удален",
-    },
-  };
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  get nsiDirectories(): IDirectory[] {
-    return this._nsiDirectories;
-  }
-
-  get rfDirectory(): IDirectory {
-    return this._rfDirectory;
-  }
-
-  get swiftDirectory(): IDirectory {
-    return this._swiftDirectory;
+  get directories(): IDirectory[] {
+    return this._directories;
   }
 }

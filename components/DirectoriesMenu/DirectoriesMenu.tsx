@@ -14,26 +14,24 @@ const DirectoriesMenu = observer(
     children: React.ReactNode;
   }) => {
     const { directoriesStore } = useContext(Context);
-    const allDirectories = directoriesStore.nsiDirectories.concat(
-      directoriesStore.swiftDirectory,
-      directoriesStore.rfDirectory,
+    const [directories, setDirectories] = useState(
+      directoriesStore.directories,
     );
-    const [directories, setDirectories] = useState(allDirectories);
 
-    const handleItemClick = (e: React.MouseEvent) => {
-      e.stopPropagation();
+    const handleItemClick = (event: React.MouseEvent): void => {
+      event.stopPropagation();
     };
 
-    const searchDirectoryByName = (value: string) => {
+    const searchDirectoryByName = (value: string): void => {
       setDirectories(
-        allDirectories.filter((directory) =>
+        directoriesStore.directories.filter((directory) =>
           directory.name.toLowerCase().includes(value.toLowerCase()),
         ),
       );
     };
 
-    const resetDirectories = () => {
-      setDirectories(allDirectories);
+    const resetDirectories = (): void => {
+      setDirectories(directoriesStore.directories);
     };
 
     return (
@@ -41,7 +39,7 @@ const DirectoriesMenu = observer(
         onChange={(value) => {
           onOpen(value);
           if (!value) {
-            setDirectories(allDirectories);
+            setDirectories(directoriesStore.directories);
           }
         }}
         radius="xs"
@@ -57,7 +55,7 @@ const DirectoriesMenu = observer(
             w="100%"
             placeholder="Поиск по справочникам"
             onClick={handleItemClick}
-            onChange={(e) => searchDirectoryByName(e.target.value)}
+            onChange={(event) => searchDirectoryByName(event.target.value)}
           />
           <ScrollArea h={300}>
             {directories.map((directory, index) => (

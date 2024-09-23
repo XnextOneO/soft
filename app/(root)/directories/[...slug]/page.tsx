@@ -17,11 +17,9 @@ const DirectoryPage = observer(
   ({ params }: { params: { slug: Array<string> } }) => {
     const { directoriesStore } = useContext(Context);
     if (
-      !directoriesStore.nsiDirectories
-        .concat(directoriesStore.rfDirectory, directoriesStore.swiftDirectory)
-        .find((dir) => {
-          return dir.link === params.slug.join("/");
-        })
+      !directoriesStore.directories.some((directory) => {
+        return directory.link === params.slug.join("/");
+      })
     ) {
       redirect("/not-found");
     }
@@ -35,14 +33,9 @@ const DirectoryPage = observer(
       { title: "Справочники", href: "/directories" },
       {
         title: `${
-          directoriesStore.nsiDirectories
-            .concat(
-              directoriesStore.rfDirectory,
-              directoriesStore.swiftDirectory,
-            )
-            .find((dir) => {
-              return dir.link === params.slug.join("/");
-            })?.name
+          directoriesStore.directories.find((directory) => {
+            return directory.link === params.slug.join("/");
+          })?.name
         }`,
         href: `${params.slug.join("/")}`,
       },

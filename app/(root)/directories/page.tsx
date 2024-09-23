@@ -85,34 +85,43 @@ const DirectoriesPage = observer(() => {
           </Title>
           <Divider w="100%" mb={20} p={0} />
           <Grid mb={20}>
-            {directoriesStore.nsiDirectories.map((directory, index) => (
-              <Grid.Col key={index} span={2}>
-                <Link
-                  style={{
-                    width: "50%",
-                    textDecoration: "none",
-                  }}
-                  href={`/directories/${directory.link}`}
-                >
-                  <UnstyledButton className={classes.item}>
-                    <IconBook
-                      color={
-                        colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"
-                      }
-                    />
-                    <Text
-                      size="sm"
-                      mt={7}
-                      c={
-                        colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"
-                      }
-                    >
-                      {directory.name}
-                    </Text>
-                  </UnstyledButton>
-                </Link>
-              </Grid.Col>
-            ))}
+            {directoriesStore.directories
+              .filter(
+                (directory) =>
+                  directory.link !== "rf" && directory.link !== "swift",
+              )
+              .map((directory, index) => (
+                <Grid.Col key={index} span={2}>
+                  <Link
+                    style={{
+                      width: "50%",
+                      textDecoration: "none",
+                    }}
+                    href={`/directories/${directory.link}`}
+                  >
+                    <UnstyledButton className={classes.item}>
+                      <IconBook
+                        color={
+                          colorScheme.colorScheme === "dark"
+                            ? "#c9c9c9"
+                            : "black"
+                        }
+                      />
+                      <Text
+                        size="sm"
+                        mt={7}
+                        c={
+                          colorScheme.colorScheme === "dark"
+                            ? "#c9c9c9"
+                            : "black"
+                        }
+                      >
+                        {directory.name}
+                      </Text>
+                    </UnstyledButton>
+                  </Link>
+                </Grid.Col>
+              ))}
           </Grid>
           <Card.Section
             style={{
@@ -148,7 +157,7 @@ const DirectoriesPage = observer(() => {
                   width: "50%",
                   textDecoration: "none",
                 }}
-                href={`/directories/${directoriesStore.rfDirectory.link}`}
+                href={`/directories/${directoriesStore.directories.find((directory) => directory.link === "rf")?.link}`}
               >
                 <UnstyledButton className={classes.item}>
                   <IconBook
@@ -173,7 +182,7 @@ const DirectoriesPage = observer(() => {
                   width: "50%",
                   textDecoration: "none",
                 }}
-                href={`/directories/${directoriesStore.swiftDirectory.link}`}
+                href={`/directories/${directoriesStore.directories.find((directory) => directory.link === "swift")?.link}`}
               >
                 <UnstyledButton className={classes.item}>
                   <IconBook

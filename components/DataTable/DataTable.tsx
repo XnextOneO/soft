@@ -71,21 +71,11 @@ const DataTable = observer(
 
     const findDirectory = useCallback(
       (slug: string) => {
-        if (slug.startsWith("nsi")) {
-          return directoriesStore.nsiDirectories.find(
-            (dir) => dir.link === slug,
-          );
-        } else if (slug.startsWith("rf")) {
-          return directoriesStore.rfDirectory;
-        } else if (slug.startsWith("swift")) {
-          return directoriesStore.swiftDirectory;
-        }
+        return directoriesStore.directories.find(
+          (directory) => directory.link === slug,
+        );
       },
-      [
-        directoriesStore.nsiDirectories,
-        directoriesStore.rfDirectory,
-        directoriesStore.swiftDirectory,
-      ],
+      [directoriesStore.directories],
     );
 
     const getColumnNames = useCallback(
@@ -120,7 +110,7 @@ const DataTable = observer(
                 // @ts-ignore
                 newItem[columnNames[key] || key] = item[key];
               }
-              
+
               if (key === "data" || key === "additionDate") {
                 const date = new Date(item[key]);
                 // @ts-ignore
