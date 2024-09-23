@@ -1,5 +1,4 @@
 import { Container, Flex } from "@mantine/core";
-import dotenv from "dotenv";
 
 import Header from "@/components/Header/Header";
 import NavMenu from "@/components/NavMenu/NavMenu";
@@ -18,7 +17,11 @@ export const metadata = {
   description: "Международные и межбанковские расчеты",
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element => {
   return (
     <html lang="en" data-mantine-color-scheme="light">
       <head>

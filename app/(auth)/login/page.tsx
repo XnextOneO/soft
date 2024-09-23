@@ -13,7 +13,6 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { IconAt, IconLock } from "@tabler/icons-react";
-import makeError from "make-error";
 
 import classes from "../Auth.module.css";
 
@@ -36,8 +35,7 @@ const LoginPage: React.FC = () => {
       setShowAlert(true);
       return;
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
+
     try {
       setAlertMessage("");
       setShowAlert(false);
@@ -48,21 +46,21 @@ const LoginPage: React.FC = () => {
       //     navigate(ALL_BEATS_ROUTE);
       // }
       router.push("/directories");
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setAlertMessage(error.response.data.message);
       setShowAlert(true);
     }
   };
-  const closeError = () => {
-    setAlertMessage("");
-    setShowAlert(false);
-    setIsLoginClicked(false);
-  };
+  // const closeError = () => {
+  //   setAlertMessage("");
+  //   setShowAlert(false);
+  //   setIsLoginClicked(false);
+  // };
 
   useEffect(() => {
-    colorScheme.colorScheme === "light"
-      ? setBackgroundState(classes.authContainer)
-      : setBackgroundState(classes.darkContainer);
+    const isLight = colorScheme.colorScheme === "light";
+    setBackgroundState(isLight ? classes.authContainer : classes.darkContainer);
   }, [colorScheme.colorScheme]);
 
   if (!backgroundState) {
@@ -99,7 +97,7 @@ const LoginPage: React.FC = () => {
             value={email}
             radius="md"
             leftSection={<IconAt size={16} />}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
           />
           <TextInput
             w="90%"
@@ -111,7 +109,7 @@ const LoginPage: React.FC = () => {
             type="password"
             leftSection={<IconLock size={16} />}
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
           />
           <Group w="90%" my={10}>
             <Button

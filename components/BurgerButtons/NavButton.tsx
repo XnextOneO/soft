@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, MantineStyleProps, UnstyledButton } from "@mantine/core";
+import { Flex } from "@mantine/core";
 
 interface NavButtonProperties {
   w: number | string;
@@ -7,7 +7,11 @@ interface NavButtonProperties {
   children: React.ReactNode;
 }
 
-const NavButton = ({ children, className, ...rest }: NavButtonProperties) => {
+const NavButton = ({
+  children,
+  className,
+  ...rest
+}: NavButtonProperties): JSX.Element => {
   return (
     <Flex align="center" className={className} {...rest}>
       {children}
