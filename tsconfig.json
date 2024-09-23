@@ -20,6 +20,7 @@
     },
     "plugins": [{ "name": "next" }]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/[...not-found]/not-found.tsx"],
+  "include": [
+    "next-environment", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/[...not-found]/not-found.tsx"],
   "exclude": ["node_modules"]
 }

@@ -101,7 +101,7 @@ module.exports = {
     "max-params": ["error", { max: 5 }],
     "max-nested-callbacks": ["error", { max: 3 }],
     "max-depth": ["error", { max: 4 }],
-    "no-magic-numbers": ["warn", { ignore: [0, 1, -1, 2] }],
+    "no-magic-numbers": ["off", { ignore: [0, 1, -1, 2] }],
     "unicorn/consistent-function-scoping": [
       "error",
       { checkArrowFunctions: true },
