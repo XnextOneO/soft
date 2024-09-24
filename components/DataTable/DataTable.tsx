@@ -109,14 +109,14 @@ const DataTable = observer(
                 if (key !== "isDelete" && key !== "deleted") {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
-                  newItem[columnNames[key] || key] = item[key];
+                  newItem[columnNames[`${key}`] || key] = item[`${key}`];
                 }
 
                 if (key === "data" || key === "additionDate") {
-                  const date = new Date(item[key]);
+                  const date = new Date(item[`${key}`]);
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
-                  newItem[columnNames[key] || key] = date.toLocaleString();
+                  newItem[columnNames[`${key}`] || key] = date.toLocaleString();
                 }
               }
             }
@@ -167,7 +167,7 @@ const DataTable = observer(
         const sortingValue = sorting[0]?.id;
         const sortingDirection = sorting[0]?.desc;
         const sortingKey = Object.keys(columnNames).find(
-          (key) => columnNames[key] === sortingValue,
+          (key) => columnNames[`${key}`] === sortingValue,
         );
 
         setManualSorting({
