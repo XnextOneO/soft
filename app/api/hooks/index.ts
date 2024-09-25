@@ -1,5 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-
 import { $host } from "../index";
 
 interface FetchApiDataParameters {
@@ -9,19 +7,12 @@ interface FetchApiDataParameters {
   column?: string;
 }
 
-export const useApiData = (
+export const fetchApiData = async (
   parameters: FetchApiDataParameters,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): { data: any; error: any; isLoading: boolean } => {
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["apiData", parameters],
-    queryFn: async () => {
-      const response = await $host.get("reference-book/nsi/currency", {
-        params: parameters,
-      });
-      return response.data;
-    },
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+) => {
+  const response = await $host.get("reference-book/nsi/currency", {
+    params: parameters,
   });
-
-  return { data, error, isLoading };
+  return response.data;
 };

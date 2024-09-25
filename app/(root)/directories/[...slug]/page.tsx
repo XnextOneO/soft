@@ -24,7 +24,7 @@ const DirectoryPage = observer(
       redirect("/not-found");
     }
 
-    // console.log(useRouter().query);
+    // console.log(useRouter().hooks);
     const colorScheme = useMantineColorScheme();
     const [opened, { open, close }] = useDisclosure(false);
 
