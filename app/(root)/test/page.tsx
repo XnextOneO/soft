@@ -1,15 +1,24 @@
 "use client";
 
-import { useApiData } from "@/app/api/hooks";
+import { useQuery } from "@tanstack/react-query";
 
-function TestPage(): JSX.Element {
+import { fetchApiData } from "@/app/api/hooks";
+
+export default function TestPage(): JSX.Element {
   const parameters = {
-    page: 1,
-    size: 10,
+    page: 0,
+    size: 20,
     sort: "ASC",
     column: "DIGITAL_CURRENCY_CODE",
   };
-  const { data, error, isLoading } = useApiData(parameters);
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["apiData", parameters],
+    queryFn: async () => {
+      return fetchApiData(parameters);
+    },
+  });
+
   if (isLoading) {
     return <div>Loading...</div>;
   } else if (error) {
@@ -18,5 +27,3 @@ function TestPage(): JSX.Element {
     return <div>data : {JSON.stringify(data)}</div>;
   }
 }
-
-export default TestPage;
