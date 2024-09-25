@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Breadcrumbs,
@@ -10,7 +10,6 @@ import {
   Title,
   useMantineColorScheme,
 } from "@mantine/core";
-import { FC } from "preact/compat";
 
 import classes from "./HomePage.module.css";
 
