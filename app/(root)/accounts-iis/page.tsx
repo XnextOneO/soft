@@ -142,7 +142,7 @@ export default function AccountsIIS(): JSX.Element {
           width: "100%",
         }}
       >
-        <MainTable data={data} columns={columns} isEdit={false} />
+        <MainTable data={data} columns={columns} isEdit={true} />
       </Container>
     </>
   );
