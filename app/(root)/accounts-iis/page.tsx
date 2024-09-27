@@ -2,11 +2,11 @@
 import { useMemo } from "react";
 import { Container } from "@mantine/core";
 import {
-  MantineReactTable,
   // eslint-disable-next-line camelcase
   MRT_ColumnDef,
-  useMantineReactTable,
 } from "mantine-react-table";
+
+import { MainTable } from "@/components/MainTable/MainTable";
 type Person = {
   name: {
     firstName: string;
@@ -128,11 +128,7 @@ export default function AccountsIIS(): JSX.Element {
 
     [],
   );
-  const table = useMantineReactTable({
-    columns,
-    data,
-    enableFullScreenToggle: false,
-  });
+
   return (
     <>
       <Container
@@ -146,7 +142,7 @@ export default function AccountsIIS(): JSX.Element {
           width: "100%",
         }}
       >
-        <MantineReactTable table={table} />
+        <MainTable data={data} columns={columns} isEdit={false} />
       </Container>
     </>
   );
