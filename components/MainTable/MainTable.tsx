@@ -14,7 +14,7 @@ interface TableProperties {
 
 export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
   const [page, setPage] = useState(1);
-  const size = 10;
+  const size = 25;
   const [totalElements] = useState(data.length);
 
   const table = useMantineReactTable({
@@ -30,6 +30,8 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
     enableRowSelection: false,
     enableBatchRowSelection: false,
     enablePagination: false,
+    enableColumnResizing: true,
+    layoutMode: "grid",
     mantineTableProps: {
       striped: "even",
       withColumnBorders: true,
@@ -41,7 +43,16 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
     setPage(newPage);
   };
   return (
-    <div>
+    <Flex
+      style={{
+        borderRadius: "4px",
+        flexDirection: "column",
+        gap: "16px",
+        justifyContent: "space-between",
+        padding: "10px 10px",
+        height: "90vh",
+      }}
+    >
       <MantineReactTable table={table} />
       <Flex gap="xs" align="center" justify={"space-between"}>
         <span>
@@ -57,6 +68,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
           onChange={handlePageChange}
         />
       </Flex>
-    </div>
+    </Flex>
   );
 };
