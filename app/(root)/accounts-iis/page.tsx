@@ -450,6 +450,13 @@ const data: Person[] = [
   },
 ];
 export default function AccountsIIS(): JSX.Element {
+  const cellSize = (): number => {
+    const longestString = Math.max(
+      ...data.map((row) => row.name.lastName.length),
+    );
+
+    return longestString * 10;
+  };
   // eslint-disable-next-line camelcase
   const columns = useMemo<MRT_ColumnDef<Person>[]>(
     () => [
@@ -457,6 +464,7 @@ export default function AccountsIIS(): JSX.Element {
         accessorKey: "name.lastName",
 
         header: "Номер",
+        size: cellSize(),
       },
 
       {
