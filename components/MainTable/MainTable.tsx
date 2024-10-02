@@ -14,7 +14,7 @@ interface TableProperties {
 
 export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
   const [page, setPage] = useState(1);
-  const size = 25;
+  const size = 13;
   const [totalElements] = useState(data.length);
 
   const table = useMantineReactTable({
@@ -47,14 +47,15 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
       style={{
         borderRadius: "4px",
         flexDirection: "column",
-        gap: "16px",
-        justifyContent: "space-between",
+        gap: "12px",
+        justifyContent: "flex-start",
         padding: "10px 10px",
         height: "90vh",
+        width: "95%",
       }}
     >
       <MantineReactTable table={table} />
-      <Flex gap="xs" align="center" justify={"space-between"}>
+      <Flex align="center" justify={"space-between"}>
         <span>
           Отображены записи {(page - 1) * size + 1}–
           {Math.min(page * size, totalElements)} из {totalElements}

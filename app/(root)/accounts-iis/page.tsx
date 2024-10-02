@@ -25,7 +25,7 @@ const data: Person[] = [
     name: {
       firstName: "Zachary Lorem Ipsum",
 
-      lastName: "Davis",
+      lastName: "Davisaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     },
 
     address: "261 Battle Ford",
@@ -445,7 +445,8 @@ const data: Person[] = [
 
     city: "Ohiowa",
 
-    state: "Nebraskaфффффф",
+    state:
+      "Nebraskaфффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффффф",
   },
 ];
 export default function AccountsIIS(): JSX.Element {
@@ -481,6 +482,43 @@ export default function AccountsIIS(): JSX.Element {
 
         header: "Ключ",
       },
+      {
+        accessorKey: "state",
+
+        header: "Ключ",
+      },
+      {
+        accessorKey: "state",
+
+        header: "Ключ",
+      },
+      {
+        accessorKey: "state",
+
+        header: "Ключ",
+      },
+      {
+        accessorKey: "state",
+
+        header: "Ключ",
+      },
+      {
+        accessorKey: "state",
+
+        header: "Ключ",
+      },
+      {
+        accessorKey: "state",
+
+        header: "Ключ",
+      },
+      {
+        accessorKey: "state",
+
+        header: "Ключ",
+
+        width: "auto",
+      },
     ],
 
     [],
@@ -496,7 +534,7 @@ export default function AccountsIIS(): JSX.Element {
           gap: "16px",
           justifyContent: "space-between",
           padding: "10px 10px",
-          width: "100%",
+          width: "90%",
         }}
       >
         <MainTable data={data} columns={columns} isEdit={true} />
