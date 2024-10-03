@@ -14,45 +14,39 @@ import {
 } from "@mantine/core";
 import { IconAt, IconLock } from "@tabler/icons-react";
 
+import { useLogin } from "@/app/api/hooks/auth";
+
 import classes from "../Auth.module.css";
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
   const colorScheme = useMantineColorScheme();
   const [backgroundState, setBackgroundState] = useState<string>("");
+  const { mutate } = useLogin();
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [, setShowAlert] = useState(false);
-  const [, setAlertMessage] = useState("");
   const [isLoginClicked, setIsLoginClicked] = useState(false);
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onLogin = async () => {
     setIsLoginClicked(true);
 
-    if (!email || !password) {
-      setAlertMessage("Please enter all the required data to login.");
-      setShowAlert(true);
+    if (!username || !password) {
+      console.log("Please enter all the required data to login.");
       return;
     }
 
-    try {
-      setAlertMessage("");
-      setShowAlert(false);
-      // const data = await login(email, password)
-      // if(data){
-      //     user.setUser(data);
-      //     user.setIsAuth(true);
-      //     navigate(ALL_BEATS_ROUTE);
-      // }
-      router.push("/directories");
-      //eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      setAlertMessage(error.response.data.message);
-      setShowAlert(true);
-    }
-  };
-  // const closeError = () => {
+    mutate(
+      { username: username, password },
+      {
+        onSuccess: () => {},
+        onError: (error) => {
+          console.log(error.message);
+        },
+      },
+    );
+    console.log(username, password);
+  }; // const closeError = () => {
   //   setAlertMessage("");
   //   setShowAlert(false);
   //   setIsLoginClicked(false);
@@ -92,12 +86,12 @@ const LoginPage: React.FC = () => {
             w="90%"
             placeholder="Введите логин"
             label="Логин"
-            error={isLoginClicked && !email ? "Логин обязателен" : ""}
+            error={isLoginClicked && !username ? "Логин обязателен" : ""}
             inputWrapperOrder={["label", "input", "error"]}
-            value={email}
+            value={username}
             radius="md"
             leftSection={<IconAt size={16} />}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => setUsername(event.target.value)}
           />
           <TextInput
             w="90%"
