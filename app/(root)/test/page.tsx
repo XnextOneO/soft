@@ -9,7 +9,7 @@ export default function TestPage(): JSX.Element {
     page: 0,
     size: 20,
     sort: "ASC",
-    column: "DIGITAL_CURRENCY_CODE",
+    column: "FIRST_ORDER_BALANCE_ACCOUNT_NUMBER",
   };
 
   const { data, error, isLoading } = useQuery({
