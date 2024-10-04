@@ -9,10 +9,16 @@ interface LoginParameters {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const login = async ({ username, password }: LoginParameters): Promise<any> => {
-  const response = await $host.post("/auth", {
-    username,
-    password,
-  });
+  const response = await $host.post(
+    "/auth",
+    {
+      username,
+      password,
+    },
+    {
+      withCredentials: true,
+    },
+  );
 
   return response.data;
 };

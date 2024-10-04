@@ -19,14 +19,14 @@ import { useLogin } from "@/app/api/hooks/auth";
 import classes from "../Auth.module.css";
 
 const LoginPage: React.FC = () => {
-  const router = useRouter();
   const colorScheme = useMantineColorScheme();
   const [backgroundState, setBackgroundState] = useState<string>("");
   const { mutate } = useLogin();
-
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoginClicked, setIsLoginClicked] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onLogin = async () => {
     setIsLoginClicked(true);
@@ -39,13 +39,14 @@ const LoginPage: React.FC = () => {
     mutate(
       { username: username, password },
       {
-        onSuccess: () => {},
+        onSuccess: (response) => {
+          router.push("/");
+        },
         onError: (error) => {
-          console.log(error.message);
+          setError(error.message);
         },
       },
     );
-    console.log(username, password);
   }; // const closeError = () => {
   //   setAlertMessage("");
   //   setShowAlert(false);
@@ -106,6 +107,11 @@ const LoginPage: React.FC = () => {
             onChange={(event) => setPassword(event.target.value)}
           />
           <Group w="90%" my={10}>
+            {error && (
+              <Text color="red" size="sm" mb="sm">
+                {error}
+              </Text>
+            )}
             <Button
               variant="filled"
               radius="xs"
