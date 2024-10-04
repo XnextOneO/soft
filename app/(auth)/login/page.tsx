@@ -26,6 +26,7 @@ const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoginClicked, setIsLoginClicked] = useState(false);
+  // eslint-disable-next-line unicorn/no-null
   const [error, setError] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onLogin = async () => {
@@ -39,11 +40,11 @@ const LoginPage: React.FC = () => {
     mutate(
       { username: username, password },
       {
-        onSuccess: (response) => {
+        onSuccess: () => {
           router.push("/");
         },
-        onError: (error) => {
-          setError(error.message);
+        onError: (loginError: Error) => {
+          setError(loginError.message);
         },
       },
     );
