@@ -1,3 +1,5 @@
+// "use server";
+// import { cookies } from "next/headers";
 import { useMutation } from "@tanstack/react-query";
 
 import { $host } from "@/app/api";
@@ -9,12 +11,19 @@ interface LoginParameters {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const login = async ({ username, password }: LoginParameters): Promise<any> => {
-  const response = await $host.post("/auth", {
-    username,
-    password,
-  });
+  const { data, headers } = await $host.post(
+    "/auth",
+    {
+      username,
+      password,
+    },
+    {
+      withCredentials: true,
+      //  headers: { Cookie: cookies().toString()
+    },
+  );
 
-  return response.data;
+  return { data, headers };
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
