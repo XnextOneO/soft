@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext } from "react";
+import React, { createContext, useEffect } from "react";
+// import { useRouter } from "next/navigation";
 import { MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -26,6 +27,18 @@ export function Providers({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
+  // const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = (): void => {
+      const hasCookie = document.cookie.includes("Set-oo");
+      if (!hasCookie) {
+        console.log("нет куки");
+      }
+    };
+
+    checkAuth();
+  }, []);
   return (
     <Context.Provider
       value={{
