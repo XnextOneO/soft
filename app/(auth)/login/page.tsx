@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { cookies } from "next/headers";
 import { useRouter } from "next/navigation";
 import {
   Button,

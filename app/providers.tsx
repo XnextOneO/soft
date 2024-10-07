@@ -1,14 +1,16 @@
 "use client";
 
-import React, { createContext } from "react";
+import React, { createContext, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import axios from "axios";
 
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 import DirectoriesStore from "@/store/directoriesStore";
+import { theme } from "@/theme";
 
 import BurgerStore from "../store/burgerStore";
-import { theme } from "../theme";
 
 interface AppContextType {
   burgerStore: BurgerStore;
@@ -26,6 +28,24 @@ export function Providers({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
+  const router = useRouter();
+  useEffect(() => {
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        if (error.response.status === 401) {
+          console.log("ошибка 401 ало");
+        }
+        return Promise.reject(error);
+      },
+    );
+    return (): void => {
+      axios.interceptors.response.eject(responseInterceptor);
+    };
+  }, [router]);
+
   return (
     <Context.Provider
       value={{
