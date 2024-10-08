@@ -62,7 +62,6 @@ const DataTable = observer(
     const [countPages, setCountPages] = useState<number>(0);
     const [totalElements, setTotalElements] = useState<number>(0);
     const [isSearchEmpty, setIsSearchEmpty] = useState<boolean>(false);
-
     const { directoriesStore } = useContext(Context);
 
     const findDirectory = useCallback(
@@ -106,7 +105,11 @@ const DataTable = observer(
             const newItem: IStringIndex = {};
             for (const key in item) {
               if (Object.prototype.hasOwnProperty.call(item, key)) {
-                if (key !== "isDelete" && key !== "deleted") {
+                if (
+                  key !== "isDelete" &&
+                  key !== "deleted" &&
+                  key !== "additionDate"
+                ) {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   newItem[columnNames[`${key}`] || key] = item[`${key}`];

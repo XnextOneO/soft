@@ -119,6 +119,11 @@ const LoginPage: React.FC = () => {
               color="#008858"
               w="100%"
               size="md"
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  onLogin();
+                }
+              }}
               onClick={onLogin}
             >
               Войти
