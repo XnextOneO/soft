@@ -49,9 +49,8 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
         flexDirection: "column",
         gap: "12px",
         justifyContent: "flex-start",
-        padding: "10px 10px",
+        padding: "0",
         height: "90vh",
-        width: "95%",
       }}
     >
       <MantineReactTable table={table} />
