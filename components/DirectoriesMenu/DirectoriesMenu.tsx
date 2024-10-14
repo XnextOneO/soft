@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Menu, ScrollArea, TextInput } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 
-import { Context } from "@/app/providers";
+import { Context } from "../Providers/AppContextProvider";
 
 const DirectoriesMenu = observer(
   ({

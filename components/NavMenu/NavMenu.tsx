@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { useMantineColorScheme } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 
-import { Context } from "@/app/providers";
+import { Context } from "../Providers/AppContextProvider";
 
 import NavMenuStack from "./NavMenuStack";
 

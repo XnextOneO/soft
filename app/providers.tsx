@@ -1,62 +1,30 @@
+// providers.tsx
 "use client";
-
-import React, { createContext } from "react";
-import { MantineProvider } from "@mantine/core";
+import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
-import DirectoriesStore from "@/store/directoriesStore";
-import { theme } from "@/theme";
-
-import BurgerStore from "../store/burgerStore";
-
-interface AppContextType {
-  burgerStore: BurgerStore;
-  directoriesStore: DirectoriesStore;
-}
-
-export const Context = createContext<AppContextType>({
-  burgerStore: new BurgerStore(),
-  directoriesStore: new DirectoriesStore(),
-});
-const queryClient = new QueryClient();
+import { AppContextProvider } from "../components/Providers/AppContextProvider";
+import { AuthManager } from "../components/Providers/AuthProvider";
+import { ThemeManager } from "../components/Providers/ThemeProvider";
+import ThemeSwitcher from "../components/ThemeSwitcher/ThemeSwitcher";
 
 export function Providers({
   children,
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  // const router = useRouter();
-  // useEffect(() => {
-  //   const responseInterceptor = axios.interceptors.response.use(
-  //     (response) => {
-  //       return response;
-  //     },
-  //     (error) => {
-  //       if (error.response.status === 401) {
-  //         console.log("ошибка 401 ало");
-  //       }
-  //       return Promise.reject(error);
-  //     },
-  //   );
-  //   return (): void => {
-  //     axios.interceptors.response.eject(responseInterceptor);
-  //   };
-  // }, [router]);
+  const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <Context.Provider
-      value={{
-        burgerStore: new BurgerStore(),
-        directoriesStore: new DirectoriesStore(),
-      }}
-    >
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider theme={theme}>
-          <ThemeSwitcher />
-          {children}
-        </MantineProvider>
-      </QueryClientProvider>
-    </Context.Provider>
+    <ThemeManager>
+      <AuthManager>
+        <AppContextProvider>
+          <QueryClientProvider client={queryClient}>
+            <ThemeSwitcher />
+            {children}
+          </QueryClientProvider>
+        </AppContextProvider>
+      </AuthManager>
+    </ThemeManager>
   );
 }

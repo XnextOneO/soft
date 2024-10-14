@@ -14,7 +14,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 
-import { Context } from "@/app/providers";
+import { Context } from "../Providers/AppContextProvider";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
 import classes from "./Header.module.css";

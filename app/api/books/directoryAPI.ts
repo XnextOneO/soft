@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios";
 
 import { $host } from "../index";
 
@@ -35,16 +35,7 @@ export const getDirectory = async (
     });
     return response.data;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      if (error.response?.status === 401) {
-        const isRefreshValid = await refreshToken();
-        return isRefreshValid
-          ? getDirectory(link, page, size, sorting)
-          : Promise.reject(error);
-      }
-    } else {
-      console.log(error);
-    }
+    console.log(error);
   }
 };
 
@@ -95,20 +86,5 @@ export const searchDataInDirectory = async (
       },
     });
     return data;
-  }
-};
-
-// eslint-disable-next-line consistent-return
-const refreshToken = async (): Promise<unknown> => {
-  try {
-    const { status } = await $host.post("/auth/refresh-token");
-    if (status === 200) {
-      return true;
-    }
-  } catch (error) {
-    // console.log(error);
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      return false;
-    }
   }
 };

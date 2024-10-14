@@ -19,7 +19,7 @@ import {
 import { IconBook } from "@tabler/icons-react";
 import { observer } from "mobx-react-lite";
 
-import { Context } from "@/app/providers";
+import { Context } from "../../../components/Providers/AppContextProvider";
 
 import classes from "./Directories.module.css";
 

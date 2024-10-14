@@ -27,7 +27,8 @@ import {
   getDirectory,
   searchDataInDirectory,
 } from "@/app/api/books/directoryAPI";
-import { Context } from "@/app/providers";
+
+import { Context } from "../Providers/AppContextProvider";
 
 import classes from "./DataTable.module.css";
 import PopoverCell from "./PopoverCell";

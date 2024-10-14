@@ -94,6 +94,11 @@ const LoginPage: React.FC = () => {
             radius="md"
             leftSection={<IconAt size={16} />}
             onChange={(event) => setUsername(event.target.value)}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") {
+                onLogin();
+              }
+            }}
           />
           <TextInput
             w="90%"
@@ -106,6 +111,11 @@ const LoginPage: React.FC = () => {
             leftSection={<IconLock size={16} />}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") {
+                onLogin();
+              }
+            }}
           />
           <Group w="90%" my={10}>
             {error && (

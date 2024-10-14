@@ -7,10 +7,10 @@ import { Breadcrumbs, Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 
-import { Context } from "@/app/providers";
 import DataTable from "@/components/DataTable/DataTable";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
 
+import { Context } from "../../../../components/Providers/AppContextProvider";
 import classes from "../Directories.module.css";
 
 const DirectoryPage = observer(
