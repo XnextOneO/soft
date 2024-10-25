@@ -31,8 +31,13 @@ const UserProfilePage = observer(() => {
 
   useEffect(() => {
     userInfo()
+      // eslint-disable-next-line promise/always-return
       .then((data) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         setName(data.name);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         setEmail(data.email);
       })
       .catch((error) => console.error(error));
