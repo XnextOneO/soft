@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Burger,
   Container,
@@ -14,7 +14,9 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 
-import { Context } from "@/app/providers";
+import { logout } from "@/app/api/auth/authAPI";
+
+import { Context } from "../Providers/AppContextProvider";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
 import classes from "./Header.module.css";
@@ -23,12 +25,17 @@ const Header: React.FC = observer(() => {
   const [opened, { toggle }] = useDisclosure();
   const { burgerStore } = useContext(Context);
   const pathname = usePathname();
-
+  const router = useRouter();
   useEffect(() => {
     if (!pathname.includes("/login")) {
       burgerStore.setOpened(opened);
     }
   }, [burgerStore, opened, pathname]);
+
+  const logoutHandler = (): void => {
+    logout();
+    router.push("/login");
+  };
 
   return (
     <Container className={classes.headerContainer} fluid p={0}>
@@ -60,7 +67,12 @@ const Header: React.FC = observer(() => {
           </Group>
           <Group justify="flex-end" align="center" gap={0}>
             <ProfileButton />
-            <UnstyledButton w={60} h={60} className={classes.buttonContainer}>
+            <UnstyledButton
+              w={60}
+              h={60}
+              className={classes.buttonContainer}
+              onClick={logoutHandler}
+            >
               <Flex justify="center">
                 <svg
                   width="28"

@@ -15,5 +15,8 @@ export const fetchApiData = async (
   const response = await $host.get(`reference-book/${parameters.link}`, {
     params: parameters,
   });
+
+  console.log(response);
+
   return response.data;
 };
