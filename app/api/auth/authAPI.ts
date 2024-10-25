@@ -32,3 +32,8 @@ export const checkRefreshToken = async (): Promise<boolean> => {
 export const logout = async (): Promise<void> => {
   await $host.get("/auth/logout");
 };
+
+export const userInfo = async (): Promise<unknown> => {
+  const { data } = await $host.get("/user/userinfo");
+  return data;
+};
