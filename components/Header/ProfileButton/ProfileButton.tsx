@@ -12,13 +12,14 @@ import classes from "./ProfileButton.module.css";
 const ProfileButton = (): JSX.Element => {
   const router = useRouter();
   const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
     userInfo()
+      // eslint-disable-next-line promise/always-return
       .then((data) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         setName(data.name);
-        setEmail(data.email);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -29,7 +30,7 @@ const ProfileButton = (): JSX.Element => {
       onClick={() => router.push("/user-profile")}
     >
       <Group>
-        <Avatar name={name} color="initials" />
+        <Avatar name={name} color={"green"} />
 
         <Text size="md" fw={600} c="white" className={classes.nickname}>
           {name}
