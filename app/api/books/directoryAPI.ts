@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-import { $host } from "../index";
+import { $authHost } from "../index";
 
 export const getDirectory = async (
   link: string,
@@ -30,7 +30,7 @@ export const getDirectory = async (
   }
 
   try {
-    const response = await $host.get(`reference-book/${link}`, {
+    const response = await $authHost.get(`reference-book/${link}`, {
       params: parameters,
     });
     return response.data;
@@ -45,7 +45,7 @@ export const uploadDirectory = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   config: AxiosRequestConfig<any> | undefined,
 ): Promise<number> => {
-  const { status } = await $host.post(
+  const { status } = await $authHost.post(
     `reference-book/${link}`,
     formData,
     config,
@@ -62,7 +62,7 @@ export const searchDataInDirectory = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   if (Object.keys(sorting).length > 0 && sorting) {
-    const { data } = await $host.get(`reference-book/${link}/search`, {
+    const { data } = await $authHost.get(`reference-book/${link}/search`, {
       params: {
         page,
         size,
@@ -78,7 +78,7 @@ export const searchDataInDirectory = async (
     });
     return data;
   } else {
-    const { data } = await $host.get(`reference-book/${link}/search`, {
+    const { data } = await $authHost.get(`reference-book/${link}/search`, {
       params: {
         page,
         size,

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Loader } from "@mantine/core";
 
 import { check } from "../../app/api/auth/authAPI";
+import { MainLoader } from "../MainLoader/MainLoader";
 
 interface AuthManagerProperties {
   children: React.ReactNode;
@@ -33,7 +33,7 @@ export function AuthManager({
   }, [router]);
 
   if (isLoading || (!isAuthenticated && pathname !== "/login")) {
-    return <Loader color="green" />;
+    return <MainLoader />;
   }
 
   return children;
