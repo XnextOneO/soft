@@ -1,21 +1,8 @@
-# FROM node:latest
-# WORKDIR /iis-gui
-# COPY package.json package-lock.json ./
-# RUN npm install --legacy-peer-deps
-
-# FROM node:latest as builder
-# WORKDIR /iis-gui
-# COPY . .
-# COPY node_modules ./node_modules
-# RUN npm build
-
-# FROM node:latest as runner
-# WORKDIR /iis-gui
-
-# COPY public ./public
-# COPY --from=builder /iis-gui/package.json ./package.json
-# COPY .next ./.next
-# COPY --from=builder /iis-gui/node_modules ./node_modules
-
-EXPOSE 3000
-CMD ["npm", "start"]
+FROM node:22
+WORKDIR /app
+COPY package*.json ./
+RUN npm cache clean --force
+RUN npm config set strict-ssl false && npm config set registry "http://registry.npmjs.org/" && npm config set proxy http://proxy.bb.asb:3128 && npm config set https-proxy http://proxy.bb.asb:3128 && npm i --legacy-peer-deps
+COPY . ./
+RUN npm run build
+CMD ["npm", "run", "start"]
