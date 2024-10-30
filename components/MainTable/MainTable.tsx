@@ -1,8 +1,16 @@
 import { FC, useState } from "react";
-import { ActionIcon, Flex, Pagination, Stack, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Flex,
+  Pagination,
+  Stack,
+  Textarea,
+  Tooltip,
+} from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import {
   MantineReactTable,
+  // eslint-disable-next-line camelcase
   MRT_EditActionButtons,
   useMantineReactTable,
 } from "mantine-react-table";
@@ -24,7 +32,13 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
   const size = 13;
   const [totalElements] = useState(data.length);
 
-  const processedColumns = columns.map((column) => {
+  const columnsWithAccessorKey = columns.map((column) => ({
+    ...column,
+    accessorKey: column,
+    header: column,
+  }));
+
+  const processedColumns = columnsWithAccessorKey.map((column) => {
     return {
       ...column,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,7 +49,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
       sortDescFirst: true,
     };
   });
-
   const table = useMantineReactTable({
     editDisplayMode: "modal",
     enableEditing: isEdit,
@@ -54,7 +67,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
         </Tooltip>
       </Flex>
     ),
-    renderEditRowModalContent: ({ internalEditComponents, row }) => (
+    renderEditRowModalContent: ({ row, internalEditComponents }) => (
       <Stack>
         {/*<Title order={4}>Редактирование </Title>*/}
         {internalEditComponents}
