@@ -335,6 +335,25 @@ export default class DirectoriesStore {
         deleted: "Удален",
       },
     },
+    {
+      name: "Справочник счетов ПК SC-Bank360Corporate",
+      link: "account",
+      columns: {
+        idBic: "БИК банка",
+        idPersonalAccount: "Лицевой счет",
+        idIsoCurrencyCode: "Код ISO валюты",
+        openingBalanceInForeignCurrency: "Входящий остаток в валюте",
+        turnoverDebit: "Оборот Дебет",
+        turnoverCredit: "Оборот Кредит",
+        closingBalanceInForeignCurrency: "Исходящий остаток в валюте",
+        closingBalanceInEquivalent: "Исходящий остаток в Эквиваленте",
+        accountServiceGroupNumber: "Номер группы обслуживания счета",
+        signOfAccountServicingInSap: "Признак обслуживания счета в SAP",
+        signOfAccountRestrictions: "Признак наличия ограничений по счету",
+        unp: "УНП",
+        accountName: "Наименование счета",
+      },
+    },
   ];
 
   constructor() {

@@ -4,6 +4,8 @@ import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 // eslint-disable-next-line camelcase
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
+import PopoverCell from "@/components/DataTable/PopoverCell";
+
 interface TableProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
@@ -17,10 +19,22 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
   const size = 13;
   const [totalElements] = useState(data.length);
 
+  const processedColumns = columns.map((column) => {
+    return {
+      ...column,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      Cell: ({ cell }: { cell: any }): JSX.Element => (
+        <PopoverCell>{cell.getValue()}</PopoverCell>
+      ),
+      size: column.accessorKey.length >= 15 ? 250 : 180,
+      sortDescFirst: true,
+    };
+  });
+
   const table = useMantineReactTable({
     editDisplayMode: "modal",
     enableEditing: isEdit,
-    columns: columns,
+    columns: processedColumns,
     data: data.slice((page - 1) * size, page * size),
     // eslint-disable-next-line camelcase
     localization: MRT_Localization_RU,
@@ -49,9 +63,8 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
         flexDirection: "column",
         gap: "12px",
         justifyContent: "flex-start",
-        padding: "10px 10px",
+        padding: "0",
         height: "90vh",
-        width: "95%",
       }}
     >
       <MantineReactTable table={table} />

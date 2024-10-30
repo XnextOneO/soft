@@ -1,28 +1,39 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Avatar, Group, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
+
+import { userInfo } from "@/app/api/auth/authAPI";
 
 import classes from "./ProfileButton.module.css";
 
 const ProfileButton = (): JSX.Element => {
   const router = useRouter();
+  const [name, setName] = useState<string>("");
+
+  useEffect(() => {
+    userInfo()
+      // eslint-disable-next-line promise/always-return
+      .then((data) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setName(data.name);
+      })
+      .catch((error) => console.error(error));
+  }, []);
   return (
     <UnstyledButton
       className={classes.profile}
       px={20}
-      onClick={() => router.push("/login")}
+      onClick={() => router.push("/user-profile")}
     >
       <Group>
-        <Avatar
-          src="https://arsenalnn.com/wp-content/uploads/diler2-1.png"
-          radius="lg"
-          size="md"
-        />
+        <Avatar name={name} color={"green"} />
 
         <Text size="md" fw={600} c="white" className={classes.nickname}>
-          Иванов Иван Иванович
+          {name}
         </Text>
 
         <IconChevronRight

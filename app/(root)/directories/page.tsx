@@ -19,7 +19,7 @@ import {
 import { IconBook } from "@tabler/icons-react";
 import { observer } from "mobx-react-lite";
 
-import { Context } from "@/app/providers";
+import { Context } from "../../../components/Providers/AppContextProvider";
 
 import classes from "./Directories.module.css";
 
@@ -88,7 +88,9 @@ const DirectoriesPage = observer(() => {
             {directoriesStore.directories
               .filter(
                 (directory) =>
-                  directory.link !== "rf" && directory.link !== "swift",
+                  directory.link !== "rf" &&
+                  directory.link !== "swift" &&
+                  directory.link !== "account",
               )
               .map((directory, index) => (
                 <Grid.Col key={index} span={2}>
@@ -147,6 +149,12 @@ const DirectoriesPage = observer(() => {
                   SWIFT
                 </Title>
               </Flex>
+              <Divider m={0} p={0} orientation="vertical" />
+              <Flex justify="center" w="50%">
+                <Title order={4} className={classes.title}>
+                  SC-Bank360Corporate
+                </Title>
+              </Flex>
             </Group>
           </Card.Section>
 
@@ -196,6 +204,31 @@ const DirectoriesPage = observer(() => {
                     c={colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"}
                   >
                     Справочник участников SWIFT
+                  </Text>
+                </UnstyledButton>
+              </Link>
+            </Flex>
+            <Divider m={0} p={0} orientation="vertical"></Divider>
+            <Flex justify="center" w="50%">
+              <Link
+                style={{
+                  width: "50%",
+                  textDecoration: "none",
+                }}
+                href={`/directories/${directoriesStore.directories.find((directory) => directory.link === "account")?.link}`}
+              >
+                <UnstyledButton className={classes.item}>
+                  <IconBook
+                    color={
+                      colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"
+                    }
+                  />
+                  <Text
+                    size="sm"
+                    mt={7}
+                    c={colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"}
+                  >
+                    Справочник счетов ПК SC-Bank360Corporate
                   </Text>
                 </UnstyledButton>
               </Link>

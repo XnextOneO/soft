@@ -1,6 +1,6 @@
 "use client";
 import { useMemo } from "react";
-import { Container } from "@mantine/core";
+import { Flex } from "@mantine/core";
 import {
   // eslint-disable-next-line camelcase
   MRT_ColumnDef,
@@ -534,19 +534,16 @@ export default function AccountsIIS(): JSX.Element {
 
   return (
     <>
-      <Container
-        fluid
-        style={{
-          borderRadius: "4px",
-          flexDirection: "row",
-          gap: "16px",
-          justifyContent: "space-between",
-          padding: "10px 10px",
-          width: "90%",
-        }}
+      <Flex
+        direction="column"
+        p={0}
+        gap={0}
+        w="100%"
+        h="100%"
+        style={{ overflow: "hidden" }}
       >
         <MainTable data={data} columns={columns} isEdit={true} />
-      </Container>
+      </Flex>
     </>
   );
 }

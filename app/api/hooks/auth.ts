@@ -1,5 +1,3 @@
-// "use server";
-// import { cookies } from "next/headers";
 import { useMutation } from "@tanstack/react-query";
 
 import { $host } from "@/app/api";

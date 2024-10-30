@@ -1,37 +1,41 @@
 import { AxiosRequestConfig } from "axios";
 
-import { $host } from "../index";
+import { $authHost } from "../index";
 
 export const getDirectory = async (
   link: string,
   page: number,
   size: number,
   sorting: { id: string; desc: string } | object,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line consistent-return, @typescript-eslint/no-explicit-any
 ): Promise<any> => {
+  const parameters: {
+    page: number;
+    size: number;
+    sort?: string;
+    column?: string;
+  } = {
+    page,
+    size,
+  };
+
   if (Object.keys(sorting).length > 0 && sorting) {
-    const { data } = await $host.get(`reference-book/${link}`, {
-      params: {
-        page,
-        size,
-        sort: (sorting as { id: string; desc: string })?.desc,
-        column: (sorting as { id: string; desc: string })?.id
-          .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) =>
-            match.replace(match, `_${match}`),
-          )
-          .replaceAll(/(?<!^)\s/gm, "_")
-          .toUpperCase(),
-      },
+    parameters.sort = (sorting as { id: string; desc: string })?.desc;
+    parameters.column = (sorting as { id: string; desc: string })?.id
+      .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) =>
+        match.replace(match, `_${match}`),
+      )
+      .replaceAll(/(?<!^)\s/gm, "_")
+      .toUpperCase();
+  }
+
+  try {
+    const response = await $authHost.get(`reference-book/${link}`, {
+      params: parameters,
     });
-    return data;
-  } else {
-    const { data } = await $host.get(`reference-book/${link}`, {
-      params: {
-        page,
-        size,
-      },
-    });
-    return data;
+    return response.data;
+  } catch (error: unknown) {
+    console.log(error);
   }
 };
 
@@ -41,7 +45,7 @@ export const uploadDirectory = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   config: AxiosRequestConfig<any> | undefined,
 ): Promise<number> => {
-  const { status } = await $host.post(
+  const { status } = await $authHost.post(
     `reference-book/${link}`,
     formData,
     config,
@@ -58,7 +62,7 @@ export const searchDataInDirectory = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   if (Object.keys(sorting).length > 0 && sorting) {
-    const { data } = await $host.get(`reference-book/${link}/search`, {
+    const { data } = await $authHost.get(`reference-book/${link}/search`, {
       params: {
         page,
         size,
@@ -74,7 +78,7 @@ export const searchDataInDirectory = async (
     });
     return data;
   } else {
-    const { data } = await $host.get(`reference-book/${link}/search`, {
+    const { data } = await $authHost.get(`reference-book/${link}/search`, {
       params: {
         page,
         size,
