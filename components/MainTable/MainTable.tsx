@@ -1,6 +1,11 @@
 import { FC, useState } from "react";
-import { Flex, Pagination } from "@mantine/core";
-import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
+import { ActionIcon, Flex, Pagination, Stack, Tooltip } from "@mantine/core";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
+import {
+  MantineReactTable,
+  MRT_EditActionButtons,
+  useMantineReactTable,
+} from "mantine-react-table";
 // eslint-disable-next-line camelcase
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
@@ -26,7 +31,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
       Cell: ({ cell }: { cell: any }): JSX.Element => (
         <PopoverCell>{cell.getValue()}</PopoverCell>
       ),
-      size: column.accessorKey.length >= 15 ? 250 : 180,
+      size: column.accessorKey.length >= 12 ? 140 : 100,
       sortDescFirst: true,
     };
   });
@@ -34,6 +39,37 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
   const table = useMantineReactTable({
     editDisplayMode: "modal",
     enableEditing: isEdit,
+    renderRowActions: ({ row, table }) => (
+      <Flex justify={"center"} align={"center"} gap={"md"}>
+        <Tooltip label="Редактирование">
+          <ActionIcon onClick={() => table.setEditingRow(row)}>
+            <IconEdit />
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip label="Удалить">
+          <ActionIcon color="red">
+            <IconTrash />
+          </ActionIcon>
+        </Tooltip>
+      </Flex>
+    ),
+    renderEditRowModalContent: ({ internalEditComponents, row }) => (
+      <Stack>
+        {/*<Title order={4}>Редактирование </Title>*/}
+        {internalEditComponents}
+        {/*or map over row.getAllCells() and render your own components */}
+        <Flex justify="flex-end">
+          {/* eslint-disable-next-line camelcase */}
+          <MRT_EditActionButtons row={row} table={table} variant="text" />{" "}
+          {/*or render your own buttons */}
+        </Flex>
+      </Stack>
+    ),
+    mantineEditRowModalProps: {
+      closeOnClickOutside: true,
+      withCloseButton: true,
+    },
     columns: processedColumns,
     data: data.slice((page - 1) * size, page * size),
     // eslint-disable-next-line camelcase
