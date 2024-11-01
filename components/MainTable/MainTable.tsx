@@ -1,19 +1,16 @@
 import { FC, useState } from "react";
 import {
   ActionIcon,
+  Button,
   Flex,
   Pagination,
   Stack,
   Textarea,
+  Title,
   Tooltip,
 } from "@mantine/core";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
-import {
-  MantineReactTable,
-  // eslint-disable-next-line camelcase
-  MRT_EditActionButtons,
-  useMantineReactTable,
-} from "mantine-react-table";
+import { IconEdit } from "@tabler/icons-react";
+import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 // eslint-disable-next-line camelcase
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
@@ -68,27 +65,34 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
         {/*</Tooltip>*/}
       </Flex>
     ),
+    displayColumnDefOptions: {
+      "mrt-row-actions": {
+        header: "",
+        size: 50,
+      },
+    },
     renderEditRowModalContent: ({ row }) => (
-      <Stack>
+      <Stack style={{ maxHeight: "80vh" }}>
         {row.getAllCells().map((cell) => {
-          if (
-            typeof cell.getValue() === "number" ||
-            typeof cell.getValue() === "string"
-          ) {
-            return (
+          return typeof cell.getValue() === "number" ||
+            typeof cell.getValue() === "string" ? (
+            <Flex direction={"column"} gap={"0"} key={cell.id}>
+              <Title order={5}>{cell.column.columnDef.header}</Title>
               <Textarea
-                key={cell.id}
                 defaultValue={cell.getValue() as string}
                 resize={"vertical"}
                 radius={"md"}
               />
-            );
-          }
+            </Flex>
+          ) : (
+            <span key={cell.id} />
+          );
         })}
-        {/*or map over row.getAllCells() and render your own components */}
-        <Flex justify="flex-end">
-          {/* eslint-disable-next-line camelcase */}
-          <MRT_EditActionButtons row={row} table={table} variant="text" />{" "}
+        <Flex justify="flex-end" gap={20} pos={"sticky"} bottom={10}>
+          <Button variant="outline" color="red">
+            Удалить
+          </Button>
+          <Button>Cохранить</Button>
         </Flex>
       </Stack>
     ),
@@ -106,8 +110,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
     enableRowSelection: false,
     enableBatchRowSelection: false,
     enablePagination: false,
-    enableColumnResizing: false,
-    columnResizeMode: "onEnd",
+    enableColumnResizing: true,
     memoMode: "table-body",
     layoutMode: "grid",
     mantineTableProps: {
