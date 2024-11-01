@@ -52,6 +52,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
   const table = useMantineReactTable({
     editDisplayMode: "modal",
     enableEditing: isEdit,
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     renderRowActions: ({ row, table }) => (
       <Flex justify={"center"} align={"center"} gap={"md"}>
         <Tooltip label="Редактирование">
@@ -60,22 +61,34 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label="Удалить">
-          <ActionIcon color="red">
-            <IconTrash />
-          </ActionIcon>
-        </Tooltip>
+        {/*<Tooltip label="Удалить">*/}
+        {/*  <ActionIcon color="red">*/}
+        {/*    <IconTrash />*/}
+        {/*  </ActionIcon>*/}
+        {/*</Tooltip>*/}
       </Flex>
     ),
-    renderEditRowModalContent: ({ row, internalEditComponents }) => (
+    renderEditRowModalContent: ({ row }) => (
       <Stack>
-        {/*<Title order={4}>Редактирование </Title>*/}
-        {internalEditComponents}
+        {row.getAllCells().map((cell) => {
+          if (
+            typeof cell.getValue() === "number" ||
+            typeof cell.getValue() === "string"
+          ) {
+            return (
+              <Textarea
+                key={cell.id}
+                defaultValue={cell.getValue() as string}
+                resize={"vertical"}
+                radius={"md"}
+              />
+            );
+          }
+        })}
         {/*or map over row.getAllCells() and render your own components */}
         <Flex justify="flex-end">
           {/* eslint-disable-next-line camelcase */}
           <MRT_EditActionButtons row={row} table={table} variant="text" />{" "}
-          {/*or render your own buttons */}
         </Flex>
       </Stack>
     ),
@@ -93,13 +106,21 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
     enableRowSelection: false,
     enableBatchRowSelection: false,
     enablePagination: false,
-    enableColumnResizing: true,
+    enableColumnResizing: false,
+    columnResizeMode: "onEnd",
+    memoMode: "table-body",
     layoutMode: "grid",
     mantineTableProps: {
       striped: "even",
       withColumnBorders: true,
     },
     initialState: { density: "xs", showGlobalFilter: true },
+    mantineEditTextInputProps: {
+      variant: "filled",
+      radius: "md",
+      size: "md",
+      type: "text",
+    },
   });
 
   const handlePageChange = (newPage: number): void => {
