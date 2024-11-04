@@ -3,7 +3,9 @@ import {
   ActionIcon,
   Button,
   Flex,
+  Group,
   Pagination,
+  Popover,
   Stack,
   Textarea,
   Title,
@@ -28,6 +30,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
   const [page, setPage] = useState(1);
   const size = 13;
   const [totalElements] = useState(data.length);
+  const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
   const columnsWithAccessorKey = columns.map((column) => ({
     ...column,
@@ -83,10 +86,35 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
           );
         })}
         <Flex justify="flex-end" gap={20} pos={"sticky"} bottom={10}>
-          <Button variant="outline" color="red">
-            Удалить
-          </Button>
-          <Button>Cохранить</Button>
+          <Popover
+            position="bottom"
+            withArrow
+            opened={deleteModalOpened}
+            onClose={() => setDeleteModalOpened(false)}
+          >
+            <Popover.Target>
+              <Button
+                variant="outline"
+                color="red"
+                onClick={() => setDeleteModalOpened(true)}
+              >
+                Удалить
+              </Button>
+            </Popover.Target>
+            <Popover.Dropdown>
+              <span>Вы уверены, что хотите удалить эту запись?</span>
+              <Group mt="lg">
+                <Button
+                  variant="outline"
+                  onClick={() => setDeleteModalOpened(false)}
+                >
+                  Отмена
+                </Button>
+                <Button onClick={handleDelete}>Удалить</Button>
+              </Group>
+            </Popover.Dropdown>
+          </Popover>
+          <Button>Сохранить</Button>
         </Flex>
       </Stack>
     ),
@@ -105,7 +133,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
-    enableColumnVirtualization: true,
+    // enableColumnVirtualization: true,
     memoMode: "table-body",
     layoutMode: "grid",
     mantineTableProps: {
@@ -123,6 +151,9 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
 
   const handlePageChange = (newPage: number): void => {
     setPage(newPage);
+  };
+  const handleDelete = (): void => {
+    setDeleteModalOpened(false);
   };
   return (
     <Flex

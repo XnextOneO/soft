@@ -7,13 +7,23 @@ interface ICellProperties {
 
 const PopoverCell: React.FC<ICellProperties> = ({ children }) => {
   return (
-    <Popover width="20%" position="bottom" withArrow shadow="md">
+    <Popover
+      width={"auto"}
+      position="bottom"
+      withArrow
+      shadow="md"
+      styles={{
+        dropdown: {
+          maxWidth: "30%",
+        },
+      }}
+    >
       <Popover.Target>
         <Text truncate="end" size="sm">
           {children}
         </Text>
       </Popover.Target>
-      <Popover.Dropdown>
+      <Popover.Dropdown style={{ wordWrap: "break-word" }}>
         <Text size="xs">{children}</Text>
       </Popover.Dropdown>
     </Popover>
