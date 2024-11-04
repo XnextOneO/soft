@@ -57,12 +57,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
             <IconEdit />
           </ActionIcon>
         </Tooltip>
-
-        {/*<Tooltip label="Удалить">*/}
-        {/*  <ActionIcon color="red">*/}
-        {/*    <IconTrash />*/}
-        {/*  </ActionIcon>*/}
-        {/*</Tooltip>*/}
       </Flex>
     ),
     displayColumnDefOptions: {
@@ -111,6 +105,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
+    enableColumnVirtualization: true,
     memoMode: "table-body",
     layoutMode: "grid",
     mantineTableProps: {
