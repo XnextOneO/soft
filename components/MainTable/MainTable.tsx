@@ -43,12 +43,21 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
       ...column,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: { cell: any }): JSX.Element => (
-        <PopoverCell>{cell.getValue()}</PopoverCell>
+        <div
+          onDoubleClick={() => {
+            if (isEdit) {
+              table.setEditingRow(cell.row);
+            }
+          }}
+        >
+          <PopoverCell>{cell.getValue()}</PopoverCell>
+        </div>
       ),
       size: column.accessorKey.length >= 12 ? 140 : 100,
       sortDescFirst: true,
     };
   });
+
   const table = useMantineReactTable({
     editDisplayMode: "modal",
     enableEditing: isEdit,
@@ -155,6 +164,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
   const handleDelete = (): void => {
     setDeleteModalOpened(false);
   };
+
   return (
     <Flex
       style={{

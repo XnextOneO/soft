@@ -3,18 +3,20 @@ import { Popover, Text } from "@mantine/core";
 
 interface ICellProperties {
   children?: number | string;
+  onDoubleClick?: () => void;
 }
 
 const PopoverCell: React.FC<ICellProperties> = ({ children }) => {
   return (
     <Popover
       width={"auto"}
-      position="bottom"
+      position="bottom-start"
       withArrow
       shadow="md"
       styles={{
         dropdown: {
           maxWidth: "30%",
+          left: 0,
         },
       }}
     >
