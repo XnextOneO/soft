@@ -220,6 +220,7 @@ const DataTable = observer(
       // eslint-disable-next-line camelcase
       localization: MRT_Localization_RU,
       enableColumnResizing: true,
+      enableColumnVirtualization: true,
       initialState: { density: "xs", showGlobalFilter: true },
       mantineTableContainerProps: { className: classes.tableWithToolbar },
       mantineTableProps: {
