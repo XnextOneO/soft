@@ -90,7 +90,7 @@ const DirectoriesPage = observer(() => {
                 (directory) =>
                   directory.link !== "rf" &&
                   directory.link !== "swift" &&
-                  directory.link !== "account",
+                  directory.link !== "scbank/account",
               )
               .map((directory, index) => (
                 <Grid.Col key={index} span={2}>

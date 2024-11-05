@@ -215,6 +215,7 @@ const DataTable = observer(
       enableBottomToolbar: true,
       enableTopToolbar: false,
       enableDensityToggle: false,
+      // columnResizeMode: "onEnd",
       enableMultiSort: false,
       // eslint-disable-next-line camelcase
       localization: MRT_Localization_RU,

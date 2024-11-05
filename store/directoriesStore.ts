@@ -337,11 +337,12 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник счетов ПК SC-Bank360Corporate",
-      link: "account",
+      link: "scbank/account",
       columns: {
-        idBic: "БИК банка",
-        idPersonalAccount: "Лицевой счет",
-        idIsoCurrencyCode: "Код ISO валюты",
+        id: "ID",
+        bic: "БИК банка",
+        personalAccount: "Лицевой счет  ",
+        isoCurrencyCode: "Код ISO валюты",
         openingBalanceInForeignCurrency: "Входящий остаток в валюте",
         turnoverDebit: "Оборот Дебет",
         turnoverCredit: "Оборот Кредит",

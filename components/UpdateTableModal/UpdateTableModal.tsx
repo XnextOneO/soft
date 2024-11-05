@@ -81,6 +81,12 @@ const UpdateTableModal = ({
       onClose={() => {
         close();
         controller.abort();
+        setFile(undefined);
+        setUploaded(false);
+        if (progress > 1) {
+          toggle();
+        }
+        setProgress(0);
       }}
       title="Обновить таблицу"
       overlayProps={{
