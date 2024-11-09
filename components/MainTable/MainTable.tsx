@@ -118,6 +118,22 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
         </Flex>
       </Flex>
     ),
+    renderBottomToolbar: () => (
+      <Flex align="center" justify={"space-between"} pt={10} pb={10}>
+        <span>
+          Отображены записи {(page - 1) * size + 1}–
+          {Math.min(page * size, totalElements)} из {totalElements}
+        </span>
+        <Pagination
+          color="#007458"
+          total={Math.ceil(totalElements / size)}
+          siblings={1}
+          value={page}
+          defaultValue={page}
+          onChange={handlePageChange}
+        />
+      </Flex>
+    ),
 
     renderEditRowModalContent: ({ row }) => (
       <Stack style={{ maxHeight: "80vh" }}>
@@ -222,20 +238,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
       }}
     >
       <MantineReactTable table={table} />
-      <Flex align="center" justify={"space-between"}>
-        <span>
-          Отображены записи {(page - 1) * size + 1}–
-          {Math.min(page * size, totalElements)} из {totalElements}
-        </span>
-        <Pagination
-          color="#007458"
-          total={Math.ceil(totalElements / size)}
-          siblings={1}
-          value={page}
-          defaultValue={page}
-          onChange={handlePageChange}
-        />
-      </Flex>
     </Flex>
   );
 };
