@@ -23,22 +23,23 @@ import {
 // eslint-disable-next-line camelcase
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
-import { getDirectory } from "@/app/api/books/directoryAPI";
 import PopoverCell from "@/components/DataTable/PopoverCell";
+import { useEditStore } from "@/store/useEditStore";
 
 interface TableProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: any[];
-  isEdit: boolean;
 }
 
-export const MainTable: FC<TableProperties> = ({ data, columns, isEdit }) => {
+export const MainTable: FC<TableProperties> = ({ data, columns }) => {
   const [page, setPage] = useState(1);
   const size = 13;
   const [totalElements] = useState(data.length);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+  const { isEdit } = useEditStore();
+  console.log("isEdit:", isEdit);
 
   const columnsWithAccessorKey = columns.map((column) => ({
     ...column,

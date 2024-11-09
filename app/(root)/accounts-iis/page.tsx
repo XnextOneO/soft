@@ -29,7 +29,7 @@ export default function AccountsIIS(): JSX.Element {
         h="100%"
         style={{ overflow: "hidden" }}
       >
-        <MainTable data={data.data} columns={data.columns} isEdit={true} />
+        <MainTable data={data.data} columns={data.columns} />
       </Flex>
     </>
   );
