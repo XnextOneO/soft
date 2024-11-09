@@ -24,6 +24,7 @@ import {
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
 import PopoverCell from "@/components/DataTable/PopoverCell";
+import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
 import { useEditStore } from "@/store/useEditStore";
 
 interface TableProperties {
@@ -40,6 +41,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const { isEdit } = useEditStore();
   const [isLoading] = useState(false);
+  const [opened, setOpened] = useState(false);
 
   const columnsWithAccessorKey = columns.map((column) => ({
     ...column,
@@ -66,6 +68,14 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
       sortDescFirst: true,
     };
   });
+
+  const onOpen = (): void => {
+    setOpened(true);
+  };
+
+  const onClose = (): void => {
+    setOpened(false);
+  };
 
   const table = useMantineReactTable({
     editDisplayMode: "modal",
@@ -106,7 +116,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
               ></path>
             </svg>
           </Button>
-          <Button color="#007458" size="sm" radius="xs">
+          <Button color="#007458" size="sm" radius="xs" onClick={onOpen}>
             Обновить таблицу
           </Button>
         </Group>
@@ -229,6 +239,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
   return (
     <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"90vh"}>
       <MantineReactTable table={table} />
+      <UpdateTableModal link={"a"} opened={opened} close={onClose} />
     </Flex>
   );
 };
