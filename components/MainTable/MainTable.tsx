@@ -39,6 +39,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
   const [totalElements] = useState(data.length);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const { isEdit } = useEditStore();
+  const [isLoading] = useState(false);
 
   const columnsWithAccessorKey = columns.map((column) => ({
     ...column,
@@ -84,6 +85,9 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
         header: "",
         size: 50,
       },
+    },
+    mantineLoadingOverlayProps: {
+      loaderProps: { color: "#006040", type: "bars" },
     },
     renderTopToolbar: () => (
       <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
@@ -186,6 +190,9 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     mantineTableProps: {
       striped: "even",
       withColumnBorders: true,
+    },
+    state: {
+      isLoading: isLoading,
     },
     initialState: { density: "xs", showGlobalFilter: true },
     mantineEditTextInputProps: {
