@@ -39,7 +39,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
   const [totalElements] = useState(data.length);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const { isEdit } = useEditStore();
-  console.log("isEdit:", isEdit);
 
   const columnsWithAccessorKey = columns.map((column) => ({
     ...column,
