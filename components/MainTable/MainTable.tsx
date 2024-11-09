@@ -136,7 +136,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     ),
 
     renderEditRowModalContent: ({ row }) => (
-      <Stack style={{ maxHeight: "80vh" }}>
+      <Stack mah={"80vh"}>
         {row.getAllCells().map((cell) => {
           return typeof cell.getValue() === "number" ||
             typeof cell.getValue() === "string" ? (
@@ -227,16 +227,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
   };
 
   return (
-    <Flex
-      style={{
-        borderRadius: "4px",
-        flexDirection: "column",
-        gap: "12px",
-        justifyContent: "flex-start",
-        padding: "0",
-        height: "90vh",
-      }}
-    >
+    <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"90vh"}>
       <MantineReactTable table={table} />
     </Flex>
   );
