@@ -39,7 +39,7 @@ export function AuthManager({
       }
     };
     authenticate().catch((error) => console.error(error));
-  }, [router, setIsEdit]);
+  }, [router, setIsEdit, setCanDelete]);
 
   if (isLoading || (!isAuthenticated && pathname !== "/login")) {
     return <MainLoader />;
