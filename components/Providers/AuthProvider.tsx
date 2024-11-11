@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-import { check } from "../../app/api/auth/authAPI";
+import { check, userInfo } from "@/app/api/auth/authAPI";
+import { useEditStore } from "@/store/useEditStore";
+
 import { MainLoader } from "../MainLoader/MainLoader";
 
 interface AuthManagerProperties {
@@ -15,21 +17,27 @@ export function AuthManager({
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const { setIsEdit } = useEditStore();
 
   useEffect(() => {
-    check()
-      .then((result: unknown) => {
+    const authenticate = async (): Promise<void> => {
+      try {
+        const result = await check();
         if (result) {
           setIsAuthenticated(true);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const usr: any = await userInfo();
+          setIsEdit(usr.email_verified);
         } else {
           router.push("/login");
         }
-        setIsLoading(false);
-        return result;
-      })
-      .catch((error: unknown) => {
+      } catch (error) {
         console.error(error);
-      });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    authenticate().catch((error) => console.error(error));
   }, [router]);
 
   if (isLoading || (!isAuthenticated && pathname !== "/login")) {
