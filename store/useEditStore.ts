@@ -4,13 +4,18 @@ import { createJSONStorage, persist } from "zustand/middleware";
 interface StoreState {
   isEdit: boolean;
   setIsEdit: (value: boolean) => void;
+  clearStore: () => void;
 }
 
 export const useEditStore = create(
   persist<StoreState>(
     (set) => ({
-      isEdit: true,
+      isEdit: false,
       setIsEdit: (value: boolean): void => set({ isEdit: value }),
+      clearStore: (): void => {
+        set({ isEdit: false });
+        localStorage.removeItem("user-permissions");
+      },
     }),
     {
       name: "user-permissions",

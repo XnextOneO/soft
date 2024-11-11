@@ -15,6 +15,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 
 import { logout } from "@/app/api/auth/authAPI";
+import { useEditStore } from "@/store/useEditStore";
 
 import { Context } from "../Providers/AppContextProvider";
 
@@ -26,6 +27,7 @@ const Header: React.FC = observer(() => {
   const { burgerStore } = useContext(Context);
   const pathname = usePathname();
   const router = useRouter();
+  const { clearStore } = useEditStore();
   useEffect(() => {
     if (!pathname.includes("/login")) {
       burgerStore.setOpened(opened);
@@ -34,6 +36,7 @@ const Header: React.FC = observer(() => {
 
   const logoutHandler = (): void => {
     logout();
+    clearStore();
     router.push("/login");
   };
 
