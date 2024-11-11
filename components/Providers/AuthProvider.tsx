@@ -17,7 +17,7 @@ export function AuthManager({
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
-  const { setIsEdit } = useEditStore();
+  const { setIsEdit, setCanDelete } = useEditStore();
 
   useEffect(() => {
     const authenticate = async (): Promise<void> => {
@@ -28,6 +28,7 @@ export function AuthManager({
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const usr: any = await userInfo();
           setIsEdit(usr.email_verified);
+          setCanDelete(usr.email_verified);
         } else {
           router.push("/login");
         }

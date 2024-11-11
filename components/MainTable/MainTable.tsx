@@ -39,7 +39,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
   const size = 13;
   const [totalElements] = useState(data.length);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
-  const { isEdit } = useEditStore();
+  const { isEdit, canDelete } = useEditStore();
   const [isLoading] = useState(false);
   const [opened, setOpened] = useState(false);
 
@@ -174,6 +174,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
                 variant="outline"
                 color="red"
                 onClick={() => setDeleteModalOpened(true)}
+                disabled={!canDelete}
               >
                 Удалить
               </Button>
