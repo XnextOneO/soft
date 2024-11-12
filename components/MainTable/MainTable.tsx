@@ -14,6 +14,7 @@ import {
 import { IconEdit } from "@tabler/icons-react";
 import {
   MantineReactTable,
+  MRT_EditActionButtons,
   // eslint-disable-next-line camelcase
   MRT_GlobalFilterTextInput,
   // eslint-disable-next-line camelcase
@@ -99,6 +100,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     mantineLoadingOverlayProps: {
       loaderProps: { color: "#006040", type: "bars" },
     },
+
     renderTopToolbar: () => (
       <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
         <Group gap="xs">
@@ -119,6 +121,13 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
           <Button color="#007458" size="sm" radius="xs" onClick={onOpen}>
             Обновить таблицу
           </Button>
+          <Button
+            onClick={() => {
+              table.setCreatingRow(true); // Открывает модальное окно для создания новой строки
+            }}
+          >
+            Создать строку
+          </Button>
         </Group>
         <Flex>
           {/* eslint-disable-next-line camelcase */}
@@ -128,6 +137,30 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
         </Flex>
       </Flex>
     ),
+    onCreatingRowSave: async ({ exitCreatingMode }) => {
+      // setData((prevData) => [...prevData, { ...values, id: newId }]);
+      exitCreatingMode(); // Закрывает модальное окно
+    },
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    renderCreateRowModalContent: ({ table, row }) => (
+      <Stack>
+        <Title order={3}>Создать новую строку</Title>
+        {processedColumns.map((column) => (
+          <Flex direction="column" key={column.accessorKey}>
+            <Title order={5}>{column.header}</Title>
+            <Textarea
+              placeholder={`Введите ${column.header}`}
+              resize={"vertical"}
+            />
+          </Flex>
+        ))}
+        <Flex justify="flex-end" mt="xl">
+          {/* eslint-disable-next-line camelcase */}
+          <MRT_EditActionButtons variant="text" table={table} row={row} />
+        </Flex>
+      </Stack>
+    ),
+
     renderBottomToolbar: () => (
       <Flex align="center" justify={"space-between"} pt={10} pb={10}>
         <span>
