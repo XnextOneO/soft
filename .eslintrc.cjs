@@ -84,6 +84,7 @@ module.exports = {
     "no-use-before-define": "off",
     "react/prop-types": "off",
     "no-catch-shadow": "off",
+    camelcase: "off",
     "no-nested-ternary": "off",
     "prefer-template": "error",
     "prefer-spread": "error",

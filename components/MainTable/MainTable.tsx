@@ -11,17 +11,15 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { IconEdit } from "@tabler/icons-react";
 import {
   MantineReactTable,
   MRT_EditActionButtons,
-  // eslint-disable-next-line camelcase
   MRT_GlobalFilterTextInput,
-  // eslint-disable-next-line camelcase
   MRT_ShowHideColumnsButton,
   useMantineReactTable,
 } from "mantine-react-table";
-// eslint-disable-next-line camelcase
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
 import PopoverCell from "@/components/DataTable/PopoverCell";
@@ -130,9 +128,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
           </Button>
         </Group>
         <Flex>
-          {/* eslint-disable-next-line camelcase */}
           <MRT_GlobalFilterTextInput table={table} />
-          {/* eslint-disable-next-line camelcase */}
           <MRT_ShowHideColumnsButton table={table} />
         </Flex>
       </Flex>
@@ -155,7 +151,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
           </Flex>
         ))}
         <Flex justify="flex-end" mt="xl">
-          {/* eslint-disable-next-line camelcase */}
           <MRT_EditActionButtons variant="text" table={table} row={row} />
         </Flex>
       </Stack>
@@ -225,7 +220,17 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
               </Group>
             </Popover.Dropdown>
           </Popover>
-          <Button>Сохранить</Button>
+          <Button
+            onClick={() =>
+              notifications.show({
+                title: "Default notification",
+                message: "Do not forget to star Mantine on GitHub! 🌟",
+                position: "bottom-right",
+              })
+            }
+          >
+            Сохранить
+          </Button>
         </Flex>
       </Stack>
     ),
@@ -235,7 +240,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     },
     columns: processedColumns,
     data: data.slice((page - 1) * size, page * size),
-    // eslint-disable-next-line camelcase
     localization: MRT_Localization_RU,
     enableFullScreenToggle: false,
     enableDensityToggle: false,
