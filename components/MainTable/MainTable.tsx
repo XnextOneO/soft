@@ -26,6 +26,8 @@ import PopoverCell from "@/components/DataTable/PopoverCell";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
 import { useEditStore } from "@/store/useEditStore";
 
+import classes from "./MainTable.module.css";
+
 interface TableProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
@@ -124,7 +126,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
               table.setCreatingRow(true); // Открывает модальное окно для создания новой строки
             }}
           >
-            Создать строку
+            Создать запись
           </Button>
         </Group>
         <Flex>
@@ -140,7 +142,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     renderCreateRowModalContent: ({ table, row }) => (
       <Stack>
-        <Title order={3}>Создать новую строку</Title>
+        <span className={classes.test}>Создать новую запись</span>
         {processedColumns.map((column) => (
           <Flex direction="column" key={column.accessorKey}>
             <Title order={5}>{column.header}</Title>
@@ -175,6 +177,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
 
     renderEditRowModalContent: ({ row }) => (
       <Stack mah={"80vh"}>
+        <span className={classes.test}>Редактирование</span>
         {row.getAllCells().map((cell) => {
           return typeof cell.getValue() === "number" ||
             typeof cell.getValue() === "string" ? (
