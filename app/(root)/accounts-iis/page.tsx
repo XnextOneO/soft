@@ -5,20 +5,85 @@ import { MainTable } from "@/components/MainTable/MainTable";
 
 export default function AccountsIIS(): JSX.Element {
   const data = {
-    columns: ["ID", "Name", "Age", "City"],
-    data: [
+    content: [
       {
-        ID: 1,
-        Name: "AliceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeAliceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeAliceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeAliceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-        Age: 30,
-        City: "New York",
+        code: "BANK",
+        name: "Уникальное и однозначное значение, установленное конкретным банком или аналогичным финансовым учреждением для идентификации отношений, определенных между банком и его клиентом",
+        // eslint-disable-next-line sonarjs/no-duplicate-string
+        additionDate: "2024-11-06T07:14:06.777+00:00",
       },
-      { ID: 2, Name: "Bob", Age: 25, City: "Los Angeles" },
-      { ID: 3, Name: "Charlie", Age: 35, City: "Chicago" },
-      { ID: 4, Name: "David", Age: 28, City: "Miami" },
+      {
+        code: "CBID",
+        name: "Уникальный идентификационный номер, присвоенный Центральным банком для идентификации организации (для РБ - БИК)",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "CHID",
+        name: "Уникальный идентификационный номер, присвоенный клиринговым центром для идентификации организации (для РБ - УНУР)",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "CINC",
+        name: "Уникальный идентификационный номер, присвоенный уполномоченным органом при регистрации и используемый для идентификации организации (для РБ - ЕГР)",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "COID",
+        name: "Идентификация организации, присвоенная уполномоченным органом страны (например, корпоративный регистрационный номер)",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "CUST",
+        name: "Номер, присвоенный эмитентом для идентификации клиента. Номер, присвоенный стороной для идентификации отношений с кредитором или должником",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "DUNS",
+        name: "Уникальный идентификационный номер, предоставляемый компанией Dun and Bradstreet для идентификации организации",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "EMPL",
+        name: "Номер, присвоенный регистрирующим органом работодателю",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "GS1G",
+        name: "Глобальный идентификационный номер. Справочный номер, используемый для идентификации юридических, функциональных или физических лиц в соответствии с правилами схемы нумерации GS1",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "SREN",
+        name: "Номер SIREN -это 9-значный код, присвоенный INSEE, французским Национальным институтом статистики и экономических исследований, для идентификации организации во Франции",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "SRET",
+        name: "Номер SIRET-это 14-значный код, присвоенный INSEE, французским Национальным институтом статистики и экономических исследований, для идентификации структурной единицы во Франции",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
+      {
+        code: "TXID",
+        name: "Номер, присвоенный налоговым органом для идентификации организации (для РБ - УНП)",
+        additionDate: "2024-11-06T07:14:06.777+00:00",
+      },
     ],
+    page: {
+      size: 20,
+      number: 0,
+      totalElements: 12,
+      totalPages: 1,
+    },
   };
+  const columns = Object.keys(data.content[0]);
 
+  const values = data.content.map((item: Record<string, string>) => {
+    const object: Record<string, string> = {};
+    for (const key of Object.keys(item)) {
+      object[key as string] = item[key as string];
+    }
+    return object;
+  });
   return (
     <>
       <Flex
@@ -29,7 +94,7 @@ export default function AccountsIIS(): JSX.Element {
         h="100%"
         style={{ overflow: "hidden" }}
       >
-        <MainTable data={data.data} columns={data.columns} />
+        <MainTable data={values} columns={columns} />
       </Flex>
     </>
   );

@@ -61,6 +61,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
               table.setEditingRow(cell.row);
             }
           }}
+          style={{ width: "100%" }}
         >
           <PopoverCell>{cell.getValue()}</PopoverCell>
         </div>
@@ -69,7 +70,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
       sortDescFirst: true,
     };
   });
-
   const onOpen = (): void => {
     setOpened(true);
   };
