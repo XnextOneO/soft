@@ -9,7 +9,7 @@ export default function TestPage(): JSX.Element {
     page: 0,
     size: 20,
     sort: "ASC",
-    column: "FIRST_ORDER_BALANCE_ACCOUNT_NUMBER",
+    link: "nsi/transfer-status-code",
   };
 
   const { data, error, isLoading } = useQuery({

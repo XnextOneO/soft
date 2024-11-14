@@ -1,4 +1,4 @@
-import { $host } from "../index";
+import { $authHost, $host } from "../index";
 
 interface FetchApiDataParameters {
   link?: string;
@@ -12,11 +12,9 @@ export const fetchApiData = async (
   parameters: FetchApiDataParameters,
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 ) => {
-  const response = await $host.get(`reference-book/${parameters.link}`, {
+  const response = await $authHost.get(`reference-book/${parameters.link}`, {
     params: parameters,
   });
-
-  console.log(response);
-
+  console.log("Данные с сервера:", response.data);
   return response.data;
 };

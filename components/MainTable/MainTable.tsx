@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconEdit } from "@tabler/icons-react";
+import { useQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
   MRT_EditActionButtons,
@@ -22,30 +23,126 @@ import {
 } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
+import { fetchApiData } from "@/app/api/hooks";
 import PopoverCell from "@/components/DataTable/PopoverCell";
+import { MainLoader } from "@/components/MainLoader/MainLoader";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
 import { useEditStore } from "@/store/useEditStore";
 
 import classes from "./MainTable.module.css";
 
-interface TableProperties {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columns: any[];
-}
+// interface TableProperties {
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   data: any[];
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   columns: any[];
+// }
 
-export const MainTable: FC<TableProperties> = ({ data, columns }) => {
+export const MainTable: FC = () => {
   const [page, setPage] = useState(1);
   const size = 13;
-  const [totalElements] = useState(data.length);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const { isEdit, canDelete } = useEditStore();
-  const [isLoading] = useState(false);
+  // const [isLoading] = useState(false);
   const [opened, setOpened] = useState(false);
+  // const apiData = {
+  //   content: [
+  //     {
+  //       code: "BANK",
+  //       name: "Уникальное и однозначное значение, установленное конкретным банком или аналогичным финансовым учреждением для идентификации отношений, определенных между банком и его клиентом",
+  //       // eslint-disable-next-line sonarjs/no-duplicate-string
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "CBID",
+  //       name: "Уникальный идентификационный номер, присвоенный Центральным банком для идентификации организации (для РБ - БИК)",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "CHID",
+  //       name: "Уникальный идентификационный номер, присвоенный клиринговым центром для идентификации организации (для РБ - УНУР)",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "CINC",
+  //       name: "Уникальный идентификационный номер, присвоенный уполномоченным органом при регистрации и используемый для идентификации организации (для РБ - ЕГР)",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "COID",
+  //       name: "Идентификация организации, присвоенная уполномоченным органом страны (например, корпоративный регистрационный номер)",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "CUST",
+  //       name: "Номер, присвоенный эмитентом для идентификации клиента. Номер, присвоенный стороной для идентификации отношений с кредитором или должником",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "DUNS",
+  //       name: "Уникальный идентификационный номер, предоставляемый компанией Dun and Bradstreet для идентификации организации",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "EMPL",
+  //       name: "Номер, присвоенный регистрирующим органом работодателю",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "GS1G",
+  //       name: "Глобальный идентификационный номер. Справочный номер, используемый для идентификации юридических, функциональных или физических лиц в соответствии с правилами схемы нумерации GS1",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "SREN",
+  //       name: "Номер SIREN -это 9-значный код, присвоенный INSEE, французским Национальным институтом статистики и экономических исследований, для идентификации организации во Франции",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "SRET",
+  //       name: "Номер SIRET-это 14-значный код, присвоенный INSEE, французским Национальным институтом статистики и экономических исследований, для идентификации структурной единицы во Франции",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //     {
+  //       code: "TXID",
+  //       name: "Номер, присвоенный налоговым органом для идентификации организации (для РБ - УНП)",
+  //       additionDate: "2024-11-06T07:14:06.777+00:00",
+  //     },
+  //   ],
+  //   page: {
+  //     size: 20,
+  //     number: 0,
+  //     totalElements: 12,
+  //     totalPages: 1,
+  //   },
+  // };
+  const parameters = {
+    page: 0,
+    size: 20,
+    sort: "ASC",
+    link: "nsi/biss-member",
+  };
+
+  const { data, isLoading, refetch, isFetching } = useQuery({
+    queryKey: ["apiData", parameters],
+    queryFn: async () => {
+      return fetchApiData(parameters);
+    },
+  });
+  const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
+  const cellValues = data?.content
+    ? data.content.map((item: Record<string, string>) => {
+        const object: Record<string, string | boolean> = {};
+        for (const key of Object.keys(item)) {
+          object[key as string] = item[key as string];
+        }
+        return object;
+      })
+    : [];
+
+  const [totalElements] = useState(cellValues.length);
 
   const columnsWithAccessorKey = columns.map((column) => ({
-    ...column,
     accessorKey: column,
     header: column,
   }));
@@ -70,14 +167,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
       sortDescFirst: true,
     };
   });
-  const onOpen = (): void => {
-    setOpened(true);
-  };
-
-  const onClose = (): void => {
-    setOpened(false);
-  };
-
   const table = useMantineReactTable({
     editDisplayMode: "modal",
     enableEditing: isEdit,
@@ -104,7 +193,13 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     renderTopToolbar: () => (
       <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
         <Group gap="xs">
-          <Button w={36} p={0} radius="xs" color="#007458">
+          <Button
+            w={36}
+            p={0}
+            radius="xs"
+            color="#007458"
+            onClick={() => refetch()}
+          >
             <svg
               width="32"
               height="32"
@@ -118,7 +213,12 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
               ></path>
             </svg>
           </Button>
-          <Button color="#007458" size="sm" radius="xs" onClick={onOpen}>
+          <Button
+            color="#007458"
+            size="sm"
+            radius="xs"
+            onClick={() => setOpened(true)}
+          >
             Обновить таблицу
           </Button>
           <Button
@@ -170,7 +270,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
           siblings={1}
           value={page}
           defaultValue={page}
-          onChange={handlePageChange}
+          onChange={setPage}
         />
       </Flex>
     ),
@@ -242,7 +342,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
       withCloseButton: true,
     },
     columns: processedColumns,
-    data: data.slice((page - 1) * size, page * size),
+    data: cellValues.slice((page - 1) * size, page * size),
     localization: MRT_Localization_RU,
     enableFullScreenToggle: false,
     enableDensityToggle: false,
@@ -259,7 +359,8 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
       withColumnBorders: true,
     },
     state: {
-      isLoading: isLoading,
+      showProgressBars: isLoading,
+      isLoading,
     },
     initialState: { density: "xs", showGlobalFilter: true },
     mantineEditTextInputProps: {
@@ -270,17 +371,18 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     },
   });
 
-  const handlePageChange = (newPage: number): void => {
-    setPage(newPage);
-  };
   const handleDelete = (): void => {
     setDeleteModalOpened(false);
   };
 
   return (
     <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"90vh"}>
-      <MantineReactTable table={table} />
-      <UpdateTableModal link={"a"} opened={opened} close={onClose} />
+      {isLoading ? <MainLoader /> : <MantineReactTable table={table} />}
+      <UpdateTableModal
+        link={"a"}
+        opened={opened}
+        close={() => setOpened(false)}
+      />
     </Flex>
   );
 };
