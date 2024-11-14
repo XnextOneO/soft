@@ -1,4 +1,4 @@
-import { $authHost, $host } from "../index";
+import { $authHost } from "../index";
 
 interface FetchApiDataParameters {
   link?: string;
