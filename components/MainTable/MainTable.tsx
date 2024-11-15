@@ -98,6 +98,11 @@ export const MainTable: FC = () => {
       sortDescFirst: true,
     };
   });
+  console.log(
+    "ДАННЫЕ В ТАБЛИЦЕ",
+    cellValues.slice((page - 1) * size, page * size),
+  );
+
   const table = useMantineReactTable({
     editDisplayMode: "modal",
     enableEditing: isEdit,
@@ -287,7 +292,8 @@ export const MainTable: FC = () => {
       withColumnBorders: true,
     },
     state: {
-      showProgressBars: isFetching,
+      isLoading: isFetching,
+      showProgressBars: isLoading,
     },
     mantineLoadingOverlayProps: {
       loaderProps: { color: "#006040", type: "bars" },
