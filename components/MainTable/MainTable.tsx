@@ -71,7 +71,7 @@ export const MainTable: FC = () => {
     : [];
   console.log(cellValues, "celllll");
 
-  const [totalElements] = useState(cellValues.length);
+  const totalElements = cellValues.length;
 
   const columnsWithAccessorKey = columns.map((column) => ({
     accessorKey: column,
@@ -194,7 +194,13 @@ export const MainTable: FC = () => {
     ),
 
     renderBottomToolbar: () => (
-      <Flex align="center" justify={"space-between"} pt={10} pb={10}>
+      <Flex
+        align="center"
+        justify={"space-between"}
+        pt={10}
+        pb={10}
+        style={{ border: "1px solid black" }}
+      >
         <span>
           Отображены записи {(page - 1) * size + 1}–
           {Math.min(page * size, totalElements)} из {totalElements}
@@ -293,10 +299,8 @@ export const MainTable: FC = () => {
     },
     state: {
       isLoading: isFetching,
-      showProgressBars: isLoading,
-    },
-    mantineLoadingOverlayProps: {
-      loaderProps: { color: "#006040", type: "bars" },
+      showProgressBars: true,
+      showAlertBanner: true,
     },
     initialState: { density: "xs", showGlobalFilter: true },
     mantineEditTextInputProps: {
