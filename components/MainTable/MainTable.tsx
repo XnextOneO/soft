@@ -12,9 +12,10 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
+import { LoadingOverlay } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconEdit } from "@tabler/icons-react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
   MRT_EditActionButtons,
@@ -41,7 +42,7 @@ import classes from "./MainTable.module.css";
 
 export const MainTable: FC = () => {
   const [page, setPage] = useState<number>(1);
-  const size = 13;
+  const size = 20;
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const { isEdit, canDelete } = useEditStore();
   const [opened, setOpened] = useState(false);
@@ -50,17 +51,21 @@ export const MainTable: FC = () => {
     page: page - 1,
     size: size,
     sort: "ASC",
-    link: "nsi/biss-member",
+    link: "scbank/account",
   };
 
-  const { data, isLoading, refetch, isFetching } = useQuery({
+  const { data, refetch, isFetching, isLoading } = useQuery({
     queryKey: ["apiData", parameters],
+
     queryFn: async () => {
       return fetchApiData(parameters);
     },
+    staleTime: 0,
+    placeholderData: keepPreviousData,
   });
 
   const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
+
   const cellValues = data?.content
     ? data.content.map((item: Record<string, string>) => {
         const object: Record<string, string | boolean> = {};
@@ -96,7 +101,7 @@ export const MainTable: FC = () => {
           <PopoverCell>{cell.getValue()}</PopoverCell>
         </div>
       ),
-      size: column.accessorKey.length >= 12 ? 140 : 100,
+      size: column.accessorKey.length >= 12 ? 260 : 150,
       sortDescFirst: true,
     };
   });
@@ -106,6 +111,14 @@ export const MainTable: FC = () => {
     enableEditing: isEdit,
     columns: processedColumns,
     data: cellValues,
+    state: {
+      isLoading: isFetching,
+      showProgressBars: true,
+    },
+    initialState: { density: "xs", showGlobalFilter: true },
+    mantineLoadingOverlayProps: {
+      loaderProps: { color: "#006040", type: "bars" },
+    },
     // eslint-disable-next-line @typescript-eslint/no-shadow
     renderRowActions: ({ row, table }) => (
       <Flex justify={"center"} align={"center"} gap={"md"}>
@@ -191,13 +204,7 @@ export const MainTable: FC = () => {
     ),
 
     renderBottomToolbar: () => (
-      <Flex
-        align="center"
-        justify={"space-between"}
-        pt={10}
-        pb={10}
-        style={{ border: "1px solid black" }}
-      >
+      <Flex align="center" justify={"space-between"} p={10}>
         <Text>
           Отображены записи {(page - 1) * size + 1}–
           {Math.min(page * size, totalElements)} из {totalElements}
@@ -211,7 +218,19 @@ export const MainTable: FC = () => {
         />
       </Flex>
     ),
-
+    mantineBottomToolbarProps: {
+      style: {
+        alignItems: "center",
+        minHeight: 0,
+      },
+    },
+    mantineTableContainerProps: {
+      style: {
+        height: "calc(100vh - 180px)",
+        overflowY: "auto",
+        borderTop: "1px solid #495057",
+      },
+    },
     renderEditRowModalContent: ({ row }) => (
       <Stack mah={"80vh"}>
         <span className={classes.test}>Редактирование</span>
@@ -286,18 +305,13 @@ export const MainTable: FC = () => {
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
-    // enableColumnVirtualization: true,
+    enableColumnVirtualization: true,
     layoutMode: "grid",
     mantineTableProps: {
       striped: "even",
       withColumnBorders: true,
     },
-    state: {
-      isLoading: isFetching,
-      showProgressBars: true,
-      showAlertBanner: true,
-    },
-    initialState: { density: "xs", showGlobalFilter: true },
+
     mantineEditTextInputProps: {
       variant: "filled",
       radius: "md",
@@ -309,13 +323,14 @@ export const MainTable: FC = () => {
   const handleDelete = (): void => {
     setDeleteModalOpened(false);
   };
-  if (!data && !data.content) {
-    return <div>Нет данных</div>;
+  if (!data) {
+    return <MainLoader />;
   }
 
   return (
-    <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"90vh"}>
-      <MantineReactTable table={table} data={data.content} />
+    <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"100%"}>
+      <MantineReactTable table={table} />
+      <LoadingOverlay visible={isLoading} />
       <UpdateTableModal
         link={"a"}
         opened={opened}
