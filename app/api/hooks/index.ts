@@ -15,6 +15,5 @@ export const fetchApiData = async (
   const response = await $authHost.get(`reference-book/${parameters.link}`, {
     params: parameters,
   });
-  console.log("Данные с сервера:", response.data);
   return response.data;
 };

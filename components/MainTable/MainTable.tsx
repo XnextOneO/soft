@@ -7,6 +7,7 @@ import {
   Pagination,
   Popover,
   Stack,
+  Text,
   Textarea,
   Title,
   Tooltip,
@@ -39,15 +40,15 @@ import classes from "./MainTable.module.css";
 // }
 
 export const MainTable: FC = () => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
   const size = 13;
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const { isEdit, canDelete } = useEditStore();
   const [opened, setOpened] = useState(false);
 
   const parameters = {
-    page: 0,
-    size: 20,
+    page: page - 1,
+    size: size,
     sort: "ASC",
     link: "nsi/biss-member",
   };
@@ -69,9 +70,10 @@ export const MainTable: FC = () => {
         return object;
       })
     : [];
-  console.log(cellValues, "celllll");
 
-  const totalElements = cellValues.length;
+  const totalElements = data?.page?.totalElements || 0;
+
+  const countPages = data?.page?.totalPages || 0;
 
   const columnsWithAccessorKey = columns.map((column) => ({
     accessorKey: column,
@@ -98,16 +100,12 @@ export const MainTable: FC = () => {
       sortDescFirst: true,
     };
   });
-  console.log(
-    "ДАННЫЕ В ТАБЛИЦЕ",
-    cellValues.slice((page - 1) * size, page * size),
-  );
-
+  console.log("data", data);
   const table = useMantineReactTable({
     editDisplayMode: "modal",
     enableEditing: isEdit,
     columns: processedColumns,
-    data: cellValues.slice((page - 1) * size, page * size),
+    data: cellValues,
     // eslint-disable-next-line @typescript-eslint/no-shadow
     renderRowActions: ({ row, table }) => (
       <Flex justify={"center"} align={"center"} gap={"md"}>
@@ -124,7 +122,6 @@ export const MainTable: FC = () => {
         size: 50,
       },
     },
-
     renderTopToolbar: () => (
       <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
         <Group gap="xs">
@@ -201,16 +198,15 @@ export const MainTable: FC = () => {
         pb={10}
         style={{ border: "1px solid black" }}
       >
-        <span>
+        <Text>
           Отображены записи {(page - 1) * size + 1}–
           {Math.min(page * size, totalElements)} из {totalElements}
-        </span>
+        </Text>
         <Pagination
           color="#007458"
-          total={Math.ceil(totalElements / size)}
-          siblings={1}
-          value={page}
-          defaultValue={page}
+          total={countPages}
+          value={parameters.page + 1}
+          defaultValue={parameters.page}
           onChange={setPage}
         />
       </Flex>
@@ -291,7 +287,6 @@ export const MainTable: FC = () => {
     enablePagination: false,
     enableColumnResizing: true,
     // enableColumnVirtualization: true,
-    memoMode: "table-body",
     layoutMode: "grid",
     mantineTableProps: {
       striped: "even",
@@ -314,10 +309,13 @@ export const MainTable: FC = () => {
   const handleDelete = (): void => {
     setDeleteModalOpened(false);
   };
+  if (!data && !data.content) {
+    return <div>Нет данных</div>;
+  }
 
   return (
     <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"90vh"}>
-      {isLoading ? <MainLoader /> : <MantineReactTable table={table} />}
+      <MantineReactTable table={table} data={data.content} />
       <UpdateTableModal
         link={"a"}
         opened={opened}
