@@ -33,13 +33,6 @@ import { useEditStore } from "@/store/useEditStore";
 
 import classes from "./MainTable.module.css";
 
-// interface TableProperties {
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   data: any[];
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   columns: any[];
-// }
-
 export const MainTable: FC = () => {
   const [page, setPage] = useState<number>(1);
   const size = 20;
@@ -112,10 +105,14 @@ export const MainTable: FC = () => {
     columns: processedColumns,
     data: cellValues,
     state: {
-      isLoading: isFetching,
-      showProgressBars: true,
+      isLoading: isLoading,
+      showProgressBars: isFetching,
     },
+
     initialState: { density: "xs", showGlobalFilter: true },
+    mantineTableBodyCellProps: {
+      mih: "50px",
+    },
     mantineLoadingOverlayProps: {
       loaderProps: { color: "#006040", type: "bars" },
     },
@@ -202,9 +199,8 @@ export const MainTable: FC = () => {
         </Flex>
       </Stack>
     ),
-
-    renderBottomToolbar: () => (
-      <Flex align="center" justify={"space-between"} p={10}>
+    renderBottomToolbarCustomActions: (): JSX.Element => (
+      <Flex align="center" justify={"space-between"} pt={10} pb={10} w={"100%"}>
         <Text>
           Отображены записи {(page - 1) * size + 1}–
           {Math.min(page * size, totalElements)} из {totalElements}
