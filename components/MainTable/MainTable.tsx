@@ -181,6 +181,17 @@ export const MainTable: FC = () => {
             table={table}
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)}
+            rightSection={
+              globalFilter && (
+                <Button
+                  variant="outline"
+                  color="white"
+                  onClick={() => setGlobalFilter("")}
+                >
+                  x
+                </Button>
+              )
+            }
           />
           <MRT_ShowHideColumnsButton table={table} />
         </Flex>
