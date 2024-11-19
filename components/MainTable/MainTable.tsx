@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconEdit } from "@tabler/icons-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -25,7 +26,7 @@ import {
 } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
-import { fetchApiData } from "@/app/api/hooks";
+import { fetchApiData, fetchApiDataWithSearch } from "@/app/api/hooks";
 import PopoverCell from "@/components/DataTable/PopoverCell";
 import { MainLoader } from "@/components/MainLoader/MainLoader";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
@@ -39,19 +40,23 @@ export const MainTable: FC = () => {
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const { isEdit, canDelete } = useEditStore();
   const [opened, setOpened] = useState(false);
+  const [globalFilter, setGlobalFilter] = useState("");
+  const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
 
   const parameters = {
     page: page - 1,
     size: size,
     sort: "ASC",
     link: "scbank/account",
+    text: debouncedGlobalFilter[0],
   };
-
   const { data, refetch, isFetching, isLoading } = useQuery({
     queryKey: ["apiData", parameters],
 
     queryFn: async () => {
-      return fetchApiData(parameters);
+      return parameters.text
+        ? fetchApiDataWithSearch(parameters)
+        : fetchApiData(parameters);
     },
     staleTime: 0,
     placeholderData: keepPreviousData,
@@ -172,7 +177,11 @@ export const MainTable: FC = () => {
           </Button>
         </Group>
         <Flex>
-          <MRT_GlobalFilterTextInput table={table} />
+          <MRT_GlobalFilterTextInput
+            table={table}
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value)}
+          />
           <MRT_ShowHideColumnsButton table={table} />
         </Flex>
       </Flex>
