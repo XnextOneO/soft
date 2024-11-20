@@ -113,7 +113,7 @@ export const MainTable: FC = () => {
       isLoading: isLoading,
       showProgressBars: isFetching,
     },
-
+    onGlobalFilterChange: setGlobalFilter,
     initialState: { density: "xs", showGlobalFilter: true },
     mantineTableBodyCellProps: {
       mih: "50px",
@@ -177,22 +177,7 @@ export const MainTable: FC = () => {
           </Button>
         </Group>
         <Flex>
-          <MRT_GlobalFilterTextInput
-            table={table}
-            value={globalFilter}
-            onChange={(event) => setGlobalFilter(event.target.value)}
-            rightSection={
-              globalFilter && (
-                <Button
-                  variant="outline"
-                  color="white"
-                  onClick={() => setGlobalFilter("")}
-                >
-                  x
-                </Button>
-              )
-            }
-          />
+          <MRT_GlobalFilterTextInput table={table} w={"300px"} />
           <MRT_ShowHideColumnsButton table={table} />
         </Flex>
       </Flex>
@@ -327,7 +312,6 @@ export const MainTable: FC = () => {
       striped: "even",
       withColumnBorders: true,
     },
-
     mantineEditTextInputProps: {
       variant: "filled",
       radius: "md",

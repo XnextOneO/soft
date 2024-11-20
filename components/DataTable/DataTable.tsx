@@ -212,7 +212,6 @@ const DataTable = observer(
       enableDensityToggle: false,
       // columnResizeMode: "onEnd",
       enableMultiSort: false,
-
       localization: MRT_Localization_RU,
       enableColumnResizing: true,
       enableColumnVirtualization: true,
