@@ -11,6 +11,8 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 
+import { useBreadCrumbs } from "@/hooks/breadcrumbs-hooks";
+
 import classes from "./HomePage.module.css";
 
 const HomePage: FC = () => {
@@ -38,6 +40,7 @@ const HomePage: FC = () => {
       </Text>
     </Link>
   ));
+  useBreadCrumbs("Главная страница");
 
   return (
     <Stack gap={0} w="100%">

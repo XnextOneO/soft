@@ -1,38 +1,59 @@
-import { FC, useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { Breadcrumbs as MantineBreadcrumbs, Text } from "@mantine/core";
+"use client";
+import { Context, createContext, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { BreadcrumbsProps, Loader } from "@mantine/core";
 
-interface Crumb {
-  title: string;
-  href: string;
-}
+import BreadcrumbsContainer from "./BreadcrumbsContainer";
+import BreadcrumbsItem from "./BreadcrumbsItem";
 
-interface BreadcrumbsProperties {
-  crumbs: Crumb[];
-}
+export const BreadCrumbsContext = createContext<Context>({
+  trailingPath: "",
+  setTrailingPath: () => {},
+});
 
-const Breadcrumbs: FC<BreadcrumbsProperties> = ({ crumbs }) => {
-  const location = useRouter().query;
-  const [, setCurrentCrumb] = useState<Crumb | null>();
+const BreadCrumbs = ({ children }: BreadcrumbsProps) => {
+  const paths = usePathname();
+  const [trailingPath, setTrailingPath] = useState("");
+  const context = useMemo(
+    () => ({
+      trailingPath,
+      setTrailingPath,
+    }),
+    [trailingPath],
+  );
 
-  useEffect(() => {
-    const currentPath = location.pathname;
-    const crumb = crumbs.find((breadcrumb) => breadcrumb.href === currentPath);
-    setCurrentCrumb(crumb);
-  }, [location.pathname, crumbs]);
+  const pathNames = paths.split("/").filter(Boolean);
+  const pathItems = pathNames.map((path, index) => ({
+    name: path,
+    path: pathNames.slice(0, index + 1).join("/"),
+  }));
+
+  if (
+    trailingPath &&
+    pathItems.length > 0 &&
+    trailingPath !== pathItems.at(-1).name
+  ) {
+    pathItems.at(-1).name = trailingPath;
+  }
 
   return (
-    <MantineBreadcrumbs separator=">" separatorMargin="5px" p="xs">
-      {crumbs.map((crumb, index) => (
-        <Link key={index} href={crumb.href} style={{ textDecoration: "none" }}>
-          <Text c="#8B8B8B" size="sm">
-            {crumb.title}
-          </Text>
-        </Link>
-      ))}
-    </MantineBreadcrumbs>
+    <>
+      <BreadcrumbsContainer>
+        {pathItems.map((item) => (
+          <BreadcrumbsItem key={item.path} href={`/${item.path}`}>
+            {item.name === "loading" ? (
+              <Loader className="w-4 h-4" />
+            ) : (
+              item.name
+            )}
+          </BreadcrumbsItem>
+        ))}
+      </BreadcrumbsContainer>
+      <BreadCrumbsContext.Provider value={context}>
+        {children}
+      </BreadCrumbsContext.Provider>
+    </>
   );
 };
 
-export default Breadcrumbs;
+export default BreadCrumbs;

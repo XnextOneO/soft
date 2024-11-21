@@ -9,17 +9,12 @@ import { Button, Flex, Group, Pagination, Text } from "@mantine/core";
 import {
   MantineReactTable,
   // type MRT_ColumnDef,
-  // eslint-disable-next-line camelcase
   MRT_ColumnFiltersState,
-  // eslint-disable-next-line camelcase
   MRT_GlobalFilterTextInput,
-  // eslint-disable-next-line camelcase
   MRT_ShowHideColumnsButton,
-  // eslint-disable-next-line camelcase
   MRT_SortingState,
   useMantineReactTable,
 } from "mantine-react-table";
-// eslint-disable-next-line camelcase
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 import { observer } from "mobx-react-lite";
 
@@ -49,10 +44,10 @@ const DataTable = observer(
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isRefetching, setIsRefetching] = useState(false);
-    // eslint-disable-next-line camelcase
+
     const [columnFilters] = useState<MRT_ColumnFiltersState>([]);
     const [globalFilter, setGlobalFilter] = useState<string>("");
-    // eslint-disable-next-line camelcase
+
     const [sorting, setSorting] = useState<MRT_SortingState>([]);
     const [manualSorting, setManualSorting] = useState<
       { id: string; desc: string } | object
@@ -215,9 +210,7 @@ const DataTable = observer(
       enableBottomToolbar: true,
       enableTopToolbar: false,
       enableDensityToggle: false,
-      // columnResizeMode: "onEnd",
       enableMultiSort: false,
-      // eslint-disable-next-line camelcase
       localization: MRT_Localization_RU,
       enableColumnResizing: true,
       enableColumnVirtualization: true,
@@ -330,9 +323,9 @@ const DataTable = observer(
           </Group>
 
           <Flex gap="xs" align="center">
-            {/* eslint-disable-next-line camelcase */}
+            {}
             <MRT_GlobalFilterTextInput table={table} />
-            {/* eslint-disable-next-line camelcase */}
+            {}
             <MRT_ShowHideColumnsButton table={table} />
           </Flex>
         </Flex>

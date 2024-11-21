@@ -15,7 +15,6 @@ export function Providers({
   children: React.ReactNode;
 }): JSX.Element {
   const [queryClient] = useState(() => new QueryClient());
-
   return (
     <ThemeManager>
       <AuthManager>

@@ -42,10 +42,12 @@ const RootLayout = ({
             p={0}
             maw="100vw"
           >
+            {/* <BreadCrumbs> */}
             <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
               <NavMenu />
               {children}
             </Flex>
+            {/* </BreadCrumbs> */}
           </Container>
         </Providers>
       </body>

@@ -8,16 +8,17 @@ import {
   Container,
   Divider,
   Flex,
-  Grid,
   Group,
   Stack,
   Text,
   Title,
-  UnstyledButton,
   useMantineColorScheme,
 } from "@mantine/core";
-import { IconBook } from "@tabler/icons-react";
 import { observer } from "mobx-react-lite";
+
+import DirectoryList from "@/components/DirectoriesPageParts/DirectoriyList";
+import DirectoryItem from "@/components/DirectoriesPageParts/DirectoryItem";
+import { useBreadCrumbs } from "@/hooks/breadcrumbs-hooks";
 
 import { Context } from "../../../components/Providers/AppContextProvider";
 
@@ -41,6 +42,16 @@ const DirectoriesPage = observer(() => {
       </Text>
     </Link>
   ));
+  useBreadCrumbs("Справочники");
+
+  const specialLinks = new Set(["rf", "swift", "scbank/account"]);
+  const specialDirectories = directoriesStore.directories.filter((directory) =>
+    specialLinks.has(directory.link),
+  );
+
+  const nsiDirectories = directoriesStore.directories.filter(
+    (directory) => !specialLinks.has(directory.link),
+  );
 
   return (
     <Stack gap={0} w="100%">
@@ -84,47 +95,10 @@ const DirectoriesPage = observer(() => {
             ЦВ НСИ НБ РБ
           </Title>
           <Divider w="100%" mb={20} p={0} />
-          <Grid mb={20}>
-            {directoriesStore.directories
-              .filter(
-                (directory) =>
-                  directory.link !== "rf" &&
-                  directory.link !== "swift" &&
-                  directory.link !== "scbank/account",
-              )
-              .map((directory, index) => (
-                <Grid.Col key={index} span={2}>
-                  <Link
-                    style={{
-                      width: "50%",
-                      textDecoration: "none",
-                    }}
-                    href={`/directories/${directory.link}`}
-                  >
-                    <UnstyledButton className={classes.item}>
-                      <IconBook
-                        color={
-                          colorScheme.colorScheme === "dark"
-                            ? "#c9c9c9"
-                            : "black"
-                        }
-                      />
-                      <Text
-                        size="sm"
-                        mt={7}
-                        c={
-                          colorScheme.colorScheme === "dark"
-                            ? "#c9c9c9"
-                            : "black"
-                        }
-                      >
-                        {directory.name}
-                      </Text>
-                    </UnstyledButton>
-                  </Link>
-                </Grid.Col>
-              ))}
-          </Grid>
+          <DirectoryList
+            directories={nsiDirectories}
+            colorScheme={colorScheme.colorScheme}
+          />
           <Card.Section
             style={{
               display: "flex",
@@ -138,101 +112,35 @@ const DirectoriesPage = observer(() => {
             w="100%"
           >
             <Group p={0} w="100%" my={10} justify="space-between" wrap="nowrap">
-              <Flex justify="center" w="50%">
-                <Title order={4} className={classes.title}>
-                  Российской Федерации
-                </Title>
-              </Flex>
-              <Divider m={0} p={0} orientation="vertical" />
-              <Flex justify="center" w="50%">
-                <Title order={4} className={classes.title}>
-                  SWIFT
-                </Title>
-              </Flex>
-              <Divider m={0} p={0} orientation="vertical" />
-              <Flex justify="center" w="50%">
-                <Title order={4} className={classes.title}>
-                  SC-Bank360Corporate
-                </Title>
-              </Flex>
+              {specialDirectories.map((directory, index) => (
+                <>
+                  <Flex justify="center" w="50%">
+                    <Title order={4} className={classes.title}>
+                      {directory.name}
+                    </Title>
+                  </Flex>
+                  {index < specialDirectories.length - 1 && (
+                    <Divider m={0} p={0} orientation="vertical" />
+                  )}
+                </>
+              ))}
             </Group>
           </Card.Section>
 
           <Group p={0} w="100%" mt={10} justify="space-between" wrap="nowrap">
-            <Flex justify="center" w="50%">
-              <Link
-                style={{
-                  width: "50%",
-                  textDecoration: "none",
-                }}
-                href={`/directories/${directoriesStore.directories.find((directory) => directory.link === "rf")?.link}`}
-              >
-                <UnstyledButton className={classes.item}>
-                  <IconBook
-                    color={
-                      colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"
-                    }
+            {specialDirectories.map((directory, index) => (
+              <>
+                <Flex justify="center" w="50%">
+                  <DirectoryItem
+                    directory={directory}
+                    colorScheme={colorScheme.colorScheme}
                   />
-                  <Text
-                    size="sm"
-                    mt={7}
-                    c={colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"}
-                  >
-                    Справочник БИК Российской Федерации
-                  </Text>
-                </UnstyledButton>
-              </Link>
-            </Flex>
-            <Divider m={0} p={0} orientation="vertical"></Divider>
-            <Flex justify="center" w="50%">
-              <Link
-                style={{
-                  width: "50%",
-                  textDecoration: "none",
-                }}
-                href={`/directories/${directoriesStore.directories.find((directory) => directory.link === "swift")?.link}`}
-              >
-                <UnstyledButton className={classes.item}>
-                  <IconBook
-                    color={
-                      colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"
-                    }
-                  />
-                  <Text
-                    size="sm"
-                    mt={7}
-                    c={colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"}
-                  >
-                    Справочник участников SWIFT
-                  </Text>
-                </UnstyledButton>
-              </Link>
-            </Flex>
-            <Divider m={0} p={0} orientation="vertical"></Divider>
-            <Flex justify="center" w="50%">
-              <Link
-                style={{
-                  width: "50%",
-                  textDecoration: "none",
-                }}
-                href={`/directories/${directoriesStore.directories.find((directory) => directory.link === "account")?.link}`}
-              >
-                <UnstyledButton className={classes.item}>
-                  <IconBook
-                    color={
-                      colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"
-                    }
-                  />
-                  <Text
-                    size="sm"
-                    mt={7}
-                    c={colorScheme.colorScheme === "dark" ? "#c9c9c9" : "black"}
-                  >
-                    Справочник счетов ПК SC-Bank360Corporate
-                  </Text>
-                </UnstyledButton>
-              </Link>
-            </Flex>
+                </Flex>
+                {index < specialDirectories.length - 1 && (
+                  <Divider m={0} p={0} orientation="vertical" />
+                )}
+              </>
+            ))}
           </Group>
         </Card>
       </Container>

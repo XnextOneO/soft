@@ -9,6 +9,7 @@ import { observer } from "mobx-react-lite";
 
 import DataTable from "@/components/DataTable/DataTable";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
+import { useBreadCrumbs } from "@/hooks/breadcrumbs-hooks";
 
 import { Context } from "../../../../components/Providers/AppContextProvider";
 import classes from "../Directories.module.css";
@@ -23,7 +24,11 @@ const DirectoryPage = observer(
     ) {
       redirect("/not-found");
     }
-
+    useBreadCrumbs(
+      directoriesStore.directories.find((directory) => {
+        return directory.link === params.slug.join("/");
+      }).name,
+    );
     // console.log(useRouter().hooks);
     const colorScheme = useMantineColorScheme();
     const [opened, { open, close }] = useDisclosure(false);
