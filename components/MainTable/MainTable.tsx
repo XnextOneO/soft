@@ -7,12 +7,16 @@ import {
   Pagination,
   Popover,
   Stack,
+  Text,
   Textarea,
   Title,
   Tooltip,
 } from "@mantine/core";
+import { LoadingOverlay } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconEdit } from "@tabler/icons-react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
   MRT_EditActionButtons,
@@ -22,28 +26,59 @@ import {
 } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
+import { fetchApiData, fetchApiDataWithSearch } from "@/app/api/hooks";
 import PopoverCell from "@/components/DataTable/PopoverCell";
+import { MainLoader } from "@/components/MainLoader/MainLoader";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
 import { useEditStore } from "@/store/useEditStore";
 
-interface TableProperties {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columns: any[];
-}
+import classes from "./MainTable.module.css";
 
-export const MainTable: FC<TableProperties> = ({ data, columns }) => {
-  const [page, setPage] = useState(1);
-  const size = 13;
-  const [totalElements] = useState(data.length);
+export const MainTable: FC = () => {
+  const [page, setPage] = useState<number>(1);
+  const size = 20;
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const { isEdit, canDelete } = useEditStore();
-  const [isLoading] = useState(false);
   const [opened, setOpened] = useState(false);
+  const [globalFilter, setGlobalFilter] = useState("");
+  const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
+
+  const parameters = {
+    page: page - 1,
+    size: size,
+    sort: "ASC",
+    link: "scbank/account",
+    text: debouncedGlobalFilter[0],
+  };
+  const { data, refetch, isFetching, isLoading } = useQuery({
+    queryKey: ["apiData", parameters],
+
+    queryFn: async () => {
+      return parameters.text
+        ? fetchApiDataWithSearch(parameters)
+        : fetchApiData(parameters);
+    },
+    staleTime: 0,
+    placeholderData: keepPreviousData,
+  });
+
+  const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
+
+  const cellValues = data?.content
+    ? data.content.map((item: Record<string, string>) => {
+        const object: Record<string, string | boolean> = {};
+        for (const key of Object.keys(item)) {
+          object[key as string] = item[key as string];
+        }
+        return object;
+      })
+    : [];
+
+  const totalElements = data?.page?.totalElements || 0;
+
+  const countPages = data?.page?.totalPages || 0;
 
   const columnsWithAccessorKey = columns.map((column) => ({
-    ...column,
     accessorKey: column,
     header: column,
   }));
@@ -59,26 +94,33 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
               table.setEditingRow(cell.row);
             }
           }}
+          style={{ width: "100%" }}
         >
           <PopoverCell>{cell.getValue()}</PopoverCell>
         </div>
       ),
-      size: column.accessorKey.length >= 12 ? 140 : 100,
+      size: column.accessorKey.length >= 12 ? 260 : 150,
       sortDescFirst: true,
     };
   });
-
-  const onOpen = (): void => {
-    setOpened(true);
-  };
-
-  const onClose = (): void => {
-    setOpened(false);
-  };
-
+  console.log("data", data);
   const table = useMantineReactTable({
     editDisplayMode: "modal",
     enableEditing: isEdit,
+    columns: processedColumns,
+    data: cellValues,
+    state: {
+      isLoading: isLoading,
+      showProgressBars: isFetching,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    initialState: { density: "xs", showGlobalFilter: true },
+    mantineTableBodyCellProps: {
+      mih: "50px",
+    },
+    mantineLoadingOverlayProps: {
+      loaderProps: { color: "#006040", type: "bars" },
+    },
     // eslint-disable-next-line @typescript-eslint/no-shadow
     renderRowActions: ({ row, table }) => (
       <Flex justify={"center"} align={"center"} gap={"md"}>
@@ -95,14 +137,16 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
         size: 50,
       },
     },
-    mantineLoadingOverlayProps: {
-      loaderProps: { color: "#006040", type: "bars" },
-    },
-
     renderTopToolbar: () => (
       <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
         <Group gap="xs">
-          <Button w={36} p={0} radius="xs" color="#007458">
+          <Button
+            w={36}
+            p={0}
+            radius="xs"
+            color="#007458"
+            onClick={() => refetch()}
+          >
             <svg
               width="32"
               height="32"
@@ -116,7 +160,12 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
               ></path>
             </svg>
           </Button>
-          <Button color="#007458" size="sm" radius="xs" onClick={onOpen}>
+          <Button
+            color="#007458"
+            size="sm"
+            radius="xs"
+            onClick={() => setOpened(true)}
+          >
             Обновить таблицу
           </Button>
           <Button
@@ -124,11 +173,11 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
               table.setCreatingRow(true); // Открывает модальное окно для создания новой строки
             }}
           >
-            Создать строку
+            Создать запись
           </Button>
         </Group>
         <Flex>
-          <MRT_GlobalFilterTextInput table={table} />
+          <MRT_GlobalFilterTextInput table={table} w={"300px"} />
           <MRT_ShowHideColumnsButton table={table} />
         </Flex>
       </Flex>
@@ -140,7 +189,7 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     renderCreateRowModalContent: ({ table, row }) => (
       <Stack>
-        <Title order={3}>Создать новую строку</Title>
+        <span className={classes.test}>Создать новую запись</span>
         {processedColumns.map((column) => (
           <Flex direction="column" key={column.accessorKey}>
             <Title order={5}>{column.header}</Title>
@@ -155,26 +204,37 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
         </Flex>
       </Stack>
     ),
-
-    renderBottomToolbar: () => (
-      <Flex align="center" justify={"space-between"} pt={10} pb={10}>
-        <span>
+    renderBottomToolbarCustomActions: (): JSX.Element => (
+      <Flex align="center" justify={"space-between"} pt={10} pb={10} w={"100%"}>
+        <Text>
           Отображены записи {(page - 1) * size + 1}–
           {Math.min(page * size, totalElements)} из {totalElements}
-        </span>
+        </Text>
         <Pagination
           color="#007458"
-          total={Math.ceil(totalElements / size)}
-          siblings={1}
-          value={page}
-          defaultValue={page}
-          onChange={handlePageChange}
+          total={countPages}
+          value={parameters.page + 1}
+          defaultValue={parameters.page}
+          onChange={setPage}
         />
       </Flex>
     ),
-
+    mantineBottomToolbarProps: {
+      style: {
+        alignItems: "center",
+        minHeight: 0,
+      },
+    },
+    mantineTableContainerProps: {
+      style: {
+        height: "calc(100vh - 180px)",
+        overflowY: "auto",
+        borderTop: "1px solid #495057",
+      },
+    },
     renderEditRowModalContent: ({ row }) => (
       <Stack mah={"80vh"}>
+        <span className={classes.test}>Редактирование</span>
         {row.getAllCells().map((cell) => {
           return typeof cell.getValue() === "number" ||
             typeof cell.getValue() === "string" ? (
@@ -238,8 +298,6 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
       closeOnClickOutside: true,
       withCloseButton: true,
     },
-    columns: processedColumns,
-    data: data.slice((page - 1) * size, page * size),
     localization: MRT_Localization_RU,
     enableFullScreenToggle: false,
     enableDensityToggle: false,
@@ -248,17 +306,12 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
-    // enableColumnVirtualization: true,
-    memoMode: "table-body",
+    enableColumnVirtualization: true,
     layoutMode: "grid",
     mantineTableProps: {
       striped: "even",
       withColumnBorders: true,
     },
-    state: {
-      isLoading: isLoading,
-    },
-    initialState: { density: "xs", showGlobalFilter: true },
     mantineEditTextInputProps: {
       variant: "filled",
       radius: "md",
@@ -267,17 +320,22 @@ export const MainTable: FC<TableProperties> = ({ data, columns }) => {
     },
   });
 
-  const handlePageChange = (newPage: number): void => {
-    setPage(newPage);
-  };
   const handleDelete = (): void => {
     setDeleteModalOpened(false);
   };
+  if (!data) {
+    return <MainLoader />;
+  }
 
   return (
-    <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"90vh"}>
+    <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"100%"}>
       <MantineReactTable table={table} />
-      <UpdateTableModal link={"a"} opened={opened} close={onClose} />
+      <LoadingOverlay visible={isLoading} />
+      <UpdateTableModal
+        link={"a"}
+        opened={opened}
+        close={() => setOpened(false)}
+      />
     </Flex>
   );
 };
