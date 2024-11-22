@@ -27,7 +27,7 @@ export const fetchApiDataWithSearch = async (
     `reference-book/${parameters.link}/search`,
     {
       params: {
-        searchText: parameters.text,
+        text: parameters.text,
       },
     },
   );
