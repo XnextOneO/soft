@@ -8,7 +8,6 @@ import {
   Textarea,
   Title,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 
 interface EditRowModalContentProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,6 +16,7 @@ interface EditRowModalContentProperties {
   setDeleteModalOpened: (opened: boolean) => void;
   canDelete: boolean;
   handleDelete: () => void;
+  handleSave: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   classes: any;
 }
@@ -27,6 +27,7 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
   setDeleteModalOpened,
   canDelete,
   handleDelete,
+  handleSave,
   classes,
 }) => {
   return (
@@ -35,7 +36,8 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       {row.getAllCells().map((cell: any) => {
         return typeof cell.getValue() === "number" ||
-          typeof cell.getValue() === "string" ? (
+          typeof cell.getValue() === "string" ||
+          typeof cell.getValue() === "boolean" ? (
           <Flex direction={"column"} gap={"0"} key={cell.id}>
             <Title order={5}>{cell.column.columnDef.header}</Title>
             <Textarea
@@ -79,13 +81,9 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
           </Popover.Dropdown>
         </Popover>
         <Button
-          onClick={() =>
-            notifications.show({
-              title: "Default notification",
-              message: "Do not forget to star Mantine on GitHub! ",
-              position: "bottom-right",
-            })
-          }
+          onClick={() => {
+            handleSave();
+          }}
         >
           Сохранить
         </Button>

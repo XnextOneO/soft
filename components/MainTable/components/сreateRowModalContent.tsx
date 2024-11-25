@@ -1,6 +1,13 @@
 import { FC } from "react";
-import { Flex, Stack, Textarea, Title } from "@mantine/core";
-import { MRT_EditActionButtons } from "mantine-react-table";
+import {
+  Button,
+  Flex,
+  Group,
+  Popover,
+  Stack,
+  Textarea,
+  Title,
+} from "@mantine/core";
 
 interface CreateRowModalContentProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,13 +18,17 @@ interface CreateRowModalContentProperties {
   processedColumns: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   classes: any;
+  createRowModalOpened: boolean;
+  setCreateRowModalOpened: (value: boolean) => void;
+  handleCreate: () => void;
 }
 
 const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
-  table,
-  row,
   processedColumns,
   classes,
+  createRowModalOpened,
+  setCreateRowModalOpened,
+  handleCreate,
 }) => {
   return (
     <Stack>
@@ -31,8 +42,31 @@ const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
           />
         </Flex>
       ))}
-      <Flex justify="flex-end" mt="xl">
-        <MRT_EditActionButtons variant="text" table={table} row={row} />
+      <Flex justify="flex-end" gap={20} pos={"sticky"} bottom={10}>
+        <Popover
+          position="bottom"
+          withArrow
+          opened={createRowModalOpened}
+          onClose={() => setCreateRowModalOpened(false)}
+        >
+          <Popover.Target>
+            <Button onClick={() => setCreateRowModalOpened(true)}>
+              Создать
+            </Button>
+          </Popover.Target>
+          <Popover.Dropdown>
+            <span>Вы уверены, что хотите создать эту запись?</span>
+            <Group mt="lg">
+              <Button
+                variant="outline"
+                onClick={() => setCreateRowModalOpened(false)}
+              >
+                Отмена
+              </Button>
+              <Button onClick={handleCreate}>Создать</Button>
+            </Group>
+          </Popover.Dropdown>
+        </Popover>
       </Flex>
     </Stack>
   );

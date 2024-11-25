@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { Flex } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
@@ -23,7 +24,8 @@ export const MainTable: FC = () => {
   const [page, setPage] = useState<number>(1);
   const size = 20;
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
-  const { isEdit, canDelete } = useEditStore();
+  const [createModalOpened, setCreateModalOpened] = useState(false);
+  const { isEdit, canDelete, canCreate } = useEditStore();
   const [opened, setOpened] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
@@ -98,6 +100,9 @@ export const MainTable: FC = () => {
         row={row}
         processedColumns={processedColumns}
         classes={classes}
+        createRowModalOpened={createModalOpened}
+        setCreateRowModalOpened={setCreateModalOpened}
+        handleCreate={handleCreate}
       />
     ),
     renderBottomToolbarCustomActions: (): JSX.Element => (
@@ -117,6 +122,7 @@ export const MainTable: FC = () => {
         setDeleteModalOpened={setDeleteModalOpened}
         canDelete={canDelete}
         handleDelete={handleDelete}
+        handleSave={handleSave}
         classes={classes}
       />
     ),
@@ -124,18 +130,23 @@ export const MainTable: FC = () => {
     renderRowActions: ({ row, table }) => (
       <RowActions row={row} table={table} />
     ),
+    renderTopToolbar: () => (
+      <TopToolbar
+        refetch={refetch}
+        setOpened={setOpened}
+        table={table}
+        canCreate={canCreate}
+      />
+    ),
+    onCreatingRowSave: async ({ exitCreatingMode }) => {
+      // setData((prevData) => [...prevData, { ...values, id: newId }]);
+      exitCreatingMode(); // Закрывает модальное окно
+    },
     displayColumnDefOptions: {
       "mrt-row-actions": {
         header: "",
         size: 50,
       },
-    },
-    renderTopToolbar: () => (
-      <TopToolbar refetch={refetch} setOpened={setOpened} table={table} />
-    ),
-    onCreatingRowSave: async ({ exitCreatingMode }) => {
-      // setData((prevData) => [...prevData, { ...values, id: newId }]);
-      exitCreatingMode(); // Закрывает модальное окно
     },
     editDisplayMode: "modal",
     enableEditing: isEdit,
@@ -145,7 +156,6 @@ export const MainTable: FC = () => {
       isLoading: isLoading,
       showProgressBars: isFetching,
     },
-
     initialState: { density: "xs", showGlobalFilter: true },
     mantineTableBodyCellProps: {
       mih: "50px",
@@ -194,8 +204,30 @@ export const MainTable: FC = () => {
 
   const handleDelete = (): void => {
     setDeleteModalOpened(false);
+    // eslint-disable-next-line unicorn/no-null
+    table.setEditingRow(null);
   };
 
+  const handleSave = (): void => {
+    // eslint-disable-next-line unicorn/no-null
+    table.setEditingRow(null);
+    notifications.show({
+      title: "Изменено успешно",
+      message: "",
+      position: "bottom-right",
+    });
+  };
+
+  const handleCreate = (): void => {
+    setCreateModalOpened(false);
+    // eslint-disable-next-line unicorn/no-null
+    table.setCreatingRow(null);
+    notifications.show({
+      title: "Создано успешно",
+      message: "",
+      position: "bottom-right",
+    });
+  };
   return data ? (
     <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"100%"}>
       <MantineReactTable table={table} />
