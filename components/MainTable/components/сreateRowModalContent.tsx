@@ -8,6 +8,7 @@ import {
   Textarea,
   Title,
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 
 interface CreateRowModalContentProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,7 +21,6 @@ interface CreateRowModalContentProperties {
   classes: any;
   createRowModalOpened: boolean;
   setCreateRowModalOpened: (value: boolean) => void;
-  handleCreate: () => void;
 }
 
 const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
@@ -28,10 +28,21 @@ const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
   classes,
   createRowModalOpened,
   setCreateRowModalOpened,
-  handleCreate,
+  table,
 }) => {
+  const handleCreate = (): void => {
+    setCreateRowModalOpened(false);
+    // eslint-disable-next-line unicorn/no-null
+    table.setCreatingRow(null);
+    notifications.show({
+      title: "Создано успешно",
+      message: "",
+      position: "bottom-right",
+    });
+  };
+
   return (
-    <Stack>
+    <Stack mah={"80vh"}>
       <span className={classes.test}>Создать новую запись</span>
       {processedColumns.map((column) => (
         <Flex direction="column" key={column.accessorKey}>

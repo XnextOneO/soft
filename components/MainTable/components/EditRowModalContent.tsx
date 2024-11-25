@@ -8,6 +8,7 @@ import {
   Textarea,
   Title,
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 
 interface EditRowModalContentProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,8 +16,8 @@ interface EditRowModalContentProperties {
   deleteModalOpened: boolean;
   setDeleteModalOpened: (opened: boolean) => void;
   canDelete: boolean;
-  handleDelete: () => void;
-  handleSave: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  table: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   classes: any;
 }
@@ -26,10 +27,30 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
   deleteModalOpened,
   setDeleteModalOpened,
   canDelete,
-  handleDelete,
-  handleSave,
+  table,
   classes,
 }) => {
+  const handleDelete = (): void => {
+    setDeleteModalOpened(false);
+    // eslint-disable-next-line unicorn/no-null
+    table.setEditingRow(null);
+    notifications.show({
+      title: "Удалено успешно",
+      message: "",
+      position: "bottom-right",
+    });
+  };
+
+  const handleSave = (): void => {
+    // eslint-disable-next-line unicorn/no-null
+    table.setEditingRow(null);
+    notifications.show({
+      title: "Изменено успешно",
+      message: "",
+      position: "bottom-right",
+    });
+  };
+
   return (
     <Stack mah={"80vh"}>
       <span className={classes.test}>Редактирование</span>

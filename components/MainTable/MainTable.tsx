@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import { Flex } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
@@ -102,7 +101,6 @@ export const MainTable: FC = () => {
         classes={classes}
         createRowModalOpened={createModalOpened}
         setCreateRowModalOpened={setCreateModalOpened}
-        handleCreate={handleCreate}
       />
     ),
     renderBottomToolbarCustomActions: (): JSX.Element => (
@@ -121,8 +119,7 @@ export const MainTable: FC = () => {
         deleteModalOpened={deleteModalOpened}
         setDeleteModalOpened={setDeleteModalOpened}
         canDelete={canDelete}
-        handleDelete={handleDelete}
-        handleSave={handleSave}
+        table={table}
         classes={classes}
       />
     ),
@@ -201,33 +198,6 @@ export const MainTable: FC = () => {
       type: "text",
     },
   });
-
-  const handleDelete = (): void => {
-    setDeleteModalOpened(false);
-    // eslint-disable-next-line unicorn/no-null
-    table.setEditingRow(null);
-  };
-
-  const handleSave = (): void => {
-    // eslint-disable-next-line unicorn/no-null
-    table.setEditingRow(null);
-    notifications.show({
-      title: "Изменено успешно",
-      message: "",
-      position: "bottom-right",
-    });
-  };
-
-  const handleCreate = (): void => {
-    setCreateModalOpened(false);
-    // eslint-disable-next-line unicorn/no-null
-    table.setCreatingRow(null);
-    notifications.show({
-      title: "Создано успешно",
-      message: "",
-      position: "bottom-right",
-    });
-  };
   return data ? (
     <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"100%"}>
       <MantineReactTable table={table} />
