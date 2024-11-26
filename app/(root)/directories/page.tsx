@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   Breadcrumbs,
@@ -113,23 +114,23 @@ const DirectoriesPage = observer(() => {
           >
             <Group p={0} w="100%" my={10} justify="space-between" wrap="nowrap">
               {specialDirectories.map((directory, index) => (
-                <>
+                <React.Fragment key={index}>
                   <Flex justify="center" w="50%">
-                    <Title order={4} className={classes.title}>
+                    <Title order={4} my={10} className={classes.title}>
                       {directory.name}
                     </Title>
                   </Flex>
                   {index < specialDirectories.length - 1 && (
                     <Divider m={0} p={0} orientation="vertical" />
                   )}
-                </>
+                </React.Fragment>
               ))}
             </Group>
           </Card.Section>
 
           <Group p={0} w="100%" mt={10} justify="space-between" wrap="nowrap">
             {specialDirectories.map((directory, index) => (
-              <>
+              <React.Fragment key={index}>
                 <Flex justify="center" w="50%">
                   <DirectoryItem
                     directory={directory}
@@ -139,7 +140,7 @@ const DirectoriesPage = observer(() => {
                 {index < specialDirectories.length - 1 && (
                   <Divider m={0} p={0} orientation="vertical" />
                 )}
-              </>
+              </React.Fragment>
             ))}
           </Group>
         </Card>
