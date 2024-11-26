@@ -6,6 +6,8 @@ interface StoreState {
   setIsEdit: (value: boolean) => void;
   canDelete: boolean;
   setCanDelete: (value: boolean) => void;
+  canCreate: boolean;
+  setCanCreate: (value: boolean) => void;
   clearStore: () => void;
 }
 
@@ -16,6 +18,8 @@ export const useEditStore = create(
       setIsEdit: (value: boolean): void => set({ isEdit: value }),
       canDelete: false,
       setCanDelete: (value: boolean): void => set({ canDelete: value }),
+      canCreate: false,
+      setCanCreate: (value: boolean): void => set({ canCreate: value }),
       clearStore: (): void => {
         set({ isEdit: false });
         localStorage.removeItem("user-permissions");

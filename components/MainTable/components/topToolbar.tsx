@@ -10,12 +10,14 @@ interface TopToolbarProperties {
   setOpened: (opened: boolean) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table: any;
+  canCreate: boolean;
 }
 
 const TopToolbar: FC<TopToolbarProperties> = ({
   refetch,
   setOpened,
   table,
+  canCreate,
 }) => {
   return (
     <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
@@ -48,13 +50,17 @@ const TopToolbar: FC<TopToolbarProperties> = ({
         >
           Обновить таблицу
         </Button>
-        <Button
-          onClick={() => {
-            table.setCreatingRow(true); // Открывает модальное окно для создания новой строки
-          }}
-        >
-          Создать запись
-        </Button>
+        {canCreate ? (
+          <Button
+            onClick={() => {
+              table.setCreatingRow(true);
+            }}
+          >
+            Создать запись
+          </Button>
+        ) : (
+          ""
+        )}
       </Group>
       <Flex>
         <MRT_GlobalFilterTextInput table={table} w={"300px"} />
