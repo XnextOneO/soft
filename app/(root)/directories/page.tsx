@@ -19,9 +19,8 @@ import { observer } from "mobx-react-lite";
 
 import DirectoryList from "@/components/DirectoriesPageParts/DirectoriyList";
 import DirectoryItem from "@/components/DirectoriesPageParts/DirectoryItem";
-import { useBreadCrumbs } from "@/hooks/breadcrumbs-hooks";
-
-import { Context } from "../../../components/Providers/AppContextProvider";
+// import { useBreadCrumbs } from "@/hooks/breadcrumbs-hooks";
+import { Context } from "@/components/Providers/AppContextProvider";
 
 import classes from "./Directories.module.css";
 
@@ -43,7 +42,7 @@ const DirectoriesPage = observer(() => {
       </Text>
     </Link>
   ));
-  useBreadCrumbs("Справочники");
+  // useBreadCrumbs("Справочники");
 
   const specialLinks = new Set(["rf", "swift", "scbank/account"]);
   const specialDirectories = directoriesStore.directories.filter((directory) =>

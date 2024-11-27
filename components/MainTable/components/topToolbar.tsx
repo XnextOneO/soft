@@ -11,6 +11,7 @@ interface TopToolbarProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table: any;
   canCreate: boolean;
+  updateTable?: boolean;
 }
 
 const TopToolbar: FC<TopToolbarProperties> = ({
@@ -18,6 +19,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   setOpened,
   table,
   canCreate,
+  updateTable,
 }) => {
   return (
     <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
@@ -42,14 +44,16 @@ const TopToolbar: FC<TopToolbarProperties> = ({
             ></path>
           </svg>
         </Button>
-        <Button
-          color="#007458"
-          size="sm"
-          radius="xs"
-          onClick={() => setOpened(true)}
-        >
-          Обновить таблицу
-        </Button>
+        {updateTable && (
+          <Button
+            color="#007458"
+            size="sm"
+            radius="xs"
+            onClick={() => setOpened(true)}
+          >
+            Обновить таблицу
+          </Button>
+        )}
         {canCreate ? (
           <Button
             onClick={() => {

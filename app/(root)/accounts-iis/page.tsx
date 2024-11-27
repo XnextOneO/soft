@@ -14,7 +14,7 @@ export default function AccountsIIS(): JSX.Element {
         h="100%"
         style={{ overflow: "hidden" }}
       >
-        <MainTable />
+        <MainTable updateTable={true} />
       </Flex>
     </>
   );

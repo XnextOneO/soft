@@ -19,7 +19,11 @@ import { useEditStore } from "@/store/useEditStore";
 
 import classes from "./MainTable.module.css";
 
-export const MainTable: FC = () => {
+interface MainTableProperties {
+  updateTable: boolean;
+}
+
+export const MainTable: FC<MainTableProperties> = ({ updateTable }) => {
   const [page, setPage] = useState<number>(1);
   const size = 20;
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
@@ -36,9 +40,9 @@ export const MainTable: FC = () => {
     link: "nsi/balance-account",
     text: debouncedGlobalFilter[0],
   };
+
   const { data, refetch, isFetching, isLoading } = useQuery({
     queryKey: ["apiData", parameters],
-
     queryFn: async () => {
       return parameters.text
         ? fetchApiDataWithSearch(parameters)
@@ -133,6 +137,7 @@ export const MainTable: FC = () => {
         setOpened={setOpened}
         table={table}
         canCreate={canCreate}
+        updateTable={updateTable}
       />
     ),
     onCreatingRowSave: async ({ exitCreatingMode }) => {
@@ -198,15 +203,18 @@ export const MainTable: FC = () => {
       type: "text",
     },
   });
+
   return data ? (
     <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"100%"}>
       <MantineReactTable table={table} />
       <LoadingOverlay visible={isLoading} />
-      <UpdateTableModal
-        link={"a"}
-        opened={opened}
-        close={() => setOpened(false)}
-      />
+      {updateTable && (
+        <UpdateTableModal
+          link={"a"}
+          opened={opened}
+          close={() => setOpened(false)}
+        />
+      )}
     </Flex>
   ) : (
     <MainLoader />
