@@ -1,5 +1,3 @@
-.tableWithToolbar {
-    /* overflow: scroll; */
-    /* display: ; */
+.table-with-toolbar {
     height: calc(100vh - 208px);
 }
