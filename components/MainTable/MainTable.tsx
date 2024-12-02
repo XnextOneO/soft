@@ -15,15 +15,17 @@ import RowActions from "@/components/MainTable/components/rowActions";
 import TopToolbar from "@/components/MainTable/components/topToolbar";
 import CreateRowModalContent from "@/components/MainTable/components/сreateRowModalContent";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
+import DirectoriesStore from "@/store/directoriesStore";
 import { useEditStore } from "@/store/useEditStore";
 
 import classes from "./MainTable.module.css";
 
 interface MainTableProperties {
   updateTable: boolean;
+  link: string;
 }
 
-export const MainTable: FC<MainTableProperties> = ({ updateTable }) => {
+export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [page, setPage] = useState<number>(1);
   const size = 20;
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
@@ -32,12 +34,12 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable }) => {
   const [opened, setOpened] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
-
+  const directoriesStore = new DirectoriesStore();
   const parameters = {
     page: page - 1,
     size: size,
     sort: "ASC",
-    link: "nsi/balance-account",
+    link: link,
     text: debouncedGlobalFilter[0],
   };
 
@@ -54,6 +56,22 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable }) => {
 
   const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
 
+  const translateColumns = (
+    tableColumns: string[],
+  ): { accessorKey: string; header: string }[] => {
+    return tableColumns.map((column) => {
+      const translatedHeader =
+        Object.values(directoriesStore._directories)
+          .flatMap((directory) => Object.entries(directory.columns))
+          .find(([key]) => key === column)?.[1] || column;
+
+      return {
+        accessorKey: column,
+        header: translatedHeader,
+      };
+    });
+  };
+
   const cellValues = data?.content
     ? data.content.map((item: Record<string, string>) => {
         const object: Record<string, string | boolean> = {};
@@ -68,10 +86,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable }) => {
 
   const countPages = data?.page?.totalPages || 0;
 
-  const columnsWithAccessorKey = columns.map((column) => ({
-    accessorKey: column,
-    header: column,
-  }));
+  const columnsWithAccessorKey = translateColumns(columns);
 
   const processedColumns = columnsWithAccessorKey.map((column) => {
     return {
@@ -84,12 +99,12 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable }) => {
               table.setEditingRow(cell.row);
             }
           }}
-          style={{ width: "100%" }}
+          className={classes.cell}
         >
           <PopoverCell>{cell.getValue()}</PopoverCell>
         </div>
       ),
-      size: column.accessorKey.length >= 12 ? 260 : 150,
+      size: column.header.length > 12 ? 360 : 200,
       sortDescFirst: true,
     };
   });
@@ -173,7 +188,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable }) => {
     },
     mantineTableContainerProps: {
       style: {
-        height: "calc(100vh - 180px)",
+        height: "calc(100vh - 222px)",
         overflowY: "auto",
         borderTop: "1px solid #495057",
       },
@@ -184,14 +199,13 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable }) => {
     },
     localization: MRT_Localization_RU,
     enableFullScreenToggle: false,
-    enableDensityToggle: false,
+    enableDensityToggle: true,
     enableStickyHeader: true,
     enableRowSelection: false,
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
     enableColumnVirtualization: true,
-    layoutMode: "grid",
     mantineTableProps: {
       striped: "even",
       withColumnBorders: true,

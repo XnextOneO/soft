@@ -1,6 +1,6 @@
-.test {
-    position: absolute;
-    z-index: 1000 !important;
-    top: 15px;
-    font-size: 22px;
+.cell:hover {
+    cursor: pointer;
+}
+.cell {
+    width: 100%;
 }

@@ -4,13 +4,11 @@ import { useContext } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Breadcrumbs, Flex, Text, useMantineColorScheme } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 
-import DataTable from "@/components/DataTable/DataTable";
+import { MainTable } from "@/components/MainTable/MainTable";
 // import { useBreadCrumbs } from "@/hooks/breadcrumbs-hooks";
 import { Context } from "@/components/Providers/AppContextProvider";
-import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
 
 import classes from "../Directories.module.css";
 
@@ -31,7 +29,6 @@ const DirectoryPage = observer(
     // );
     // console.log(useRouter().hooks);
     const colorScheme = useMantineColorScheme();
-    const [opened, { open, close }] = useDisclosure(false);
 
     const breadcrumbs = [
       { title: "Главная страница IIS Беларусбанк", href: "/" },
@@ -77,13 +74,8 @@ const DirectoryPage = observer(
             {breadcrumbs}
           </Breadcrumbs>
 
-          <DataTable slug={params.slug.join("/")} onOpen={open} />
+          <MainTable link={params.slug.join("/")} updateTable={true} />
         </Flex>
-        <UpdateTableModal
-          link={params.slug.join("/")}
-          opened={opened}
-          close={close}
-        />
       </>
     );
   },

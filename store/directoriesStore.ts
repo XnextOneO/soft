@@ -7,7 +7,7 @@ export interface IDirectory {
 }
 
 export default class DirectoriesStore {
-  private _directories: IDirectory[] = [
+  public _directories: IDirectory[] = [
     {
       name: "Справочник кодов категории назначения перевода",
       link: "nsi/transfer-destination-category-code",
