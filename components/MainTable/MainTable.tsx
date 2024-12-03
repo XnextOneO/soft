@@ -206,6 +206,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     enablePagination: false,
     enableColumnResizing: true,
     enableColumnVirtualization: true,
+
     mantineTableProps: {
       striped: "even",
       withColumnBorders: true,

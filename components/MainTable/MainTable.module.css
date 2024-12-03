@@ -1,6 +1,9 @@
-.cell:hover {
-    cursor: pointer;
-}
 .cell {
     width: 100%;
 }
+
+.cell:hover {
+    cursor: pointer;
+}
+
+
