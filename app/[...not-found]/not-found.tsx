@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { Image, Stack, Title, useMantineColorScheme } from "@mantine/core";
 
 import classes from "./NotFound.module.css";
@@ -22,6 +23,9 @@ export default function NotFound(): JSX.Element {
           <Title size={48} mt={48}>
             Страница не найдена
           </Title>
+          <Link href={"/"} className={classes.backLink}>
+            Вернуться на главную страницу
+          </Link>
         </Stack>
       </div>
     </>

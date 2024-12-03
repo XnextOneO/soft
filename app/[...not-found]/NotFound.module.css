@@ -17,3 +17,9 @@
     align-items: center;
     background-image: url("../../public/assets/background-dark-mode.png");
 }
+
+.back-link {
+    text-decoration: none;
+    font-size: 40px;
+
+}

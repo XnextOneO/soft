@@ -356,6 +356,18 @@ export default class DirectoriesStore {
         accountName: "Наименование счета",
       },
     },
+    {
+      name: "Статусы",
+      link: "/statuses",
+      columns: {
+        id: "ID",
+        datetime: "Наименование",
+        username: "Дата добавления",
+        uuid: "Удален",
+        status: "Статус",
+        action: "Действие",
+      },
+    },
   ];
 
   constructor() {
