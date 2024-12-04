@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useEffect } from "react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Burger,
@@ -62,12 +63,14 @@ const Header: React.FC = observer(() => {
           />
         </Flex>
         <Group justify="space-between" w="100%" pl="md">
-          <Group gap="xs">
-            <Image src="../../favicon.png" w={30} h={30} alt="logo" />
-            <Text c="white" size="24px" fw={700} className={classes.title}>
-              IIS Беларусбанк
-            </Text>
-          </Group>
+          <Link href={"/"}>
+            <Group gap="xs">
+              <Image src="../../favicon.png" w={30} h={30} alt="logo" />
+              <Text c="white" size="24px" fw={700} className={classes.title}>
+                IIS Беларусбанк
+              </Text>
+            </Group>
+          </Link>
           <Group justify="flex-end" align="center" gap={0}>
             <ProfileButton />
             <UnstyledButton

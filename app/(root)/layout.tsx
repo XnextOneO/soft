@@ -1,5 +1,6 @@
 import { Container, Flex } from "@mantine/core";
 
+import MyBreadcrumbs from "@/components/Breadcrumbs";
 import Header from "@/components/Header/Header";
 import NavMenu from "@/components/NavMenu/NavMenu";
 
@@ -43,6 +44,7 @@ const RootLayout = ({
             maw="100vw"
           >
             {/* <BreadCrumbs> */}
+            <MyBreadcrumbs />
             <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
               <NavMenu />
               {children}
