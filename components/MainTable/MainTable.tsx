@@ -1,7 +1,11 @@
 import { FC, useState } from "react";
-import { Flex } from "@mantine/core";
+import { Flex, Loader } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
+import {
+  IconRosetteDiscountCheckFilled,
+  IconSquareX,
+} from "@tabler/icons-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
@@ -75,6 +79,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       };
     });
   };
+
   const cellValues = data?.content
     ? data.content.map((item: Record<string, string>) => {
         const object: Record<string, string | boolean> = {};
@@ -95,23 +100,54 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     return {
       ...column,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Cell: ({ cell }: { cell: any }): JSX.Element => (
-        <div
-          onDoubleClick={() => {
-            if (isEdit) {
-              table.setEditingRow(cell.row);
+      Cell: ({ cell }: { cell: any }): JSX.Element => {
+        const cellValue = cell.getValue();
+
+        // Условное рендеринг для статуса
+        if (column.accessorKey === "status") {
+          switch (cellValue) {
+            case "IN_PROCESSING": {
+              return (
+                <div className={classes.statusCell}>
+                  <Loader size="sm" />
+                </div>
+              );
             }
-          }}
-          className={classes.cell}
-        >
-          <PopoverCell>{cell.getValue()}</PopoverCell>
-        </div>
-      ),
+            case "ERROR": {
+              return (
+                <div className={classes.statusCell}>
+                  <IconSquareX color={"red"} />
+                </div>
+              );
+            }
+            case "SUCCESS": {
+              return (
+                <div className={classes.statusCell}>
+                  <IconRosetteDiscountCheckFilled color={"green"} />
+                </div>
+              );
+            }
+            // No default
+          }
+        }
+
+        return (
+          <div
+            onDoubleClick={() => {
+              if (isEdit) {
+                table.setEditingRow(cell.row);
+              }
+            }}
+            className={classes.cell}
+          >
+            <PopoverCell>{cellValue}</PopoverCell>
+          </div>
+        );
+      },
       size: column.header.length > 12 ? 360 : 200,
       sortDescFirst: true,
     };
   });
-
   const table = useMantineReactTable({
     onGlobalFilterChange: setGlobalFilter,
     // eslint-disable-next-line @typescript-eslint/no-shadow

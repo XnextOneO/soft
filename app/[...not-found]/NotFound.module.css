@@ -1,3 +1,9 @@
+.backLink {
+    text-decoration: none;
+    font-size: 40px;
+    color: black;
+}
+
 .notFoundContainer {
     margin: 0;
     padding: 0;
@@ -18,8 +24,3 @@
     background-image: url("../../public/assets/background-dark-mode.png");
 }
 
-.back-link {
-    text-decoration: none;
-    font-size: 40px;
-
-}
