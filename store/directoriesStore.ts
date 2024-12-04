@@ -3,7 +3,7 @@ import { makeAutoObservable } from "mobx";
 export interface IDirectory {
   name: string;
   link: string;
-  columns: object;
+  columns: { [key: string]: string };
 }
 
 export default class DirectoriesStore {
@@ -358,12 +358,12 @@ export default class DirectoriesStore {
     },
     {
       name: "Статусы",
-      link: "/statuses",
+      link: "statuses",
       columns: {
         id: "ID",
-        datetime: "Наименование",
-        username: "Дата добавления",
-        uuid: "Удален",
+        datetime: "Дата",
+        username: "Имя пользователя",
+        uuid: "UUId",
         status: "Статус",
         action: "Действие",
       },

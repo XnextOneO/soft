@@ -58,12 +58,16 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
   const translateColumns = (
     tableColumns: string[],
+    tableLink: string,
   ): { accessorKey: string; header: string }[] => {
+    const directoryEntry = directoriesStore._directories.find(
+      (directory) => directory.link === tableLink,
+    );
+
+    const columnsToTranslate = directoryEntry ? directoryEntry.columns : {};
+
     return tableColumns.map((column) => {
-      const translatedHeader =
-        Object.values(directoriesStore._directories)
-          .flatMap((directory) => Object.entries(directory.columns))
-          .find(([key]) => key === column)?.[1] || column;
+      const translatedHeader = columnsToTranslate[column] || column;
 
       return {
         accessorKey: column,
@@ -71,7 +75,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       };
     });
   };
-
   const cellValues = data?.content
     ? data.content.map((item: Record<string, string>) => {
         const object: Record<string, string | boolean> = {};
@@ -86,7 +89,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
   const countPages = data?.page?.totalPages || 0;
 
-  const columnsWithAccessorKey = translateColumns(columns);
+  const columnsWithAccessorKey = translateColumns(columns, link);
 
   const processedColumns = columnsWithAccessorKey.map((column) => {
     return {

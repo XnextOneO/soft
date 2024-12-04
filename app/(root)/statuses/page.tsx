@@ -14,7 +14,7 @@ export default function Statuses(): JSX.Element {
         h="100%"
         style={{ overflow: "hidden" }}
       >
-        <MainTable updateTable={false} link="statuses" />
+        <MainTable updateTable={true} link="statuses" />
       </Flex>
     </>
   );
