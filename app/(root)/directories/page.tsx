@@ -2,16 +2,13 @@
 
 import { useContext } from "react";
 import React from "react";
-import Link from "next/link";
 import {
-  Breadcrumbs,
   Card,
   Container,
   Divider,
   Flex,
   Group,
   Stack,
-  Text,
   Title,
   useMantineColorScheme,
 } from "@mantine/core";
@@ -28,22 +25,6 @@ const DirectoriesPage = observer(() => {
   const { directoriesStore } = useContext(Context);
   const colorScheme = useMantineColorScheme();
 
-  const breadcrumbs = [
-    { title: "Главная страница IIS Беларусбанк", href: "/" },
-    { title: "Справочники", href: "/directories" },
-  ].map((item, index) => (
-    <Link key={index} href={item.href} style={{ textDecoration: "none" }}>
-      <Text
-        c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#006040"}
-        size="sm"
-        className={classes.breadcrumbsItem}
-      >
-        {item.title}
-      </Text>
-    </Link>
-  ));
-  // useBreadCrumbs("Справочники");
-
   const specialLinks = new Set(["rf", "swift", "scbank/account"]);
   const specialDirectories = directoriesStore.directories.filter((directory) =>
     specialLinks.has(directory.link),
@@ -55,16 +36,6 @@ const DirectoriesPage = observer(() => {
 
   return (
     <Stack gap={0} w="100%">
-      <Breadcrumbs
-        separator=">"
-        separatorMargin="5px"
-        p="xs"
-        style={{
-          borderBottom: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
-        }}
-      >
-        {breadcrumbs}
-      </Breadcrumbs>
       <Container
         fluid
         className={classes.tableContainer}

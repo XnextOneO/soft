@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Anchor, Breadcrumbs } from "@mantine/core";
 
+import classes from "./Breadcrumbs.module.css";
+
 const MyBreadcrumbs = (): JSX.Element => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
@@ -20,7 +22,7 @@ const MyBreadcrumbs = (): JSX.Element => {
   });
 
   return (
-    <Breadcrumbs>
+    <Breadcrumbs className={classes.wrapper}>
       <Link href="/" passHref>
         <Anchor>Главная</Anchor>
       </Link>
@@ -28,8 +30,7 @@ const MyBreadcrumbs = (): JSX.Element => {
         <Link key={index} href={item.href} passHref>
           <Anchor>
             {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
-          </Anchor>{" "}
-          {/* Делаем первую букву заглавной */}
+          </Anchor>
         </Link>
       ))}
     </Breadcrumbs>

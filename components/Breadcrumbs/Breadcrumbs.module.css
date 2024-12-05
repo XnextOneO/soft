@@ -1,22 +1,3 @@
-/*.item {*/
-/*	display: flex;*/
-/*	flex-direction: column;*/
-/*	align-items: center;*/
-/*	justify-content: center;*/
-/*	text-align: center;*/
-/*	width: 100%;*/
-/*	border-radius: var(--mantine-radius-md);*/
-/*	height: rem(110px);*/
-/*	background-color: light-dark(*/
-/*		var(--mantine-color-white),*/
-/*		var(--mantine-color-dark-7)*/
-/*	);*/
-/*	transition:*/
-/*		box-shadow 150ms ease,*/
-/*		transform 100ms ease;*/
-
-/*	@mixin hover {*/
-/*		box-shadow: var(--mantine-shadow-md);*/
-/*		transform: scale(1.05);*/
-/*	}*/
-/*}*/
+.wrapper {
+    padding: 10px;
+}

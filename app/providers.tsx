@@ -1,6 +1,7 @@
 // providers.tsx
 "use client";
 import { useState } from "react";
+import { appWithTranslation } from "next-i18next";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { AppContextProvider } from "@/components/Providers/AppContextProvider";
@@ -8,6 +9,8 @@ import { AuthManager } from "@/components/Providers/AuthProvider";
 import { ThemeManager } from "@/components/Providers/ThemeProvider";
 
 import ThemeSwitcher from "../components/ThemeSwitcher/ThemeSwitcher";
+
+//added i18n
 
 export function Providers({
   children,
@@ -28,3 +31,4 @@ export function Providers({
     </ThemeManager>
   );
 }
+export default appWithTranslation(Providers);

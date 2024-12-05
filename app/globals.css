@@ -1,5 +1,5 @@
 @font-face {
-    font-family: "Roboto-Regular";
+    font-family: Roboto-Regular;
     src: url("../public/fonts/Roboto-Regular.ttf") format("truetype");
     font-style: normal;
     font-weight: normal;
@@ -12,6 +12,10 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
+}
+
+* {
+    text-decoration: none;
 }
 
 .mantine-Breadcrumbs-breadcrumb {
