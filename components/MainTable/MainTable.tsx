@@ -249,7 +249,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     });
 
     return data ? (
-        <Flex direction={"column"} gap={12} justify={"flex-start"} p={0} h={"100%"}>
+        <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"}>
             <MantineReactTable table={table} />
             <LoadingOverlay visible={isLoading} />
             {updateTable && <UpdateTableModal link={"a"} opened={opened} close={() => setOpened(false)} />}

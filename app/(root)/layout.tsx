@@ -14,6 +14,7 @@ import { Providers } from "../providers";
 
 import classes from "./Root.module.scss";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const metadata = {
     title: "IIS Беларусбанк",
     description: "Международные и межбанковские расчеты",
@@ -28,6 +29,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }): JSX.Element => {
                     name="viewport"
                     content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
                 />
+                <title>{metadata.title}</title>
             </head>
             <body>
                 <Providers>

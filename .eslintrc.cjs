@@ -9,6 +9,7 @@ module.exports = {
     "src/routeTree.gen.ts",
     "next-env.d.ts",
     ".next/*",
+    ".next.config.mjs",
   ],
   env: { browser: true, es2021: true, node: true },
   parserOptions: {

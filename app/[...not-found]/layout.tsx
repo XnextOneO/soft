@@ -3,6 +3,7 @@ import "../globals.scss";
 
 import { Providers } from "../providers";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const metadata = {
     title: "Ошибка 404 | IIS Беларусбанк",
     description: "Международные и межбанковские расчеты",
@@ -13,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
         <html lang="en" data-mantine-color-scheme="light">
             <head>
                 <link rel="shortcut icon" href="/favicon.png" />
-
+                <title>{metadata.title}</title>
                 <meta
                     name="viewport"
                     content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
