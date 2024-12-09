@@ -10,3 +10,7 @@
 //     return () => context.setTrailingPath("");
 //   }, [trailingPath, context]);
 // };
+
+// todo: add breadcrumbs
+
+console.log("useBreadCrumbs");

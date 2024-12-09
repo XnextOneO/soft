@@ -1,39 +1,55 @@
 import { $host } from "..";
 
-// eslint-disable-next-line consistent-return
-export const check = async (retryCount = 0): Promise<unknown> => {
+/**
+ * Checks user authentication status with retry mechanism
+ * @param retryCount - Number of retry attempts (default: 0)
+ * @returns Boolean indicating authentication status
+ */
+export const check = async (retryCount = 0): Promise<boolean> => {
   try {
-    const { status } = await $host.get("/user/check");
-    if (status === 200) {
-      return true;
-    }
+    const { status } = await $host.get<void>("/user/check");
+    return status === 200;
   } catch {
+    // Limit retry attempts
     if (retryCount >= 3) {
       return false;
     }
+
     try {
-      const refreshTokenResult = await checkRefreshToken();
-      return refreshTokenResult ? await check(retryCount + 1) : false;
+      // Attempt to refresh token
+      const isRefreshSuccessful = await checkRefreshToken();
+      return isRefreshSuccessful ? await check(retryCount + 1) : false;
     } catch {
       return false;
     }
   }
 };
 
+/**
+ * Attempts to refresh authentication token
+ * @returns Boolean indicating token refresh success
+ */
 export const checkRefreshToken = async (): Promise<boolean> => {
   try {
-    const { status } = await $host.get("/auth/refresh-token");
+    const { status } = await $host.get<void>("/auth/refresh-token");
     return status === 200;
   } catch {
     return false;
   }
 };
 
+/**
+ * Logs out the current user
+ */
 export const logout = async (): Promise<void> => {
-  await $host.get("/auth/logout");
+  await $host.get<void>("/auth/logout");
 };
 
-export const userInfo = async (): Promise<unknown> => {
-  const { data } = await $host.get("/user/userinfo");
+/**
+ * Retrieves current user information
+ * @returns User information data
+ */
+export const userInfo = async <T = unknown>(): Promise<T> => {
+  const { data } = await $host.get<T>("/user/userinfo");
   return data;
 };

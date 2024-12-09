@@ -1,90 +1,122 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 
 import { $authHost } from "../index";
 
-export const getDirectory = async (
+/**
+ * Converts camelCase to snake_case for API parameters
+ * @param input - Input string in camelCase
+ * @returns Converted string in snake_case
+ */
+const convertToSnakeCase = (input: string): string => {
+  return input
+    .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) => `_${match}`)
+    .replaceAll(/(?<!^)\s/gm, "_")
+    .toUpperCase();
+};
+
+/**
+ * Sorting configuration interface
+ */
+interface SortingConfig {
+  id: string;
+  desc: string;
+}
+
+/**
+ * Retrieves directory data with pagination and sorting
+ * @param link - Endpoint link
+ * @param page - Page number
+ * @param size - Page size
+ * @param sorting - Sorting configuration
+ * @returns Directory data
+ */
+export const getDirectory = async <T = unknown>(
   link: string,
   page: number,
   size: number,
-  sorting: { id: string; desc: string } | object,
-  // eslint-disable-next-line consistent-return, @typescript-eslint/no-explicit-any
-): Promise<any> => {
+  sorting: Partial<SortingConfig> = {},
+): Promise<T | undefined> => {
   const parameters: {
     page: number;
     size: number;
     sort?: string;
     column?: string;
-  } = {
-    page,
-    size,
-  };
+  } = { page, size };
 
-  if (Object.keys(sorting).length > 0 && sorting) {
-    parameters.sort = (sorting as { id: string; desc: string })?.desc;
-    parameters.column = (sorting as { id: string; desc: string })?.id
-      .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) =>
-        match.replace(match, `_${match}`),
-      )
-      .replaceAll(/(?<!^)\s/gm, "_")
-      .toUpperCase();
+  if (Object.keys(sorting).length > 0) {
+    const sortConfig = sorting as SortingConfig;
+    parameters.sort = sortConfig.desc;
+    parameters.column = convertToSnakeCase(sortConfig.id);
   }
 
   try {
-    const response = await $authHost.get(`reference-book/${link}`, {
+    const response: AxiosResponse<T> = await $authHost.get(`reference-book/${link}`, {
       params: parameters,
     });
     return response.data;
   } catch (error: unknown) {
-    console.log(error);
+    console.error("Error fetching directory:", error);
+    return undefined;
   }
 };
 
+/**
+ * Uploads data to a directory
+ * @param link - Endpoint link
+ * @param formData - Form data to upload
+ * @param config - Axios request configuration
+ * @returns HTTP status code
+ */
 export const uploadDirectory = async (
   link: string,
   formData: FormData,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  config: AxiosRequestConfig<any> | undefined,
+  config?: AxiosRequestConfig,
 ): Promise<number> => {
-  const { status } = await $authHost.post(
-    `reference-book/${link}`,
-    formData,
-    config,
-  );
-  return status;
+  try {
+    const { status } = await $authHost.post(`reference-book/${link}`, formData, config);
+    return status;
+  } catch (error: unknown) {
+    console.error("Error uploading directory:", error);
+    throw error;
+  }
 };
 
-export const searchDataInDirectory = async (
+/**
+ * Searches data in a directory with optional sorting
+ * @param link - Endpoint link
+ * @param page - Page number
+ * @param size - Page size
+ * @param sorting - Sorting configuration
+ * @param searchValue - Search query
+ * @returns Searched directory data
+ */
+export const searchDataInDirectory = async <T = unknown>(
   link: string,
   page: number,
   size: number,
-  sorting: { id: string; desc: string } | object,
-  searchValue: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<any> => {
-  if (Object.keys(sorting).length > 0 && sorting) {
-    const { data } = await $authHost.get(`reference-book/${link}/search`, {
-      params: {
-        page,
-        size,
-        sort: (sorting as { id: string; desc: string })?.desc,
-        column: (sorting as { id: string; desc: string })?.id
-          .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) =>
-            match.replace(match, `_${match}`),
-          )
-          .replaceAll(/(?<!^)\s/gm, "_")
-          .toUpperCase(),
-        text: searchValue ?? "",
-      },
-    });
+  sorting: Partial<SortingConfig> = {},
+  searchValue = "",
+): Promise<T | undefined> => {
+  const baseParameters = {
+    page,
+    size,
+    text: searchValue,
+  };
+
+  const parameters =
+    Object.keys(sorting).length > 0
+      ? {
+          ...baseParameters,
+          sort: (sorting as SortingConfig).desc,
+          column: convertToSnakeCase((sorting as SortingConfig).id),
+        }
+      : baseParameters;
+
+  try {
+    const { data } = await $authHost.get<T>(`reference-book/${link}/search`, { params: parameters });
     return data;
-  } else {
-    const { data } = await $authHost.get(`reference-book/${link}/search`, {
-      params: {
-        page,
-        size,
-        text: searchValue ?? "",
-      },
-    });
-    return data;
+  } catch (error: unknown) {
+    console.error("Error searching in directory:", error);
+    return undefined;
   }
 };

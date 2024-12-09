@@ -14,7 +14,6 @@ export default class DirectoriesStore {
       columns: {
         code: "Код назначения платежа",
         name: "Наименование кода назначения платежа",
-        // eslint-disable-next-line sonarjs/no-duplicate-string
         additionDate: "Дата добавления",
         isDelete: "Удален",
       },
@@ -53,15 +52,13 @@ export default class DirectoriesStore {
       name: "Справочник балансовых счетов Национального банка",
       link: "nsi/balance-account-nb",
       columns: {
-        firstOrderBalanceAccountNumber:
-          "Номер балансового счета 1-го порядка (класс)",
+        firstOrderBalanceAccountNumber: "Номер балансового счета 1-го порядка (класс)",
         secondOrderBalanceAccountNumber: "Номер балансового счета 2-го порядка",
         thirdOrderBalanceAccountNumber: "Номер балансового счета 3-го порядка",
         fourthOrderBalanceAccountNumber: "Номер балансового счета 4-го порядка",
         isClose: "Признак закрытия (0 – открыт, 1 – закрыт)",
         characteristic: "Характеристика счета",
-        classGroupaccountAccountName:
-          "Наименование класса, группы счета и счета",
+        classGroupaccountAccountName: "Наименование класса, группы счета и счета",
         additionDate: "Дата добавления",
         isDelete: "Удален",
       },
@@ -70,15 +67,13 @@ export default class DirectoriesStore {
       name: "Справочник балансовых счетов банков",
       link: "nsi/balance-account",
       columns: {
-        firstOrderBalanceAccountNumber:
-          "Номер балансового счета 1-го порядка (класс)",
+        firstOrderBalanceAccountNumber: "Номер балансового счета 1-го порядка (класс)",
         secondOrderBalanceAccountNumber: "Номер балансового счета 2-го порядка",
         thirdOrderBalanceAccountNumber: "Номер балансового счета 3-го порядка",
         fourthOrderBalanceAccountNumber: "Номер балансового счета 4-го порядка",
         isClose: "Признак закрытия (0 – открыт, 1 – закрыт)",
         characteristic: "Характеристика счета",
-        classGroupaccountAccountName:
-          "Наименование класса, группы счета и счета",
+        classGroupaccountAccountName: "Наименование класса, группы счета и счета",
         additionDate: "Дата добавления",
         isDelete: "Удален",
       },
@@ -106,8 +101,7 @@ export default class DirectoriesStore {
         digitalCurrencyCode: "Буквенный код валюты",
         letterCurrencyCode: "Цифровой код валюты",
         data: "Дата начала действия курса",
-        countUnits:
-          "Количество единиц иностранной валюты, за которое устанавливается официальный курс",
+        countUnits: "Количество единиц иностранной валюты, за которое устанавливается официальный курс",
         officialRate:
           "Установленный официальный курс белорусского рубля к иностранной валюте (за количество единиц иностранной валюты)	",
         officialRatePerOneUnit:
@@ -148,14 +142,11 @@ export default class DirectoriesStore {
         paymentCode: "Код платежа в бюджет",
         name: "Наименование кода платежа в бюджет",
         isPayRepublicBudget: "Признак уплаты в республиканский бюджет",
-        isPayCustomsPayments:
-          "Признак уплаты таможенных платежей на единый счет",
+        isPayCustomsPayments: "Признак уплаты таможенных платежей на единый счет",
         isPaySocialProtectionFund: "Признак уплаты в ФСЗН",
-        isPayAdministrators:
-          "Признак уплаты на счета администраторов доходов бюджета",
+        isPayAdministrators: "Признак уплаты на счета администраторов доходов бюджета",
         isPayLocalBudget: "Признак уплаты в местные бюджеты",
-        isPayAnotherClients:
-          "Признак перечисления на счета иных клиентов казначейства	",
+        isPayAnotherClients: "Признак перечисления на счета иных клиентов казначейства	",
         isPayOutOfBudgetFonds: "Признак платежей во внебюджетные фонды",
         isPayOutOfBudget: "Признак платежей внебюджетных средств",
         additionDate: "Дата добавления",
@@ -182,14 +173,11 @@ export default class DirectoriesStore {
       link: "nsi/republican-budget-account",
       columns: {
         identificationCode: "БИК банка бенефициара",
-        republicanBudgetAccount:
-          "Счет по учету средств республиканского бюджета",
+        republicanBudgetAccount: "Счет по учету средств республиканского бюджета",
         digitalCurrencyCode: "Код валюты цифровой",
-        actualBeneficiaryUNP:
-          "УНП фактического бенефициара (клиента казначейства)",
+        actualBeneficiaryUNP: "УНП фактического бенефициара (клиента казначейства)",
         beneficiaryUNP: "УНП бенефициара",
-        actualBeneficiaryName:
-          "Наименование фактического бенефициара (клиента казначейства)",
+        actualBeneficiaryName: "Наименование фактического бенефициара (клиента казначейства)",
         beneficiaryName: "Наименование бенефициара",
         additionDate: "Дата добавления",
         isDelete: "Удален",
@@ -247,11 +235,9 @@ export default class DirectoriesStore {
         identificationCode: "БИК банка бенефициара",
         localBudgetAccount: "Счет по учету средств местного бюджета",
         digitalCurrencyCode: "Код валюты цифровой",
-        actualBeneficiaryUNP:
-          "УНП фактического бенефициара (местного финансового органа, исполкома)",
+        actualBeneficiaryUNP: "УНП фактического бенефициара (местного финансового органа, исполкома)",
         beneficiaryUNP: "УНП бенефициара",
-        actualBeneficiaryName:
-          "Наименование фактического бенефициара (местного финансового органа, исполкома)",
+        actualBeneficiaryName: "Наименование фактического бенефициара (местного финансового органа, исполкома)",
         beneficiaryName: "Наименование бенефициара",
         additionDate: "Дата добавления",
         isDelete: "Удален",
@@ -263,10 +249,8 @@ export default class DirectoriesStore {
       columns: {
         code: "Код статуса субъекта",
         name: "Наименование cтатуcа субъекта",
-        isUsingBisORIis:
-          "Признак использования АС МБР и АИС ПБИ (1 – используется)",
-        isUsingFulfillingMonetaryObligationsSystem:
-          "Признак использования АИС ИДО (1 – используется)",
+        isUsingBisORIis: "Признак использования АС МБР и АИС ПБИ (1 – используется)",
+        isUsingFulfillingMonetaryObligationsSystem: "Признак использования АИС ИДО (1 – используется)",
         additionDate: "Дата добавления",
         isDelete: "Удален",
       },

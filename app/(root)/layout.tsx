@@ -1,3 +1,4 @@
+import { FC, PropsWithChildren } from "react";
 import { Container, Flex } from "@mantine/core";
 
 import MyBreadcrumbs from "@/components/Breadcrumbs";
@@ -7,53 +8,42 @@ import NavMenu from "@/components/NavMenu/NavMenu";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "mantine-react-table/styles.css";
-import "../globals.css";
+import "../globals.scss";
 
 import { Providers } from "../providers";
 
-import classes from "./Root.module.css";
+import classes from "./Root.module.scss";
 
 export const metadata = {
-  title: "IIS Беларусбанк",
-  description: "Международные и межбанковские расчеты",
+    title: "IIS Беларусбанк",
+    description: "Международные и межбанковские расчеты",
 };
 
-const RootLayout = ({
-  children,
-}: {
-  children: React.ReactNode;
-}): JSX.Element => {
-  return (
-    <html lang="en" data-mantine-color-scheme="light">
-      <head>
-        <link rel="shortcut icon" href="/favicon.png" />
-
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
-        />
-      </head>
-      <body>
-        <Providers>
-          <Header />
-          <Container
-            fluid
-            className={classes.mainContainer}
-            m={0}
-            p={0}
-            maw="100vw"
-          >
-            <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
-              <NavMenu />
-              <div className={classes.contentWrapper}>
-                <MyBreadcrumbs />
-                {children}
-              </div>
-            </Flex>
-          </Container>
-        </Providers>
-      </body>
-    </html>
-  );
+const RootLayout: FC<PropsWithChildren> = ({ children }): JSX.Element => {
+    return (
+        <html lang="en" data-mantine-color-scheme="light">
+            <head>
+                <link rel="shortcut icon" href="/favicon.png" />
+                <meta
+                    name="viewport"
+                    content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
+                />
+            </head>
+            <body>
+                <Providers>
+                    <Header />
+                    <Container fluid className={classes.mainContainer} m={0} p={0} maw="100vw">
+                        <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
+                            <NavMenu />
+                            <div className={classes.contentWrapper}>
+                                <MyBreadcrumbs />
+                                {children}
+                            </div>
+                        </Flex>
+                    </Container>
+                </Providers>
+            </body>
+        </html>
+    );
 };
 export default RootLayout;

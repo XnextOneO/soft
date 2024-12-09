@@ -1,4 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
 
 import { $host } from "@/app/api";
 
@@ -7,23 +8,35 @@ interface LoginParameters {
   password: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const login = async ({ username, password }: LoginParameters): Promise<any> => {
-  return await $host.post(
-    "/auth",
-    {
-      username,
-      password,
-    },
-    {
-      withCredentials: true,
-    },
-  );
+interface LoginResponse {
+  token: string;
+  userId: number;
+  username: string;
+}
+
+// Login function: Handles the API call for user login
+const login = async ({ username, password }: LoginParameters): Promise<LoginResponse> => {
+  try {
+    const response: AxiosResponse<LoginResponse> = await $host.post(
+      "/auth",
+      { username, password },
+      { withCredentials: true },
+    );
+    return response.data;
+  } catch (error) {
+    // Log and rethrow the error for react-query to handle
+    console.error("Login failed:", error);
+    throw new Error("Failed to log in. Please try again.");
+  }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const useLogin = (): any => {
-  return useMutation({
+// useLogin hook: Provides a mutation for the login function
+export const useLogin = (): UseMutationResult<
+  LoginResponse, // Success type
+  Error, // Error type
+  LoginParameters // Variables type
+> => {
+  return useMutation<LoginResponse, Error, LoginParameters>({
     mutationFn: login,
   });
 };

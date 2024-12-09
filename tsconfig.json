@@ -21,6 +21,6 @@
     "plugins": [{ "name": "next" }]
   },
   "include": [
-    "next-environment", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/[...not-found]/not-found.tsx", "components/AuthWrapper"],
-  "exclude": ["node_modules"]
+    "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/[...not-found]/not-found.tsx", "components/AuthWrapper"],
+  "exclude": ["node_modules", ".next"]
 }
