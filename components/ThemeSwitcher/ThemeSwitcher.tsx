@@ -14,14 +14,11 @@ const ThemeSwitcher: React.FC = () => {
     return (
         <ActionIcon
             style={{
-                position: "absolute",
-                top: "94.9vh",
-                left: "4.5px",
                 zIndex: 1000,
             }}
             onClick={() => setColorScheme(computedColorScheme === "light" ? "dark" : "light")}
             variant="default"
-            size="xl"
+            size="lg"
             radius="xl"
             aria-label="Toggle color scheme"
         >

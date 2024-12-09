@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Avatar, Group, Text, UnstyledButton } from "@mantine/core";
+import { Group, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
 
 import { userInfo } from "@/app/api/auth/authAPI";
+import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 
 import classes from "./ProfileButton.module.scss";
 
@@ -26,8 +27,6 @@ const ProfileButton = (): JSX.Element => {
     return (
         <UnstyledButton className={classes.profile} px={20} onClick={() => router.push("/user-profile")}>
             <Group>
-                <Avatar name={name} color={"green"} />
-
                 <Text size="md" fw={600} c="white" className={classes.nickname}>
                     {name}
                 </Text>

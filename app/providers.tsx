@@ -22,10 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }): JSX.Elem
                 <ThemeManager>
                     <AuthManager>
                         <AppContextProvider>
-                            <QueryClientProvider client={queryClient}>
-                                <ThemeSwitcher />
-                                {children}
-                            </QueryClientProvider>
+                            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
                         </AppContextProvider>
                     </AuthManager>
                 </ThemeManager>

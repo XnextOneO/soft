@@ -8,6 +8,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 
 import { logout } from "@/app/api/auth/authAPI";
+import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 import { useEditStore } from "@/store/useEditStore";
 
 import { Context } from "../Providers/AppContextProvider";
@@ -60,6 +61,7 @@ const Header: React.FC = observer(() => {
                     </Link>
                     <Group justify="flex-end" align="center" gap={0}>
                         <ProfileButton />
+                        <ThemeSwitcher />
                         <UnstyledButton w={60} h={60} className={classes.buttonContainer} onClick={logoutHandler}>
                             <Flex justify="center">
                                 <svg

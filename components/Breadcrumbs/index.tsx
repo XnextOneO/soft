@@ -22,13 +22,19 @@ const MyBreadcrumbs = (): JSX.Element => {
     return (
         <Breadcrumbs className={classes.wrapper}>
             <Link href="/" passHref>
-                <Anchor>Главная</Anchor>
+                <Anchor className={classes.breadCrumbLink}>Главная</Anchor>
             </Link>
-            {items.map((item, index) => (
-                <Link key={index} href={item.href} passHref>
-                    <Anchor>{item.title.charAt(0).toUpperCase() + item.title.slice(1)}</Anchor>
-                </Link>
-            ))}
+            {items.map((item, index) =>
+                index === items.length - 1 ? (
+                    <span key={index}>{item.title.charAt(0).toUpperCase() + item.title.slice(1)}</span>
+                ) : (
+                    <Link key={index} href={item.href} passHref>
+                        <Anchor className={classes.breadCrumbLink}>
+                            {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
+                        </Anchor>
+                    </Link>
+                ),
+            )}
         </Breadcrumbs>
     );
 };
