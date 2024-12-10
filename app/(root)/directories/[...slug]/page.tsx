@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { Flex } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 
-import { MainTable } from "../../../../components/MainTable/MainTable";
-import { Context } from "../../../../components/Providers/AppContextProvider";
+import { MainTable } from "@/components/MainTable/MainTable";
+import { Context } from "@/components/Providers/AppContextProvider";
 
 const DirectoryPage = observer(({ params }: { params: { slug: Array<string> } }) => {
     const { directoriesStore } = useContext(Context);

@@ -2,5 +2,8 @@
   "not-found": {
     "title": "Не знойдзена",
     "go-to-home": "Вярнуцца на галоўную"
+  },
+  "bread-crumbs" : {
+    "main-page" : "Главная страница"
   }
 }

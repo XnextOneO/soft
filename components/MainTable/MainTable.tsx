@@ -30,6 +30,7 @@ interface MainTableProperties {
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [page, setPage] = useState<number>(1);
     const size = 20;
+
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
     const [createModalOpened, setCreateModalOpened] = useState(false);
     const { isEdit, canDelete, canCreate } = useEditStore();

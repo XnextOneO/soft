@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Anchor, Breadcrumbs } from "@mantine/core";
 
 import classes from "./Breadcrumbs.module.scss";
@@ -9,12 +10,12 @@ import classes from "./Breadcrumbs.module.scss";
 const MyBreadcrumbs = (): JSX.Element => {
     const pathname = usePathname();
     const pathSegments = pathname.split("/").filter(Boolean);
-
+    const t = useTranslations("bread-crumbs");
     const filteredSegments = pathSegments.filter((segment) => segment !== "nsi" && segment !== "scbank");
 
     const items = filteredSegments.map((segment, index) => {
         const href = `/${filteredSegments.slice(0, index + 1).join("/")}`;
-        const title = segment.replaceAll("-", " ");
+        const title = t(segment) || segment.replaceAll("-", " ");
 
         return { title, href };
     });
@@ -22,7 +23,7 @@ const MyBreadcrumbs = (): JSX.Element => {
     return (
         <Breadcrumbs className={classes.wrapper}>
             <Link href="/" passHref>
-                <Anchor className={classes.breadCrumbLink}>Главная</Anchor>
+                <Anchor className={classes.breadCrumbLink}>{t("main-page")}</Anchor>
             </Link>
             {items.map((item, index) =>
                 index === items.length - 1 ? (
