@@ -5,7 +5,7 @@ import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
+import { MantineReactTable, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
 import { fetchApiData, fetchApiDataWithSearch } from "@/app/api/hooks";
@@ -33,17 +33,25 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
     const [createModalOpened, setCreateModalOpened] = useState(false);
+    const [sorting, setSorting] = useState<MRT_SortingState>([]);
     const { isEdit, canDelete, canCreate } = useEditStore();
     const [opened, setOpened] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
+
+    console.log("logg", sorting);
+
+    const sortValue = sorting[0]?.desc === true ? "DESC" : "ASC";
+    const sortColumn = sorting[0]?.id;
+    const formattedSortColumn = sortColumn ? sortColumn.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase() : "";
     const directoriesStore = new DirectoriesStore();
     const parameters = {
         page: page - 1,
         size: size,
-        sort: "ASC",
+        sort: sortValue,
         link: link,
         text: debouncedGlobalFilter[0],
+        column: formattedSortColumn,
     };
 
     const { data, refetch, isFetching, isLoading } = useQuery({
@@ -202,6 +210,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         state: {
             isLoading: isLoading,
             showProgressBars: isFetching,
+            sorting,
         },
         initialState: { density: "xs", showGlobalFilter: true },
         mantineTableBodyCellProps: {
@@ -236,7 +245,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         enablePagination: false,
         enableColumnResizing: true,
         enableColumnVirtualization: true,
-
+        enableColumnActions: false,
         mantineTableProps: {
             striped: "even",
             withColumnBorders: true,
@@ -247,6 +256,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             size: "md",
             type: "text",
         },
+        manualSorting: true,
+        onSortingChange: setSorting,
     });
 
     return data ? (

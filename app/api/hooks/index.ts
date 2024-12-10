@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { $authHost } from "../index";
 
 // Define the FetchApiDataParameters interface with strict typing for each field
@@ -12,6 +11,7 @@ interface FetchApiDataParameters {
 }
 
 // Function to fetch data with parameters
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchApiData = async (parameters: FetchApiDataParameters): Promise<any> => {
   try {
     const response = await $authHost.get(`reference-book/${parameters.link}`, {
@@ -25,6 +25,7 @@ export const fetchApiData = async (parameters: FetchApiDataParameters): Promise<
 };
 
 // Function to fetch data with search text
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchApiDataWithSearch = async (parameters: FetchApiDataParameters): Promise<any> => {
   try {
     const response = await $authHost.get(`reference-book/${parameters.link}/search`, {
