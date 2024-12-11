@@ -6,7 +6,6 @@ import { Group, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
 
 import { userInfo } from "@/app/api/auth/authAPI";
-import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 
 import classes from "./ProfileButton.module.scss";
 

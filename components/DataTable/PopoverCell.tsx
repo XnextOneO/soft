@@ -15,7 +15,6 @@ const PopoverCell: React.FC<PropsWithChildren<ICellProperties>> = ({ children })
             styles={{
                 dropdown: {
                     maxWidth: "30%",
-                    left: 0,
                 },
             }}
         >

@@ -1,3 +1,6 @@
+import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
+
 import { $authHost } from "../index";
 
 // Define the FetchApiDataParameters interface with strict typing for each field
@@ -35,6 +38,16 @@ export const fetchApiDataWithSearch = async (parameters: FetchApiDataParameters)
     });
     return response.data;
   } catch (error) {
+    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+      notifications.show({
+        title: "Ошибка",
+        message: "Поиск находится в процессе разработки",
+        color: "red",
+        autoClose: 5000,
+      });
+      return { content: [], page: { totalElements: 0, totalPages: 0 } };
+    }
+
     console.error("Error fetching search API data:", error);
     throw new Error("Failed to fetch search API data");
   }

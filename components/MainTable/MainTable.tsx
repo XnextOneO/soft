@@ -43,8 +43,11 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
     const sortValue = sorting[0]?.desc === true ? "DESC" : "ASC";
     const sortColumn = sorting[0]?.id;
+
     const formattedSortColumn = sortColumn ? sortColumn.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase() : "";
+
     const directoriesStore = new DirectoriesStore();
+
     const parameters = {
         page: page - 1,
         size: size,
