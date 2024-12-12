@@ -75,12 +75,14 @@ const UpdateTableModal = ({
                     title: "Ошибка загрузки",
                     message: error.response.data.message.join(", "), // Объединяем сообщения в строку
                     color: "red",
+                    autoClose: false,
                 });
             } else {
                 showNotification({
                     title: "Ошибка загрузки",
                     message: "Произошла неизвестная ошибка.",
                     color: "red",
+                    autoClose: false,
                 });
             }
         }
@@ -217,7 +219,7 @@ const UpdateTableModal = ({
                                     }
                                 />
                             ) : // eslint-disable-next-line sonarjs/no-nested-conditional
-                            error ? ( // Проверка на наличие ошибки
+                            error ? (
                                 <RingProgress
                                     sections={[{ value: 100, color: "red" }]}
                                     label={
@@ -227,18 +229,12 @@ const UpdateTableModal = ({
                                                 setFile(undefined);
                                                 setUploaded(false);
                                                 setProgress(0);
-                                                setError(false); // Сброс состояния ошибки
+                                                setError(false);
                                                 toggle();
                                             }}
                                         >
                                             <ActionIcon color="teal" variant="light" radius="xl" size="xl">
-                                                <IconX
-                                                    color={"red"}
-                                                    style={{
-                                                        width: rem(22),
-                                                        height: rem(22),
-                                                    }}
-                                                />
+                                                <IconX color={"red"} />
                                             </ActionIcon>
                                         </Center>
                                     }
