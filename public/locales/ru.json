@@ -3,9 +3,9 @@
     "title": "Не найдено",
     "go-to-home": "Вернуться на главную"
   },
-  "bread-crumbs" : {
-    "main-page" : "Главная страница",
-    "directories" : "Справочники",
+  "bread-crumbs": {
+    "main-page": "Главная страница",
+    "directories": "Справочники",
     "transfer-destination-category-code": "Справочник кодов категории назначения перевода",
     "organization-identification-code": "Справочник кодов идентификации организации",
     "transfer-cancellation-code": "Справочник кодов отмены перевода",

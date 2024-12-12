@@ -15,6 +15,7 @@ import {
 } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { useDisclosure } from "@mantine/hooks";
+import { showNotification } from "@mantine/notifications"; // Импортируем showNotification
 import { IconCheck, IconCloudUpload, IconFile, IconUpload, IconX } from "@tabler/icons-react";
 import { AxiosProgressEvent } from "axios";
 
@@ -34,6 +35,7 @@ const UpdateTableModal = ({
     const [visible, { toggle }] = useDisclosure(false);
     const [progress, setProgress] = useState<number>(0);
     const [uploaded, setUploaded] = useState<boolean>(false);
+    const [error, setError] = useState<boolean>(false);
     const openReference = useRef<() => void>(null);
     const [file, setFile] = useState<File | null>();
     const controller = new AbortController();
@@ -60,10 +62,27 @@ const UpdateTableModal = ({
 
             if (status === 200) {
                 setUploaded(true);
+                setError(false);
             }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-shadow
         } catch (error: any) {
             console.error(error.message);
+            setError(true);
+
+            // Вызов уведомления с текстом ошибки
+            if (error.response && error.response.data && error.response.data.message) {
+                showNotification({
+                    title: "Ошибка загрузки",
+                    message: error.response.data.message.join(", "), // Объединяем сообщения в строку
+                    color: "red",
+                });
+            } else {
+                showNotification({
+                    title: "Ошибка загрузки",
+                    message: "Произошла неизвестная ошибка.",
+                    color: "red",
+                });
+            }
         }
     };
 
@@ -75,6 +94,7 @@ const UpdateTableModal = ({
                 controller.abort();
                 setFile(undefined);
                 setUploaded(false);
+                setError(false);
                 if (progress > 1) {
                     toggle();
                 }
@@ -85,6 +105,7 @@ const UpdateTableModal = ({
                 backgroundOpacity: 0.55,
             }}
             centered
+            className={classes.relative}
         >
             <UnstyledButton className={classes.fileButton}>
                 {file ? (
@@ -166,6 +187,7 @@ const UpdateTableModal = ({
             <LoadingOverlay
                 visible={visible}
                 zIndex={1000}
+                className={classes.absolute}
                 loaderProps={{
                     children: (
                         <>
@@ -179,11 +201,39 @@ const UpdateTableModal = ({
                                                 setFile(undefined);
                                                 setUploaded(false);
                                                 setProgress(0);
+                                                setError(false); // Сброс состояния ошибки
                                                 toggle();
                                             }}
                                         >
                                             <ActionIcon color="teal" variant="light" radius="xl" size="xl">
                                                 <IconCheck
+                                                    style={{
+                                                        width: rem(22),
+                                                        height: rem(22),
+                                                    }}
+                                                />
+                                            </ActionIcon>
+                                        </Center>
+                                    }
+                                />
+                            ) : // eslint-disable-next-line sonarjs/no-nested-conditional
+                            error ? ( // Проверка на наличие ошибки
+                                <RingProgress
+                                    sections={[{ value: 100, color: "red" }]}
+                                    label={
+                                        <Center
+                                            onClick={() => {
+                                                close();
+                                                setFile(undefined);
+                                                setUploaded(false);
+                                                setProgress(0);
+                                                setError(false); // Сброс состояния ошибки
+                                                toggle();
+                                            }}
+                                        >
+                                            <ActionIcon color="teal" variant="light" radius="xl" size="xl">
+                                                <IconX
+                                                    color={"red"}
                                                     style={{
                                                         width: rem(22),
                                                         height: rem(22),
