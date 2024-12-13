@@ -40,9 +40,9 @@ export const fetchApiDataWithSearch = async (parameters: FetchApiDataParameters)
   } catch (error) {
     if (error instanceof AxiosError && error.response && error.response.status === 404) {
       notifications.show({
-        title: "Ошибка",
+        title: "Уведомление",
         message: "Поиск находится в процессе разработки",
-        color: "red",
+        color: "yellow",
         autoClose: 5000,
       });
       return { content: [], page: { totalElements: 0, totalPages: 0 } };

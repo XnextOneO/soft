@@ -39,7 +39,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [globalFilter, setGlobalFilter] = useState("");
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
 
-    console.log("logg", sorting);
+    const handleGlobalFilterChange = (value: string): void => {
+        setGlobalFilter(value);
+        setPage(1);
+    };
 
     const sortValue = sorting[0]?.desc === true ? "DESC" : "ASC";
     const sortColumn = sorting[0]?.id;
@@ -153,7 +156,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         };
     });
     const table = useMantineReactTable({
-        onGlobalFilterChange: setGlobalFilter,
+        onGlobalFilterChange: handleGlobalFilterChange,
         // eslint-disable-next-line @typescript-eslint/no-shadow
         renderCreateRowModalContent: ({ table, row }) => (
             <CreateRowModalContent
