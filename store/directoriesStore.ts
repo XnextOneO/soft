@@ -110,7 +110,7 @@ export default class DirectoriesStore {
       },
     },
     {
-      name: "Справочник банков",
+      name: "Справочник банков и НКФО РБ",
       link: "nsi/bank",
       columns: {
         bankCode: "Условный номер участника расчетов (УНУР)",
