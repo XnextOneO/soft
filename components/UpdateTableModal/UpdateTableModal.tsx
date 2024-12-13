@@ -233,7 +233,7 @@ const UpdateTableModal = ({
                                                 toggle();
                                             }}
                                         >
-                                            <ActionIcon color="teal" variant="light" radius="xl" size="xl">
+                                            <ActionIcon color="red" variant="light" radius="xl" size="xl">
                                                 <IconX color={"red"} />
                                             </ActionIcon>
                                         </Center>

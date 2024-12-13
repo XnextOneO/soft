@@ -18,11 +18,10 @@ const HomePage: FC = () => {
     }, [colorScheme.colorScheme]);
 
     return (
-        <Stack gap={0} w="100%">
-            <Container fluid mah="100vh" miw="700px" maw="100vw" className={backgroundState}>
-                <Stack w="100%" className={classes.stackContainer}>
+        <Stack>
+            <Container fluid className={backgroundState}>
+                <Stack className={classes.stackContainer}>
                     <Title>Главная страница IIS Беларусбанк</Title>
-
                     <Link href="/directories">
                         <Button color="#006040">Справочники</Button>
                     </Link>

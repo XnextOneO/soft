@@ -1,9 +1,4 @@
 {
-  "not-found": {
-    "title": "Не знойдзена",
-    "go-to-home": "Вярнуцца на галоўную"
-  },
-  "bread-crumbs" : {
-    "main-page" : "Главная страница"
-  }
+  "go-to-home": "not translated",
+  "title": "not translated"
 }

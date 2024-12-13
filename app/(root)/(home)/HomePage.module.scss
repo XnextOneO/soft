@@ -1,27 +1,28 @@
 .main-container-light {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: calc(100vh - 60px);
-	background-image: url("../../../public/assets/background.png");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: calc(100vh - 60px);
+  background-image: url("../../../public/assets/background.png");
 }
 
 .main-container-dark {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: calc(100vh - 60px);
-	background-image: url("../../../public/assets/background-dark-mode.png");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: calc(100vh - 60px);
+  background-image: url("../../../public/assets/background-dark-mode.png");
 }
 
 .stack-container {
-    display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

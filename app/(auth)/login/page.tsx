@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, Group, Image, Loader, Text, TextInput, useMantineColorScheme } from "@mantine/core";
-import { IconAt, IconLock } from "@tabler/icons-react";
+import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 
 import { useLogin } from "@/app/api/hooks/auth";
 
@@ -16,6 +16,7 @@ const LoginPage: React.FC = () => {
     const router = useRouter();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [isLoginClicked, setIsLoginClicked] = useState(false);
     // eslint-disable-next-line unicorn/no-null
     const [error, setError] = useState<string | null>(null);
@@ -98,8 +99,21 @@ const LoginPage: React.FC = () => {
                         error={isLoginClicked && !password ? "Пароль обязателен" : ""}
                         inputWrapperOrder={["label", "input", "error"]}
                         radius="md"
-                        type="password"
+                        type={showPassword ? "text" : "password"} // Переключение типа
                         leftSection={<IconLock size={16} />}
+                        rightSection={
+                            <div
+                                onClick={() => setShowPassword((previous) => !previous)}
+                                style={{
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}
+                            >
+                                {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+                            </div>
+                        }
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
                         onKeyPress={(event) => {
@@ -107,7 +121,7 @@ const LoginPage: React.FC = () => {
                                 onLogin();
                             }
                         }}
-                    />
+                    />{" "}
                     <Group w="90%" my={10}>
                         {error && (
                             <Text color="red" size="sm" mb="sm">
