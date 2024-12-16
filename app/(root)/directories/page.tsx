@@ -16,7 +16,7 @@ const DirectoriesPage = observer(() => {
     const { directoriesStore } = useContext(Context);
     const colorScheme = useMantineColorScheme();
 
-    const specialLinks = new Set(["rf", "swift", "scbank/account"]);
+    const specialLinks = new Set(["rf", "swift", "scbank/account", "statuses"]);
     const specialDirectories = directoriesStore.directories.filter((directory) => specialLinks.has(directory.link));
 
     const nsiDirectories = directoriesStore.directories.filter((directory) => !specialLinks.has(directory.link));

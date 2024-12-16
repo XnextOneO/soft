@@ -35,7 +35,9 @@ const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
 
     return (
         <Stack mah={"80vh"} gap={5}>
-            <span className={classes.test}>Создать новую запись</span>
+            <Title order={3} pos={"sticky"} top={10} className={classes.modalTitle}>
+                Создать новую запись
+            </Title>
             {processedColumns.map((column) => (
                 <Flex direction="column" key={column.accessorKey}>
                     <Title order={5}>{column.header}</Title>
