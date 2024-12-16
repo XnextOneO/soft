@@ -1,11 +1,12 @@
 import React from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Stack, UnstyledButton } from "@mantine/core";
+import { IconFileAnalytics, IconFolders, IconHelp } from "@tabler/icons-react";
 
 import DirectoriesMenu from "../DirectoriesMenu/DirectoriesMenu";
 
 import NavMenuButtonStack from "./NavMenuButtonStack";
-import { IconFileAnalytics, IconFolders, IconHelp } from "@tabler/icons-react";
 
 interface INavMenuStackProperties {
     colorScheme: string;
@@ -24,6 +25,7 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
     opened,
     marginLeft,
 }) => {
+    const t = useTranslations("nav-menu-stack");
     return (
         <Stack
             w={width}
@@ -46,7 +48,7 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
                         marginLeft={marginLeft}
                         icon={IconFolders}
                     >
-                        {opened ? "Справочники" : ""}
+                        {opened ? t("directories") : ""}
                     </NavMenuButtonStack>
                 </UnstyledButton>
             </DirectoriesMenu>
@@ -57,16 +59,11 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
                     marginLeft={marginLeft}
                     icon={IconFileAnalytics}
                 >
-                    {opened ? "Статусы" : ""}
+                    {opened ? t("statuses") : ""}
                 </NavMenuButtonStack>
             </Link>
-            <NavMenuButtonStack
-                colorScheme={colorScheme}
-                width={width}
-                marginLeft={marginLeft}
-                icon={IconHelp}
-            >
-                {opened ? "Помощь" : ""}
+            <NavMenuButtonStack colorScheme={colorScheme} width={width} marginLeft={marginLeft} icon={IconHelp}>
+                {opened ? t("help") : ""}
             </NavMenuButtonStack>
         </Stack>
     );

@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
     ActionIcon,
     Button,
@@ -39,6 +40,7 @@ const UpdateTableModal = ({
     const openReference = useRef<() => void>(null);
     const [file, setFile] = useState<File | null>();
     const controller = new AbortController();
+    const t = useTranslations("upload-file");
 
     const uploadFiles = async (): Promise<void> => {
         const formData = new FormData();
@@ -51,9 +53,11 @@ const UpdateTableModal = ({
                 setProgress(percentCompleted);
             },
         };
+
         if (!file) {
             return;
         }
+
         try {
             formData.append(`file`, file);
             toggle();
@@ -64,23 +68,30 @@ const UpdateTableModal = ({
                 setUploaded(true);
                 setError(false);
             }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-shadow
         } catch (error: any) {
             console.error(error.message);
             setError(true);
 
-            // Вызов уведомления с текстом ошибки
-            if (error.response && error.response.data && error.response.data.message) {
-                showNotification({
-                    title: "Ошибка загрузки",
-                    message: error.response.data.message.join(", "), // Объединяем сообщения в строку
-                    color: "red",
-                    autoClose: false,
-                });
+            if (error.response) {
+                if (error.response.data && error.response.data.message) {
+                    showNotification({
+                        title: t("upload-error-title"),
+                        message: error.response.data.message,
+                        color: "red",
+                        autoClose: false,
+                    });
+                } else {
+                    showNotification({
+                        title: t("upload-error-title"),
+                        message: "Произошла неизвестная ошибка.",
+                        color: "red",
+                        autoClose: false,
+                    });
+                }
             } else {
                 showNotification({
-                    title: "Ошибка загрузки",
-                    message: "Произошла неизвестная ошибка.",
+                    title: t("upload-error-title"),
+                    message: "Произошла ошибка сети или сервер недоступен.",
                     color: "red",
                     autoClose: false,
                 });
@@ -102,7 +113,7 @@ const UpdateTableModal = ({
                 }
                 setProgress(0);
             }}
-            title="Обновить таблицу"
+            title={t("modal-title")}
             overlayProps={{
                 backgroundOpacity: 0.55,
             }}
@@ -115,7 +126,6 @@ const UpdateTableModal = ({
                         <Stack>
                             <IconFile width="100%" />
                             <Text fz="sm">{file.name}</Text>
-
                             <Button
                                 variant="subtle"
                                 color="red"
@@ -169,12 +179,12 @@ const UpdateTableModal = ({
                             </Group>
 
                             <Text ta="center" fw={700} fz="lg" mt="md">
-                                <Dropzone.Accept>Поместите файл сюда</Dropzone.Accept>
-                                <Dropzone.Reject>Неправильный файл</Dropzone.Reject>
-                                <Dropzone.Idle>Загрузите файл справочника</Dropzone.Idle>
+                                <Dropzone.Accept>{t("dropzone-accept")}</Dropzone.Accept>
+                                <Dropzone.Reject>{t("dropzone-reject")}</Dropzone.Reject>
+                                <Dropzone.Idle>{t("dropzone-idle")}</Dropzone.Idle>
                             </Text>
                             <Text ta="center" fz="sm" my="md" c="dimmed">
-                                Перетащите в данную область файл справочника.
+                                {t("dropzone-description")}
                             </Text>
                         </div>
                     </Dropzone>
@@ -183,7 +193,7 @@ const UpdateTableModal = ({
 
             <Group justify="center">
                 <Button color="#006040" onClick={uploadFiles} disabled={!file}>
-                    Отправить на загрузку
+                    {t("upload-button")}
                 </Button>
             </Group>
             <LoadingOverlay
@@ -203,7 +213,7 @@ const UpdateTableModal = ({
                                                 setFile(undefined);
                                                 setUploaded(false);
                                                 setProgress(0);
-                                                setError(false); // Сброс состояния ошибки
+                                                setError(false);
                                                 toggle();
                                             }}
                                         >

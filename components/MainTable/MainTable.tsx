@@ -200,7 +200,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         ),
         onCreatingRowSave: async ({ exitCreatingMode }) => {
             // setData((prevData) => [...prevData, { ...values, id: newId }]);
-            exitCreatingMode(); // Закрывает модальное окно
+            exitCreatingMode();
         },
         displayColumnDefOptions: {
             "mrt-row-actions": {

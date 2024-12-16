@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { ActionIcon, Flex, Tooltip } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 
@@ -9,9 +10,10 @@ interface RowActionsProperties {
 }
 
 const RowActions = ({ row, table }: RowActionsProperties): JSX.Element => {
+    const t = useTranslations("row-actions");
     return (
         <Flex justify={"center"} align={"center"} gap={"md"}>
-            <Tooltip label="Редактирование">
+            <Tooltip label={t("edit")}>
                 <ActionIcon onClick={() => table.setEditingRow(row)}>
                     <IconEdit />
                 </ActionIcon>

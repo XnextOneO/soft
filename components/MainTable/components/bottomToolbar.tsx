@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 import { Flex, Pagination, Text } from "@mantine/core";
 
 interface BottomToolbarProperties {
@@ -12,10 +13,12 @@ interface BottomToolbarProperties {
 }
 
 const BottomToolbar: FC<BottomToolbarProperties> = ({ page, size, totalElements, countPages, parameters, setPage }) => {
+    const t = useTranslations("bottom-toolbar");
     return (
         <Flex align="center" justify={"space-between"} pt={10} pb={10} w={"100%"}>
             <Text>
-                Отображены записи {(page - 1) * size + 1}–{Math.min(page * size, totalElements)} из {totalElements}
+                {t("records")} {(page - 1) * size + 1}–{Math.min(page * size, totalElements)} {t("from")}{" "}
+                {totalElements}
             </Text>
             <Pagination
                 color="#007458"

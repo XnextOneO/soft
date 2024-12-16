@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 import { Button, Flex, Group, Popover, Stack, Textarea, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 
@@ -22,6 +23,7 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
     table,
     classes,
 }) => {
+    const t = useTranslations("edit-row-modal-content");
     const handleDelete = (): void => {
         setDeleteModalOpened(false);
         // eslint-disable-next-line unicorn/no-null
@@ -46,7 +48,7 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
     return (
         <Stack mah={"80vh"} gap={5}>
             <Title order={3} pos={"sticky"} top={10} className={classes.modalTitle}>
-                Создать новую запись
+                {t("create-new-row")}
             </Title>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {row.getAllCells().map((cell: any) => {
@@ -75,16 +77,16 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
                             onClick={() => setDeleteModalOpened(true)}
                             disabled={!canDelete}
                         >
-                            Удалить
+                            {t("delete")}
                         </Button>
                     </Popover.Target>
                     <Popover.Dropdown>
-                        <span>Вы уверены, что хотите удалить эту запись?</span>
+                        <span>{t("sure-to-delete")}</span>
                         <Group mt="lg">
                             <Button variant="outline" onClick={() => setDeleteModalOpened(false)}>
-                                Отмена
+                                {t("cancel")}
                             </Button>
-                            <Button onClick={handleDelete}>Удалить</Button>
+                            <Button onClick={handleDelete}>{t("delete")}</Button>
                         </Group>
                     </Popover.Dropdown>
                 </Popover>
@@ -93,7 +95,7 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
                         handleSave();
                     }}
                 >
-                    Сохранить
+                    {t("save")}
                 </Button>
             </Flex>
         </Stack>

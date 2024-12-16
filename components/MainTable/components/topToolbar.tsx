@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 import { Button, Flex, Group } from "@mantine/core";
-import { MRT_GlobalFilterTextInput, MRT_ShowHideColumnsButton } from "mantine-react-table";
 import { IconReload } from "@tabler/icons-react";
+import { MRT_GlobalFilterTextInput, MRT_ShowHideColumnsButton } from "mantine-react-table";
 
 interface TopToolbarProperties {
     refetch: () => void;
@@ -14,15 +15,16 @@ interface TopToolbarProperties {
 }
 
 const TopToolbar: FC<TopToolbarProperties> = ({ refetch, setOpened, table, canCreate, updateTable }) => {
+    const t = useTranslations("top-toolbar");
     return (
         <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
             <Group gap="xs">
                 <Button w={36} p={0} radius="xs" color="#007458" onClick={() => refetch()}>
-                    <IconReload/>
+                    <IconReload />
                 </Button>
                 {updateTable && (
                     <Button color="#007458" size="sm" radius="xs" onClick={() => setOpened(true)}>
-                        Обновить таблицу
+                        {t("update-table")}
                     </Button>
                 )}
                 {canCreate ? (
@@ -31,7 +33,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({ refetch, setOpened, table, canCr
                             table.setCreatingRow(true);
                         }}
                     >
-                        Создать запись
+                        {t("create-new-row")}
                     </Button>
                 ) : (
                     ""

@@ -1,10 +1,11 @@
 "use client";
 
 import { useContext, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Box, Burger, Container, Flex, Group, Text, UnstyledButton, Image as MantineImage } from "@mantine/core";
+import { useTranslations } from "next-intl";
+import { Box, Burger, Container, Flex, Group, Image as MantineImage, Text, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 
@@ -12,11 +13,11 @@ import { logout } from "@/app/api/auth/authAPI";
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 import { useEditStore } from "@/store/useEditStore";
 
+import LogoutIcon from "../../public/assets/logout.svg";
 import { Context } from "../Providers/AppContextProvider";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
 import classes from "./Header.module.scss";
-import LogoutIcon from "../../public/assets/logout.svg"
 
 const Header: React.FC = observer(() => {
     const [opened, { toggle }] = useDisclosure();
@@ -24,6 +25,7 @@ const Header: React.FC = observer(() => {
     const pathname = usePathname();
     const router = useRouter();
     const { clearStore } = useEditStore();
+    const t = useTranslations("header");
     useEffect(() => {
         if (!pathname.includes("/login")) {
             burgerStore.setOpened(opened);
@@ -49,7 +51,7 @@ const Header: React.FC = observer(() => {
                             alignItems: "center",
                         }}
                         opened={opened}
-                        aria-label="Навигация"
+                        aria-label={t("navigation")}
                     />
                 </Flex>
                 <Group justify="space-between" w="100%" pl="md">
@@ -57,7 +59,7 @@ const Header: React.FC = observer(() => {
                         <Group gap="xs">
                             <MantineImage src="../../favicon.png" w={30} h={30} alt="logo" />
                             <Text c="white" size="24px" fw={700} className={classes.title}>
-                                IIS Беларусбанк
+                                IIS {t("belarusbank")}
                             </Text>
                         </Group>
                     </Link>
@@ -68,7 +70,7 @@ const Header: React.FC = observer(() => {
                         <ProfileButton />
                         <UnstyledButton w={60} h={60} className={classes.buttonContainer} onClick={logoutHandler}>
                             <Flex justify="center">
-                                <Image src={LogoutIcon} alt="Logout Icon"/>
+                                <Image src={LogoutIcon} alt="Logout Icon" />
                             </Flex>
                         </UnstyledButton>
                     </Group>

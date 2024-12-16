@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Button, Card, Group, Image, Loader, Text, TextInput, useMantineColorScheme } from "@mantine/core";
 import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 
@@ -20,6 +21,7 @@ const LoginPage: React.FC = () => {
     const [isLoginClicked, setIsLoginClicked] = useState(false);
     // eslint-disable-next-line unicorn/no-null
     const [error, setError] = useState<string | null>(null);
+    const t = useTranslations("auth");
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const onLogin = async () => {
         setIsLoginClicked(true);
@@ -74,13 +76,13 @@ const LoginPage: React.FC = () => {
                         </Text>
                     </Group>
                     <Text fw={400} size="34px">
-                        Авторизация
+                        {t("authorization")}
                     </Text>
                     <TextInput
                         w="90%"
-                        placeholder="Введите логин"
-                        label="Логин"
-                        error={isLoginClicked && !username ? "Логин обязателен" : ""}
+                        placeholder={t("login-input")}
+                        label={t("login")}
+                        error={isLoginClicked && !username ? t("login-required") : ""}
                         inputWrapperOrder={["label", "input", "error"]}
                         value={username}
                         radius="md"
@@ -94,12 +96,12 @@ const LoginPage: React.FC = () => {
                     />
                     <TextInput
                         w="90%"
-                        placeholder="Введите пароль"
-                        label="Пароль"
-                        error={isLoginClicked && !password ? "Пароль обязателен" : ""}
+                        placeholder={t("enter-password")}
+                        label={t("password")}
+                        error={isLoginClicked && !password ? t("password-required") : ""}
                         inputWrapperOrder={["label", "input", "error"]}
                         radius="md"
-                        type={showPassword ? "text" : "password"} // Переключение типа
+                        type={showPassword ? "text" : "password"}
                         leftSection={<IconLock size={16} />}
                         rightSection={
                             <div
@@ -141,7 +143,7 @@ const LoginPage: React.FC = () => {
                             }}
                             onClick={onLogin}
                         >
-                            Войти
+                            {t("sign-in")}
                         </Button>
                     </Group>
                     <Text c="dimmed" size="sm">

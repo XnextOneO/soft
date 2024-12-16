@@ -22,7 +22,8 @@ const MyBreadcrumbs = (): JSX.Element => {
     });
 
     return (
-        <Breadcrumbs className={classes.wrapper}
+        <Breadcrumbs
+            className={classes.wrapper}
             separator=">"
             separatorMargin="5px"
             p="xs"
@@ -31,14 +32,22 @@ const MyBreadcrumbs = (): JSX.Element => {
             }}
         >
             <Link href="/" passHref color="">
-                <Anchor c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#006040"} className={classes.breadCrumbLink}>{t("main-page")}</Anchor>
+                <Anchor
+                    c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#006040"}
+                    className={classes.breadCrumbLink}
+                >
+                    {t("main-page")}
+                </Anchor>
             </Link>
             {items.map((item, index) =>
                 index === items.length - 1 ? (
                     <span key={index}>{item.title.charAt(0).toUpperCase() + item.title.slice(1)}</span>
                 ) : (
                     <Link key={index} href={item.href} passHref>
-                        <Anchor className={classes.breadCrumbLink} c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#006040"}>
+                        <Anchor
+                            className={classes.breadCrumbLink}
+                            c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#006040"}
+                        >
                             {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
                         </Anchor>
                     </Link>

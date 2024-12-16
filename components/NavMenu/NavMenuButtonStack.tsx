@@ -1,11 +1,11 @@
+import { useEffect, useState } from "react";
 import { Text } from "@mantine/core";
+import { IconFolders } from "@tabler/icons-react";
 
 import CustomIcon from "../BurgerButtons/CustomIcon";
 import NavButton from "../BurgerButtons/NavButton";
 
 import classes from "./NavMenu.module.scss";
-import { IconFolders } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
 
 interface INavMenuButtonStackProperties {
     colorScheme: string;
@@ -46,7 +46,7 @@ const NavMenuButtonStack: React.FC<INavMenuButtonStackProperties> = ({
 
     return (
         <NavButton className={navButtonClass} w={width}>
-            <IconComponent width={60} height={25} color={iconColorState}/>
+            <IconComponent width={60} height={25} color={iconColorState} />
             <Text c={active ? "#c9c9c9" : ""} ml={marginLeft}>
                 {children}
             </Text>
