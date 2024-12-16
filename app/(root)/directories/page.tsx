@@ -2,6 +2,7 @@
 
 import { useContext } from "react";
 import React from "react";
+import { useTranslations } from "next-intl";
 import { Card, Container, Divider, Flex, Group, Stack, Title, useMantineColorScheme } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 
@@ -15,6 +16,7 @@ import classes from "./Directories.module.scss";
 const DirectoriesPage = observer(() => {
     const { directoriesStore } = useContext(Context);
     const colorScheme = useMantineColorScheme();
+    const t = useTranslations("directories-page");
 
     const specialLinks = new Set(["rf", "swift", "scbank/account", "statuses"]);
     const specialDirectories = directoriesStore.directories.filter((directory) => specialLinks.has(directory.link));
@@ -38,13 +40,13 @@ const DirectoriesPage = observer(() => {
                     >
                         <Group my={10} justify="space-between">
                             <Title order={3} className={classes.title}>
-                                Справочники
+                                {t("directories")}
                             </Title>
                         </Group>
                     </Card.Section>
 
                     <Title order={4} my={10} className={classes.title}>
-                        ЦВ НСИ НБ РБ
+                        {t("nsi")}
                     </Title>
                     <Divider w="100%" mb={20} p={0} />
                     <DirectoryList directories={nsiDirectories} colorScheme={colorScheme.colorScheme} />

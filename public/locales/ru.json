@@ -29,6 +29,70 @@
     "account": "Справочник счетов ПК SC-Bank360Corporate",
     "statuses": "Статусы",
     "user-profile": "Профиль пользователя"
+  },
+  "auth": {
+    "authorization": "Авторизация",
+    "login-input" : "Введите логин",
+    "login" : "Логин",
+    "login-required": "Логин обязателен",
+    "enter-password": "Введите пароль",
+    "password" : "Пароль",
+    "password-required": "Пароль обязателен",
+    "sign-in": "Войти"
+  },
+  "home": {
+    "main-page" : "Главная страница IIS Беларусбанк",
+    "directories" : "Справочники"
+  },
+  "directories-page" : {
+    "directories" : "Справочники",
+    "nsi" : "ЦВ НСИ НБ РБ"
+  },
+  "directories-menu" : {
+    "search-by-directories" : "Поиск по справочникам"
+  },
+  "header" : {
+    "belarusbank" : "Беларусбанк",
+    "navigation" : "навигация"
+  },
+  "bottom-toolbar" : {
+    "records": "Отображены записи",
+    "from" : "из"
+  },
+  "edit-row-modal-content" : {
+    "create-new-row" : "Создать новую запись",
+    "delete": "Удалить",
+    "sure-to-delete": "Вы уверены, что хотите удалить эту запись?",
+    "cancel" : "Отмена",
+    "save" : "Сохранить"
+  },
+  "row-actions" : {
+    "edit" : "Редактирование"
+  },
+  "top-toolbar" : {
+    "update-table" : "Обновить таблицу",
+    "create-new-row" : "Создать запись"
+  },
+  "create-row-modal-content" : {
+    "create-new-row" : "Создать новую запись",
+    "sure-to-create" : "Вы уверены, что хотите создать эту запись?",
+    "cancel" : "Отмена",
+    "create" : "Создать"
+  },
+  "nav-menu-stack" : {
+    "directories" : "Справочники",
+    "statuses" : "Статусы",
+    "help": "Поддержка"
+  },
+  "upload-file" : {
+    "modal-title": "Обновить таблицу",
+    "dropzone-accept": "Поместите файл сюда",
+    "dropzone-reject": "Неправильный файл",
+    "dropzone-idle": "Загрузите файл справочника",
+    "dropzone-description": "Перетащите в данную область файл справочника.",
+    "upload-button": "Отправить на загрузку",
+    "upload-error-title": "Ошибка загрузки",
+    "upload-error-message": "Произошла неизвестная ошибка."
   }
 }
 

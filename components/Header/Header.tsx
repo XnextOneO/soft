@@ -3,6 +3,7 @@
 import { useContext, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Burger, Container, Flex, Group, Image, Text, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
@@ -22,6 +23,7 @@ const Header: React.FC = observer(() => {
     const pathname = usePathname();
     const router = useRouter();
     const { clearStore } = useEditStore();
+    const t = useTranslations("header");
     useEffect(() => {
         if (!pathname.includes("/login")) {
             burgerStore.setOpened(opened);
@@ -47,7 +49,7 @@ const Header: React.FC = observer(() => {
                             alignItems: "center",
                         }}
                         opened={opened}
-                        aria-label="Навигация"
+                        aria-label={t("navigation")}
                     />
                 </Flex>
                 <Group justify="space-between" w="100%" pl="md">
@@ -55,7 +57,7 @@ const Header: React.FC = observer(() => {
                         <Group gap="xs">
                             <Image src="../../favicon.png" w={30} h={30} alt="logo" />
                             <Text c="white" size="24px" fw={700} className={classes.title}>
-                                IIS Беларусбанк
+                                IIS {t("belarusbank")}
                             </Text>
                         </Group>
                     </Link>

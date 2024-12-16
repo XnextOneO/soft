@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 import { Button, Flex, Group, Popover, Stack, Textarea, Title } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 
@@ -22,6 +23,8 @@ const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
     setCreateRowModalOpened,
     table,
 }) => {
+    const t = useTranslations("create-row-modal-content");
+
     const handleCreate = (): void => {
         setCreateRowModalOpened(false);
         // eslint-disable-next-line unicorn/no-null
@@ -36,7 +39,7 @@ const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
     return (
         <Stack mah={"80vh"} gap={5}>
             <Title order={3} pos={"sticky"} top={10} className={classes.modalTitle}>
-                Создать новую запись
+                {t("create-new-row")}
             </Title>
             {processedColumns.map((column) => (
                 <Flex direction="column" key={column.accessorKey}>
@@ -55,12 +58,12 @@ const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
                         <Button onClick={() => setCreateRowModalOpened(true)}>Создать</Button>
                     </Popover.Target>
                     <Popover.Dropdown>
-                        <span>Вы уверены, что хотите создать эту запись?</span>
+                        <span>{t("sure-to-create")}</span>
                         <Group mt="lg">
                             <Button variant="outline" onClick={() => setCreateRowModalOpened(false)}>
-                                Отмена
+                                {t("cancel")}
                             </Button>
-                            <Button onClick={handleCreate}>Создать</Button>
+                            <Button onClick={handleCreate}>{t("create")}</Button>
                         </Group>
                     </Popover.Dropdown>
                 </Popover>

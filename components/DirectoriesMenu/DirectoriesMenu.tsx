@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Menu, ScrollArea, TextInput } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 
@@ -9,6 +10,7 @@ const DirectoriesMenu = observer(
     ({ onOpen, children }: { onOpen: React.Dispatch<React.SetStateAction<boolean>>; children: React.ReactNode }) => {
         const { directoriesStore } = useContext(Context);
         const [directories, setDirectories] = useState(directoriesStore.directories);
+        const t = useTranslations("directories-menu");
 
         const handleItemClick = (event: React.MouseEvent): void => {
             event.stopPropagation();
@@ -45,7 +47,7 @@ const DirectoriesMenu = observer(
                     <TextInput
                         p="xs"
                         w="100%"
-                        placeholder="Поиск по справочникам"
+                        placeholder={t("search-by-directories")}
                         onClick={handleItemClick}
                         onChange={(event) => searchDirectoryByName(event.target.value)}
                     />
