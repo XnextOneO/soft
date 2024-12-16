@@ -45,7 +45,9 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
 
     return (
         <Stack mah={"80vh"} gap={5}>
-            <span className={classes.test}>Редактирование</span>
+            <Title order={3} pos={"sticky"} top={10} className={classes.modalTitle}>
+                Создать новую запись
+            </Title>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {row.getAllCells().map((cell: any) => {
                 return typeof cell.getValue() === "number" ||
