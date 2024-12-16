@@ -1,7 +1,10 @@
+import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
+
 import { $authHost } from "../index";
 
 interface FetchApiDataParameters {
-  link?: string;
+  link: string;
   page?: number;
   size?: number;
   sort?: string;
@@ -9,27 +12,50 @@ interface FetchApiDataParameters {
   text?: string;
 }
 
-export const fetchApiData = async (
-  parameters: FetchApiDataParameters,
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-) => {
-  const response = await $authHost.get(`reference-book/${parameters.link}`, {
-    params: parameters,
-  });
-  return response.data;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const fetchApiData = async (parameters: FetchApiDataParameters): Promise<any> => {
+  try {
+    const response = await $authHost.get(`reference-book/${parameters.link}`, {
+      params: parameters,
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError && error.response && error.response.status === 400) {
+      notifications.show({
+        title: "Уведомление",
+        message: "Сортировка находится в процессе разработки, перезагрузите страницу",
+        color: "yellow",
+        autoClose: 5000,
+      });
+      return { content: [], page: { totalElements: 0, totalPages: 0 } };
+    }
+
+    console.error("Error fetching API data:", error);
+    throw new Error("Failed to fetch API data");
+  }
 };
 
-export const fetchApiDataWithSearch = async (
-  parameters: FetchApiDataParameters,
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-) => {
-  const response = await $authHost.get(
-    `reference-book/${parameters.link}/search`,
-    {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const fetchApiDataWithSearch = async (parameters: FetchApiDataParameters): Promise<any> => {
+  try {
+    const response = await $authHost.get(`reference-book/${parameters.link}/search`, {
       params: {
         text: parameters.text,
       },
-    },
-  );
-  return response.data;
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError && error.response && error.response.status === 404) {
+      notifications.show({
+        title: "Уведомление",
+        message: "Поиск находится в процессе разработки",
+        color: "yellow",
+        autoClose: 5000,
+      });
+      return { content: [], page: { totalElements: 0, totalPages: 0 } };
+    }
+
+    console.error("Error fetching search API data:", error);
+    throw new Error("Failed to fetch search API data");
+  }
 };

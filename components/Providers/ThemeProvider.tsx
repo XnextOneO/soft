@@ -6,16 +6,14 @@ import { theme } from "@/theme";
 import "@mantine/notifications/styles.css";
 
 interface ThemeManagerProperties {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }
 
-export function ThemeManager({
-  children,
-}: ThemeManagerProperties): React.ReactNode {
-  return (
-    <MantineProvider theme={theme}>
-      <Notifications />
-      {children}
-    </MantineProvider>
-  );
+export function ThemeManager({ children }: ThemeManagerProperties): React.ReactNode {
+    return (
+        <MantineProvider theme={theme}>
+            <Notifications />
+            {children}
+        </MantineProvider>
+    );
 }

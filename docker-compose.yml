@@ -1,12 +1,7 @@
-#version: '3'
-name: iis-gui
-
 services:
-  iis-gui:
+  app:
     build: .
-    container_name: app
+    container_name: iis-gui
     ports:
       - "3000:3000"
-#    environment:
-#      - NODE_ENV=development
-
+    restart: unless-stopped

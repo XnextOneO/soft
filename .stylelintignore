@@ -1,0 +1,9 @@
+node_modules/
+dist/
+storybook-build/
+.idea/
+.vscode/
+.env
+docker-compose.yml
+Dockerfile
+.next

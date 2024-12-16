@@ -1,0 +1,15 @@
+.auth-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../public/assets/background.png");
+}
+
+.dark-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../public/assets/background-dark-mode.png");
+}

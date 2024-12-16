@@ -1,0 +1,17 @@
+.cell {
+    width: 100%;
+    padding: 4px;
+}
+
+.status-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.cell:hover {
+    cursor: pointer;
+}
+
+

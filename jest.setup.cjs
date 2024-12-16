@@ -1,15 +1,16 @@
-require('@testing-library/jest-dom');
+/* eslint-disable @typescript-eslint/explicit-function-return-type,no-undef */
+require("@testing-library/jest-dom");
 
 const { getComputedStyle } = window;
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 window.HTMLElement.prototype.scrollIntoView = () => {};
 
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
-    onchange: null,
+    onchange: undefined,
     addListener: jest.fn(),
     removeListener: jest.fn(),
     addEventListener: jest.fn(),

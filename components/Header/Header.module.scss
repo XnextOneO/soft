@@ -1,4 +1,4 @@
-.headerContainer {
+.header-container {
 	display: block;
 	box-sizing: border-box;
 	margin: 0;
@@ -9,11 +9,11 @@
 	min-width: 400px;
 }
 
-.buttonContainer {
+.button-container {
     align-content: center;
 }
 
-.buttonContainer:hover {
+.button-container:hover {
     background-color: #004830;
     cursor: pointer;
 }

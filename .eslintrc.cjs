@@ -1,3 +1,4 @@
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
   reportUnusedDisableDirectives: true,
   ignorePatterns: [
@@ -6,6 +7,9 @@ module.exports = {
     "src/generated/*",
     "src/vite-env.d.ts",
     "src/routeTree.gen.ts",
+    "next-env.d.ts",
+    ".next/*",
+    ".next.config.mjs",
   ],
   env: { browser: true, es2021: true, node: true },
   parserOptions: {
@@ -19,7 +23,6 @@ module.exports = {
     "react-refresh",
     "sonarjs",
     "unicorn",
-    "comments",
     "promise",
     "security",
     "no-secrets",
@@ -36,9 +39,8 @@ module.exports = {
     "plugin:@typescript-eslint/eslint-recommended",
     "@jetbrains",
     "@jetbrains/eslint-config/node",
-    "plugin:sonarjs/recommended",
+    "plugin:sonarjs/recommended-legacy",
     "plugin:security/recommended-legacy",
-    "plugin:eslint-comments/recommended",
     "plugin:promise/recommended",
     "plugin:unicorn/recommended",
     "plugin:prettier/recommended",
@@ -61,11 +63,7 @@ module.exports = {
           // Parent imports. Put `..` last.
           [String.raw`^\.\.(?!/?$)`, String.raw`^\.\./?$`],
           // Other relative imports. Put same-folder imports and `.` last.
-          [
-            String.raw`^\./(?=.*/)(?!/?$)`,
-            String.raw`^\.(?!/?$)`,
-            String.raw`^\./?$`,
-          ],
+          [String.raw`^\./(?=.*/)(?!/?$)`, String.raw`^\.(?!/?$)`, String.raw`^\./?$`],
           // Style imports.
           [String.raw`^.+\.?(styles)$`],
         ],
@@ -84,7 +82,6 @@ module.exports = {
     "no-use-before-define": "off",
     "react/prop-types": "off",
     "no-catch-shadow": "off",
-    camelcase: "off",
     "no-nested-ternary": "off",
     "prefer-template": "error",
     "prefer-spread": "error",
@@ -95,24 +92,17 @@ module.exports = {
     "unicorn/filename-case": "off",
     "@typescript-eslint/explicit-function-return-type": "error",
 
-    "max-lines": [
-      "error",
-      { max: 1000, skipBlankLines: true, skipComments: true },
-    ],
+    "max-lines": ["error", { max: 1000, skipBlankLines: true, skipComments: true }],
     "max-params": ["error", { max: 5 }],
     "max-nested-callbacks": ["error", { max: 3 }],
     "max-depth": ["error", { max: 4 }],
     "no-magic-numbers": ["off", { ignore: [0, 1, -1, 2] }],
-    "unicorn/consistent-function-scoping": [
-      "error",
-      { checkArrowFunctions: true },
-    ],
-    "unicorn/prevent-abbreviations": [
-      "error",
-      { checkDefaultAndNamespaceImports: true },
-    ],
+    "unicorn/consistent-function-scoping": ["error", { checkArrowFunctions: true }],
+    "unicorn/prevent-abbreviations": ["error", { checkDefaultAndNamespaceImports: true }],
 
     "unicorn/empty-brace-spaces": "error",
     "unicorn/no-unreadable-array-destructuring": "error",
+    "eslint-comments/disable-enable-pair": "off",
+    "sonarjs/todo-tag": "off",
   },
 };
