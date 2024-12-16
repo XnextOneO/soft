@@ -4,13 +4,15 @@ import CustomIcon from "../BurgerButtons/CustomIcon";
 import NavButton from "../BurgerButtons/NavButton";
 
 import classes from "./NavMenu.module.scss";
+import { IconFolders } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
 
 interface INavMenuButtonStackProperties {
     colorScheme: string;
     active?: boolean;
     width: number;
     marginLeft: number;
-    path: string;
+    icon: React.ElementType;
     children?: React.ReactNode;
 }
 
@@ -19,22 +21,32 @@ const NavMenuButtonStack: React.FC<INavMenuButtonStackProperties> = ({
     active,
     width,
     marginLeft,
-    path,
+    icon: IconComponent,
     children,
 }) => {
+    const [iconColorState, setIconColorState] = useState<string>("");
+
     let navButtonClass;
+    let pathColor;
 
     if (active) {
         navButtonClass = classes.navButtonActive;
+        pathColor = "#FFFFFF";
     } else if (colorScheme === "dark") {
         navButtonClass = classes.navButtonDark;
+        pathColor = "#FFFFFF";
     } else {
         navButtonClass = classes.navButton;
+        pathColor = "#333333";
     }
+
+    useEffect(() => {
+        setIconColorState(pathColor);
+    }, [active, colorScheme, pathColor]);
 
     return (
         <NavButton className={navButtonClass} w={width}>
-            <CustomIcon active={active} colorScheme={colorScheme} path={path} />
+            <IconComponent width={60} height={25} color={iconColorState}/>
             <Text c={active ? "#c9c9c9" : ""} ml={marginLeft}>
                 {children}
             </Text>

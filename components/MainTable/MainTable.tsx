@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { FC, useState } from "react";
-import { Flex, Loader } from "@mantine/core";
+import { Flex, Loader, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
@@ -38,7 +38,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [opened, setOpened] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
-
+    const colorScheme = useMantineColorScheme();
     const handleGlobalFilterChange = (value: string): void => {
         setGlobalFilter(value);
         setPage(1);
@@ -234,7 +234,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             style: {
                 height: "calc(100vh - 222px)",
                 overflowY: "auto",
-                borderTop: "1px solid #adb5bd",
+                borderTop: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
             },
         },
         mantineEditRowModalProps: {
