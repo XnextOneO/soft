@@ -44,15 +44,15 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
     };
 
     return (
-        <Stack mah={"80vh"}>
+        <Stack mah={"80vh"} gap={5}>
             <span className={classes.test}>Редактирование</span>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {row.getAllCells().map((cell: any) => {
                 return typeof cell.getValue() === "number" ||
                     typeof cell.getValue() === "string" ||
                     typeof cell.getValue() === "boolean" ? (
-                    <Flex direction={"column"} gap={"0"} key={cell.id}>
-                        <Title order={5}>{cell.column.columnDef.header}</Title>
+                    <Flex direction={"column"} justify={"flex-start"} key={cell.id}>
+                        <Title order={4}>{cell.column.columnDef.header}</Title>
                         <Textarea defaultValue={cell.getValue() as string} resize={"vertical"} radius={"md"} autosize />
                     </Flex>
                 ) : (

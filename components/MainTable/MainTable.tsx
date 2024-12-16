@@ -110,7 +110,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             Cell: ({ cell }: { cell: any }): JSX.Element => {
                 const cellValue = cell.getValue();
 
-                // Условное рендеринг для статуса
                 if (column.accessorKey === "status") {
                     switch (cellValue) {
                         case "IN_PROCESSING": {
@@ -235,7 +234,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             style: {
                 height: "calc(100vh - 222px)",
                 overflowY: "auto",
-                borderTop: "1px solid #495057",
+                borderTop: "1px solid #adb5bd",
             },
         },
         mantineEditRowModalProps: {

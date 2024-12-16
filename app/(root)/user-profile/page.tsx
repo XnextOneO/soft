@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Avatar, Card, Container, Group, Text, useMantineColorScheme } from "@mantine/core";
+import { Card, Container, Group, Text, useMantineColorScheme } from "@mantine/core";
 import { IconAt } from "@tabler/icons-react";
 import { observer } from "mobx-react-lite";
 
@@ -40,7 +40,6 @@ const UserProfilePage = observer(() => {
         <Container fluid mah="100vh" miw="700px" maw="100vw" className={backgroundState}>
             <Card withBorder>
                 <Group wrap="nowrap">
-                    <Avatar name={name} color="initials" />
                     <div>
                         {/* <Text fz="xs" tt="uppercase" fw={700} c="dimmed">
             Software engineer
