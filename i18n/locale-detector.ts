@@ -8,7 +8,7 @@ import { headers } from "next/headers";
  * @returns {Promise<string>} The short locale code (e.g., "en", "ru").
  */
 export async function getUserLocale(): Promise<string> {
-  const DEFAULT_LOCALE = "ru"; // Define constants for better readability and maintainability
+  const DEFAULT_LOCALE = "by"; // Define constants for better readability and maintainability
 
   try {
     const headersList = headers();
