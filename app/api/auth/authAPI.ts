@@ -1,4 +1,4 @@
-import { $host } from "..";
+import { $authHost, $host } from "..";
 
 // eslint-disable-next-line consistent-return
 export const check = async (retryCount = 0): Promise<unknown> => {
@@ -22,7 +22,7 @@ export const check = async (retryCount = 0): Promise<unknown> => {
 
 export const checkRefreshToken = async (): Promise<boolean> => {
   try {
-    const { status } = await $host.get("/auth/refresh-token");
+    const { status } = await $authHost.get("/auth/refresh-token");
     return status === 200;
   } catch {
     return false;
@@ -34,6 +34,6 @@ export const logout = async (): Promise<void> => {
 };
 
 export const userInfo = async (): Promise<unknown> => {
-  const { data } = await $host.get("/user/userinfo");
+  const { data } = await $authHost.get("/user/userinfo");
   return data;
 };
