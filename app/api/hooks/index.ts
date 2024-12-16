@@ -3,7 +3,6 @@ import { AxiosError } from "axios";
 
 import { $authHost } from "../index";
 
-// Define the FetchApiDataParameters interface with strict typing for each field
 interface FetchApiDataParameters {
   link: string;
   page?: number;
@@ -13,7 +12,6 @@ interface FetchApiDataParameters {
   text?: string;
 }
 
-// Function to fetch data with parameters
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchApiData = async (parameters: FetchApiDataParameters): Promise<any> => {
   try {
@@ -22,12 +20,21 @@ export const fetchApiData = async (parameters: FetchApiDataParameters): Promise<
     });
     return response.data;
   } catch (error) {
+    if (error instanceof AxiosError && error.response && error.response.status === 400) {
+      notifications.show({
+        title: "Уведомление",
+        message: "Сортировка находится в процессе разработки, перезагрузите страницу",
+        color: "yellow",
+        autoClose: 5000,
+      });
+      return { content: [], page: { totalElements: 0, totalPages: 0 } };
+    }
+
     console.error("Error fetching API data:", error);
     throw new Error("Failed to fetch API data");
   }
 };
 
-// Function to fetch data with search text
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchApiDataWithSearch = async (parameters: FetchApiDataParameters): Promise<any> => {
   try {
