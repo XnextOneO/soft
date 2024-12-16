@@ -39,7 +39,7 @@ const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
             {processedColumns.map((column) => (
                 <Flex direction="column" key={column.accessorKey}>
                     <Title order={5}>{column.header}</Title>
-                    <Textarea placeholder={`Введите ${column.header}`} resize={"vertical"} />
+                    <Textarea placeholder={`Введите ${column.header}`} resize={"vertical"} autosize />
                 </Flex>
             ))}
             <Flex justify="flex-end" gap={20} pos={"sticky"} bottom={10}>

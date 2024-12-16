@@ -53,7 +53,7 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
                     typeof cell.getValue() === "boolean" ? (
                     <Flex direction={"column"} gap={"0"} key={cell.id}>
                         <Title order={5}>{cell.column.columnDef.header}</Title>
-                        <Textarea defaultValue={cell.getValue() as string} resize={"vertical"} radius={"md"} />
+                        <Textarea defaultValue={cell.getValue() as string} resize={"vertical"} radius={"md"} autosize />
                     </Flex>
                 ) : (
                     <span key={cell.id} />
