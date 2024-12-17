@@ -64,11 +64,8 @@ const Header: React.FC = observer(() => {
                             </Text>
                         </Group>
                     </Link>
-                    <Group justify="flex-end" align="center" gap={0}>
-                        <Box mr={5}>
-                            <LanguageSwitcher />
-                        </Box>
-
+                    <Group justify="flex-end" align="center" gap={5}>
+                        <LanguageSwitcher />
                         <Box mr={5}>
                             <ThemeSwitcher />
                         </Box>

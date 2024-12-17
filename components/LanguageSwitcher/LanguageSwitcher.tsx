@@ -1,44 +1,36 @@
-"use client";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { UnstyledButton } from "@mantine/core";
 
-import { useEffect, useState, useTransition } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { getUserLocale, setUserLocale } from "@/i18n/locale-detector";
 
-import { setUserLocale } from "@/i18n/locale";
+import BY from "../../public/assets/BY.svg";
+import RU from "../../public/assets/RU.svg";
+const LanguageSwitcherButton = (): JSX.Element => {
+    const [locale, setLocale] = useState("by");
 
-import LanguageSwitcherSelect from "./LanguageSwitcherSelect";
+    useEffect(() => {
+        const fetchLocale = async (): Promise<void> => {
+            const currentLocale = await getUserLocale();
+            setLocale(currentLocale);
+        };
+        fetchLocale();
+    }, []);
 
-const LanguageSwitcher = () => {
-    const t = useTranslations("language-switcher");
-    const locale = useLocale();
-    const [value, setValue] = useState(locale); // Состояние для текущего языка
-
-    const handleChange = (newLocale: string) => {
-        setValue(newLocale);
-        // setUserLocale(value);
+    const handleLocaleChange = async (): Promise<void> => {
+        const newLocale = locale === "ru" ? "by" : "ru";
+        await setUserLocale(newLocale);
+        setLocale(newLocale);
     };
 
-    // useEffect(() => {
-    //     console.log(locale);
-    //     setValue(locale);
-    // }, [locale]);
-
     return (
-        <LanguageSwitcherSelect
-            value={value} // Передаем текущее значение
-            items={[
-                {
-                    value: "ru",
-                    label: t("ru"),
-                },
-                {
-                    value: "by",
-                    label: t("by"),
-                },
-            ]}
-            label={t("label")}
-            onChange={handleChange} // Передаем функцию изменения
-        />
+        <UnstyledButton onClick={handleLocaleChange} h={22}>
+            {locale === "ru" ? (
+                <Image src={RU} alt="Русский" width={"44"} height={22} />
+            ) : (
+                <Image src={BY} alt="Бел" width={"44"} height={22} />
+            )}
+        </UnstyledButton>
     );
 };
-
-export default LanguageSwitcher;
+export default LanguageSwitcherButton;
