@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -13,6 +14,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher/LanguageSwitcher";
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 import { useEditStore } from "@/store/useEditStore";
 
+import LogoutIcon from "../../public/assets/logout.svg";
 import { Context } from "../Providers/AppContextProvider";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
@@ -62,8 +64,7 @@ const Header: React.FC = observer(() => {
                             </Text>
                         </Group>
                     </Link>
-                    <Group justify="flex-end" align="center" gap={5}>
-                        <LanguageSwitcher />
+                    <Group justify="flex-end" align="center" gap={0}>
                         <Box mr={5}>
                             <LanguageSwitcher />
                         </Box>
