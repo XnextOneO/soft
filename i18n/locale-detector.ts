@@ -8,10 +8,12 @@ import { defaultLocale, Locale } from "@/i18n/config";
 // also read it from a database, backend service, or any other source.
 const COOKIE_NAME = "NEXT_LOCALE";
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function getUserLocale() {
   return cookies().get(COOKIE_NAME)?.value || defaultLocale;
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function setUserLocale(locale: Locale) {
   cookies().set(COOKIE_NAME, locale);
 }
