@@ -93,5 +93,10 @@
     "upload-button": "Адправіць на загрузку",
     "upload-error-title": "Памылка загрузкі",
     "upload-error-message": "Адбылася невядомая памылка."
+  },
+  "language-switcher": {
+    "ru": "Руская",
+    "by": "Беларуская",
+    "label": "Мова"
   }
 }

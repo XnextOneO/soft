@@ -93,6 +93,11 @@
     "upload-button": "Отправить на загрузку",
     "upload-error-title": "Ошибка загрузки",
     "upload-error-message": "Произошла неизвестная ошибка."
+  },
+  "language-switcher": {
+    "ru": "Русский",
+    "by": "Белорусский",
+    "label": "Язык"
   }
 }
 
