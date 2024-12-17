@@ -65,6 +65,7 @@ const Header: React.FC = observer(() => {
                         </Group>
                     </Link>
                     <Group justify="flex-end" align="center" gap={0}>
+                        <LanguageSwitcher />
                         <Box mr={5}>
                             <ThemeSwitcher />
                         </Box>
@@ -94,7 +95,6 @@ const Header: React.FC = observer(() => {
                                 </svg>
                             </Flex>
                         </UnstyledButton>
-                        <LanguageSwitcher />
                     </Group>
                 </Group>
             </Flex>
