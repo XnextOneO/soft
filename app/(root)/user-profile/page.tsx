@@ -12,6 +12,7 @@ const UserProfilePage = observer(() => {
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const colorScheme = useMantineColorScheme();
+
     const [backgroundState, setBackgroundState] = useState<string>("");
 
     useEffect(() => {

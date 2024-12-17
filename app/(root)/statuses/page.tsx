@@ -7,7 +7,7 @@ export default function Statuses(): JSX.Element {
     return (
         <>
             <Flex direction="column" p={0} gap={0} w="100%" h="100%">
-                <MainTable updateTable={true} link="statuses" />
+                <MainTable updateTable={false} link="statuses" />
             </Flex>
         </>
     );

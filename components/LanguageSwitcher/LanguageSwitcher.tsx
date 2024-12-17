@@ -7,7 +7,7 @@ import { getUserLocale, setUserLocale } from "@/i18n/locale-detector";
 import BY from "../../public/assets/BY.svg";
 import RU from "../../public/assets/RU.svg";
 const LanguageSwitcherButton = (): JSX.Element => {
-    const [locale, setLocale] = useState("by");
+    const [locale, setLocale] = useState("ru");
 
     useEffect(() => {
         const fetchLocale = async (): Promise<void> => {

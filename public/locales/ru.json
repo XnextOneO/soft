@@ -32,59 +32,59 @@
   },
   "auth": {
     "authorization": "Авторизация",
-    "login-input" : "Введите логин",
-    "login" : "Логин",
+    "login-input": "Введите логин",
+    "login": "Логин",
     "login-required": "Логин обязателен",
     "enter-password": "Введите пароль",
-    "password" : "Пароль",
+    "password": "Пароль",
     "password-required": "Пароль обязателен",
     "sign-in": "Войти"
   },
   "home": {
-    "main-page" : "Главная страница IIS Беларусбанк",
-    "directories" : "Справочники"
+    "main-page": "Главная страница IIS Беларусбанк",
+    "directories": "Справочники"
   },
-  "directories-page" : {
-    "directories" : "Справочники",
-    "nsi" : "ЦВ НСИ НБ РБ"
+  "directories-page": {
+    "directories": "Справочники",
+    "nsi": "ЦВ НСИ НБ РБ"
   },
-  "directories-menu" : {
-    "search-by-directories" : "Поиск по справочникам"
+  "directories-menu": {
+    "search-by-directories": "Поиск по справочникам"
   },
-  "header" : {
-    "belarusbank" : "Беларусбанк",
-    "navigation" : "навигация"
+  "header": {
+    "belarusbank": "Беларусбанк",
+    "navigation": "навигация"
   },
-  "bottom-toolbar" : {
+  "bottom-toolbar": {
     "records": "Отображены записи",
-    "from" : "из"
+    "from": "из"
   },
-  "edit-row-modal-content" : {
-    "create-new-row" : "Создать новую запись",
+  "edit-row-modal-content": {
+    "create-new-row": "Создать новую запись",
     "delete": "Удалить",
     "sure-to-delete": "Вы уверены, что хотите удалить эту запись?",
-    "cancel" : "Отмена",
-    "save" : "Сохранить"
+    "cancel": "Отмена",
+    "save": "Сохранить"
   },
-  "row-actions" : {
-    "edit" : "Редактирование"
+  "row-actions": {
+    "edit": "Редактирование"
   },
-  "top-toolbar" : {
-    "update-table" : "Обновить таблицу",
-    "create-new-row" : "Создать запись"
+  "top-toolbar": {
+    "update-table": "Обновить таблицу",
+    "create-new-row": "Создать запись"
   },
-  "create-row-modal-content" : {
-    "create-new-row" : "Создать новую запись",
-    "sure-to-create" : "Вы уверены, что хотите создать эту запись?",
-    "cancel" : "Отмена",
-    "create" : "Создать"
+  "create-row-modal-content": {
+    "create-new-row": "Создать новую запись",
+    "sure-to-create": "Вы уверены, что хотите создать эту запись?",
+    "cancel": "Отмена",
+    "create": "Создать"
   },
-  "nav-menu-stack" : {
-    "directories" : "Справочники",
-    "statuses" : "Статусы",
+  "nav-menu-stack": {
+    "directories": "Справочники",
+    "statuses": "Статусы",
     "help": "Поддержка"
   },
-  "upload-file" : {
+  "upload-file": {
     "modal-title": "Обновить таблицу",
     "dropzone-accept": "Поместите файл сюда",
     "dropzone-reject": "Неправильный файл",
