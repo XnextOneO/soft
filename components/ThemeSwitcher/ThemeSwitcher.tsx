@@ -18,7 +18,7 @@ const ThemeSwitcher: React.FC = () => {
             }}
             onClick={() => setColorScheme(computedColorScheme === "light" ? "dark" : "light")}
             variant="default"
-            size="lg"
+            size="xl"
             radius="xl"
             aria-label="Toggle color scheme"
         >
