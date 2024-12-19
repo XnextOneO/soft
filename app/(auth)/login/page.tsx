@@ -8,6 +8,7 @@ import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 
 import { useLogin } from "@/app/api/hooks/auth";
 import LanguageSwitcherButton from "@/components/LanguageSwitcher/LanguageSwitcher";
+import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
 
 import classes from "../Auth.module.scss";
 
@@ -151,6 +152,7 @@ const LoginPage: React.FC = () => {
                         © ОАО «АСБ Беларусбанк», 2024
                     </Text>
                     <LanguageSwitcherButton />
+                    <ThemeSwitcher />
                 </Group>
             </Card>
         </div>
