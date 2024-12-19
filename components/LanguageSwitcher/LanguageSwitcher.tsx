@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Flex, SegmentedControl, UnstyledButton } from "@mantine/core";
+import Image, { StaticImageData } from "next/image";
+import { Flex, SegmentedControl } from "@mantine/core";
 
 import { getUserLocale, setUserLocale } from "@/i18n/locale-detector";
 
@@ -10,10 +10,10 @@ import RU from "../../public/assets/RU.svg";
 import classes from "./LanguageSwitcher.module.scss";
 const LanguageSwitcherButton = (): JSX.Element => {
     const [locale, setLocale] = useState("ru");
-    const flagImages = {
+    const flagImages: Record<string, StaticImageData> = {
         BY: BY,
         RU: RU,
-        // Добавьте другие языки и их флаги здесь
+        // Add other languages and their flags here
     };
     const items = [{ value: "ru" }, { value: "by" }];
 
@@ -32,13 +32,6 @@ const LanguageSwitcherButton = (): JSX.Element => {
     };
 
     return (
-        // <UnstyledButton onClick={handleLocaleChange} h={22}>
-        //     {locale === "ru" ? (
-        //         <Image src={RU} alt="Русский" width={"44"} height={22} />
-        //     ) : (
-        //         <Image src={BY} alt="Бел" width={"44"} height={22} />
-        //     )}
-        // </UnstyledButton>
         <SegmentedControl
             value={locale}
             onChange={handleLocaleChange}
@@ -48,7 +41,12 @@ const LanguageSwitcherButton = (): JSX.Element => {
                 value: item.value,
                 label: (
                     <Flex>
-                        <Image alt="" src={flagImages[item.value.toUpperCase()]} width="30" height={20} />
+                        <Image
+                            alt=""
+                            src={flagImages[item.value.toUpperCase() as keyof typeof flagImages]}
+                            width="30"
+                            height={20}
+                        />
                     </Flex>
                 ),
             }))}
