@@ -41,6 +41,10 @@ export const fetchApiDataWithSearch = async (parameters: FetchApiDataParameters)
     const response = await $authHost.get(`reference-book/${parameters.link}/search`, {
       params: {
         text: parameters.text,
+        page: parameters.page,
+        size: parameters.size,
+        sort: parameters.sort,
+        column: parameters.column,
       },
     });
     return response.data;
