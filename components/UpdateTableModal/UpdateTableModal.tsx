@@ -68,6 +68,7 @@ const UpdateTableModal = ({
                 setUploaded(true);
                 setError(false);
             }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/no-shadow
         } catch (error: any) {
             console.error(error.message);
             setError(true);
@@ -120,76 +121,78 @@ const UpdateTableModal = ({
             centered
             className={classes.relative}
         >
-            <UnstyledButton className={classes.fileButton}>
-                {file ? (
-                    <Card withBorder radius="md" mt="md">
-                        <Stack>
-                            <IconFile width="100%" />
-                            <Text fz="sm">{file.name}</Text>
-                            <Button
-                                variant="subtle"
-                                color="red"
-                                onClick={() => {
-                                    setFile(undefined);
-                                }}
-                            >
-                                <IconX />
-                            </Button>
-                        </Stack>
-                    </Card>
-                ) : (
-                    <Dropzone
-                        openRef={openReference}
-                        onDrop={(droppedFile) => {
-                            setFile(droppedFile[0]);
-                        }}
-                        radius="md"
-                    >
-                        <div style={{ pointerEvents: "none" }}>
-                            <Group justify="center">
-                                <Dropzone.Accept>
-                                    <IconUpload
-                                        style={{
-                                            width: rem(50),
-                                            height: rem(50),
-                                        }}
-                                        color="#006040"
-                                        stroke={1.5}
-                                    />
-                                </Dropzone.Accept>
-                                <Dropzone.Reject>
-                                    <IconX
-                                        style={{
-                                            width: rem(50),
-                                            height: rem(50),
-                                        }}
-                                        color="red"
-                                        stroke={1.5}
-                                    />
-                                </Dropzone.Reject>
-                                <Dropzone.Idle>
-                                    <IconCloudUpload
-                                        style={{
-                                            width: rem(50),
-                                            height: rem(50),
-                                        }}
-                                        stroke={1.5}
-                                    />
-                                </Dropzone.Idle>
-                            </Group>
+            <div className={classes.modalWrapper}>
+                <UnstyledButton className={classes.fileButton}>
+                    {file ? (
+                        <Card withBorder radius="md" mt="md">
+                            <Stack>
+                                <IconFile width="100%" />
+                                <Text fz="sm">{file.name}</Text>
+                                <Button
+                                    variant="subtle"
+                                    color="red"
+                                    onClick={() => {
+                                        setFile(undefined);
+                                    }}
+                                >
+                                    <IconX />
+                                </Button>
+                            </Stack>
+                        </Card>
+                    ) : (
+                        <Dropzone
+                            openRef={openReference}
+                            onDrop={(droppedFile) => {
+                                setFile(droppedFile[0]);
+                            }}
+                            radius="md"
+                        >
+                            <div style={{ pointerEvents: "none" }}>
+                                <Group justify="center">
+                                    <Dropzone.Accept>
+                                        <IconUpload
+                                            style={{
+                                                width: rem(50),
+                                                height: rem(50),
+                                            }}
+                                            color="#006040"
+                                            stroke={1.5}
+                                        />
+                                    </Dropzone.Accept>
+                                    <Dropzone.Reject>
+                                        <IconX
+                                            style={{
+                                                width: rem(50),
+                                                height: rem(50),
+                                            }}
+                                            color="red"
+                                            stroke={1.5}
+                                        />
+                                    </Dropzone.Reject>
+                                    <Dropzone.Idle>
+                                        <IconCloudUpload
+                                            style={{
+                                                width: rem(50),
+                                                height: rem(50),
+                                            }}
+                                            stroke={1.5}
+                                        />
+                                    </Dropzone.Idle>
+                                </Group>
 
-                            <Text ta="center" fw={700} fz="lg" mt="md">
-                                <Dropzone.Accept>{t("dropzone-accept")}</Dropzone.Accept>
-                                <Dropzone.Reject>{t("dropzone-reject")}</Dropzone.Reject>
-                                <Dropzone.Idle>{t("dropzone-idle")}</Dropzone.Idle>
-                            </Text>
-                            <Text ta="center" fz="sm" my="md" c="dimmed">
-                                {t("dropzone-description")}
-                            </Text>
-                        </div>
-                    </Dropzone>
-                )}
-            </UnstyledButton>
+                                <Text ta="center" fw={700} fz="lg" mt="md">
+                                    <Dropzone.Accept>{t("dropzone-accept")}</Dropzone.Accept>
+                                    <Dropzone.Reject>{t("dropzone-reject")}</Dropzone.Reject>
+                                    <Dropzone.Idle>{t("dropzone-idle")}</Dropzone.Idle>
+                                </Text>
+                                <Text ta="center" fz="sm" my="md" c="dimmed">
+                                    {t("dropzone-description")}
+                                </Text>
+                            </div>
+                        </Dropzone>
+                    )}
+                </UnstyledButton>
+            </div>
 
             <Group justify="center">
                 <Button color="#006040" onClick={uploadFiles} disabled={!file}>

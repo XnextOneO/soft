@@ -21,13 +21,11 @@
   }
 }
 
-//
-//.absolute {
-//  position: absolute !important;position
-//  height: 90%;height
-//  bottom: 0 !important;bottom
-//}
-//
-//.relative {
-//  position: relative !important;position
-//}
+
+
+.modal-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
