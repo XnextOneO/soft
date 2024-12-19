@@ -14,11 +14,12 @@
   cursor: pointer;
   transition: box-shadow 150ms ease,
   transform 100ms ease;
+  width: 100%;
 
   @mixin hover {
     box-shadow: var(--mantine-shadow-lg);
     transform: scale(1.05);
-  } 
+  }
 }
 
 

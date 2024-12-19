@@ -6,6 +6,8 @@ import { getUserLocale, setUserLocale } from "@/i18n/locale-detector";
 
 import BY from "../../public/assets/BY.svg";
 import RU from "../../public/assets/RU.svg";
+
+import classes from "./LanguageSwitcher.module.scss";
 const LanguageSwitcherButton = (): JSX.Element => {
     const [locale, setLocale] = useState("ru");
 
@@ -24,7 +26,7 @@ const LanguageSwitcherButton = (): JSX.Element => {
     };
 
     return (
-        <UnstyledButton onClick={handleLocaleChange} h={22}>
+        <UnstyledButton onClick={handleLocaleChange} h={22} className={classes.btn}>
             {locale === "ru" ? (
                 <Image src={RU} alt="Русский" width={"44"} height={22} />
             ) : (
