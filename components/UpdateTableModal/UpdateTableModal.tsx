@@ -210,11 +210,11 @@ const UpdateTableModal = ({
                                         <Center
                                             onClick={() => {
                                                 close();
-                                                setFile(undefined);
                                                 setUploaded(false);
                                                 setProgress(0);
                                                 setError(false);
                                                 toggle();
+                                                setFile(undefined);
                                             }}
                                         >
                                             <ActionIcon color="teal" variant="light" radius="xl" size="xl">
