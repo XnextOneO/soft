@@ -73,11 +73,15 @@ const UpdateTableModal = ({
             console.error(error.message);
             setError(true);
 
+            const messages = error.response.data.message;
+
+            const messageString = messages.map((message: string) => `${message}`).join("\n");
+
             if (error.response) {
                 if (error.response.data && error.response.data.message) {
                     showNotification({
                         title: t("upload-error-title"),
-                        message: error.response.data.message,
+                        message: <Text style={{ whiteSpace: "pre-line" }}>{messageString}</Text>,
                         color: "red",
                         autoClose: false,
                     });
