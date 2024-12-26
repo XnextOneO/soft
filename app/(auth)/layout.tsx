@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function AuthLayout({ children }: { children: React.ReactNode }): JSX.Element {
     return (
-        <html lang="en" data-mantine-color-scheme="light">
+        <html lang="en " data-mantine-color-scheme="light">
             <head>
                 <link rel="shortcut icon" href="/favicon.png" />
                 <title>{metadata.title}</title>
