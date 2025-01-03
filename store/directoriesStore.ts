@@ -98,8 +98,8 @@ export default class DirectoriesStore {
       name: "Справочник курсов валют",
       link: "nsi/exchange-rate",
       columns: {
-        digitalCurrencyCode: "Буквенный код валюты",
-        letterCurrencyCode: "Цифровой код валюты",
+        digitalCurrencyCode: "Цифровой код валюты",
+        letterCurrencyCode: "Буквенный код валюты",
         data: "Дата начала действия курса",
         countUnits: "Количество единиц иностранной валюты, за которое устанавливается официальный курс",
         officialRate:
