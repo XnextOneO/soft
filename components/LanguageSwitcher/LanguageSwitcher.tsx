@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { UnstyledButton } from "@mantine/core";
+import Image, { StaticImageData } from "next/image";
+import { Flex, SegmentedControl } from "@mantine/core";
 
-import { MainLoader } from "@/components/MainLoader/MainLoader";
 import { getUserLocale, setUserLocale } from "@/i18n/locale-detector";
 
 import BY from "../../public/assets/BY.svg";
 import RU from "../../public/assets/RU.svg";
 
 import classes from "./LanguageSwitcher.module.scss";
-
 const LanguageSwitcherButton = (): JSX.Element => {
     const [locale, setLocale] = useState("ru");
-    const [loading, setLoading] = useState(false);
+    const flagImages: Record<string, StaticImageData> = {
+        BY: BY,
+        RU: RU,
+        // Add other languages and their flags here
+    };
+    const items = [{ value: "ru" }, { value: "by" }];
 
     useEffect(() => {
         const fetchLocale = async (): Promise<void> => {
@@ -23,25 +26,32 @@ const LanguageSwitcherButton = (): JSX.Element => {
     }, []);
 
     const handleLocaleChange = async (): Promise<void> => {
-        setLoading(true);
         const newLocale = locale === "ru" ? "by" : "ru";
         await setUserLocale(newLocale);
         setLocale(newLocale);
-        setLoading(false);
     };
 
     return (
-        <UnstyledButton onClick={handleLocaleChange} h={22} className={classes.btn}>
-            {loading ? (
-                <MainLoader />
-            ) : // eslint-disable-next-line sonarjs/no-nested-conditional
-            locale === "ru" ? (
-                <Image src={RU} alt="Русский" width={"44"} height={22} />
-            ) : (
-                <Image src={BY} alt="Бел" width={"44"} height={22} />
-            )}
-        </UnstyledButton>
+        <SegmentedControl
+            value={locale}
+            onChange={handleLocaleChange}
+            radius="xl"
+            size="md"
+            data={items.map((item) => ({
+                value: item.value,
+                label: (
+                    <Flex>
+                        <Image
+                            alt=""
+                            src={flagImages[item.value.toUpperCase() as keyof typeof flagImages]}
+                            width="30"
+                            height={20}
+                        />
+                    </Flex>
+                ),
+            }))}
+            classNames={classes}
+        />
     );
 };
-
 export default LanguageSwitcherButton;

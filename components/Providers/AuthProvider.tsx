@@ -37,7 +37,7 @@ export function AuthManager({ children }: AuthManagerProperties): React.ReactNod
             }
         };
         authenticate().catch((error) => console.error(error));
-    }, [router, setIsEdit, setCanDelete]);
+    }, [router, setIsEdit, setCanDelete, isLoading]);
 
     if (isLoading || (!isAuthenticated && pathname !== "/login")) {
         return <MainLoader />;
