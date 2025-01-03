@@ -16,18 +16,12 @@ interface LoginResponse {
 
 // Login function: Handles the API call for user login
 const login = async ({ username, password }: LoginParameters): Promise<LoginResponse> => {
-  try {
-    const response: AxiosResponse<LoginResponse> = await $host.post(
-      "/auth",
-      { username, password },
-      { withCredentials: true },
-    );
-    return response.data;
-  } catch (error) {
-    // Log and rethrow the error for react-query to handle
-    console.error("Login failed:", error);
-    throw new Error("Failed to log in. Please try again.");
-  }
+  const response: AxiosResponse<LoginResponse> = await $host.post(
+    "/auth",
+    { username, password },
+    { withCredentials: true },
+  );
+  return response.data;
 };
 
 // useLogin hook: Provides a mutation for the login function

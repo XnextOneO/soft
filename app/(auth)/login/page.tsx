@@ -27,20 +27,26 @@ const LoginPage: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const onLogin = async () => {
         setIsLoginClicked(true);
+        setError(null);
 
         if (!username || !password) {
-            console.log("Please enter all the required data to login.");
+            console.log("Пожалуйста, введите все необходимые данные для входа.");
             return;
         }
 
         mutate(
-            { username: username, password },
+            { username, password },
             {
                 onSuccess: () => {
                     router.push("/");
                 },
-                onError: (loginError: Error) => {
-                    setError(loginError.message);
+                onError: (loginError: any) => {
+                    if (loginError.response && loginError.response.data) {
+                        const errorMessage = loginError.response.data.message[0] || "Неизвестная ошибка";
+                        setError(errorMessage);
+                    } else {
+                        setError("Не удалось выполнить вход");
+                    }
                 },
             },
         );
