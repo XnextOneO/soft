@@ -40,7 +40,6 @@ export function AuthManager({ children }: AuthManagerProperties): React.ReactNod
     }, [router, setIsEdit, setCanDelete, isLoading]);
 
     if (isLoading || (!isAuthenticated && pathname !== "/login")) {
-        console.log("aaaaaaaaaaaaaaa");
         return <MainLoader />;
     }
 
