@@ -13,7 +13,6 @@ const LanguageSwitcherButton = (): JSX.Element => {
     const flagImages: Record<string, StaticImageData> = {
         BY: BY,
         RU: RU,
-        // Add other languages and their flags here
     };
     const items = [{ value: "ru" }, { value: "by" }];
 
@@ -22,7 +21,7 @@ const LanguageSwitcherButton = (): JSX.Element => {
             const currentLocale = await getUserLocale();
             setLocale(currentLocale);
         };
-        fetchLocale();
+        fetchLocale().then(r => r);
     }, []);
 
     const handleLocaleChange = async (): Promise<void> => {
