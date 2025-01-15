@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Button, Card, Group, Image, Loader, Text, TextInput, useMantineColorScheme } from "@mantine/core";
-import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
+import { Alert, Button, Card, Group, Image, Loader, Text, TextInput, useMantineColorScheme } from "@mantine/core";
+import { IconAt, IconExclamationCircle, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 
 import { useLogin } from "@/app/api/hooks/auth";
 import LanguageSwitcherButton from "@/components/LanguageSwitcher/LanguageSwitcher";
@@ -86,6 +86,17 @@ const LoginPage: React.FC = () => {
                     <Text fw={400} size="34px">
                         {t("authorization")}
                     </Text>
+                    {error && (
+                        <Alert
+                            w="90%"
+                            radius="md"
+                            title="Ошибка"
+                            color="red"
+                            // onClick={closeError}
+                        >
+                            {error}
+                        </Alert>
+                    )}
                     <TextInput
                         w="90%"
                         placeholder={t("login-input")}
@@ -133,11 +144,6 @@ const LoginPage: React.FC = () => {
                         }}
                     />{" "}
                     <Group w="90%" my={10}>
-                        {error && (
-                            <Text color="red" size="sm" mb="sm">
-                                {error}
-                            </Text>
-                        )}
                         <Button
                             variant="filled"
                             radius="xs"
