@@ -27,6 +27,7 @@ const LoginPage: React.FC = () => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const onLogin = async () => {
         setIsLoginClicked(true);
+        // eslint-disable-next-line unicorn/no-null
         setError(null);
 
         if (!username || !password) {
@@ -40,6 +41,7 @@ const LoginPage: React.FC = () => {
                 onSuccess: () => {
                     router.push("/");
                 },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onError: (loginError: any) => {
                     if (loginError.response && loginError.response.data) {
                         const errorMessage = loginError.response.data.message[0] || "Неизвестная ошибка";
@@ -163,8 +165,10 @@ const LoginPage: React.FC = () => {
                     <Text c="dimmed" size="sm">
                         © ОАО «АСБ Беларусбанк», 2024
                     </Text>
-                    <LanguageSwitcherButton />
-                    <ThemeSwitcher />
+                    <Flex align="center" justify="space-between" w="90%">
+                        <LanguageSwitcherButton />
+                        <ThemeSwitcher />
+                    </Flex>
                 </Group>
             </Card>
         </div>

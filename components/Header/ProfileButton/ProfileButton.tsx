@@ -21,12 +21,12 @@ const ProfileButton = (): JSX.Element => {
                 // @ts-ignore
                 setName(data.name);
             })
-            .catch((error) => console.error(error));
+            .catch((error) => console.error(error));2
     }, []);
     return (
         <UnstyledButton className={classes.profile} px={20} onClick={() => router.push("/user-profile")}>
             <Group>
-                <Text w={150} size="md" fw={600} c="white" className={classes.nickname}>
+                <Text size="md" fw={600} c="white" className={classes.nickname}>
                     {name}
                 </Text>
 
