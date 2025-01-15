@@ -18,7 +18,6 @@ export default {
     tsx: ["JsxLexer"],
     default: ["JsxLexer"],
   },
-
   lineEnding: "auto",
   locales: ["ru", "by"],
   namespaceSeparator: ":",
