@@ -65,11 +65,12 @@ const Header: React.FC = observer(() => {
                         </Group>
                     </Link>
                     <Group justify="flex-end" align="center" gap={5}>
+                        <ProfileButton />
                         <LanguageSwitcher />
                         <Box mr={5}>
                             <ThemeSwitcher />
                         </Box>
-                        <ProfileButton />
+
                         <UnstyledButton w={60} h={60} className={classes.buttonContainer} onClick={logoutHandler}>
                             <Flex justify="center">
                                 <Image src={LogoutIcon} width={28} height={28} alt="Logout Icon" />
