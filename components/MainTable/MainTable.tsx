@@ -29,7 +29,7 @@ interface MainTableProperties {
 
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [page, setPage] = useState<number>(1);
-    const size = 20;
+    const [size, setSize] = useState<number>(20);
 
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
     const [createModalOpened, setCreateModalOpened] = useState(false);
@@ -175,6 +175,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
                 countPages={countPages}
                 parameters={parameters}
                 setPage={setPage}
+                setSize={setSize}
             />
         ),
         renderEditRowModalContent: ({ row }) => (
@@ -262,6 +263,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             type: "text",
         },
         manualSorting: true,
+        manualPagination: true,
         onSortingChange: setSorting,
     });
 

@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import { Flex, SegmentedControl } from "@mantine/core";
+import { Flex, SegmentedControl, useMantineColorScheme } from "@mantine/core";
 
 import { getUserLocale, setUserLocale } from "@/i18n/locale-detector";
 
-import BY from "../../public/assets/BY.svg";
-import RU from "../../public/assets/RU.svg";
+import BYBlack from "../../public/assets/BY_black.svg";
+import BYWhite from "../../public/assets/BY_white.svg";
+import RUBlack from "../../public/assets/RU_black.svg";
+import RUWhite from "../../public/assets/RU_white.svg";
 
 import classes from "./LanguageSwitcher.module.scss";
 const LanguageSwitcherButton = (): JSX.Element => {
+    const colorScheme = useMantineColorScheme();
     const [locale, setLocale] = useState("ru");
     const flagImages: Record<string, StaticImageData> = {
-        BY: BY,
-        RU: RU,
+        BYBlack: BYBlack,
+        BYWhite: BYWhite,
+        RUBlack: RUBlack,
+        RUWhite: RUWhite,
+        // Add other languages and their flags here
     };
     const items = [{ value: "ru" }, { value: "by" }];
 
@@ -21,7 +27,7 @@ const LanguageSwitcherButton = (): JSX.Element => {
             const currentLocale = await getUserLocale();
             setLocale(currentLocale);
         };
-        fetchLocale().then(r => r);
+        fetchLocale();
     }, []);
 
     const handleLocaleChange = async (): Promise<void> => {
@@ -42,8 +48,12 @@ const LanguageSwitcherButton = (): JSX.Element => {
                     <Flex>
                         <Image
                             alt=""
-                            src={flagImages[item.value.toUpperCase() as keyof typeof flagImages]}
-                            width="30"
+                            src={
+                                flagImages[
+                                    `${item.value.toUpperCase()}${colorScheme.colorScheme === "light" ? "Black" : "White"}`
+                                ]
+                            }
+                            width={20}
                             height={20}
                         />
                     </Flex>

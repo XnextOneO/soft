@@ -15,8 +15,9 @@ interface FetchApiDataParameters {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchApiData = async (parameters: FetchApiDataParameters): Promise<any> => {
   try {
-    const response = await $authHost.get(`reference-book/${parameters.link}`, {
-      params: parameters,
+    const { link, ...parametersToQuery } = parameters;
+    const response = await $authHost.get(`reference-book/${link}`, {
+      params: parametersToQuery,
     });
     return response.data;
   } catch (error) {
@@ -38,14 +39,9 @@ export const fetchApiData = async (parameters: FetchApiDataParameters): Promise<
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const fetchApiDataWithSearch = async (parameters: FetchApiDataParameters): Promise<any> => {
   try {
-    const response = await $authHost.get(`reference-book/${parameters.link}/search`, {
-      params: {
-        text: parameters.text,
-        page: parameters.page,
-        size: parameters.size,
-        sort: parameters.sort,
-        column: parameters.column,
-      },
+    const { link, ...parametersToQuery } = parameters;
+    const response = await $authHost.get(`reference-book/${link}/search`, {
+      params: parametersToQuery,
     });
     return response.data;
   } catch (error) {

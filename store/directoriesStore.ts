@@ -341,7 +341,7 @@ export default class DirectoriesStore {
       },
     },
     {
-      name: "Статусы",
+      name: "Журнал загрузок",
       link: "statuses",
       columns: {
         id: "ID",

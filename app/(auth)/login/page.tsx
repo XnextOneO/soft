@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Alert, Button, Card, Group, Image, Loader, Text, TextInput, useMantineColorScheme } from "@mantine/core";
-import { IconAt, IconExclamationCircle, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
+import { Alert, Button, Card, Flex, Group, Image, Loader, Text, TextInput, useMantineColorScheme } from "@mantine/core";
+import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 
 import { useLogin } from "@/app/api/hooks/auth";
 import LanguageSwitcherButton from "@/components/LanguageSwitcher/LanguageSwitcher";

@@ -93,6 +93,7 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
                 <Button
                     onClick={() => {
                         handleSave();
+                        setDeleteModalOpened(false);
                     }}
                 >
                     {t("save")}
