@@ -9,7 +9,6 @@ const COOKIE_NAME = "NEXT_LOCALE";
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function getUserLocale() {
   return cookies().get(COOKIE_NAME)?.value || defaultLocale;
-
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

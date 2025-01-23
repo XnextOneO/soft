@@ -12,7 +12,7 @@ import { observer } from "mobx-react-lite";
 import { logout } from "@/app/api/auth/authAPI";
 import LanguageSwitcher from "@/components/LanguageSwitcher/LanguageSwitcher";
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
-import { useEditStore } from "@/store/useEditStore";
+import { userStore } from "@/store/userStore";
 
 import LogoutIcon from "../../public/assets/logout.svg";
 import { Context } from "../Providers/AppContextProvider";
@@ -25,7 +25,7 @@ const Header: React.FC = observer(() => {
     const { burgerStore } = useContext(Context);
     const pathname = usePathname();
     const router = useRouter();
-    const { clearStore } = useEditStore();
+    const { clearStore } = userStore();
     const t = useTranslations("header");
     useEffect(() => {
         if (!pathname.includes("/login")) {

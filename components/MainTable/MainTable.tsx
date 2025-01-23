@@ -18,7 +18,7 @@ import TopToolbar from "@/components/MainTable/components/topToolbar";
 import CreateRowModalContent from "@/components/MainTable/components/сreateRowModalContent";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
 import DirectoriesStore from "@/store/directoriesStore";
-import { useEditStore } from "@/store/useEditStore";
+import { useEditStore } from "@/store/userStore";
 
 import classes from "./MainTable.module.scss";
 

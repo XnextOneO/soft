@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface StoreState {
+  name: string;
+  setName: (value: string) => void;
   isEdit: boolean;
   setIsEdit: (value: boolean) => void;
   canDelete: boolean;
@@ -11,9 +13,11 @@ interface StoreState {
   clearStore: () => void;
 }
 
-export const useEditStore = create(
+export const userStore = create(
   persist<StoreState>(
     (set) => ({
+      name: "",
+      setName: (value: string): void => set({ name: value }),
       isEdit: false,
       setIsEdit: (value: boolean): void => set({ isEdit: value }),
       canDelete: false,
@@ -22,11 +26,11 @@ export const useEditStore = create(
       setCanCreate: (value: boolean): void => set({ canCreate: value }),
       clearStore: (): void => {
         set({ isEdit: false });
-        localStorage.removeItem("user-permissions");
+        localStorage.removeItem("user-info");
       },
     }),
     {
-      name: "user-permissions",
+      name: "user-info",
       storage: createJSONStorage(() => localStorage),
     },
   ),

@@ -1,4 +1,4 @@
-import { $host } from "..";
+import { $authHost, $host } from "..";
 
 /**
  * Checks user authentication status with retry mechanism
@@ -31,7 +31,7 @@ export const check = async (retryCount = 0): Promise<boolean> => {
  */
 export const checkRefreshToken = async (): Promise<boolean> => {
   try {
-    const { status } = await $host.get<void>("/auth/refresh-token");
+    const { status } = await $authHost.get<void>("/auth/refresh-token");
     return status === 200;
   } catch {
     return false;
@@ -50,6 +50,6 @@ export const logout = async (): Promise<void> => {
  * @returns User information data
  */
 export const userInfo = async <T = unknown>(): Promise<T> => {
-  const { data } = await $host.get<T>("/user/userinfo");
+  const { data } = await $authHost.get<T>("/user/userinfo");
   return data;
 };
