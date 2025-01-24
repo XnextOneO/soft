@@ -18,7 +18,7 @@ import TopToolbar from "@/components/MainTable/components/topToolbar";
 import CreateRowModalContent from "@/components/MainTable/components/сreateRowModalContent";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
 import DirectoriesStore from "@/store/directoriesStore";
-import { useEditStore } from "@/store/userStore";
+import { userStore } from "@/store/userStore";
 
 import classes from "./MainTable.module.scss";
 
@@ -34,7 +34,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
     const [createModalOpened, setCreateModalOpened] = useState(false);
     const [sorting, setSorting] = useState<MRT_SortingState>([]);
-    const { isEdit, canDelete, canCreate } = useEditStore();
+    const { isEdit, canDelete, canCreate } = userStore();
     const [opened, setOpened] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
