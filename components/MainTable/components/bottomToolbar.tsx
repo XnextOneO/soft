@@ -24,6 +24,20 @@ const BottomToolbar: FC<BottomToolbarProperties> = ({
 }) => {
     const t = useTranslations("bottom-toolbar");
 
+    const handleSizeChange = (value: string | null): void => {
+        const newSize = Number(value);
+        setSize(newSize);
+        const lastPage = Math.ceil(totalElements / newSize);
+        if (page > lastPage) {
+            setPage(lastPage);
+        } else {
+            const newTotalPages = Math.ceil(totalElements / newSize);
+            if (newTotalPages > countPages) {
+                setPage(newTotalPages);
+            }
+        }
+    };
+
     return (
         <Flex align="center" justify={"space-between"} pt={5} pb={10} w={"100%"}>
             <Text>
@@ -39,7 +53,7 @@ const BottomToolbar: FC<BottomToolbarProperties> = ({
                     defaultValue="20"
                     allowDeselect={false}
                     value={size.toString()}
-                    onChange={(value) => setSize(Number(value))}
+                    onChange={(event) => handleSizeChange(event)}
                 />
                 <Pagination
                     color="#007458"
