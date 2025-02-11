@@ -12,6 +12,26 @@ const config = {
     },
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     webpack: (webpackConfig) => {
+        webpackConfig.module.rules.push({
+            test: /\.svg$/,
+            use: [
+                {
+                    loader: "@svgr/webpack",
+                    options: {
+                        svgo: true, // Optimize SVGs
+                        svgoConfig: {
+                            plugins: [
+                                {
+                                    name: "removeViewBox",
+                                    active: false, // Keep the viewBox attribute for responsiveness
+                                },
+                            ],
+                        },
+                    },
+                },
+            ],
+        });
+
         const rules = webpackConfig.module.rules
             .find((rule) => typeof rule.oneOf === "object")
             .oneOf.filter((rule) => Array.isArray(rule.use));

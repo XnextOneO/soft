@@ -10,7 +10,6 @@ const useAuthInterceptor = (): void => {
   useEffect(() => {
     const interceptor = $authHost.interceptors.response.use(
       (response) => {
-        console.log(response);
         return response;
       },
       async (error) => {

@@ -1,25 +1,22 @@
 import { useEffect, useState } from "react";
-import Image, { StaticImageData } from "next/image";
-import { Flex, SegmentedControl, useMantineColorScheme } from "@mantine/core";
+import {
+    Button,
+    Flex,
+    Group,
+    Menu,
+    SegmentedControl,
+    Text,
+    UnstyledButton,
+    useMantineColorScheme,
+} from "@mantine/core";
 
 import { getUserLocale, setUserLocale } from "@/i18n/locale-detector";
-
-import BYBlack from "../../public/assets/BY_black.svg";
-import BYWhite from "../../public/assets/BY_white.svg";
-import RUBlack from "../../public/assets/RU_black.svg";
-import RUWhite from "../../public/assets/RU_white.svg";
 
 import classes from "./LanguageSwitcher.module.scss";
 const LanguageSwitcherButton = (): JSX.Element => {
     const colorScheme = useMantineColorScheme();
     const [locale, setLocale] = useState("ru");
-    const flagImages: Record<string, StaticImageData> = {
-        BYBlack: BYBlack,
-        BYWhite: BYWhite,
-        RUBlack: RUBlack,
-        RUWhite: RUWhite,
-        // Add other languages and their flags here
-    };
+
     const items = [{ value: "ru" }, { value: "by" }];
 
     useEffect(() => {
@@ -30,37 +27,49 @@ const LanguageSwitcherButton = (): JSX.Element => {
         fetchLocale();
     }, []);
 
-    const handleLocaleChange = async (): Promise<void> => {
-        const newLocale = locale === "ru" ? "by" : "ru";
+    const handleLocaleChange = async (value: string): Promise<void> => {
+        const newLocale = value;
         await setUserLocale(newLocale);
         setLocale(newLocale);
     };
 
     return (
-        <SegmentedControl
-            value={locale}
-            onChange={handleLocaleChange}
-            radius="xl"
-            size="md"
-            data={items.map((item) => ({
-                value: item.value,
-                label: (
-                    <Flex>
-                        <Image
-                            alt=""
-                            src={
-                                flagImages[
-                                    `${item.value.toUpperCase()}${colorScheme.colorScheme === "light" ? "Black" : "White"}`
-                                ]
-                            }
-                            width={20}
-                            height={20}
-                        />
-                    </Flex>
-                ),
-            }))}
-            classNames={classes}
-        />
+        // <SegmentedControl
+        //     value={locale}
+        //     onChange={handleLocaleChange}
+        //     radius="xl"
+        //     size="xs"
+        //     data={items.map((item) => ({
+        //         value: item.value,
+        //         label: (
+        //             <Flex>
+        //                 <Text fw={600} size="sm">
+        //                     {item.value.toUpperCase()}
+        //                 </Text>
+        //             </Flex>
+        //         ),
+        //     }))}
+        //     classNames={classes}
+        // />
+        <Menu shadow="md" width={72} offset={0}>
+            <Menu.Target>
+                <UnstyledButton w={72} h="52px" className={classes.switcher}>
+                    <Group justify="center">
+                        <Text fw={700} c="#ffffff">
+                            {locale.toUpperCase()}
+                        </Text>
+                    </Group>
+                </UnstyledButton>
+            </Menu.Target>
+
+            <Menu.Dropdown p={0}>
+                {items.map((item) => (
+                    <Menu.Item key={item.value} onClick={() => handleLocaleChange(item.value)}>
+                        <UnstyledButton className={classes.switcherItem}>{item.value.toUpperCase()}</UnstyledButton>
+                    </Menu.Item>
+                ))}
+            </Menu.Dropdown>
+        </Menu>
     );
 };
 export default LanguageSwitcherButton;

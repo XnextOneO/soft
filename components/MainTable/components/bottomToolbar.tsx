@@ -39,7 +39,7 @@ const BottomToolbar: FC<BottomToolbarProperties> = ({
     };
 
     return (
-        <Flex align="center" justify={"space-between"} pt={5} pb={10} w={"100%"}>
+        <Flex align="center" justify={"space-between"} w={"100%"}>
             <Text>
                 {t("records")} {(page - 1) * size + 1}–{Math.min(page * size, totalElements)} {t("from")}{" "}
                 {totalElements}

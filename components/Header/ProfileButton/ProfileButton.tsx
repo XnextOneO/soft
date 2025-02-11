@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Group, Text, UnstyledButton } from "@mantine/core";
+import { Avatar, Group, Text, UnstyledButton } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
 
 import { userStore } from "@/store/userStore";
@@ -15,6 +15,12 @@ const ProfileButton = (): JSX.Element => {
     return (
         <UnstyledButton className={classes.profile} px={20} onClick={() => router.push("/user-profile")}>
             <Group>
+                <Avatar color="white" radius="xl">
+                    {name
+                        .split(" ")
+                        .map((word) => word.slice(0, 1))
+                        .join("")}
+                </Avatar>
                 <Text size="md" fw={600} c="white" className={classes.nickname}>
                     {name}
                 </Text>

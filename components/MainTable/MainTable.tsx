@@ -156,7 +156,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     });
     const table = useMantineReactTable({
         onGlobalFilterChange: handleGlobalFilterChange,
-        // eslint-disable-next-line @typescript-eslint/no-shadow
+
         renderCreateRowModalContent: ({ table, row }) => (
             <CreateRowModalContent
                 table={table}
@@ -188,7 +188,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
                 classes={classes}
             />
         ),
-        // eslint-disable-next-line @typescript-eslint/no-shadow
+
         renderRowActions: ({ row, table }) => <RowActions row={row} table={table} />,
         renderTopToolbar: () => (
             <TopToolbar
@@ -233,7 +233,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         },
         mantineTableContainerProps: {
             style: {
-                height: "calc(100vh - 222px)",
+                height: "calc(100vh - 192px)",
                 overflowY: "auto",
                 borderTop: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
             },
@@ -244,7 +244,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         },
         localization: MRT_Localization_RU,
         enableFullScreenToggle: false,
-        enableDensityToggle: true,
+        enableDensityToggle: false,
         enableStickyHeader: true,
         enableRowSelection: false,
         enableBatchRowSelection: false,

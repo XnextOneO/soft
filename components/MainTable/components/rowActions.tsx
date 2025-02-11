@@ -12,9 +12,9 @@ interface RowActionsProperties {
 const RowActions = ({ row, table }: RowActionsProperties): JSX.Element => {
     const t = useTranslations("row-actions");
     return (
-        <Flex justify={"center"} align={"center"} gap={"md"}>
+        <Flex justify={"center"} align={"center"}>
             <Tooltip label={t("edit")}>
-                <ActionIcon onClick={() => table.setEditingRow(row)}>
+                <ActionIcon variant="light" onClick={() => table.setEditingRow(row)}>
                     <IconEdit />
                 </ActionIcon>
             </Tooltip>

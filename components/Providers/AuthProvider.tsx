@@ -16,7 +16,7 @@ export function AuthManager({ children }: AuthManagerProperties): React.ReactNod
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
     const pathname = usePathname();
-    const { setName, setIsEdit, setCanDelete } = userStore();
+    const { setName, setEmail, setIsEdit, setCanDelete } = userStore();
     useAuthInterceptor();
 
     useEffect(() => {
@@ -30,6 +30,7 @@ export function AuthManager({ children }: AuthManagerProperties): React.ReactNod
                     setIsEdit(usr.email_verified);
                     setCanDelete(usr.email_verified);
                     setName(usr.name);
+                    setEmail(usr.email);
                 } else {
                     router.push("/login");
                 }
@@ -41,7 +42,7 @@ export function AuthManager({ children }: AuthManagerProperties): React.ReactNod
         };
 
         authenticate().catch((error) => console.error(error));
-    }, [router, setIsEdit, setCanDelete, isLoading, setName]);
+    }, [router, setIsEdit, setCanDelete, isLoading, setName, setEmail]);
 
     if (isLoading || (!isAuthenticated && pathname !== "/login")) {
         return <MainLoader />;

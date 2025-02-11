@@ -5,12 +5,11 @@ import { Card, Container, Group, Text, useMantineColorScheme } from "@mantine/co
 import { IconAt } from "@tabler/icons-react";
 import { observer } from "mobx-react-lite";
 
-import { userInfo } from "@/app/api/auth/authAPI";
+import { userStore } from "@/store/userStore";
 
 import classes from "./UserProfile.module.scss";
 const UserProfilePage = observer(() => {
-    const [name, setName] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
+    const { name, email } = userStore();
     const colorScheme = useMantineColorScheme();
 
     const [backgroundState, setBackgroundState] = useState<string>("");
@@ -22,20 +21,6 @@ const UserProfilePage = observer(() => {
             setBackgroundState(classes.mainContainerDark);
         }
     }, [colorScheme.colorScheme]);
-
-    useEffect(() => {
-        userInfo()
-            // eslint-disable-next-line promise/always-return
-            .then((data) => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setName(data.name);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                setEmail(data.email);
-            })
-            .catch((error) => console.error(error));
-    }, []);
 
     return (
         <Container fluid mah="100vh" miw="700px" maw="100vw" className={backgroundState}>

@@ -1,28 +1,14 @@
-.root {
-    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
-    box-shadow: var(--mantine-shadow-md);
-  }
-  
-  .indicator {
-    background-image: linear-gradient(
-      to right,
-      var(--mantine-color-teal-filled),
-      var(--mantine-color-green-filled)
-    );
-  }
-  
-  .control {
-    &::before {
-      display: none;
-    }
-    padding: 0;
-  }
-  
-  .label {
-    &,
-    &:hover {
-      &[data-active] {
-        color: var(--mantine-color-white);
-      }
-    }
-  }
+.switcher {
+	height: 52px;
+}
+
+.switcher:hover {
+	background-color: #004830;
+	cursor: pointer;
+}
+
+.switcher-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

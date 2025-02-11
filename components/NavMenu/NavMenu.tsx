@@ -29,7 +29,7 @@ const NavMenu = observer(() => {
                     colorScheme={colorScheme.colorScheme}
                     active={active}
                     setActive={setActive}
-                    width={60}
+                    width={52}
                     opened={false}
                     marginLeft={0}
                 />

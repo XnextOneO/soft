@@ -1,31 +1,29 @@
 "use client";
 
 import { useContext, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Box, Burger, Container, Flex, Group, Image as MantineImage, Text, UnstyledButton } from "@mantine/core";
+import { Box, Burger, Container, Flex, Group, Image as MantineImage, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 
-import { logout } from "@/app/api/auth/authAPI";
 import LanguageSwitcher from "@/components/LanguageSwitcher/LanguageSwitcher";
 import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
-import { userStore } from "@/store/userStore";
 
-import LogoutIcon from "../../public/assets/logout.svg";
 import { Context } from "../Providers/AppContextProvider";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
 import classes from "./Header.module.scss";
 
-const Header: React.FC = observer(() => {
+interface HeaderProperties {
+    isBurger: boolean;
+    isProfile: boolean;
+}
+const Header: React.FC<HeaderProperties> = observer(({ isBurger, isProfile }) => {
     const [opened, { toggle }] = useDisclosure();
     const { burgerStore } = useContext(Context);
     const pathname = usePathname();
-    const router = useRouter();
-    const { clearStore } = userStore();
     const t = useTranslations("header");
     useEffect(() => {
         if (!pathname.includes("/login")) {
@@ -33,49 +31,41 @@ const Header: React.FC = observer(() => {
         }
     }, [burgerStore, opened, pathname]);
 
-    const logoutHandler = (): void => {
-        logout();
-        clearStore();
-        router.push("/login");
-    };
-
     return (
         <Container className={classes.headerContainer} fluid p={0}>
             <Flex w="100%" h="100%" direction="row">
-                <Flex justify="center" align="center" className={classes.buttonContainer} onClick={toggle}>
-                    <Burger
-                        w={60}
-                        color="white"
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                        opened={opened}
-                        aria-label={t("navigation")}
-                    />
-                </Flex>
+                {isBurger && (
+                    <Flex justify="center" align="center" className={classes.buttonContainer} onClick={toggle} w={54}>
+                        <Burger
+                            size="sm"
+                            color="white"
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                            opened={opened}
+                            aria-label={t("navigation")}
+                        />
+                    </Flex>
+                )}
                 <Group justify="space-between" w="100%" pl="md">
                     <Link href={"/"}>
                         <Group gap="xs">
                             <MantineImage src="../../favicon.png" w={30} h={30} alt="logo" />
-                            <Text c="white" size="24px" fw={700} className={classes.title}>
+                            <Text c="white" size="20px" fw={700} className={classes.title}>
                                 IIS {t("belarusbank")}
                             </Text>
                         </Group>
                     </Link>
                     <Group justify="flex-end" align="center" gap={5}>
-                        <ProfileButton />
-                        <LanguageSwitcher />
+                        <Box mr={5}>
+                            <LanguageSwitcher />
+                        </Box>
                         <Box mr={5}>
                             <ThemeSwitcher />
                         </Box>
-
-                        <UnstyledButton w={60} h={60} className={classes.buttonContainer} onClick={logoutHandler}>
-                            <Flex justify="center">
-                                <Image src={LogoutIcon} width={28} height={28} alt="Logout Icon" />
-                            </Flex>
-                        </UnstyledButton>
+                        {isProfile && <ProfileButton />}
                     </Group>
                 </Group>
             </Flex>

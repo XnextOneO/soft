@@ -3,12 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Alert, Button, Card, Flex, Group, Image, Loader, Text, TextInput, useMantineColorScheme } from "@mantine/core";
+import { Alert, Button, Card, Group, Loader, Stack, Text, TextInput, useMantineColorScheme } from "@mantine/core";
 import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 
 import { useLogin } from "@/app/api/hooks/auth";
-import LanguageSwitcherButton from "@/components/LanguageSwitcher/LanguageSwitcher";
-import ThemeSwitcher from "@/components/ThemeSwitcher/ThemeSwitcher";
+import Header from "@/components/Header/Header";
 
 import classes from "../Auth.module.scss";
 
@@ -69,108 +68,107 @@ const LoginPage: React.FC = () => {
 
     return (
         <div className={backgroundState}>
-            <Card w="25%" py={70} miw={400} shadow="xl" withBorder>
-                <Group
-                    gap="sm"
-                    w="100%"
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        padding: "0",
-                    }}
-                >
-                    <Group gap="xs" my={20}>
+            <Stack gap={0}>
+                <Header isBurger={false} isProfile={false} />
+                <Card w="25%" py={70} miw={400} shadow="xl" withBorder>
+                    <Group
+                        gap="sm"
+                        w="100%"
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            padding: "0",
+                        }}
+                    >
+                        {/* <Group gap="xs" my={20}>
                         <Image src="../../favicon.png" w={40} h={40} alt="IIS Logo" />
                         <Text size="44px" fw={700}>
                             IIS
                         </Text>
-                    </Group>
-                    <Text fw={400} size="34px">
-                        {t("authorization")}
-                    </Text>
-                    {error && (
-                        <Alert
-                            w="90%"
-                            radius="md"
-                            title="Ошибка"
-                            color="red"
-                            // onClick={closeError}
-                        >
-                            {error}
-                        </Alert>
-                    )}
-                    <TextInput
-                        w="90%"
-                        placeholder={t("login-input")}
-                        label={t("login")}
-                        error={isLoginClicked && !username ? t("login-required") : ""}
-                        inputWrapperOrder={["label", "input", "error"]}
-                        value={username}
-                        radius="md"
-                        leftSection={<IconAt size={16} />}
-                        onChange={(event) => setUsername(event.target.value)}
-                        onKeyPress={(event) => {
-                            if (event.key === "Enter") {
-                                onLogin();
-                            }
-                        }}
-                    />
-                    <TextInput
-                        w="90%"
-                        placeholder={t("enter-password")}
-                        label={t("password")}
-                        error={isLoginClicked && !password ? t("password-required") : ""}
-                        inputWrapperOrder={["label", "input", "error"]}
-                        radius="md"
-                        type={showPassword ? "text" : "password"}
-                        leftSection={<IconLock size={16} />}
-                        rightSection={
-                            <div
-                                onClick={() => setShowPassword((previous) => !previous)}
-                                style={{
-                                    cursor: "pointer",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
+                    </Group> */}
+                        <Text fw={400} size="34px">
+                            {t("authorization")}
+                        </Text>
+                        {error && (
+                            <Alert
+                                w="90%"
+                                radius="md"
+                                title="Ошибка"
+                                color="red"
+                                // onClick={closeError}
                             >
-                                {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
-                            </div>
-                        }
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        onKeyPress={(event) => {
-                            if (event.key === "Enter") {
-                                onLogin();
-                            }
-                        }}
-                    />{" "}
-                    <Group w="90%" my={10}>
-                        <Button
-                            variant="filled"
-                            radius="xs"
-                            color="#008858"
-                            w="100%"
-                            size="md"
-                            onKeyDown={(event) => {
+                                {error}
+                            </Alert>
+                        )}
+                        <TextInput
+                            w="90%"
+                            placeholder={t("login-input")}
+                            label={t("login")}
+                            error={isLoginClicked && !username ? t("login-required") : ""}
+                            inputWrapperOrder={["label", "input", "error"]}
+                            value={username}
+                            radius="md"
+                            leftSection={<IconAt size={16} />}
+                            onChange={(event) => setUsername(event.target.value)}
+                            onKeyPress={(event) => {
                                 if (event.key === "Enter") {
                                     onLogin();
                                 }
                             }}
-                            onClick={onLogin}
-                        >
-                            {t("sign-in")}
-                        </Button>
+                        />
+                        <TextInput
+                            w="90%"
+                            placeholder={t("enter-password")}
+                            label={t("password")}
+                            error={isLoginClicked && !password ? t("password-required") : ""}
+                            inputWrapperOrder={["label", "input", "error"]}
+                            radius="md"
+                            type={showPassword ? "text" : "password"}
+                            leftSection={<IconLock size={16} />}
+                            rightSection={
+                                <div
+                                    onClick={() => setShowPassword((previous) => !previous)}
+                                    style={{
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    {showPassword ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+                                </div>
+                            }
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            onKeyPress={(event) => {
+                                if (event.key === "Enter") {
+                                    onLogin();
+                                }
+                            }}
+                        />{" "}
+                        <Group w="90%" my={10}>
+                            <Button
+                                variant="filled"
+                                radius="xs"
+                                color="#008858"
+                                w="100%"
+                                size="md"
+                                onKeyDown={(event) => {
+                                    if (event.key === "Enter") {
+                                        onLogin();
+                                    }
+                                }}
+                                onClick={onLogin}
+                            >
+                                {t("sign-in")}
+                            </Button>
+                        </Group>
+                        <Text c="dimmed" size="sm">
+                            © ОАО «АСБ Беларусбанк», 2024
+                        </Text>
                     </Group>
-                    <Text c="dimmed" size="sm">
-                        © ОАО «АСБ Беларусбанк», 2024
-                    </Text>
-                    <Flex align="center" justify="space-between" w="90%">
-                        <LanguageSwitcherButton />
-                        <ThemeSwitcher />
-                    </Flex>
-                </Group>
-            </Card>
+                </Card>
+            </Stack>
         </div>
     );
 };

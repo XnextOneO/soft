@@ -12,7 +12,6 @@ export function Providers({ children }: { children: React.ReactNode }): JSX.Elem
     const [queryClient] = useState(() => new QueryClient());
     useEffect(() => {
         setIsClient(true);
-        console.log("o essssssssss");
     }, []);
 
     return (
@@ -20,9 +19,9 @@ export function Providers({ children }: { children: React.ReactNode }): JSX.Elem
             {isClient ? (
                 <QueryClientProvider client={queryClient}>
                     <ThemeManager>
-                        <AuthManager>
-                            <AppContextProvider>{children}</AppContextProvider>
-                        </AuthManager>
+                        {/* <AuthManager> */}
+                        <AppContextProvider>{children}</AppContextProvider>
+                        {/* </AuthManager> */}
                     </ThemeManager>
                 </QueryClientProvider>
             ) : (

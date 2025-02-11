@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Menu, ScrollArea, TextInput } from "@mantine/core";
+import { Menu, TextInput } from "@mantine/core";
 import { observer } from "mobx-react-lite";
 
 import { Context } from "../Providers/AppContextProvider";
@@ -36,10 +36,12 @@ const DirectoriesMenu = observer(
                         setDirectories(directoriesStore.directories);
                     }
                 }}
+                offset={0}
                 radius="xs"
                 width={450}
                 transitionProps={{ transition: "rotate-right", duration: 150 }}
                 position="right-start"
+                styles={{ dropdown: { maxHeight: 300, overflowY: "auto" } }}
             >
                 <Menu.Target>{children}</Menu.Target>
 
@@ -51,20 +53,18 @@ const DirectoriesMenu = observer(
                         onClick={handleItemClick}
                         onChange={(event) => searchDirectoryByName(event.target.value)}
                     />
-                    <ScrollArea h={300}>
-                        {directories.map((directory, index) => (
-                            <Link
-                                style={{ textDecoration: "none" }}
-                                key={index}
-                                href={`/directories/${directory.link}`}
-                                onClick={() => {
-                                    resetDirectories();
-                                }}
-                            >
-                                <Menu.Item>{directory.name}</Menu.Item>
-                            </Link>
-                        ))}
-                    </ScrollArea>
+                    {directories.map((directory, index) => (
+                        <Link
+                            style={{ textDecoration: "none" }}
+                            key={index}
+                            href={`/directories/${directory.link}`}
+                            onClick={() => {
+                                resetDirectories();
+                            }}
+                        >
+                            <Menu.Item>{directory.name}</Menu.Item>
+                        </Link>
+                    ))}
                 </Menu.Dropdown>
             </Menu>
         );
