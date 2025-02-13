@@ -1,6 +1,6 @@
 "use client";
 
-import { ActionIcon, useComputedColorScheme, useMantineColorScheme } from "@mantine/core";
+import { Group, useComputedColorScheme, useMantineColorScheme } from "@mantine/core";
 import { IconMoon, IconSun } from "@tabler/icons-react";
 
 import classes from "./ThemeSwitcher.module.scss";
@@ -12,22 +12,20 @@ const ThemeSwitcher: React.FC = () => {
     });
 
     return (
-        <ActionIcon
-            style={{
-                zIndex: 1000,
-            }}
+        <Group
+            justify="center"
+            w={52}
+            h="52px"
+            className={classes.themeSwitcher}
             onClick={() => setColorScheme(computedColorScheme === "light" ? "dark" : "light")}
-            variant="default"
-            size="lg"
-            radius="xl"
             aria-label="Toggle color scheme"
         >
             {computedColorScheme === "dark" ? (
-                <IconSun className={classes.icon} stroke={1.5} />
+                <IconSun className={classes.icon} stroke={1.5} color="#FFFFFF" />
             ) : (
-                <IconMoon className={classes.icon} stroke={1.5} />
+                <IconMoon className={classes.icon} stroke={1.5} color="#FFFFFF" />
             )}
-        </ActionIcon>
+        </Group>
     );
 };
 

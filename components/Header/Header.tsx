@@ -58,13 +58,9 @@ const Header: React.FC<HeaderProperties> = observer(({ isBurger, isProfile }) =>
                             </Text>
                         </Group>
                     </Link>
-                    <Group justify="flex-end" align="center" gap={5}>
-                        <Box mr={5}>
-                            <LanguageSwitcher />
-                        </Box>
-                        <Box mr={5}>
-                            <ThemeSwitcher />
-                        </Box>
+                    <Group gap={0} justify="flex-end" align="center">
+                        <ThemeSwitcher />
+                        <LanguageSwitcher />
                         {isProfile && <ProfileButton />}
                     </Group>
                 </Group>

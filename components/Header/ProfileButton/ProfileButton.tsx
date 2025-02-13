@@ -13,7 +13,7 @@ const ProfileButton = (): JSX.Element => {
     const { name } = userStore();
 
     return (
-        <UnstyledButton className={classes.profile} px={20} onClick={() => router.push("/user-profile")}>
+        <UnstyledButton className={classes.profile} px={10} onClick={() => router.push("/user-profile")}>
             <Group>
                 <Avatar color="white" radius="xl">
                     {name

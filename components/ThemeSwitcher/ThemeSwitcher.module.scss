@@ -22,3 +22,12 @@
       display: block;
     }
   }
+
+  .themeSwitcher {
+    height: 52px;
+  }
+  
+  .themeSwitcher:hover {
+    background-color: #004830;
+    cursor: pointer;
+  }

@@ -81,7 +81,11 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
                     </Link>
                 ))}
                 <DropdownMenu onOpen={setActive}>
-                    <UnstyledButton onClick={() => setActive(!active)}>
+                    <UnstyledButton
+                        onClick={() => {
+                            setActive(!active);
+                        }}
+                    >
                         <NavMenuButtonStack
                             colorScheme={colorScheme}
                             active={active}

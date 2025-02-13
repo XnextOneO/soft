@@ -10,7 +10,7 @@ interface SvgButtonProperties extends HTMLAttributes<HTMLDivElement> {
 const SvgButton: FC<SvgButtonProperties> = ({ SvgIcon, fillColor, style, children, ...properties }) => {
     return (
         <div className={classes.parent} style={style} {...properties}>
-            <SvgIcon className={classes.svgIcon} style={{ fill: fillColor }} />
+            <SvgIcon className={classes.svgIcon} style={{ color: fillColor }} />
             {children}
         </div>
     );

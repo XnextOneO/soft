@@ -53,13 +53,13 @@ const LanguageSwitcherButton = (): JSX.Element => {
         // />
         <Menu shadow="md" width={72} offset={0}>
             <Menu.Target>
-                <UnstyledButton w={72} h="52px" className={classes.switcher}>
-                    <Group justify="center">
-                        <Text fw={700} c="#ffffff">
-                            {locale.toUpperCase()}
-                        </Text>
-                    </Group>
-                </UnstyledButton>
+                {/* <UnstyledButton > */}
+                <Group justify="center" w={72} className={classes.switcher}>
+                    <Text fw={700} c="#ffffff" style={{ textAlign: "center", lineHeight: "52px" }}>
+                        {locale.toUpperCase()}
+                    </Text>
+                </Group>
+                {/* </UnstyledButton> */}
             </Menu.Target>
 
             <Menu.Dropdown p={0}>
