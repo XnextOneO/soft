@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 
 import { Context } from "../Providers/AppContextProvider";
 
-const DirectoriesMenu = observer(
+const DropdownMenu = observer(
     ({ onOpen, children }: { onOpen: React.Dispatch<React.SetStateAction<boolean>>; children: React.ReactNode }) => {
         const { directoriesStore } = useContext(Context);
         const [directories, setDirectories] = useState(directoriesStore.directories);
@@ -45,7 +45,7 @@ const DirectoriesMenu = observer(
             >
                 <Menu.Target>{children}</Menu.Target>
 
-                <Menu.Dropdown>
+                <Menu.Dropdown style={{ boxShadow: "0px 6px 35px 6px rgba(48, 48, 48, 0.2)" }}>
                     <TextInput
                         p="xs"
                         w="100%"
@@ -71,4 +71,4 @@ const DirectoriesMenu = observer(
     },
 );
 
-export default DirectoriesMenu;
+export default DropdownMenu;

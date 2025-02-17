@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Box, Burger, Container, Flex, Group, Image as MantineImage, Text } from "@mantine/core";
+import { Burger, Container, Flex, Group, Image as MantineImage, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { observer } from "mobx-react-lite";
 

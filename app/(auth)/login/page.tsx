@@ -56,7 +56,8 @@ const LoginPage: React.FC = () => {
     //   setShowAlert(false);
     //   setIsLoginClicked(false);
     // };
-
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
     useEffect(() => {
         const isLight = colorScheme.colorScheme === "light";
         setBackgroundState(isLight ? classes.authContainer : classes.darkContainer);
@@ -164,7 +165,7 @@ const LoginPage: React.FC = () => {
                             </Button>
                         </Group>
                         <Text c="dimmed" size="sm">
-                            © ОАО «АСБ Беларусбанк», 2024
+                            © ОАО «АСБ Беларусбанк», {currentYear}
                         </Text>
                     </Group>
                 </Card>
