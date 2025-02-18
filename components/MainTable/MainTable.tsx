@@ -52,14 +52,14 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
     const directoriesStore = new DirectoriesStore();
 
-    const parameters = {
-        page: page - 1,
-        size: size,
-        sort: sortValue,
-        link: link,
-        text: debouncedGlobalFilter[0],
-        column: formattedSortColumn,
-    };
+    // const parameters = {
+    //     page: page - 1,
+    //     size: size,
+    //     sort: sortValue,
+    //     link: link,
+    //     text: debouncedGlobalFilter[0],
+    //     column: formattedSortColumn,
+    // };
 
     // const { data, refetch, isFetching, isLoading } = useQuery({
     //     queryKey: ["apiData", parameters],
@@ -70,33 +70,31 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     //     placeholderData: keepPreviousData,
     // });
 
+    const parametersPost = {
+                link : link,
+                page: page -1,
+                size: size,
+                // columnSearchCriteria: {
+                //     // Дополнительные свойства
+                //     exampleKey: 'exampleValue', // Замените на нужные значения
+                // },
+                // sortCriteria: {
+                //     // Дополнительные свойства
+                //     exampleSortKey: 'exampleSortValue', // Замените на нужные значения
+                //     sortOrder: 'ASC', // или 'DESC'
+                // },
+                dataStatus: 'NOT_DELETED', // или 'DELETED', 'ALL'
+            };
 
-    const mutation  = useMutation({
-        mutationFn: postApiData,
 
+    const { data, refetch, isFetching, isLoading } = useQuery({
+        queryKey: ["apiData", parametersPost],
+        queryFn: async () => {
+            return postApiData(parametersPost);
+        },
+        staleTime: 0,
+        placeholderData: keepPreviousData,
     });
-
-    useEffect(() => {
-        const parametersPost = {
-            link : link,
-            page: 1,
-            size: 10,
-            // columnSearchCriteria: {
-            //     // Дополнительные свойства
-            //     exampleKey: 'exampleValue', // Замените на нужные значения
-            // },
-            // sortCriteria: {
-            //     // Дополнительные свойства
-            //     exampleSortKey: 'exampleSortValue', // Замените на нужные значения
-            //     sortOrder: 'ASC', // или 'DESC'
-            // },
-            dataStatus: 'NOT_DELETED', // или 'DELETED', 'ALL'
-        };
-
-        mutation.mutate(parametersPost);
-    }, [link]);
-
-    const data = mutation.data;
 
 
 
@@ -204,7 +202,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
                 size={size}
                 totalElements={totalElements}
                 countPages={countPages}
-                parameters={parameters}
+                parameters={parametersPost}
                 setPage={setPage}
                 setSize={setSize}
             />
