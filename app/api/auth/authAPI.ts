@@ -7,7 +7,7 @@ import { $authHost, $host } from "..";
  */
 export const check = async (retryCount = 0): Promise<boolean> => {
   try {
-    const { status } = await $host.get<void>("/user/check");
+    const { status } = await $host.get<void>("authorization/user/check");
     return status === 200;
   } catch {
     // Limit retry attempts
@@ -31,7 +31,7 @@ export const check = async (retryCount = 0): Promise<boolean> => {
  */
 export const checkRefreshToken = async (): Promise<boolean> => {
   try {
-    const { status } = await $authHost.get<void>("/auth/refresh-token");
+    const { status } = await $authHost.get<void>("/authorization/refresh-token");
     return status === 200;
   } catch {
     return false;
@@ -42,7 +42,7 @@ export const checkRefreshToken = async (): Promise<boolean> => {
  * Logs out the current user
  */
 export const logout = async (): Promise<void> => {
-  await $host.get<void>("/auth/logout");
+  await $host.get<void>("/authorization/logout");
 };
 
 /**
@@ -50,6 +50,6 @@ export const logout = async (): Promise<void> => {
  * @returns User information data
  */
 export const userInfo = async <T = unknown>(): Promise<T> => {
-  const { data } = await $authHost.get<T>("/user/userinfo");
+  const { data } = await $authHost.get<T>("/authorization/user/userinfo");
   return data;
 };

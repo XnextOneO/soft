@@ -19,9 +19,9 @@ export function Providers({ children }: { children: React.ReactNode }): JSX.Elem
             {isClient ? (
                 <QueryClientProvider client={queryClient}>
                     <ThemeManager>
-                        {/* <AuthManager> */}
+                         <AuthManager>
                         <AppContextProvider>{children}</AppContextProvider>
-                        {/* </AuthManager> */}
+                         </AuthManager>
                     </ThemeManager>
                 </QueryClientProvider>
             ) : (
