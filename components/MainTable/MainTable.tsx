@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
-import { FC, useState } from "react";
+import {FC, useEffect, useState} from "react";
 import { Flex, Loader, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {keepPreviousData, useMutation, useQuery} from "@tanstack/react-query";
 import { MantineReactTable, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
@@ -21,6 +21,7 @@ import DirectoriesStore from "@/store/directoriesStore";
 import { userStore } from "@/store/userStore";
 
 import classes from "./MainTable.module.scss";
+import {postApiData} from "@/app/api/hooks/fetchTableData";
 
 interface MainTableProperties {
     updateTable: boolean;
@@ -60,14 +61,44 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         column: formattedSortColumn,
     };
 
-    const { data, refetch, isFetching, isLoading } = useQuery({
-        queryKey: ["apiData", parameters],
-        queryFn: async () => {
-            return parameters.text ? fetchApiDataWithSearch(parameters) : fetchApiData(parameters);
-        },
-        staleTime: 0,
-        placeholderData: keepPreviousData,
+    // const { data, refetch, isFetching, isLoading } = useQuery({
+    //     queryKey: ["apiData", parameters],
+    //     queryFn: async () => {
+    //         return parameters.text ? fetchApiDataWithSearch(parameters) : fetchApiData(parameters);
+    //     },
+    //     staleTime: 0,
+    //     placeholderData: keepPreviousData,
+    // });
+
+
+    const mutation  = useMutation({
+        mutationFn: postApiData,
+
     });
+
+    useEffect(() => {
+        const parametersPost = {
+            link : link,
+            page: 1,
+            size: 10,
+            // columnSearchCriteria: {
+            //     // Дополнительные свойства
+            //     exampleKey: 'exampleValue', // Замените на нужные значения
+            // },
+            // sortCriteria: {
+            //     // Дополнительные свойства
+            //     exampleSortKey: 'exampleSortValue', // Замените на нужные значения
+            //     sortOrder: 'ASC', // или 'DESC'
+            // },
+            dataStatus: 'NOT_DELETED', // или 'DELETED', 'ALL'
+        };
+
+        mutation.mutate(parametersPost);
+    }, [link]);
+
+    const data = mutation.data;
+
+
 
     const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
 
