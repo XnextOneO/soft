@@ -56,23 +56,28 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             [key: string]: string ;
     }
 
+    const sortCriteria:SortCriteria = {};
+    sorting.forEach(sort => {
+        const formattedColumn = sort.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
+        sortCriteria[formattedColumn] = sort.desc ? 'DESC' : 'ASC';
+    });
+
+
+    const columnSearchCriteria: FilterCriteria = {};
+    debouncedColumnFilter[0].forEach(columnFilter => {
+        if (columnFilter.value) {
+            const formattedColumn = columnFilter.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
+            columnSearchCriteria[formattedColumn] = String(columnFilter.value);
+        }
+    });
+
     const parametersPost = {
         link: link,
         page: page - 1,
         size: size,
         globalSearchText: debouncedGlobalFilter[0],
-        sortCriteria: sorting.reduce<SortCriteria>((acc, sort) => {
-            const formattedColumn = sort.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
-            acc[formattedColumn] = sort.desc ? 'DESC' : 'ASC';
-            return acc;
-        }, {}),
-        columnSearchCriteria: debouncedColumnFilter[0].reduce<FilterCriteria>((acc, columnFilter) => {
-            if (columnFilter.value) {
-                const formattedColumn = columnFilter.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
-                acc[formattedColumn] = String(columnFilter.value);
-            }
-            return acc;
-        }, {}),
+        sortCriteria: sortCriteria,
+        columnSearchCriteria: columnSearchCriteria,
         dataStatus: "NOT_DELETED",
     };
     const { data, refetch, isFetching, isLoading } = useQuery({
