@@ -41,6 +41,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
     const debouncedColumnFilter = useDebouncedValue(filter, 200);
     const colorScheme = useMantineColorScheme();
+    const [error, setError] = useState<string | null>(null);
     const handleGlobalFilterChange = (value: string): void => {
         setGlobalFilter(value);
         setPage(1);
@@ -77,11 +78,17 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const { data, refetch, isFetching, isLoading } = useQuery({
         queryKey: ["apiData", parametersPost],
         queryFn: async () => {
-            return postApiData(parametersPost);
+            try {
+                return await postApiData(parametersPost);
+            } catch (err) {
+                setError("ошибка сервера");
+                throw err;
+            }
         },
         staleTime: 0,
         placeholderData: keepPreviousData,
-        // retryDelay: 10000,
+        retryDelay: 10000,
+        retry : false,
     });
 
     const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
@@ -283,6 +290,13 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         onColumnFiltersChange: setFilter,
         isMultiSortEvent: () => true,
     });
+
+
+    if (error) {
+        return <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"} align="center" justify="center">
+                {error}
+        </Flex>
+    }
 
     return data ? (
         <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"}>
