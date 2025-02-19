@@ -8,7 +8,6 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { MantineReactTable, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
-import { fetchApiData, fetchApiDataWithSearch } from "@/app/api/hooks";
 import PopoverCell from "@/components/DataTable/PopoverCell";
 import { MainLoader } from "@/components/MainLoader/MainLoader";
 import BottomToolbar from "@/components/MainTable/components/bottomToolbar";
@@ -21,6 +20,7 @@ import DirectoriesStore from "@/store/directoriesStore";
 import { userStore } from "@/store/userStore";
 
 import classes from "./MainTable.module.scss";
+import { postApiData } from "@/app/api/hooks/fetchTableData";
 
 interface MainTableProperties {
     updateTable: boolean;
@@ -44,29 +44,33 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         setPage(1);
     };
 
-    const sortValue = sorting[0]?.desc === true ? "DESC" : "ASC";
-    const sortColumn = sorting[0]?.id;
 
-    const formattedSortColumn = sortColumn ? sortColumn.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase() : "";
 
     const directoriesStore = new DirectoriesStore();
 
-    const parameters = {
+    interface SortCriteria {
+        [key: string]: 'ASC' | 'DESC';
+    }
+    const parametersPost = {
+        link: link,
         page: page - 1,
         size: size,
-        sort: sortValue,
-        link: link,
-        text: debouncedGlobalFilter[0],
-        column: formattedSortColumn,
+        globalSearchText: debouncedGlobalFilter[0],
+        sortCriteria: sorting.reduce<SortCriteria>((acc, sort) => {
+            const formattedColumn = sort.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
+            acc[formattedColumn] = sort.desc ? 'DESC' : 'ASC';
+            return acc;
+        }, {}),
+        dataStatus: "NOT_DELETED",
     };
-
     const { data, refetch, isFetching, isLoading } = useQuery({
-        queryKey: ["apiData", parameters],
+        queryKey: ["apiData", parametersPost],
         queryFn: async () => {
-            return parameters.text ? fetchApiDataWithSearch(parameters) : fetchApiData(parameters);
+            return postApiData(parametersPost);
         },
         staleTime: 0,
         placeholderData: keepPreviousData,
+        // retryDelay: 10000,
     });
 
     const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
@@ -156,7 +160,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     });
     const table = useMantineReactTable({
         onGlobalFilterChange: handleGlobalFilterChange,
-
         renderCreateRowModalContent: ({ table, row }) => (
             <CreateRowModalContent
                 table={table}
@@ -173,7 +176,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
                 size={size}
                 totalElements={totalElements}
                 countPages={countPages}
-                parameters={parameters}
+                parameters={parametersPost}
                 setPage={setPage}
                 setSize={setSize}
             />
@@ -203,6 +206,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             // setData((prevData) => [...prevData, { ...values, id: newId }]);
             exitCreatingMode();
         },
+       enableFilters: true,
         displayColumnDefOptions: {
             "mrt-row-actions": {
                 header: "",
@@ -218,7 +222,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             showProgressBars: isFetching,
             sorting,
         },
-        initialState: { density: "xs", showGlobalFilter: true },
+        initialState: { density: "xs", showGlobalFilter: true, showColumnFilters:true },
         mantineTableBodyCellProps: {
             mih: "50px",
         },
@@ -265,6 +269,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         manualSorting: true,
         manualPagination: true,
         onSortingChange: setSorting,
+        isMultiSortEvent: () => true,
     });
 
     return data ? (
