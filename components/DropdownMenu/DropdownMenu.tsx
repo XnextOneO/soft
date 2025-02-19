@@ -36,7 +36,7 @@ const DropdownMenu = observer(
                         setDirectories(directoriesStore.directories);
                     }
                 }}
-                offset={0}
+                offset={1}
                 radius="xs"
                 width={450}
                 transitionProps={{ transition: "rotate-right", duration: 150 }}
