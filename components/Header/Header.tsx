@@ -35,7 +35,14 @@ const Header: React.FC<HeaderProperties> = observer(({ isBurger, isProfile }) =>
         <Container className={classes.headerContainer} fluid p={0}>
             <Flex w="100%" h="100%" direction="row">
                 {isBurger && (
-                    <Flex justify="center" align="center" className={classes.buttonContainer} onClick={toggle} w={54}>
+                    <Flex
+                        justify="center"
+                        align="center"
+                        className={classes.buttonContainer}
+                        onClick={toggle}
+                        w={52}
+                        miw={52}
+                    >
                         <Burger
                             size="sm"
                             color="white"

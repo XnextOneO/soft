@@ -17,7 +17,7 @@ interface LoginResponse {
 // Login function: Handles the API call for user login
 const login = async ({ username, password }: LoginParameters): Promise<LoginResponse> => {
   const response: AxiosResponse<LoginResponse> = await $host.post(
-    "/auth",
+    "authorization/login",
     { username, password },
     { withCredentials: true },
   );
