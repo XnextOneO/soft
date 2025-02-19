@@ -5,7 +5,7 @@ import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { MantineReactTable, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
+import { MantineReactTable, MRT_SortingState, MRT_ColumnFiltersState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
 import PopoverCell from "@/components/DataTable/PopoverCell";
@@ -34,23 +34,27 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
     const [createModalOpened, setCreateModalOpened] = useState(false);
     const [sorting, setSorting] = useState<MRT_SortingState>([]);
+    const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
     const { isEdit, canDelete, canCreate } = userStore();
     const [opened, setOpened] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
+    const debouncedColumnFilter = useDebouncedValue(filter, 200);
     const colorScheme = useMantineColorScheme();
     const handleGlobalFilterChange = (value: string): void => {
         setGlobalFilter(value);
         setPage(1);
     };
 
-
-
     const directoriesStore = new DirectoriesStore();
 
     interface SortCriteria {
         [key: string]: 'ASC' | 'DESC';
     }
+    interface FilterCriteria {
+            [key: string]: string ;
+    }
+
     const parametersPost = {
         link: link,
         page: page - 1,
@@ -59,6 +63,13 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         sortCriteria: sorting.reduce<SortCriteria>((acc, sort) => {
             const formattedColumn = sort.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
             acc[formattedColumn] = sort.desc ? 'DESC' : 'ASC';
+            return acc;
+        }, {}),
+        columnSearchCriteria: debouncedColumnFilter[0].reduce<FilterCriteria>((acc, columnFilter) => {
+            if (columnFilter.value) {
+                const formattedColumn = columnFilter.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
+                acc[formattedColumn] = String(columnFilter.value);
+            }
             return acc;
         }, {}),
         dataStatus: "NOT_DELETED",
@@ -269,6 +280,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         manualSorting: true,
         manualPagination: true,
         onSortingChange: setSorting,
+        onColumnFiltersChange: setFilter,
         isMultiSortEvent: () => true,
     });
 
