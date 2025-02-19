@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { notifications } from '@mantine/notifications';
 import { AxiosError } from 'axios';
 import { $authHost } from "../index";
@@ -7,12 +6,12 @@ interface PostApiDataParameters {
   link: string;
   page: number;
   size: number;
+  globalSearchText: string;
   columnSearchCriteria?: {
     [key: string]: string;
   };
   sortCriteria?: {
     [key: string]: string;
-    sortOrder: string;
   };
   dataStatus: string;
 }

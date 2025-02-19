@@ -1,14 +1,13 @@
 /* eslint-disable camelcase */
-import {FC, useEffect, useState} from "react";
+import { FC, useState } from "react";
 import { Flex, Loader, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
-import {keepPreviousData, useMutation, useQuery} from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { MantineReactTable, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
-import { fetchApiData, fetchApiDataWithSearch } from "@/app/api/hooks";
 import PopoverCell from "@/components/DataTable/PopoverCell";
 import { MainLoader } from "@/components/MainLoader/MainLoader";
 import BottomToolbar from "@/components/MainTable/components/bottomToolbar";
@@ -21,7 +20,7 @@ import DirectoriesStore from "@/store/directoriesStore";
 import { userStore } from "@/store/userStore";
 
 import classes from "./MainTable.module.scss";
-import {postApiData} from "@/app/api/hooks/fetchTableData";
+import { postApiData } from "@/app/api/hooks/fetchTableData";
 
 interface MainTableProperties {
     updateTable: boolean;
@@ -45,48 +44,25 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         setPage(1);
     };
 
-    const sortValue = sorting[0]?.desc === true ? "DESC" : "ASC";
-    const sortColumn = sorting[0]?.id;
 
-    const formattedSortColumn = sortColumn ? sortColumn.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase() : "";
 
     const directoriesStore = new DirectoriesStore();
 
-    // const parameters = {
-    //     page: page - 1,
-    //     size: size,
-    //     sort: sortValue,
-    //     link: link,
-    //     text: debouncedGlobalFilter[0],
-    //     column: formattedSortColumn,
-    // };
-
-    // const { data, refetch, isFetching, isLoading } = useQuery({
-    //     queryKey: ["apiData", parameters],
-    //     queryFn: async () => {
-    //         return parameters.text ? fetchApiDataWithSearch(parameters) : fetchApiData(parameters);
-    //     },
-    //     staleTime: 0,
-    //     placeholderData: keepPreviousData,
-    // });
-
+    interface SortCriteria {
+        [key: string]: 'ASC' | 'DESC';
+    }
     const parametersPost = {
-                link : link,
-                page: page -1,
-                size: size,
-                // columnSearchCriteria: {
-                //     // Дополнительные свойства
-                //     exampleKey: 'exampleValue', // Замените на нужные значения
-                // },
-                // sortCriteria: {
-                //     // Дополнительные свойства
-                //     exampleSortKey: 'exampleSortValue', // Замените на нужные значения
-                //     sortOrder: 'ASC', // или 'DESC'
-                // },
-                dataStatus: 'NOT_DELETED', // или 'DELETED', 'ALL'
-            };
-
-
+        link: link,
+        page: page - 1,
+        size: size,
+        globalSearchText: debouncedGlobalFilter[0],
+        sortCriteria: sorting.reduce<SortCriteria>((acc, sort) => {
+            const formattedColumn = sort.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
+            acc[formattedColumn] = sort.desc ? 'DESC' : 'ASC';
+            return acc;
+        }, {}),
+        dataStatus: "NOT_DELETED",
+    };
     const { data, refetch, isFetching, isLoading } = useQuery({
         queryKey: ["apiData", parametersPost],
         queryFn: async () => {
@@ -94,9 +70,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         },
         staleTime: 0,
         placeholderData: keepPreviousData,
+        // retryDelay: 10000,
     });
-
-
 
     const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
 
@@ -185,7 +160,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     });
     const table = useMantineReactTable({
         onGlobalFilterChange: handleGlobalFilterChange,
-
         renderCreateRowModalContent: ({ table, row }) => (
             <CreateRowModalContent
                 table={table}
@@ -232,6 +206,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             // setData((prevData) => [...prevData, { ...values, id: newId }]);
             exitCreatingMode();
         },
+       enableFilters: true,
         displayColumnDefOptions: {
             "mrt-row-actions": {
                 header: "",
@@ -294,6 +269,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         manualSorting: true,
         manualPagination: true,
         onSortingChange: setSorting,
+        isMultiSortEvent: () => true,
     });
 
     return data ? (
