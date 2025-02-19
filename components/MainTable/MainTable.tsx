@@ -222,7 +222,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             showProgressBars: isFetching,
             sorting,
         },
-        initialState: { density: "xs", showGlobalFilter: true },
+        initialState: { density: "xs", showGlobalFilter: true, showColumnFilters:true },
         mantineTableBodyCellProps: {
             mih: "50px",
         },
