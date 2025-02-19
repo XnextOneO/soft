@@ -39,6 +39,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [opened, setOpened] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
+    const debouncedColumnFilter = useDebouncedValue(filter, 200);
     const colorScheme = useMantineColorScheme();
     const handleGlobalFilterChange = (value: string): void => {
         setGlobalFilter(value);
@@ -64,7 +65,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             acc[formattedColumn] = sort.desc ? 'DESC' : 'ASC';
             return acc;
         }, {}),
-        columnSearchCriteria: filter.reduce<FilterCriteria>((acc, columnFilter) => {
+        columnSearchCriteria: debouncedColumnFilter[0].reduce<FilterCriteria>((acc, columnFilter) => {
             if (columnFilter.value) {
                 const formattedColumn = columnFilter.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
                 acc[formattedColumn] = String(columnFilter.value);
