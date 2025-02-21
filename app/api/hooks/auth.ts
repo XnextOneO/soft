@@ -8,27 +8,27 @@ interface LoginParameters {
   password: string;
 }
 
+// Update the LoginResponse interface to match the backend response
 interface LoginResponse {
-  token: string;
-  userId: number;
-  username: string;
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  refresh_expires_in: number;
 }
 
-// Login function: Handles the API call for user login
 const login = async ({ username, password }: LoginParameters): Promise<LoginResponse> => {
   const response: AxiosResponse<LoginResponse> = await $host.post(
     "/authorization/login",
     { username, password },
     { withCredentials: true },
   );
-  return response.data;
+  return response.data; // This will now return the updated structure
 };
 
-// useLogin hook: Provides a mutation for the login function
 export const useLogin = (): UseMutationResult<
-  LoginResponse, // Success type
-  Error, // Error type
-  LoginParameters // Variables type
+  LoginResponse,
+  Error,
+  LoginParameters
 > => {
   return useMutation<LoginResponse, Error, LoginParameters>({
     mutationFn: login,
