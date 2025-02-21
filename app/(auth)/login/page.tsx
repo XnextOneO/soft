@@ -6,11 +6,11 @@ import { useTranslations } from "next-intl";
 import { Alert, Button, Card, Group, Loader, Stack, Text, TextInput, useMantineColorScheme } from "@mantine/core";
 import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 
-import { useLogin } from "@/app/api/hooks/auth";
+import { useLogin } from "@/app/api/mutation/auth";
 import Header from "@/components/Header/Header";
+import { useAuthStore } from "@/store/authStore";
 
 import classes from "../Auth.module.scss";
-import {useAuthStore} from "@/store/authStore";
 
 const LoginPage: React.FC = () => {
     const colorScheme = useMantineColorScheme();
@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
     const [isLoginClicked, setIsLoginClicked] = useState(false);
     // eslint-disable-next-line unicorn/no-null
     const [error, setError] = useState<string | null>(null);
-    const {setTokens} = useAuthStore();
+    const { setTokens } = useAuthStore();
     const t = useTranslations("auth");
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const onLogin = async () => {
@@ -40,8 +40,10 @@ const LoginPage: React.FC = () => {
             { username, password },
             {
                 onSuccess: (data) => {
+                    // eslint-disable-next-line camelcase
                     const { access_token, refresh_token } = data;
                     setTokens(access_token, refresh_token);
+                    console.log(access_token, "accesfromlogin");
                     router.push("/");
                 },
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

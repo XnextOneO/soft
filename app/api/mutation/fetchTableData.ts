@@ -1,5 +1,6 @@
-import { notifications } from '@mantine/notifications';
-import { AxiosError } from 'axios';
+import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
+
 import { $authHost } from "../index";
 
 interface PostApiDataParameters {
@@ -16,10 +17,19 @@ interface PostApiDataParameters {
   dataStatus: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const postApiData = async (parameters: PostApiDataParameters): Promise<any> => {
+  const storedData = localStorage.getItem("auth-storage");
+  // eslint-disable-next-line unicorn/no-null
+  const accessToken = storedData ? JSON.parse(storedData).state.accessToken : null;
+  console.log(accessToken, "accestoken");
   try {
     const { link } = parameters;
-    const response = await $authHost.post(`reference-book/${link}/search`, parameters);
+    const response = await $authHost.post(`reference-book/${link}/search`, parameters, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
