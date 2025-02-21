@@ -10,6 +10,7 @@ import { useLogin } from "@/app/api/hooks/auth";
 import Header from "@/components/Header/Header";
 
 import classes from "../Auth.module.scss";
+import {useAuthStore} from "@/store/authStore";
 
 const LoginPage: React.FC = () => {
     const colorScheme = useMantineColorScheme();
@@ -22,6 +23,7 @@ const LoginPage: React.FC = () => {
     const [isLoginClicked, setIsLoginClicked] = useState(false);
     // eslint-disable-next-line unicorn/no-null
     const [error, setError] = useState<string | null>(null);
+    const {setTokens} = useAuthStore();
     const t = useTranslations("auth");
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const onLogin = async () => {
@@ -37,7 +39,9 @@ const LoginPage: React.FC = () => {
         mutate(
             { username, password },
             {
-                onSuccess: () => {
+                onSuccess: (data) => {
+                    const { access_token, refresh_token } = data;
+                    setTokens(access_token, refresh_token);
                     router.push("/");
                 },
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,11 +55,7 @@ const LoginPage: React.FC = () => {
                 },
             },
         );
-    }; // const closeError = () => {
-    //   setAlertMessage("");
-    //   setShowAlert(false);
-    //   setIsLoginClicked(false);
-    // };
+    };
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     useEffect(() => {
