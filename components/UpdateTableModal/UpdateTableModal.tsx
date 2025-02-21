@@ -16,11 +16,11 @@ import {
 } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { useDisclosure } from "@mantine/hooks";
-import { showNotification } from "@mantine/notifications"; // Импортируем showNotification
+import { showNotification } from "@mantine/notifications";
 import { IconCheck, IconCloudUpload, IconFile, IconUpload, IconX } from "@tabler/icons-react";
 import { AxiosProgressEvent } from "axios";
 
-import { uploadDirectory } from "@/app/api/books/directoryAPI";
+import { uploadDirectory } from "@/app/api/mutation/directoryAPI";
 
 import classes from "./UpdateTableModal.module.scss";
 

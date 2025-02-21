@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Flex, Stack, UnstyledButton } from "@mantine/core";
 
-import { userStore } from "@/store/userStore";
+import { useAuthStore } from "@/store/authStore";
 
 import IconAccountManagement from "../../public/assets/account-management.svg";
 import IconAnalytics from "../../public/assets/analytics.svg";
@@ -21,7 +21,6 @@ import IconUntilFindingOut from "../../public/assets/until-finding-out.svg";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
 
 import NavMenuButtonStack from "./NavMenuButtonStack";
-import {useAuthStore} from "@/store/authStore";
 
 interface INavMenuStackProperties {
     colorScheme: string;
@@ -44,7 +43,7 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
     const { clearTokens } = useAuthStore();
     const t = useTranslations("nav-menu-stack");
 
-    const handleLogout = () => {
+    const handleLogout = (): void => {
         clearTokens();
         router.push("/login");
     };

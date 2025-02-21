@@ -3,13 +3,8 @@ import { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Button, Container, Group, Stack, Title, useMantineColorScheme } from "@mantine/core";
-import { DateInput, DatesProvider } from "@mantine/dates";
-
-import SvgButton from "@/components/SvgWrapper/SvgButton";
 
 import "dayjs/locale/ru";
-
-import IconCalendar from "../../../public/assets/calendar.svg";
 
 import classes from "./HomePage.module.scss";
 const HomePage: FC = () => {

@@ -5,13 +5,14 @@ import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { MantineReactTable, MRT_SortingState, MRT_ColumnFiltersState, useMantineReactTable } from "mantine-react-table";
+import { MantineReactTable, MRT_ColumnFiltersState, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
-import PopoverCell from "@/components/DataTable/PopoverCell";
+import { postApiData } from "@/app/api/mutation/fetchTableData";
 import { MainLoader } from "@/components/MainLoader/MainLoader";
 import BottomToolbar from "@/components/MainTable/components/bottomToolbar";
 import EditRowModalContent from "@/components/MainTable/components/EditRowModalContent";
+import PopoverCell from "@/components/MainTable/components/PopoverCell";
 import RowActions from "@/components/MainTable/components/rowActions";
 import TopToolbar from "@/components/MainTable/components/topToolbar";
 import CreateRowModalContent from "@/components/MainTable/components/сreateRowModalContent";
@@ -20,7 +21,6 @@ import DirectoriesStore from "@/store/directoriesStore";
 import { userStore } from "@/store/userStore";
 
 import classes from "./MainTable.module.scss";
-import { postApiData } from "@/app/api/hooks/fetchTableData";
 
 interface MainTableProperties {
     updateTable: boolean;
@@ -41,6 +41,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
     const debouncedColumnFilter = useDebouncedValue(filter, 200);
     const colorScheme = useMantineColorScheme();
+    // eslint-disable-next-line unicorn/no-null
     const [error, setError] = useState<string | null>(null);
     const handleGlobalFilterChange = (value: string): void => {
         setGlobalFilter(value);
@@ -50,26 +51,25 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const directoriesStore = new DirectoriesStore();
 
     interface SortCriteria {
-        [key: string]: 'ASC' | 'DESC';
+        [key: string]: "ASC" | "DESC";
     }
     interface FilterCriteria {
-            [key: string]: string ;
+        [key: string]: string;
     }
 
-    const sortCriteria:SortCriteria = {};
-    sorting.forEach(sort => {
+    const sortCriteria: SortCriteria = {};
+    for (const sort of sorting) {
         const formattedColumn = sort.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
-        sortCriteria[formattedColumn] = sort.desc ? 'DESC' : 'ASC';
-    });
-
+        sortCriteria[formattedColumn] = sort.desc ? "DESC" : "ASC";
+    }
 
     const columnSearchCriteria: FilterCriteria = {};
-    debouncedColumnFilter[0].forEach(columnFilter => {
+    for (const columnFilter of debouncedColumnFilter[0]) {
         if (columnFilter.value) {
             const formattedColumn = columnFilter.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
             columnSearchCriteria[formattedColumn] = String(columnFilter.value);
         }
-    });
+    }
 
     const parametersPost = {
         link: link,
@@ -85,15 +85,15 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         queryFn: async () => {
             try {
                 return await postApiData(parametersPost);
-            } catch (err) {
+            } catch (error_) {
                 setError("ошибка сервера");
-                throw err;
+                throw error_;
             }
         },
         staleTime: 0,
         placeholderData: keepPreviousData,
-        retryDelay: 10000,
-        retry : false,
+        retryDelay: 10_000,
+        retry: false,
     });
 
     const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
@@ -183,6 +183,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     });
     const table = useMantineReactTable({
         onGlobalFilterChange: handleGlobalFilterChange,
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         renderCreateRowModalContent: ({ table, row }) => (
             <CreateRowModalContent
                 table={table}
@@ -215,6 +216,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             />
         ),
 
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         renderRowActions: ({ row, table }) => <RowActions row={row} table={table} />,
         renderTopToolbar: () => (
             <TopToolbar
@@ -229,7 +231,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             // setData((prevData) => [...prevData, { ...values, id: newId }]);
             exitCreatingMode();
         },
-       enableFilters: true,
+        enableFilters: true,
         displayColumnDefOptions: {
             "mrt-row-actions": {
                 header: "",
@@ -245,7 +247,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             showProgressBars: isFetching,
             sorting,
         },
-        initialState: { density: "xs", showGlobalFilter: true, showColumnFilters:true },
+        initialState: { density: "xs", showGlobalFilter: true, showColumnFilters: true },
         mantineTableBodyCellProps: {
             mih: "50px",
         },
@@ -296,11 +298,12 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         isMultiSortEvent: () => true,
     });
 
-
     if (error) {
-        return <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"} align="center" justify="center">
+        return (
+            <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"} align="center" justify="center">
                 {error}
-        </Flex>
+            </Flex>
+        );
     }
 
     return data ? (

@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useTranslations } from "next-intl";
 import { Button, Flex, Group } from "@mantine/core";
 import { IconReload } from "@tabler/icons-react";
-import {MRT_GlobalFilterTextInput, MRT_ShowHideColumnsButton, MRT_ToggleFiltersButton} from "mantine-react-table";
+import { MRT_GlobalFilterTextInput, MRT_ShowHideColumnsButton, MRT_ToggleFiltersButton } from "mantine-react-table";
 
 interface TopToolbarProperties {
     refetch: () => void;
@@ -42,7 +42,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({ refetch, setOpened, table, canCr
             <Flex gap={"5"}>
                 <MRT_GlobalFilterTextInput table={table} w={"300px"} />
                 <MRT_ShowHideColumnsButton table={table} />
-                <MRT_ToggleFiltersButton table={table}/>
+                <MRT_ToggleFiltersButton table={table} />
             </Flex>
         </Flex>
     );

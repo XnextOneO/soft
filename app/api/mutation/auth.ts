@@ -25,11 +25,7 @@ const login = async ({ username, password }: LoginParameters): Promise<LoginResp
   return response.data; // This will now return the updated structure
 };
 
-export const useLogin = (): UseMutationResult<
-  LoginResponse,
-  Error,
-  LoginParameters
-> => {
+export const useLogin = (): UseMutationResult<LoginResponse, Error, LoginParameters> => {
   return useMutation<LoginResponse, Error, LoginParameters>({
     mutationFn: login,
   });
