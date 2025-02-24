@@ -8,7 +8,6 @@ import { $authHost, $host } from "..";
 export const check = async (retryCount = 0): Promise<boolean> => {
   try {
     const { status } = await $host.get<void>("authorization/user/check");
-    const { status } = await $host.get<void>("authorization/user/check");
     return status === 200;
   } catch {
     // Limit retry attempts
