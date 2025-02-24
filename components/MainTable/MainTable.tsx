@@ -5,14 +5,14 @@ import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { MantineReactTable, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
+import { MantineReactTable, MRT_ColumnFiltersState, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
-import { postApiData } from "@/app/api/mutation/fetchTableData";
+import { postApiData } from "@/app/api/hooks/fetchTableData";
+import PopoverCell from "@/components/DataTable/PopoverCell";
 import { MainLoader } from "@/components/MainLoader/MainLoader";
 import BottomToolbar from "@/components/MainTable/components/bottomToolbar";
 import EditRowModalContent from "@/components/MainTable/components/EditRowModalContent";
-import PopoverCell from "@/components/MainTable/components/PopoverCell";
 import RowActions from "@/components/MainTable/components/rowActions";
 import TopToolbar from "@/components/MainTable/components/topToolbar";
 import CreateRowModalContent from "@/components/MainTable/components/сreateRowModalContent";
@@ -34,12 +34,13 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
     const [createModalOpened, setCreateModalOpened] = useState(false);
     const [sorting, setSorting] = useState<MRT_SortingState>([]);
+    const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
     const { isEdit, canDelete, canCreate } = userStore();
     const [opened, setOpened] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
+    const debouncedColumnFilter = useDebouncedValue(filter, 200);
     const colorScheme = useMantineColorScheme();
-    // eslint-disable-next-line unicorn/no-null
     const [error, setError] = useState<string | null>(null);
     const handleGlobalFilterChange = (value: string): void => {
         setGlobalFilter(value);
@@ -51,6 +52,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     interface SortCriteria {
         [key: string]: "ASC" | "DESC";
     }
+    interface FilterCriteria {
+        [key: string]: string;
+    }
 
     const sortCriteria: SortCriteria = {};
     for (const sort of sorting) {
@@ -58,12 +62,21 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         sortCriteria[formattedColumn] = sort.desc ? "DESC" : "ASC";
     }
 
+    const columnSearchCriteria: FilterCriteria = {};
+    for (const columnFilter of debouncedColumnFilter[0]) {
+        if (columnFilter.value) {
+            const formattedColumn = columnFilter.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
+            columnSearchCriteria[formattedColumn] = String(columnFilter.value);
+        }
+    }
+
     const parametersPost = {
         link: link,
         page: page - 1,
         size: size,
-        searchText: debouncedGlobalFilter[0],
+        globalSearchText: debouncedGlobalFilter[0],
         sortCriteria: sortCriteria,
+        columnSearchCriteria: columnSearchCriteria,
         dataStatus: "NOT_DELETED",
     };
     const { data, refetch, isFetching, isLoading } = useQuery({
@@ -169,7 +182,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     });
     const table = useMantineReactTable({
         onGlobalFilterChange: handleGlobalFilterChange,
-        // eslint-disable-next-line @typescript-eslint/no-shadow
         renderCreateRowModalContent: ({ table, row }) => (
             <CreateRowModalContent
                 table={table}
@@ -202,7 +214,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             />
         ),
 
-        // eslint-disable-next-line @typescript-eslint/no-shadow
         renderRowActions: ({ row, table }) => <RowActions row={row} table={table} />,
         renderTopToolbar: () => (
             <TopToolbar
@@ -217,7 +228,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             // setData((prevData) => [...prevData, { ...values, id: newId }]);
             exitCreatingMode();
         },
-        enableFilters: false,
+        enableFilters: true,
         displayColumnDefOptions: {
             "mrt-row-actions": {
                 header: "",
@@ -280,6 +291,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         manualSorting: true,
         manualPagination: true,
         onSortingChange: setSorting,
+        onColumnFiltersChange: setFilter,
         isMultiSortEvent: () => true,
     });
 
