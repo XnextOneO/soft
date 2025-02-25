@@ -5,24 +5,22 @@ import { useRefresh } from "@/app/api/mutation/auth";
 import { useAuthStore } from "@/store/authStore";
 
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // eslint-disable-next-line camelcase
     const { accessToken, refreshToken, clearTokens, setTokens, expires_in } = useAuthStore();
     const router = useRouter();
     const { mutate: refreshMutate } = useRefresh();
 
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         const checkTokenExpiration = () => {
             if (!accessToken) {
                 router.push("/login");
                 return;
             }
 
-            // eslint-disable-next-line camelcase
-            const tokenExpirationTime = expires_in;
             const currentTime = Date.now();
+            const tokenExpirationTime = currentTime + expires_in * 1000;
+            const refreshTime = tokenExpirationTime - 60_000;
 
-            if (currentTime >= tokenExpirationTime) {
+            const timeoutId = setTimeout(() => {
                 if (refreshToken) {
                     refreshMutate(
                         { token: refreshToken },
@@ -45,14 +43,13 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
                     clearTokens();
                     router.push("/login");
                 }
-            }
+            }, refreshTime - currentTime);
+
+            return () => clearTimeout(timeoutId);
         };
 
-        const intervalId = setInterval(checkTokenExpiration, 10_000);
-
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        return () => clearInterval(intervalId);
-    }, [accessToken, refreshToken, clearTokens, refreshMutate]);
+        checkTokenExpiration();
+    }, [accessToken, refreshToken, clearTokens, refreshMutate, expires_in]);
 
     return <>{children}</>;
 };
