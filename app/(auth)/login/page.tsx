@@ -40,10 +40,10 @@ const LoginPage: React.FC = () => {
             { username, password },
             {
                 onSuccess: (data) => {
+                    console.log(data, "data");
                     // eslint-disable-next-line camelcase
-                    const { access_token, refresh_token } = data;
-                    setTokens(access_token, refresh_token);
-                    console.log(access_token, "accesfromlogin");
+                    const { access_token, refresh_token, expires_in, refresh_expires_in } = data;
+                    setTokens(access_token, refresh_token, expires_in, refresh_expires_in);
                     router.push("/");
                 },
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

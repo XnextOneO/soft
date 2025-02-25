@@ -8,7 +8,6 @@ interface LoginParameters {
   password: string;
 }
 
-// Update the LoginResponse interface to match the backend response
 interface LoginResponse {
   access_token: string;
   refresh_token: string;
@@ -22,11 +21,30 @@ const login = async ({ username, password }: LoginParameters): Promise<LoginResp
     { username, password },
     { withCredentials: true },
   );
-  return response.data; // This will now return the updated structure
+  return response.data;
 };
 
 export const useLogin = (): UseMutationResult<LoginResponse, Error, LoginParameters> => {
   return useMutation<LoginResponse, Error, LoginParameters>({
     mutationFn: login,
+  });
+};
+
+interface RefreshTokenParameters {
+  token: string;
+}
+
+const refresh = async ({ token }: RefreshTokenParameters): Promise<LoginResponse> => {
+  const response: AxiosResponse<LoginResponse> = await $host.post(
+    "/authorization/refresh-token",
+    { token },
+    { withCredentials: true },
+  );
+  return response.data;
+};
+
+export const useRefresh = (): UseMutationResult<LoginResponse, Error, RefreshTokenParameters> => {
+  return useMutation<LoginResponse, Error, RefreshTokenParameters>({
+    mutationFn: refresh,
   });
 };
