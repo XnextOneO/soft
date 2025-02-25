@@ -7,10 +7,7 @@ interface PostApiDataParameters {
   link: string;
   page: number;
   size: number;
-  globalSearchText: string;
-  columnSearchCriteria?: {
-    [key: string]: string;
-  };
+  searchText?: string;
   sortCriteria?: {
     [key: string]: string;
   };

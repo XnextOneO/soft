@@ -5,7 +5,7 @@ import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { MantineReactTable, MRT_ColumnFiltersState, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
+import { MantineReactTable, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
 import { postApiData } from "@/app/api/mutation/fetchTableData";
@@ -34,12 +34,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
     const [createModalOpened, setCreateModalOpened] = useState(false);
     const [sorting, setSorting] = useState<MRT_SortingState>([]);
-    const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
     const { isEdit, canDelete, canCreate } = userStore();
     const [opened, setOpened] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
-    const debouncedColumnFilter = useDebouncedValue(filter, 200);
     const colorScheme = useMantineColorScheme();
     // eslint-disable-next-line unicorn/no-null
     const [error, setError] = useState<string | null>(null);
@@ -53,9 +51,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     interface SortCriteria {
         [key: string]: "ASC" | "DESC";
     }
-    interface FilterCriteria {
-        [key: string]: string;
-    }
 
     const sortCriteria: SortCriteria = {};
     for (const sort of sorting) {
@@ -63,21 +58,12 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         sortCriteria[formattedColumn] = sort.desc ? "DESC" : "ASC";
     }
 
-    const columnSearchCriteria: FilterCriteria = {};
-    for (const columnFilter of debouncedColumnFilter[0]) {
-        if (columnFilter.value) {
-            const formattedColumn = columnFilter.id.replaceAll(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
-            columnSearchCriteria[formattedColumn] = String(columnFilter.value);
-        }
-    }
-
     const parametersPost = {
         link: link,
         page: page - 1,
         size: size,
-        globalSearchText: debouncedGlobalFilter[0],
+        searchText: debouncedGlobalFilter[0],
         sortCriteria: sortCriteria,
-        columnSearchCriteria: columnSearchCriteria,
         dataStatus: "NOT_DELETED",
     };
     const { data, refetch, isFetching, isLoading } = useQuery({
@@ -231,7 +217,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             // setData((prevData) => [...prevData, { ...values, id: newId }]);
             exitCreatingMode();
         },
-        enableFilters: true,
+        enableFilters: false,
         displayColumnDefOptions: {
             "mrt-row-actions": {
                 header: "",
@@ -294,7 +280,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         manualSorting: true,
         manualPagination: true,
         onSortingChange: setSorting,
-        onColumnFiltersChange: setFilter,
         isMultiSortEvent: () => true,
     });
 
