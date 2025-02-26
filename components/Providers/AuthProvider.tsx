@@ -48,7 +48,8 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             }
         };
 
-        const intervalId = setInterval(checkTokenExpiration, 10_000);
+        // eslint-disable-next-line camelcase
+        const intervalId = setInterval(checkTokenExpiration, expires_in * 1000);
 
         // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         return () => clearInterval(intervalId);
