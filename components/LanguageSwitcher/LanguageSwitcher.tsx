@@ -1,26 +1,29 @@
 import { useEffect, useState } from "react";
 import { Group, Menu, Text, UnstyledButton } from "@mantine/core";
 
+import { defaultLocale, Locale, locales } from "@/i18n/config";
 import { getUserLocale, setUserLocale } from "@/i18n/locale-detector";
 
 import classes from "./LanguageSwitcher.module.scss";
 const LanguageSwitcherButton = (): JSX.Element => {
-    const [locale, setLocale] = useState("ru");
-
-    const items = [{ value: "ru" }, { value: "by" }];
-
+    const [locale, setLocale] = useState<Locale>(defaultLocale);
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const items: { value: Locale }[] = locales.map((locale) => ({ value: locale }));
     useEffect(() => {
         const fetchLocale = async (): Promise<void> => {
             const currentLocale = await getUserLocale();
-            setLocale(currentLocale);
+            if (locales.includes(currentLocale as Locale)) {
+                setLocale(currentLocale as Locale);
+            } else {
+                setLocale(defaultLocale);
+            }
         };
         fetchLocale();
     }, []);
 
-    const handleLocaleChange = async (value: string): Promise<void> => {
-        const newLocale = value;
-        await setUserLocale(newLocale);
-        setLocale(newLocale);
+    const handleLocaleChange = async (value: Locale): Promise<void> => {
+        await setUserLocale(value);
+        setLocale(value);
     };
 
     return (
