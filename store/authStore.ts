@@ -25,7 +25,9 @@ export const useAuthStore = create<AuthStore>()(
         // eslint-disable-next-line camelcase
         set({ accessToken, refreshToken, expires_in, refresh_expires_in }),
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-      clearTokens: () => set({ accessToken: null, refreshToken: null }),
+      clearTokens: () => {
+        localStorage.removeItem("auth-storage");
+      },
     }),
     {
       name: "auth-storage",
