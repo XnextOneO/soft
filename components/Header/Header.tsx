@@ -19,8 +19,9 @@ import classes from "./Header.module.scss";
 interface HeaderProperties {
     isBurger: boolean;
     isProfile: boolean;
+    link?: boolean;
 }
-const Header: React.FC<HeaderProperties> = observer(({ isBurger, isProfile }) => {
+const Header: React.FC<HeaderProperties> = observer(({ isBurger, isProfile, link }) => {
     const [opened, { toggle }] = useDisclosure();
     const { burgerStore } = useContext(Context);
     const pathname = usePathname();
@@ -57,14 +58,23 @@ const Header: React.FC<HeaderProperties> = observer(({ isBurger, isProfile }) =>
                     </Flex>
                 )}
                 <Group justify="space-between" w="100%" pl="md">
-                    <Link href={"/"}>
+                    {link ? (
+                        <Link href={"/"}>
+                            <Group gap="xs">
+                                <MantineImage src="../../favicon.png" w={30} h={30} alt="logo" />
+                                <Text c="white" size="20px" fw={700} className={classes.title}>
+                                    IIS {t("belarusbank")}
+                                </Text>
+                            </Group>
+                        </Link>
+                    ) : (
                         <Group gap="xs">
                             <MantineImage src="../../favicon.png" w={30} h={30} alt="logo" />
                             <Text c="white" size="20px" fw={700} className={classes.title}>
                                 IIS {t("belarusbank")}
                             </Text>
                         </Group>
-                    </Link>
+                    )}
                     <Group gap={0} justify="flex-end" align="center">
                         <ThemeSwitcher />
                         <LanguageSwitcher />

@@ -22,7 +22,7 @@ export const userStore = create(
       setName: (value: string): void => set({ name: value }),
       email: "",
       setEmail: (value: string): void => set({ email: value }),
-      isEdit: false,
+      isEdit: true,
       setIsEdit: (value: boolean): void => set({ isEdit: value }),
       canDelete: false,
       setCanDelete: (value: boolean): void => set({ canDelete: value }),

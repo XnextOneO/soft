@@ -72,7 +72,7 @@ const LoginPage: React.FC = () => {
     return (
         <div className={backgroundState}>
             <Stack gap={0}>
-                <Header isBurger={false} isProfile={false} />
+                <Header isBurger={false} isProfile={false} link={false} />
                 <Card w="25%" py={70} miw={400} shadow="xl" withBorder>
                     <Group
                         gap="sm"
