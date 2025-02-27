@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { MantineReactTable, MRT_ColumnFiltersState, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
@@ -41,6 +40,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
     const debouncedColumnFilter = useDebouncedValue(filter, 200);
     const colorScheme = useMantineColorScheme();
+    // eslint-disable-next-line unicorn/no-null
     const [error, setError] = useState<string | null>(null);
     const handleGlobalFilterChange = (value: string): void => {
         setGlobalFilter(value);
@@ -201,6 +201,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     });
     const table = useMantineReactTable({
         onGlobalFilterChange: handleGlobalFilterChange,
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         renderCreateRowModalContent: ({ table, row }) => (
             <CreateRowModalContent
                 table={table}
@@ -233,6 +234,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             />
         ),
 
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         renderRowActions: ({ row, table }) => <RowActions row={row} table={table} />,
         renderTopToolbar: () => (
             <TopToolbar
@@ -263,7 +265,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             showProgressBars: isFetching,
             sorting,
         },
-        initialState: { density: "xs", showGlobalFilter: true, showColumnFilters: true },
+        initialState: { density: "xs", showGlobalFilter: true, showColumnFilters: false },
         mantineTableBodyCellProps: {
             mih: "50px",
         },

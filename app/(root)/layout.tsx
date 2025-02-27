@@ -33,7 +33,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }): JSX.Element => {
             </head>
             <body>
                 <Providers>
-                    <Header isBurger={true} isProfile={true} />
+                    <Header isBurger={true} isProfile={true} link={true} />
                     <Container fluid className={classes.mainContainer} m={0} p={0} maw="100vw">
                         <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
                             <NavMenu />
