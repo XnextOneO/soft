@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
-import { FC, useState } from "react";
-import { Flex, Loader, Text, useMantineColorScheme } from "@mantine/core";
+import React, { FC, useState } from "react";
+import { Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
@@ -8,11 +8,11 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { MantineReactTable, MRT_ColumnFiltersState, MRT_SortingState, useMantineReactTable } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
 
-import { postApiData } from "@/app/api/hooks/fetchTableData";
-import PopoverCell from "@/components/DataTable/PopoverCell";
+import { postApiData } from "@/app/api/mutation/fetchTableData";
 import { MainLoader } from "@/components/MainLoader/MainLoader";
 import BottomToolbar from "@/components/MainTable/components/bottomToolbar";
 import EditRowModalContent from "@/components/MainTable/components/EditRowModalContent";
+import PopoverCell from "@/components/MainTable/components/PopoverCell";
 import RowActions from "@/components/MainTable/components/rowActions";
 import TopToolbar from "@/components/MainTable/components/topToolbar";
 import CreateRowModalContent from "@/components/MainTable/components/сreateRowModalContent";
@@ -142,7 +142,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
                             return (
                                 <div className={classes.statusCell}>
                                     {/*<Loader size="sm" />*/}
-                                    <Text c="yellow">В обработке</Text>
+                                    <Text c={"yellow"}>В обработке</Text>
                                 </div>
                             );
                         }
@@ -150,7 +150,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
                             return (
                                 <div className={classes.statusCell}>
                                     {/*<IconSquareX color={"red"} />*/}
-                                    <Text c="red">Ошибка</Text>
+                                    <Text c={"red"}>Ошибка</Text>
                                 </div>
                             );
                         }
@@ -158,15 +158,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
                             return (
                                 <div className={classes.statusCell}>
                                     {/*<IconRosetteDiscountCheckFilled color={"green"} />*/}
-                                    <Text c="green">Успешно</Text>
-                                </div>
-                            );
-                        }
-                        case "PENDING": {
-                            return (
-                                <div className={classes.statusCell}>
-                                    {/*<IconRosetteDiscountCheckFilled color={"green"} />*/}
-                                    <Text c="orange">В ожидании</Text>
+                                    <Text c={"green"}>Успешно</Text>
                                 </div>
                             );
                         }
@@ -174,7 +166,15 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
                             return (
                                 <div className={classes.statusCell}>
                                     {/*<IconRosetteDiscountCheckFilled color={"green"} />*/}
-                                    <Text c="gray">Отменено</Text>
+                                    <Text c={"gray"}>Отменено</Text>
+                                </div>
+                            );
+                        }
+                        case "PENDING": {
+                            return (
+                                <div className={classes.statusCell}>
+                                    {/*<IconRosetteDiscountCheckFilled color={"green"} />*/}
+                                    <Text c={"orange"}>В оиждании</Text>
                                 </div>
                             );
                         }
