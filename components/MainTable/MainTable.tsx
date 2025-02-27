@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { FC, useState } from "react";
-import { Flex, Loader, useMantineColorScheme } from "@mantine/core";
+import { Flex, Loader, Text, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconRosetteDiscountCheckFilled, IconSquareX } from "@tabler/icons-react";
@@ -141,21 +141,40 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
                         case "IN_PROCESSING": {
                             return (
                                 <div className={classes.statusCell}>
-                                    <Loader size="sm" />
+                                    {/*<Loader size="sm" />*/}
+                                    <Text c="yellow">В обработке</Text>
                                 </div>
                             );
                         }
                         case "ERROR": {
                             return (
                                 <div className={classes.statusCell}>
-                                    <IconSquareX color={"red"} />
+                                    {/*<IconSquareX color={"red"} />*/}
+                                    <Text c="red">Ошибка</Text>
                                 </div>
                             );
                         }
                         case "SUCCESS": {
                             return (
                                 <div className={classes.statusCell}>
-                                    <IconRosetteDiscountCheckFilled color={"green"} />
+                                    {/*<IconRosetteDiscountCheckFilled color={"green"} />*/}
+                                    <Text c="green">Успешно</Text>
+                                </div>
+                            );
+                        }
+                        case "PENDING": {
+                            return (
+                                <div className={classes.statusCell}>
+                                    {/*<IconRosetteDiscountCheckFilled color={"green"} />*/}
+                                    <Text c="orange">В ожидании</Text>
+                                </div>
+                            );
+                        }
+                        case "CANCELLED": {
+                            return (
+                                <div className={classes.statusCell}>
+                                    {/*<IconRosetteDiscountCheckFilled color={"green"} />*/}
+                                    <Text c="gray">Отменено</Text>
                                 </div>
                             );
                         }
