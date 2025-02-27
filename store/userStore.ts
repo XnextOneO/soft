@@ -24,9 +24,9 @@ export const userStore = create(
       setEmail: (value: string): void => set({ email: value }),
       isEdit: true,
       setIsEdit: (value: boolean): void => set({ isEdit: value }),
-      canDelete: false,
+      canDelete: true,
       setCanDelete: (value: boolean): void => set({ canDelete: value }),
-      canCreate: false,
+      canCreate: true,
       setCanCreate: (value: boolean): void => set({ canCreate: value }),
       clearStore: (): void => {
         set({ isEdit: false });
