@@ -31,7 +31,7 @@ interface MainTableProperties {
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const [page, setPage] = useState<number>(1);
     const [size, setSize] = useState<number>(20);
-
+    const [localization, setLocalization] = useState(MRT_Localization_RU);
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
     const [createModalOpened, setCreateModalOpened] = useState(false);
     const [sorting, setSorting] = useState<MRT_SortingState>([]);
@@ -48,18 +48,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         setGlobalFilter(value);
         setPage(1);
     };
-    const [locale, setLocale] = useState("ru");
-
-    useEffect(() => {
-        const fetchLocale = async (): Promise<void> => {
-            const currentLocale = await getUserLocale();
-            setLocale(currentLocale);
-        };
-        fetchLocale();
-    }, []);
-
     const directoriesStore = new DirectoriesStore();
-
     interface SortCriteria {
         [key: string]: "ASC" | "DESC";
     }
@@ -81,6 +70,20 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         }
     }
 
+    // eslint-disable-next-line unicorn/consistent-function-scoping
+    async function fetchUserLocale(): Promise<string> {
+        return await getUserLocale();
+    }
+    useEffect(() => {
+        const setLocale = async (): Promise<void> => {
+            const locale = await fetchUserLocale();
+            const localizationValue = locale === "ru" ? MRT_Localization_RU : MRT_Localization_BY;
+            setLocalization(localizationValue);
+        };
+
+        setLocale();
+    }, [fetchUserLocale()]);
+
     const parametersPost = {
         link: link,
         page: page - 1,
@@ -90,6 +93,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         columnSearchCriteria: columnSearchCriteria,
         dataStatus: "NOT_DELETED",
     };
+
     const { data, refetch, isFetching, isLoading } = useQuery({
         queryKey: ["apiData", parametersPost],
         queryFn: async () => {
@@ -300,7 +304,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             closeOnClickOutside: true,
             withCloseButton: true,
         },
-        localization: locale === "ru" ? MRT_Localization_RU : MRT_Localization_BY,
+        localization: localization,
         enableFullScreenToggle: false,
         enableDensityToggle: false,
         enableStickyHeader: true,
