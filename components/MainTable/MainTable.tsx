@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
@@ -16,6 +16,8 @@ import RowActions from "@/components/MainTable/components/rowActions";
 import TopToolbar from "@/components/MainTable/components/topToolbar";
 import CreateRowModalContent from "@/components/MainTable/components/сreateRowModalContent";
 import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
+import { getUserLocale } from "@/i18n/locale-detector";
+import { MRT_Localization_BY } from "@/public/locales/MRT_Localization_BY";
 import DirectoriesStore from "@/store/directoriesStore";
 import { userStore } from "@/store/userStore";
 
@@ -46,6 +48,15 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         setGlobalFilter(value);
         setPage(1);
     };
+    const [locale, setLocale] = useState("ru");
+
+    useEffect(() => {
+        const fetchLocale = async (): Promise<void> => {
+            const currentLocale = await getUserLocale();
+            setLocale(currentLocale);
+        };
+        fetchLocale();
+    }, []);
 
     const directoriesStore = new DirectoriesStore();
 
@@ -289,7 +300,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             closeOnClickOutside: true,
             withCloseButton: true,
         },
-        localization: MRT_Localization_RU,
+        localization: locale === "ru" ? MRT_Localization_RU : MRT_Localization_BY,
         enableFullScreenToggle: false,
         enableDensityToggle: false,
         enableStickyHeader: true,
