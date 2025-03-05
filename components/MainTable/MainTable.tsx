@@ -199,11 +199,11 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
                 return (
                     <div
-                        onDoubleClick={() => {
-                            if (isEdit) {
-                                table.setEditingRow(cell.row);
-                            }
-                        }}
+                        // onDoubleClick={() => {
+                        //     if (isEdit) {
+                        //         table.setEditingRow(cell.row);
+                        //     }
+                        // }}
                         className={classes.cell}
                     >
                         <PopoverCell>{cellValue}</PopoverCell>
@@ -282,7 +282,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         },
         initialState: { density: "xs", showGlobalFilter: true, showColumnFilters: false },
         mantineTableBodyCellProps: {
-            mih: "50px",
+            mih: "0px",
+            p: "4px 4px",
         },
         mantineLoadingOverlayProps: {
             loaderProps: { color: "#006040", type: "bars" },
