@@ -33,7 +33,7 @@ export const LoginPage: FC = () => {
   // eslint-disable-next-line unicorn/no-null
   const [error, setError] = useState<string | null>(null);
   const { setTokens } = useAuthStore();
-  const t = useTranslation(["auth"]);
+  const { t } = useTranslation(["auth"]);
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onLogin = async () => {
     setIsLoginClicked(true);
