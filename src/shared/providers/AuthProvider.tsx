@@ -6,7 +6,6 @@ import { useRouter } from "@tanstack/react-router";
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // eslint-disable-next-line camelcase
   const { accessToken, refreshToken, clearTokens, setTokens, expires_in } =
     useAuthStore();
   const router = useRouter();
@@ -20,7 +19,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         return;
       }
 
-      // eslint-disable-next-line camelcase
       const tokenExpirationTime = expires_in;
       const currentTime = Date.now();
 
@@ -50,7 +48,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
 
-    // eslint-disable-next-line camelcase
     const intervalId = setInterval(checkTokenExpiration, expires_in * 1000);
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
