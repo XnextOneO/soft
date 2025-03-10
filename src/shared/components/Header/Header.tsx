@@ -25,7 +25,7 @@ interface HeaderProperties {
 }
 const Header: FC<HeaderProperties> = ({ isBurger, isProfile, link }) => {
   const [opened, { toggle }] = useDisclosure();
-  const t = useTranslation(["header"]);
+  const { t } = useTranslation(["header"]);
 
   return (
     <Container className={classes.headerContainer} fluid p={0}>

@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
+import "@mantine/core/styles.css";
+
 const RootComponent: React.FC = () => {
   const isDevelopment = import.meta.env.MODE === "development";
   const queryClient = new QueryClient({
