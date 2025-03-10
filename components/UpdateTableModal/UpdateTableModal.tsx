@@ -28,10 +28,12 @@ const UpdateTableModal = ({
     link,
     opened,
     close,
+    refetch,
 }: {
     link: string;
     opened: boolean;
     close: () => void;
+    refetch: () => void;
 }): JSX.Element => {
     const [visible, { toggle }] = useDisclosure(false);
     const [progress, setProgress] = useState<number>(0);
@@ -224,7 +226,15 @@ const UpdateTableModal = ({
                                                 setFile(undefined);
                                             }}
                                         >
-                                            <ActionIcon color="teal" variant="light" radius="xl" size="xl">
+                                            <ActionIcon
+                                                color="teal"
+                                                variant="light"
+                                                radius="xl"
+                                                size="xl"
+                                                onClick={() => {
+                                                    refetch();
+                                                }}
+                                            >
                                                 <IconCheck
                                                     style={{
                                                         width: rem(22),

@@ -282,8 +282,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         },
         initialState: { density: "xs", showGlobalFilter: true, showColumnFilters: false },
         mantineTableBodyCellProps: {
-            mih: "0px",
-            p: "4px 4px",
+            h: "35px",
+            p: "4px 10px",
         },
         mantineLoadingOverlayProps: {
             loaderProps: { color: "#006040", type: "bars" },
@@ -344,7 +344,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"}>
             <MantineReactTable table={table} />
             <LoadingOverlay visible={isLoading} />
-            {updateTable && <UpdateTableModal link={link} opened={opened} close={() => setOpened(false)} />}
+            {updateTable && (
+                <UpdateTableModal refetch={refetch} link={link} opened={opened} close={() => setOpened(false)} />
+            )}
         </Flex>
     ) : (
         <MainLoader />
