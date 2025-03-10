@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
@@ -14,13 +14,14 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { useLogin } from "@shared/api/mutation/auth.ts";
+import Header from "@shared/components/Header/Header.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
 import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 import { useRouter } from "@tanstack/react-router";
 
-import classes from "../Auth.module.scss";
+import styles from "./index.module.scss";
 
-const LoginPage: React.FC = () => {
+export const LoginPage: FC = () => {
   const colorScheme = useMantineColorScheme();
   const [backgroundState, setBackgroundState] = useState<string>("");
   const { mutate } = useLogin();
@@ -62,7 +63,7 @@ const LoginPage: React.FC = () => {
             expires_in,
             refresh_expires_in,
           );
-          router.push("/");
+          router.navigate({ to: "/", replace: true });
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (loginError: any) => {
@@ -81,7 +82,7 @@ const LoginPage: React.FC = () => {
   const currentYear = currentDate.getFullYear();
   useEffect(() => {
     const isLight = colorScheme.colorScheme === "light";
-    setBackgroundState(isLight ? classes.authContainer : classes.darkContainer);
+    setBackgroundState(isLight ? styles.authContainer : styles.darkContainer);
   }, [colorScheme.colorScheme]);
 
   if (!backgroundState) {
@@ -198,5 +199,3 @@ const LoginPage: React.FC = () => {
     </div>
   );
 };
-
-export default LoginPage;

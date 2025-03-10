@@ -115,6 +115,6 @@ module.exports = {
     "unicorn/no-unreadable-array-destructuring": "error",
     "eslint-comments/disable-enable-pair": "off",
     "sonarjs/todo-tag": "off",
-    "@typescript-eslint/camelcase": "error",
+    camelcase: "off",
   },
 };

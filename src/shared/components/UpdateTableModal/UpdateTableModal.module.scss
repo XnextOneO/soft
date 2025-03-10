@@ -1,0 +1,31 @@
+.file-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 20px 30px;
+  padding: 10px;
+  border-radius: var(--mantine-radius-md);
+  background-color: light-dark(
+      rgb(244 244 244),
+      rgb(44 44 44)
+  );
+  cursor: pointer;
+  transition: box-shadow 150ms ease,
+  transform 100ms ease;
+  width: 100%;
+
+  @mixin hover {
+    box-shadow: var(--mantine-shadow-lg);
+    transform: scale(1.05);
+  }
+}
+
+
+.modal-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
