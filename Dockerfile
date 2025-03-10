@@ -12,7 +12,7 @@ COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
 # Copy the rest of the application code
-COPY ../litefront ./
+COPY . ./
 
 # Build the application
 RUN npm run build

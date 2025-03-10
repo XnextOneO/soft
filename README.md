@@ -1,4 +1,4 @@
-![](.github/logo.png)
+![](./.github/logo.png)
 
 A [Vite](https://vitejs.dev) + [GraphQL](https://graphql.org) + Typescript frontend boilerplate
 using [Feature-Sliced Design](https://feature-sliced.design) as project architecture methodology.

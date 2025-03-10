@@ -1,7 +1,7 @@
 node_modules/
 dist/
 storybook-build/
-../litefront/.idea
+.idea
 .vscode
 .env
 /test-results/
