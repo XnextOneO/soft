@@ -73,7 +73,7 @@ export const uploadDirectory = async (
   config?: AxiosRequestConfig,
 ): Promise<number> => {
   try {
-    const { status } = await $authHost.post(`reference-book/${link}`, formData, config);
+    const { status } = await $authHost.post(`reference-book/${link}/upload-file`, formData, config);
     return status;
   } catch (error: unknown) {
     console.error("Error uploading directory:", error);
