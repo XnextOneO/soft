@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: ../litefront
+      context: .
     restart: unless-stopped
     env_file:
       - .env
