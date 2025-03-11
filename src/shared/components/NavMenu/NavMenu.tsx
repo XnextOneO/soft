@@ -1,25 +1,25 @@
-import { useContext, useState } from "react";
+import { FC, useState } from "react";
 import { useMantineColorScheme } from "@mantine/core";
-
-import { Context } from "../../providers/AppContextProvider.tsx";
 
 import NavMenuStack from "./NavMenuStack";
 
-const NavMenu = () => {
-  const { burgerStore } = useContext(Context);
+interface NavMenuProperties {
+  isMenuOpen: boolean;
+}
+
+const NavMenu: FC<NavMenuProperties> = ({ isMenuOpen }) => {
   const colorScheme = useMantineColorScheme();
 
   const [active, setActive] = useState(false);
-
   return (
     <>
-      {burgerStore.opened ? (
+      {isMenuOpen ? (
         <NavMenuStack
           colorScheme={colorScheme.colorScheme}
           active={active}
           setActive={setActive}
           width={250}
-          opened={true}
+          opened={isMenuOpen}
           marginLeft={10}
         />
       ) : (
@@ -28,7 +28,7 @@ const NavMenu = () => {
           active={active}
           setActive={setActive}
           width={52}
-          opened={false}
+          opened={isMenuOpen}
           marginLeft={0}
         />
       )}

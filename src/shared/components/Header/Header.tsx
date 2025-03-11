@@ -1,5 +1,3 @@
-"use client";
-
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -10,7 +8,6 @@ import {
   Image as MantineImage,
   Text,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import LanguageSwitcher from "@shared/components/LanguageSwitcher/LanguageSwitcher.tsx";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { Link } from "@tanstack/react-router";
@@ -22,9 +19,16 @@ interface HeaderProperties {
   isBurger: boolean;
   isProfile: boolean;
   link?: boolean;
+  toggleMenu: () => void;
+  isMenuOpen: boolean;
 }
-const Header: FC<HeaderProperties> = ({ isBurger, isProfile, link }) => {
-  const [opened, { toggle }] = useDisclosure();
+const Header: FC<HeaderProperties> = ({
+  isBurger,
+  isProfile,
+  link,
+  toggleMenu,
+  isMenuOpen,
+}) => {
   const { t } = useTranslation(["header"]);
 
   return (
@@ -35,7 +39,7 @@ const Header: FC<HeaderProperties> = ({ isBurger, isProfile, link }) => {
             justify="center"
             align="center"
             className={classes.buttonContainer}
-            onClick={toggle}
+            onClick={toggleMenu}
             w={52}
             miw={52}
           >
@@ -47,7 +51,7 @@ const Header: FC<HeaderProperties> = ({ isBurger, isProfile, link }) => {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              opened={opened}
+              opened={isMenuOpen}
               aria-label={t("navigation")}
             />
           </Flex>
