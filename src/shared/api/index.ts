@@ -19,6 +19,3 @@ $authHost.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
-console.log($host.defaults.baseURL, "host");
-console.log($authHost.defaults.baseURL, "authHost");
