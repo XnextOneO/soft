@@ -13,7 +13,7 @@ const MyBreadcrumbs = (): JSX.Element => {
   const pathname = location.pathname;
   const colorScheme = useMantineColorScheme();
   const pathSegments = pathname.split("/").filter(Boolean);
-  const t = useTranslation(["bread-crumbs"]);
+  const { t } = useTranslation(["bread-crumbs"]);
   const filteredSegments = pathSegments.filter(
     (segment) => segment !== "nsi" && segment !== "scbank",
   );

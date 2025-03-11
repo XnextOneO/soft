@@ -5,18 +5,18 @@ import DropdownMenu from "@shared/components/DropdownMenu/DropdownMenu.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
 import { Link, useRouter } from "@tanstack/react-router";
 
-import { ReactComponent as IconAccountManagement } from "../../../../public/assets/account-management.svg";
-import { ReactComponent as IconAnalytics } from "../../../../public/assets/analytics.svg";
-import { ReactComponent as IconConfigurationTables } from "../../../../public/assets/configuration-tables.svg";
-import { ReactComponent as IconDirectories } from "../../../../public/assets/directories.svg";
-import { ReactComponent as IconHelp } from "../../../../public/assets/help.svg";
-import { ReactComponent as IconInvestigationOfPayments } from "../../../../public/assets/investigation-of-payments.svg";
-import { ReactComponent as IconJournal } from "../../../../public/assets/journal.svg";
-import { ReactComponent as IconLogout } from "../../../../public/assets/logout.svg";
-import { ReactComponent as IconManagingReviewRequests } from "../../../../public/assets/managing-review-requests.svg";
-import { ReactComponent as IconPaymentManagement } from "../../../../public/assets/payment-management.svg";
-import { ReactComponent as IconReportsStats } from "../../../../public/assets/reports-stats.svg";
-import { ReactComponent as IconUntilFindingOut } from "../../../../public/assets/until-finding-out.svg";
+import IconAccountManagement from "../../../../public/assets/account-management.svg";
+import IconAnalytics from "../../../../public/assets/analytics.svg";
+import IconConfigurationTables from "../../../../public/assets/configuration-tables.svg";
+import IconDirectories from "../../../../public/assets/directories.svg";
+import IconHelp from "../../../../public/assets/help.svg";
+import IconInvestigationOfPayments from "../../../../public/assets/investigation-of-payments.svg";
+import IconJournal from "../../../../public/assets/journal.svg";
+import IconLogout from "../../../../public/assets/logout.svg";
+import IconManagingReviewRequests from "../../../../public/assets/managing-review-requests.svg";
+import IconPaymentManagement from "../../../../public/assets/payment-management.svg";
+import IconReportsStats from "../../../../public/assets/reports-stats.svg";
+import IconUntilFindingOut from "../../../../public/assets/until-finding-out.svg";
 
 import NavMenuButtonStack from "./NavMenuButtonStack";
 
@@ -39,7 +39,7 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
 }) => {
   const router = useRouter();
   const { clearTokens } = useAuthStore();
-  const t = useTranslation(["nav-menu-stack"]);
+  const { t } = useTranslation(["nav-menu-stack"]);
 
   const handleLogout = (): void => {
     clearTokens();
