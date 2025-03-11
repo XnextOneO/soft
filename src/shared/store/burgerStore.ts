@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 
 export default class BurgerStore {
-  private _opened: boolean = false;
+  private _opened: boolean = true;
 
   constructor() {
     makeAutoObservable(this);
@@ -9,6 +9,10 @@ export default class BurgerStore {
 
   setOpened(opened: boolean): void {
     this._opened = opened;
+  }
+
+  toggleOpened(): void {
+    this._opened = !this._opened;
   }
 
   get opened(): boolean {
