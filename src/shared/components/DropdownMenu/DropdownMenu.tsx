@@ -18,7 +18,7 @@ const DropdownMenu = observer(
     const [directories, setDirectories] = useState(
       directoriesStore.directories,
     );
-    const t = useTranslation("directories-menu");
+    const { t } = useTranslation("directories-menu");
 
     const handleItemClick = (event: React.MouseEvent): void => {
       event.stopPropagation();

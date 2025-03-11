@@ -3,7 +3,7 @@ import React, { FC, HTMLAttributes } from "react";
 import classes from "./SvgWrapper.module.scss";
 
 interface SvgButtonProperties extends HTMLAttributes<HTMLDivElement> {
-  SvgIcon: FC<React.SVGProps<SVGSVGElement>>;
+  SvgIcon: string;
   fillColor: string;
 }
 
@@ -16,7 +16,11 @@ const SvgButton: FC<SvgButtonProperties> = ({
 }) => {
   return (
     <div className={classes.parent} style={style} {...properties}>
-      <SvgIcon className={classes.svgIcon} style={{ color: fillColor }} />
+      <img
+        src={SvgIcon}
+        className={classes.svgIcon}
+        style={{ color: fillColor }}
+      />
       {children}
     </div>
   );
