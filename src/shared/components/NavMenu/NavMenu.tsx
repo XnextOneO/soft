@@ -1,13 +1,11 @@
-"use client";
 import { useContext, useState } from "react";
 import { useMantineColorScheme } from "@mantine/core";
-import { observer } from "mobx-react-lite";
 
 import { Context } from "../../providers/AppContextProvider.tsx";
 
 import NavMenuStack from "./NavMenuStack";
 
-const NavMenu = observer(() => {
+const NavMenu = () => {
   const { burgerStore } = useContext(Context);
   const colorScheme = useMantineColorScheme();
 
@@ -36,6 +34,6 @@ const NavMenu = observer(() => {
       )}
     </>
   );
-});
+};
 
 export default NavMenu;

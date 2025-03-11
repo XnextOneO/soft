@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import { Menu, TextInput } from "@mantine/core";
+import { Link } from "@tanstack/react-router";
 import { observer } from "mobx-react-lite";
 
 import { Context } from "../../providers/AppContextProvider.tsx";
@@ -18,7 +18,7 @@ const DropdownMenu = observer(
     const [directories, setDirectories] = useState(
       directoriesStore.directories,
     );
-    const t = useTranslations("directories-menu");
+    const t = useTranslation("directories-menu");
 
     const handleItemClick = (event: React.MouseEvent): void => {
       event.stopPropagation();
@@ -67,7 +67,7 @@ const DropdownMenu = observer(
             <Link
               style={{ textDecoration: "none" }}
               key={index}
-              href={`/directories/${directory.link}`}
+              to={`/directories/${directory.link}`}
               onClick={() => {
                 resetDirectories();
               }}

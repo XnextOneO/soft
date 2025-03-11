@@ -6,6 +6,7 @@ import react from "@vitejs/plugin-react";
 import { configDotenv } from "dotenv";
 import { UserConfig } from "vite";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
+import svgr from "vite-plugin-svgr";
 import { vitePluginVersionMark } from "vite-plugin-version-mark";
 import tsconfigPaths from "vite-tsconfig-paths";
 
@@ -22,6 +23,7 @@ const viteConfig = (): UserConfig => {
       port,
       strictPort: true,
       host: "0.0.0.0",
+      allowedHosts: true,
     },
     preview: {
       port,
@@ -30,6 +32,7 @@ const viteConfig = (): UserConfig => {
     plugins: [
       tsconfigPaths(),
       react(),
+      svgr(),
       ViteImageOptimizer(),
       TanStackRouterVite({
         generatedRouteTree: "./src/generated/routeTree.gen.ts",
