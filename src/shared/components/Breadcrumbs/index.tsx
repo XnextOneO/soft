@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Anchor,
@@ -6,18 +6,20 @@ import {
   Text,
   useMantineColorScheme,
 } from "@mantine/core";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 
 import classes from "./Breadcrumbs.module.scss";
 
 const MyBreadcrumbs = (): JSX.Element => {
-  const pathname = location.pathname;
+  const location = useLocation();
   const colorScheme = useMantineColorScheme();
-  const pathSegments = pathname.split("/").filter(Boolean);
   const { t } = useTranslation(["bread-crumbs"]);
-  const filteredSegments = pathSegments.filter(
-    (segment) => segment !== "nsi" && segment !== "scbank",
-  );
+  const filteredSegments = useMemo(() => {
+    const pathSegments = location.pathname.split("/").filter(Boolean);
+    return pathSegments.filter(
+      (segment) => segment !== "nsi" && segment !== "scbank",
+    );
+  }, [location.pathname]);
   const [items, setItems] = useState<{ title: string; href: string }[]>([]);
 
   useEffect(() => {
@@ -26,7 +28,6 @@ const MyBreadcrumbs = (): JSX.Element => {
       const title =
         t(`bread-crumbs:bread-crumbs.${segment}`) ||
         segment.replaceAll("-", " ");
-
       return { title, href };
     });
     setItems(newItems);
