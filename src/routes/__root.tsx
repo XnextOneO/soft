@@ -11,6 +11,7 @@ import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import "@mantine/core/styles.css";
+import "mantine-react-table/styles.css";
 
 import styles from "./index.module.scss";
 
