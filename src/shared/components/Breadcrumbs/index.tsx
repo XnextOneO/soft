@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Anchor,
@@ -17,14 +18,17 @@ const MyBreadcrumbs = (): JSX.Element => {
   const filteredSegments = pathSegments.filter(
     (segment) => segment !== "nsi" && segment !== "scbank",
   );
+  const [items, setItems] = useState<{ title: string; href: string }[]>([]);
 
-  const items = filteredSegments.map((segment, index) => {
-    const href = `/${filteredSegments.slice(0, index + 1).join("/")}`;
-    const title = t(segment) || segment.replaceAll("-", " ");
+  useEffect(() => {
+    const newItems = filteredSegments.map((segment, index) => {
+      const href = `/${filteredSegments.slice(0, index + 1).join("/")}`;
+      const title = t(segment) || segment.replaceAll("-", " ");
 
-    return { title, href };
-  });
-
+      return { title, href };
+    });
+    setItems(newItems);
+  }, [filteredSegments, t]);
   return (
     <Breadcrumbs
       className={classes.wrapper}

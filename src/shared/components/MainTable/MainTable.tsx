@@ -295,7 +295,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       showColumnFilters: false,
     },
     mantineTableBodyCellProps: {
-      mih: "0px",
+      mih: "40px",
       p: "4px 4px",
     },
     mantineLoadingOverlayProps: {
