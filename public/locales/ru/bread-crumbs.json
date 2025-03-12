@@ -26,6 +26,7 @@
     "statuses": "Журнал загрузок",
     "payment-management": "Управление платежами",
     "account-management": "Ведение счетов НОСТРО/ЛОРО",
-    "user-profile": "Профиль пользователя"
+    "user-profile": "Профиль пользователя",
+    "login": "логин"
   }
 }

@@ -23,7 +23,9 @@ const MyBreadcrumbs = (): JSX.Element => {
   useEffect(() => {
     const newItems = filteredSegments.map((segment, index) => {
       const href = `/${filteredSegments.slice(0, index + 1).join("/")}`;
-      const title = t(segment) || segment.replaceAll("-", " ");
+      const title =
+        t(`bread-crumbs:bread-crumbs.${segment}`) ||
+        segment.replaceAll("-", " ");
 
       return { title, href };
     });
@@ -44,7 +46,7 @@ const MyBreadcrumbs = (): JSX.Element => {
           c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#006040"}
           className={classes.breadCrumbLink}
         >
-          {t("main-page")}
+          {t("bread-crumbs:bread-crumbs.main-page")}
         </Anchor>
       </Link>
       {items.map((item, index) =>
