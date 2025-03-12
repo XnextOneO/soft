@@ -1,7 +1,19 @@
-import { FC, useEffect, useState } from "react";
+import { FC, JSX, useEffect, useState } from "react";
 import { Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
+import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
+import { postApiData } from "@shared/api/mutation/fetchTableData.ts";
+import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
+import BottomToolbar from "@shared/components/MainTable/components/bottomToolbar.tsx";
+import EditRowModalContent from "@shared/components/MainTable/components/EditRowModalContent.tsx";
+import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
+import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
+import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
+import CreateRowModalContent from "@shared/components/MainTable/components/сreateRowModalContent.tsx";
+import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
+import DirectoriesStore from "@shared/store/directoriesStore.ts";
+import { userStore } from "@shared/store/userStore.ts";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
@@ -9,21 +21,7 @@ import {
   MRT_SortingState,
   useMantineReactTable,
 } from "mantine-react-table";
-import { MRT_Localization_RU } from "mantine-react-table/locales/ru";
-
-import { postApiData } from "@/app/api/mutation/fetchTableData";
-import { MainLoader } from "@/components/MainLoader/MainLoader";
-import BottomToolbar from "@/components/MainTable/components/bottomToolbar";
-import EditRowModalContent from "@/components/MainTable/components/EditRowModalContent";
-import PopoverCell from "@/components/MainTable/components/PopoverCell";
-import RowActions from "@/components/MainTable/components/rowActions";
-import TopToolbar from "@/components/MainTable/components/topToolbar";
-import CreateRowModalContent from "@/components/MainTable/components/сreateRowModalContent";
-import UpdateTableModal from "@/components/UpdateTableModal/UpdateTableModal";
-import { getUserLocale } from "@/i18n/locale-detector";
-import { MRT_Localization_BY } from "@/public/locales/MRT_Localization_BY";
-import DirectoriesStore from "@/store/directoriesStore";
-import { userStore } from "@/store/userStore";
+import { MRT_Localization_RU } from "mantine-react-table/locales/ru/index.esm.mjs";
 
 import classes from "./MainTable.module.scss";
 
@@ -78,20 +76,16 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     }
   }
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
-  async function fetchUserLocale(): Promise<string> {
-    return await getUserLocale();
-  }
   useEffect(() => {
     const setLocale = async (): Promise<void> => {
-      const locale = await fetchUserLocale();
+      const locale = "ru";
       const localizationValue =
         locale === "ru" ? MRT_Localization_RU : MRT_Localization_BY;
       setLocalization(localizationValue);
     };
 
     setLocale();
-  }, [fetchUserLocale()]);
+  }, []);
 
   const parametersPost = {
     link: link,
@@ -277,7 +271,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       />
     ),
     onCreatingRowSave: async ({ exitCreatingMode }) => {
-      // setData((prevData) => [...prevData, { ...values, id: newId }]);
       exitCreatingMode();
     },
     enableFilters: true,
@@ -330,7 +323,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     enableDensityToggle: false,
     enableStickyHeader: true,
     enableRowSelection: false,
-    enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
     enableColumnVirtualization: true,
