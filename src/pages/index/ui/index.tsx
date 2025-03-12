@@ -8,7 +8,6 @@ import {
   Title,
   useMantineColorScheme,
 } from "@mantine/core";
-import { Link } from "@tanstack/react-router";
 
 import styles from "./index.module.scss";
 
@@ -30,9 +29,7 @@ export const IndexPage: FC = () => {
         <Group w="100%" p={20} justify="center">
           <Stack className={styles.stackContainer}>
             <Title>{t("main-page")}</Title>
-            <Link to={"/"}>
-              <Button color="#006040">{t("directories")}</Button>
-            </Link>
+            <Button color="#006040">{t("directories")}</Button>
           </Stack>
           {/* <DatesProvider settings={{ consistentWeeks: true, locale: "ru" }}>
                         {/* <DatePicker />
