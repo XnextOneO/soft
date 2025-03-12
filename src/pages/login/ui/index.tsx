@@ -33,7 +33,7 @@ export const LoginPage: FC = () => {
   // eslint-disable-next-line unicorn/no-null
   const [error, setError] = useState<string | null>(null);
   const { setTokens } = useAuthStore();
-  const { t } = useTranslation(["auth"]);
+  const { t } = useTranslation(["login"]);
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onLogin = async () => {
     setIsLoginClicked(true);
@@ -110,7 +110,7 @@ export const LoginPage: FC = () => {
                         </Text>
                     </Group> */}
             <Text fw={400} size="34px">
-              {t("authorization")}
+              {t("login:auth.authorization")}
             </Text>
             {error && (
               <Alert
@@ -125,9 +125,13 @@ export const LoginPage: FC = () => {
             )}
             <TextInput
               w="90%"
-              placeholder={t("login-input")}
-              label={t("login")}
-              error={isLoginClicked && !username ? t("login-required") : ""}
+              placeholder={t("login:auth.login-input")}
+              label={t("login:auth.login")}
+              error={
+                isLoginClicked && !username
+                  ? t("login:auth.login-required")
+                  : ""
+              }
               inputWrapperOrder={["label", "input", "error"]}
               value={username}
               radius="md"
@@ -141,9 +145,13 @@ export const LoginPage: FC = () => {
             />
             <TextInput
               w="90%"
-              placeholder={t("enter-password")}
-              label={t("password")}
-              error={isLoginClicked && !password ? t("password-required") : ""}
+              placeholder={t("login:auth.enter-password")}
+              label={t("login:auth.password")}
+              error={
+                isLoginClicked && !password
+                  ? t("login:auth.password-required")
+                  : ""
+              }
               inputWrapperOrder={["label", "input", "error"]}
               radius="md"
               type={showPassword ? "text" : "password"}
@@ -187,7 +195,7 @@ export const LoginPage: FC = () => {
                 }}
                 onClick={onLogin}
               >
-                {t("sign-in")}
+                {t("login:auth.sign-in")}
               </Button>
             </Group>
             <Text c="dimmed" size="sm">
