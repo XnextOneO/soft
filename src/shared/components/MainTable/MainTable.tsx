@@ -65,7 +65,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       .toUpperCase();
     sortCriteria[formattedColumn] = sort.desc ? "DESC" : "ASC";
   }
-
   const columnSearchCriteria: FilterCriteria = {};
   for (const columnFilter of debouncedColumnFilter[0]) {
     if (columnFilter.value) {
