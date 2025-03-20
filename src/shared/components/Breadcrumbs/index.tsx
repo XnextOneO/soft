@@ -15,7 +15,10 @@ const MyBreadcrumbs = (): JSX.Element => {
   const colorScheme = useMantineColorScheme();
   const { t } = useTranslation(["bread-crumbs"]);
   const filteredSegments = useMemo(() => {
-    const pathSegments = location.pathname.split("/").filter(Boolean);
+    const pathSegments = location.pathname
+      .replace("__", "/")
+      .split("/")
+      .filter(Boolean);
     return pathSegments.filter(
       (segment) => segment !== "nsi" && segment !== "scbank",
     );
@@ -26,8 +29,7 @@ const MyBreadcrumbs = (): JSX.Element => {
     const newItems = filteredSegments.map((segment, index) => {
       const href = `/${filteredSegments.slice(0, index + 1).join("/")}`;
       const title =
-        t(`bread-crumbs:bread-crumbs.${segment}`) ||
-        segment.replaceAll("-", " ");
+        t(`bread-crumbs:bread-crumbs.${segment}`) || segment.replace("-", " ");
       return { title, href };
     });
     setItems(newItems);
