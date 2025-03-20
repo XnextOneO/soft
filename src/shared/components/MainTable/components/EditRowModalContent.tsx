@@ -56,7 +56,7 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
   return (
     <Stack mah={"80vh"} gap={5}>
       <Title order={3} pos={"sticky"} top={10} className={classes.modalTitle}>
-        {t("create-new-row")}
+        {t("edit-row-modal-content:edit-row-modal-content.create-new-row")}
       </Title>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       {row.getAllCells().map((cell: any) => {
@@ -90,19 +90,25 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
               onClick={() => setDeleteModalOpened(true)}
               disabled={!canDelete}
             >
-              {t("delete")}
+              {t("edit-row-modal-content:edit-row-modal-content.delete")}
             </Button>
           </Popover.Target>
           <Popover.Dropdown>
-            <span>{t("sure-to-delete")}</span>
+            <span>
+              {t(
+                "edit-row-modal-content:edit-row-modal-content.sure-to-delete",
+              )}
+            </span>
             <Group mt="lg">
               <Button
                 variant="outline"
                 onClick={() => setDeleteModalOpened(false)}
               >
-                {t("cancel")}
+                {t("edit-row-modal-content:edit-row-modal-content.cancel")}
               </Button>
-              <Button onClick={handleDelete}>{t("delete")}</Button>
+              <Button onClick={handleDelete}>
+                {t("edit-row-modal-content:edit-row-modal-content.delete")}
+              </Button>
             </Group>
           </Popover.Dropdown>
         </Popover>
@@ -112,7 +118,7 @@ const EditRowModalContent: FC<EditRowModalContentProperties> = ({
             setDeleteModalOpened(false);
           }}
         >
-          {t("save")}
+          {t("edit-row-modal-content:edit-row-modal-content.save")}
         </Button>
       </Flex>
     </Stack>

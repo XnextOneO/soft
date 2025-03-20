@@ -1,0 +1,17 @@
+{
+  "nav-menu-stack": {
+    "directories": "Справочники",
+    "statuses": "Журнал загрузок",
+    "payment-management": "Управление платежами",
+    "account-management": "Ведение счетов НОСТРО/ЛОРО",
+    "until-finding-out": "Счет \"До выяснения\"",
+    "configuration-tables": "Настроечные таблицы",
+    "reports-stats": "Отчеты/Статистика",
+    "managing-review-requests": "GPI: Управление запросами на отзыв",
+    "investigation-of-payments": "Расследования платежей",
+    "analytics": "Аналитика",
+    "journal": "Журнал",
+    "logout": "Выход",
+    "help": "Поддержка"
+  }
+}

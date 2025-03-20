@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SVGProps, useEffect, useState } from "react";
 import React from "react";
 import { Text } from "@mantine/core";
 
@@ -12,7 +12,7 @@ interface INavMenuButtonStackProperties {
   active?: boolean;
   width: number;
   marginLeft: number;
-  icon: string;
+  icon: SVGProps<SVGSVGElement>;
   children?: React.ReactNode;
 }
 

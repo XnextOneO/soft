@@ -4,8 +4,8 @@ import { MainTable } from "@shared/components/MainTable/MainTable.tsx";
 import { useParams } from "@tanstack/react-router";
 
 export const DirectoriesPage: FC = () => {
-  const parameters = useParams({ from: "/directories/$" });
-  const link = parameters._splat || "";
+  const parameters = useParams({ from: "/directories/$slug" });
+  const link = parameters.slug || "";
   return (
     <Flex direction="column" p={0} gap={0} w="100%" h="100%">
       <MainTable link={link} updateTable={true} />

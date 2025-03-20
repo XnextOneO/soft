@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { JSX, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActionIcon,
@@ -89,7 +89,7 @@ const UpdateTableModal = ({
       if (error.response) {
         if (error.response.data && error.response.data.message) {
           showNotification({
-            title: t("upload-error-title"),
+            title: t("upload-file:upload-file.upload-error-title"),
             message: (
               <Text style={{ whiteSpace: "pre-line" }}>{messageString}</Text>
             ),
@@ -98,7 +98,7 @@ const UpdateTableModal = ({
           });
         } else {
           showNotification({
-            title: t("upload-error-title"),
+            title: t("upload-file:upload-file.upload-error-title"),
             message: "Произошла неизвестная ошибка.",
             color: "red",
             autoClose: false,
@@ -106,7 +106,7 @@ const UpdateTableModal = ({
         }
       } else {
         showNotification({
-          title: t("upload-error-title"),
+          title: t("upload-file:upload-file.upload-error-title"),
           message: "Произошла ошибка сети или сервер недоступен.",
           color: "red",
           autoClose: false,
@@ -129,7 +129,7 @@ const UpdateTableModal = ({
         }
         setProgress(0);
       }}
-      title={t("modal-title")}
+      title={t("upload-file:upload-file.modal-title")}
       overlayProps={{
         backgroundOpacity: 0.55,
       }}
@@ -196,12 +196,18 @@ const UpdateTableModal = ({
                 </Group>
 
                 <Text ta="center" fw={700} fz="lg" mt="md">
-                  <Dropzone.Accept>{t("dropzone-accept")}</Dropzone.Accept>
-                  <Dropzone.Reject>{t("dropzone-reject")}</Dropzone.Reject>
-                  <Dropzone.Idle>{t("dropzone-idle")}</Dropzone.Idle>
+                  <Dropzone.Accept>
+                    {t("upload-file:upload-file.dropzone-accept")}
+                  </Dropzone.Accept>
+                  <Dropzone.Reject>
+                    {t("upload-file:upload-file.dropzone-reject")}
+                  </Dropzone.Reject>
+                  <Dropzone.Idle>
+                    {t("upload-file:upload-file.dropzone-idle")}
+                  </Dropzone.Idle>
                 </Text>
                 <Text ta="center" fz="sm" my="md" c="dimmed">
-                  {t("dropzone-description")}
+                  {t("upload-file:upload-file.dropzone-description")}
                 </Text>
               </div>
             </Dropzone>
@@ -211,7 +217,7 @@ const UpdateTableModal = ({
 
       <Group justify="center">
         <Button color="#006040" onClick={uploadFiles} disabled={!file}>
-          {t("upload-button")}
+          {t("upload-file:upload-file.upload-button")}
         </Button>
       </Group>
       <LoadingOverlay

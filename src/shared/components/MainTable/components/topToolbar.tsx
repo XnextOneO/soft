@@ -43,7 +43,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
             radius="xs"
             onClick={() => setOpened(true)}
           >
-            {t("update-table")}
+            {t("top-toolbar:top-toolbar.update-table")}
           </Button>
         )}
         {canCreate ? (
@@ -52,7 +52,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
               table.setCreatingRow(true);
             }}
           >
-            {t("create-new-row")}
+            {t("top-toolbar:top-toolbar.create-new-row")}
           </Button>
         ) : (
           ""

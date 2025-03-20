@@ -1,26 +1,20 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Burger,
-  Container,
-  Flex,
-  Group,
-  Image as MantineImage,
-  Text,
-} from "@mantine/core";
+import { Burger, Container, Flex, Group, Image, Text } from "@mantine/core";
 import LanguageSwitcher from "@shared/components/LanguageSwitcher/LanguageSwitcher.tsx";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { Link } from "@tanstack/react-router";
 
+import Favicon from "../../../../public/assets/favicon.png";
+
 import ProfileButton from "./ProfileButton/ProfileButton";
 import classes from "./Header.module.scss";
-
 interface HeaderProperties {
   isBurger: boolean;
   isProfile: boolean;
   link?: boolean;
-  toggleMenu: () => void;
-  isMenuOpen: boolean;
+  toggleMenu?: () => void;
+  isMenuOpen?: boolean;
 }
 const Header: FC<HeaderProperties> = ({
   isBurger,
@@ -52,7 +46,7 @@ const Header: FC<HeaderProperties> = ({
                 alignItems: "center",
               }}
               opened={isMenuOpen}
-              aria-label={t("navigation")}
+              aria-label={t("header:header.navigation")}
             />
           </Flex>
         )}
@@ -60,22 +54,17 @@ const Header: FC<HeaderProperties> = ({
           {link ? (
             <Link to={"/"}>
               <Group gap="xs">
-                <MantineImage
-                  src="../../favicon.png"
-                  w={30}
-                  h={30}
-                  alt="logo"
-                />
+                <Image src={Favicon} w={30} h={30} alt="logo" />
                 <Text c="white" size="20px" fw={700} className={classes.title}>
-                  IIS {t("belarusbank")}
+                  IIS {t("header:header.belarusbank")}
                 </Text>
               </Group>
             </Link>
           ) : (
             <Group gap="xs">
-              <MantineImage src="../../favicon.png" w={30} h={30} alt="logo" />
+              <Image src={Favicon} w={30} h={30} alt="logo" />
               <Text c="white" size="20px" fw={700} className={classes.title}>
-                IIS {t("belarusbank")}
+                IIS {t("header:header.belarusbank")}
               </Text>
             </Group>
           )}

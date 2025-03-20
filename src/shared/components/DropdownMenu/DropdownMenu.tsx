@@ -18,7 +18,7 @@ const DropdownMenu = observer(
     const [directories, setDirectories] = useState(
       directoriesStore.directories,
     );
-    const { t } = useTranslation("directories-menu");
+    const { t } = useTranslation(["directories-menu"]);
 
     const handleItemClick = (event: React.MouseEvent): void => {
       event.stopPropagation();
@@ -59,7 +59,9 @@ const DropdownMenu = observer(
           <TextInput
             p="xs"
             w="100%"
-            placeholder={t("search-by-directories")}
+            placeholder={t(
+              "directories-menu:directories-menu.search-by-directories",
+            )}
             onClick={handleItemClick}
             onChange={(event) => searchDirectoryByName(event.target.value)}
           />
@@ -67,7 +69,10 @@ const DropdownMenu = observer(
             <Link
               style={{ textDecoration: "none" }}
               key={index}
-              to={`/directories/${directory.link}`}
+              to={`/directories/$slug`}
+              params={{
+                slug: decodeURIComponent(directory.link),
+              }}
               onClick={() => {
                 resetDirectories();
               }}

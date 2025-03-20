@@ -14,7 +14,7 @@ import styles from "./index.module.scss";
 export const IndexPage: FC = () => {
   const colorScheme = useMantineColorScheme();
   const [backgroundState, setBackgroundState] = useState<string>("");
-  const { t } = useTranslation(["register"]);
+  const { t } = useTranslation(["home"]);
   useEffect(() => {
     if (colorScheme.colorScheme === "light") {
       setBackgroundState(styles.mainContainerLight);
@@ -28,8 +28,8 @@ export const IndexPage: FC = () => {
       <Container fluid className={backgroundState}>
         <Group w="100%" p={20} justify="center">
           <Stack className={styles.stackContainer}>
-            <Title>{t("main-page")}</Title>
-            <Button color="#006040">{t("directories")}</Button>
+            <Title>{t("home:home.main-page")}</Title>
+            <Button color="#006040">{t("home:home.directories")}</Button>
           </Stack>
           {/* <DatesProvider settings={{ consistentWeeks: true, locale: "ru" }}>
                         {/* <DatePicker />

@@ -47,7 +47,7 @@ const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
   return (
     <Stack mah={"80vh"} gap={5}>
       <Title order={3} pos={"sticky"} top={10} className={classes.modalTitle}>
-        {t("create-new-row")}
+        {t("create-row-modal-content:create-row-modal-content.create-new-row")}
       </Title>
       {processedColumns.map((column) => (
         <Flex direction="column" key={column.accessorKey}>
@@ -72,15 +72,21 @@ const CreateRowModalContent: FC<CreateRowModalContentProperties> = ({
             </Button>
           </Popover.Target>
           <Popover.Dropdown>
-            <span>{t("sure-to-create")}</span>
+            <span>
+              {t(
+                "create-row-modal-content:create-row-modal-content.sure-to-create",
+              )}
+            </span>
             <Group mt="lg">
               <Button
                 variant="outline"
                 onClick={() => setCreateRowModalOpened(false)}
               >
-                {t("cancel")}
+                {t("create-row-modal-content:create-row-modal-content.cancel")}
               </Button>
-              <Button onClick={handleCreate}>{t("create")}</Button>
+              <Button onClick={handleCreate}>
+                {t("create-row-modal-content:create-row-modal-content.create")}
+              </Button>
             </Group>
           </Popover.Dropdown>
         </Popover>
