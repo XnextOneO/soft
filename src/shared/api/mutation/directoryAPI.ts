@@ -50,9 +50,12 @@ export const getDirectory = async <T = unknown>(
   }
 
   try {
-    const response: AxiosResponse<T> = await $authHost.get(`reference-book/${link}`, {
-      params: parameters,
-    });
+    const response: AxiosResponse<T> = await $authHost.get(
+      `reference-book/${link}`,
+      {
+        params: parameters,
+      },
+    );
     return response.data;
   } catch (error: unknown) {
     console.error("Error fetching directory:", error);
@@ -73,7 +76,11 @@ export const uploadDirectory = async (
   config?: AxiosRequestConfig,
 ): Promise<number> => {
   try {
-    const { status } = await $authHost.post(`reference-book/${link}`, formData, config);
+    const { status } = await $authHost.post(
+      `reference-book/${link}/upload-file`,
+      formData,
+      config,
+    );
     return status;
   } catch (error: unknown) {
     console.error("Error uploading directory:", error);
@@ -113,7 +120,9 @@ export const searchDataInDirectory = async <T = unknown>(
       : baseParameters;
 
   try {
-    const { data } = await $authHost.get<T>(`reference-book/${link}/search`, { params: parameters });
+    const { data } = await $authHost.get<T>(`reference-book/${link}/search`, {
+      params: parameters,
+    });
     return data;
   } catch (error: unknown) {
     console.error("Error searching in directory:", error);
