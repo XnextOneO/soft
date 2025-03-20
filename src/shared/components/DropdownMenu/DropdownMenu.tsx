@@ -71,7 +71,7 @@ const DropdownMenu = observer(
               key={index}
               to={`/directories/$slug`}
               params={{
-                slug: decodeURIComponent(directory.link),
+                slug: encodeURIComponent(directory.link),
               }}
               onClick={() => {
                 resetDirectories();
