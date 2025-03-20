@@ -13,12 +13,12 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './../routes/__root'
-import { Route as DirectoriesSplatImport } from './../routes/directories/$'
 
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
 const LoginIndexLazyImport = createFileRoute('/login/')()
+const DirectoriesSlugLazyImport = createFileRoute('/directories/$slug')()
 
 // Create/Update Routes
 
@@ -36,11 +36,13 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   import('./../routes/login/index.lazy').then((d) => d.Route),
 )
 
-const DirectoriesSplatRoute = DirectoriesSplatImport.update({
-  id: '/directories/$',
-  path: '/directories/$',
+const DirectoriesSlugLazyRoute = DirectoriesSlugLazyImport.update({
+  id: '/directories/$slug',
+  path: '/directories/$slug',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() =>
+  import('./../routes/directories/$slug.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -53,11 +55,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/directories/$': {
-      id: '/directories/$'
-      path: '/directories/$'
-      fullPath: '/directories/$'
-      preLoaderRoute: typeof DirectoriesSplatImport
+    '/directories/$slug': {
+      id: '/directories/$slug'
+      path: '/directories/$slug'
+      fullPath: '/directories/$slug'
+      preLoaderRoute: typeof DirectoriesSlugLazyImport
       parentRoute: typeof rootRoute
     }
     '/login/': {
@@ -74,41 +76,41 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/directories/$': typeof DirectoriesSplatRoute
+  '/directories/$slug': typeof DirectoriesSlugLazyRoute
   '/login': typeof LoginIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/directories/$': typeof DirectoriesSplatRoute
+  '/directories/$slug': typeof DirectoriesSlugLazyRoute
   '/login': typeof LoginIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/directories/$': typeof DirectoriesSplatRoute
+  '/directories/$slug': typeof DirectoriesSlugLazyRoute
   '/login/': typeof LoginIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/directories/$' | '/login'
+  fullPaths: '/' | '/directories/$slug' | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/directories/$' | '/login'
-  id: '__root__' | '/' | '/directories/$' | '/login/'
+  to: '/' | '/directories/$slug' | '/login'
+  id: '__root__' | '/' | '/directories/$slug' | '/login/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  DirectoriesSplatRoute: typeof DirectoriesSplatRoute
+  DirectoriesSlugLazyRoute: typeof DirectoriesSlugLazyRoute
   LoginIndexLazyRoute: typeof LoginIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  DirectoriesSplatRoute: DirectoriesSplatRoute,
+  DirectoriesSlugLazyRoute: DirectoriesSlugLazyRoute,
   LoginIndexLazyRoute: LoginIndexLazyRoute,
 }
 
@@ -123,15 +125,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/directories/$",
+        "/directories/$slug",
         "/login/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/directories/$": {
-      "filePath": "directories/$.tsx"
+    "/directories/$slug": {
+      "filePath": "directories/$slug.lazy.tsx"
     },
     "/login/": {
       "filePath": "login/index.lazy.tsx"

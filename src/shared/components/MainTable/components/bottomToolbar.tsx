@@ -41,11 +41,12 @@ const BottomToolbar: FC<BottomToolbarProperties> = ({
   return (
     <Flex align="center" justify={"space-between"} w={"100%"}>
       <Text>
-        {t("records")} {(page - 1) * size + 1}–
-        {Math.min(page * size, totalElements)} {t("from")} {totalElements}
+        {t("bottom-toolbar:bottom-toolbar.records")} {(page - 1) * size + 1}–
+        {Math.min(page * size, totalElements)}{" "}
+        {t("bottom-toolbar:bottom-toolbar.from")} {totalElements}
       </Text>
       <Group>
-        <Text>{t("rows-count")}</Text>
+        <Text>{t("bottom-toolbar:bottom-toolbar.rows-count")}</Text>
         <Select
           w={80}
           placeholder={size.toString()}

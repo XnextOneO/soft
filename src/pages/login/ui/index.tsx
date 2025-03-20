@@ -137,7 +137,7 @@ export const LoginPage: FC = () => {
               radius="md"
               leftSection={<IconAt size={16} />}
               onChange={(event) => setUsername(event.target.value)}
-              onKeyPress={(event) => {
+              onKeyUp={(event) => {
                 if (event.key === "Enter") {
                   onLogin();
                 }
@@ -175,7 +175,7 @@ export const LoginPage: FC = () => {
               }
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              onKeyPress={(event) => {
+              onKeyUp={(event) => {
                 if (event.key === "Enter") {
                   onLogin();
                 }

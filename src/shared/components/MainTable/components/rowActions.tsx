@@ -1,6 +1,7 @@
+import { JSX } from "react";
 import { useTranslation } from "react-i18next";
 import { ActionIcon, Flex, Tooltip } from "@mantine/core";
-import { IconEdit } from "@tabler/icons-react";
+import { IconPencil } from "@tabler/icons-react";
 
 interface RowActionsProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,9 +14,13 @@ const RowActions = ({ row, table }: RowActionsProperties): JSX.Element => {
   const { t } = useTranslation(["row-actions"]);
   return (
     <Flex justify={"center"} align={"center"}>
-      <Tooltip label={t("edit")}>
-        <ActionIcon variant="light" onClick={() => table.setEditingRow(row)}>
-          <IconEdit />
+      <Tooltip label={t("row-actions:row-actions.edit")}>
+        <ActionIcon
+          variant="transparent"
+          color={"dimmed"}
+          onClick={() => table.setEditingRow(row)}
+        >
+          <IconPencil stroke={1} />
         </ActionIcon>
       </Tooltip>
     </Flex>

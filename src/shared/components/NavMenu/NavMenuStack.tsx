@@ -5,18 +5,18 @@ import DropdownMenu from "@shared/components/DropdownMenu/DropdownMenu.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
 import { Link, useRouter } from "@tanstack/react-router";
 
-import IconAccountManagement from "../../../../public/assets/account-management.svg";
-import IconAnalytics from "../../../../public/assets/analytics.svg";
-import IconConfigurationTables from "../../../../public/assets/configuration-tables.svg";
-import IconDirectories from "../../../../public/assets/directories.svg";
-import IconHelp from "../../../../public/assets/help.svg";
-import IconInvestigationOfPayments from "../../../../public/assets/investigation-of-payments.svg";
-import IconJournal from "../../../../public/assets/journal.svg";
-import IconLogout from "../../../../public/assets/logout.svg";
-import IconManagingReviewRequests from "../../../../public/assets/managing-review-requests.svg";
-import IconPaymentManagement from "../../../../public/assets/payment-management.svg";
-import IconReportsStats from "../../../../public/assets/reports-stats.svg";
-import IconUntilFindingOut from "../../../../public/assets/until-finding-out.svg";
+import IconAccountManagement from "../../../../public/assets/account-management.svg?react";
+import IconAnalytics from "../../../../public/assets/analytics.svg?react";
+import IconConfigurationTables from "../../../../public/assets/configuration-tables.svg?react";
+import IconDirectories from "../../../../public/assets/directories.svg?react";
+import IconHelp from "../../../../public/assets/help.svg?react";
+import IconInvestigationOfPayments from "../../../../public/assets/investigation-of-payments.svg?react";
+import IconJournal from "../../../../public/assets/journal.svg?react";
+import IconLogout from "../../../../public/assets/logout.svg?react";
+import IconManagingReviewRequests from "../../../../public/assets/managing-review-requests.svg?react";
+import IconPaymentManagement from "../../../../public/assets/payment-management.svg?react";
+import IconReportsStats from "../../../../public/assets/reports-stats.svg?react";
+import IconUntilFindingOut from "../../../../public/assets/until-finding-out.svg?react";
 
 import NavMenuButtonStack from "./NavMenuButtonStack";
 
@@ -89,7 +89,7 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
               marginLeft={marginLeft}
               icon={icon}
             >
-              {opened ? t(key) : ""}
+              {opened ? t(`nav-menu-stack:nav-menu-stack.${key}`) : ""}
             </NavMenuButtonStack>
           </Link>
         ))}
@@ -106,7 +106,7 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
               marginLeft={marginLeft}
               icon={IconDirectories}
             >
-              {opened ? t("directories") : ""}
+              {opened ? t("nav-menu-stack:nav-menu-stack.directories") : ""}
             </NavMenuButtonStack>
           </UnstyledButton>
         </DropdownMenu>
@@ -116,7 +116,7 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
           marginLeft={marginLeft}
           icon={IconHelp}
         >
-          {opened ? t("help") : ""}
+          {opened ? t("nav-menu-stack:nav-menu-stack.help") : ""}
         </NavMenuButtonStack>
       </Stack>
       <UnstyledButton onClick={handleLogout}>
@@ -127,7 +127,7 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
             marginLeft={marginLeft}
             icon={IconLogout}
           >
-            {opened ? t("logout") : ""}
+            {opened ? t("nav-menu-stack:nav-menu-stack.logout") : ""}
           </NavMenuButtonStack>
         </Flex>
       </UnstyledButton>
