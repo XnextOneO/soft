@@ -65,21 +65,25 @@ const DropdownMenu = observer(
             onClick={handleItemClick}
             onChange={(event) => searchDirectoryByName(event.target.value)}
           />
-          {directories.map((directory, index) => (
-            <Link
-              style={{ textDecoration: "none" }}
-              key={index}
-              to={`/directories/$slug`}
-              params={{
-                slug: encodeURIComponent(directory.link),
-              }}
-              onClick={() => {
-                resetDirectories();
-              }}
-            >
-              <Menu.Item>{directory.name}</Menu.Item>
-            </Link>
-          ))}
+          {directories.map((directory, index) => {
+            const encodedLink = directory.link.replace("/", "__");
+
+            return (
+              <Link
+                style={{ textDecoration: "none" }}
+                key={index}
+                to={`/directories/$slug`}
+                params={{
+                  slug: encodedLink,
+                }}
+                onClick={() => {
+                  resetDirectories();
+                }}
+              >
+                <Menu.Item>{directory.name}</Menu.Item>
+              </Link>
+            );
+          })}
         </Menu.Dropdown>
       </Menu>
     );
