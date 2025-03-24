@@ -12,7 +12,7 @@ i18n
     react: {
       useSuspense: false, // Avoid using suspense for translation loading
     },
-    fallbackLng: "en", // Default language if the user's language is not available
+    fallbackLng: "ru", // Default language if the user's language is not available
     debug: import.meta.env.DEV, // Enable debug mode in development
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json", // Path to translation files

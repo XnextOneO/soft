@@ -19,7 +19,7 @@ export default {
     default: ["JsxLexer"],
   },
   lineEnding: "auto",
-  locales: ["en", "ru"],
+  locales: ["by", "ru"],
   namespaceSeparator: ":",
   output: "public/locales/$LOCALE/$NAMESPACE.json",
   pluralSeparator: "_",

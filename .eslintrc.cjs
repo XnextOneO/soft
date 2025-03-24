@@ -46,6 +46,7 @@ module.exports = {
   ],
   parser: "@typescript-eslint/parser",
   rules: {
+    "unicorn/prefer-string-replace-all": "off",
     "react-refresh/only-export-components": "warn",
     "@typescript-eslint/no-namespace": "off",
     "simple-import-sort/imports": [
@@ -101,7 +102,7 @@ module.exports = {
     "max-params": ["error", { max: 5 }],
     "max-nested-callbacks": ["error", { max: 3 }],
     "max-depth": ["error", { max: 4 }],
-    "no-magic-numbers": ["warn", { ignore: [0, 1, -1, 2] }],
+    "no-magic-numbers": "off",
     "unicorn/consistent-function-scoping": [
       "error",
       { checkArrowFunctions: true },

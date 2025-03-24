@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface IconProperties {
   active?: boolean;
@@ -10,7 +10,7 @@ const CustomIcon = ({
   active,
   colorScheme,
   path,
-}: IconProperties): JSX.Element => {
+}: IconProperties): React.ReactElement => {
   const [iconColorState, setIconColorState] = useState<string>("");
 
   let pathColor;

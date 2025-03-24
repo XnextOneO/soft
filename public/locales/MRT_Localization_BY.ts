@@ -1,7 +1,5 @@
-// eslint-disable-next-line camelcase
-import { type MRT_Localization } from "mantine-react-table/src/types";
+import { MRT_Localization } from "mantine-react-table";
 
-// eslint-disable-next-line camelcase
 export const MRT_Localization_BY: MRT_Localization = {
   actions: "Дзеянні",
   and: "і",
@@ -74,7 +72,8 @@ export const MRT_Localization_BY: MRT_Localization = {
   rowsPerPage: "Радкоў на старонку",
   save: "Захаваць",
   search: "Знайсці",
-  selectedCountOfRowCountRowsSelected: "{selectedCount} з {rowCount} радкоў выбрана",
+  selectedCountOfRowCountRowsSelected:
+    "{selectedCount} з {rowCount} радкоў выбрана",
   select: "Выбраць",
   showAll: "Паказаць усё",
   showAllColumns: "Паказаць усе калонкі",
