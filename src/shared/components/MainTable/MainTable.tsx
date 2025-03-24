@@ -1,4 +1,5 @@
 import { FC, JSX, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
@@ -43,6 +44,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
   const debouncedColumnFilter = useDebouncedValue(filter, 200);
+  const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
   // eslint-disable-next-line unicorn/no-null
   const [error, setError] = useState<string | null>(null);
@@ -76,20 +78,19 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     }
   }
 
-  // eslint-disable-next-line unicorn/consistent-function-scoping
-  async function fetchUserLocale(): Promise<string> {
-    return await getUserLocale();
-  }
   useEffect(() => {
-    const setLocale = async (): Promise<void> => {
-      const locale = await fetchUserLocale();
-      const localizationValue =
-        locale === "ru" ? MRT_Localization_RU : MRT_Localization_BY;
-      setLocalization(localizationValue);
+    const handleLanguageChange = (lng: string) => {
+      setLocalization(lng === "by" ? MRT_Localization_BY : MRT_Localization_RU);
     };
 
-    setLocale();
-  }, [fetchUserLocale()]);
+    handleLanguageChange(i18n.language);
+
+    i18n.on("languageChanged", handleLanguageChange);
+
+    return (): void => {
+      i18n.off("languageChanged", handleLanguageChange);
+    };
+  }, [i18n]);
 
   const parametersPost = {
     link: link,
