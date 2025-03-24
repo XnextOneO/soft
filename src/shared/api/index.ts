@@ -18,7 +18,8 @@ const authInterceptor = (
 
   const accessToken = storedData
     ? JSON.parse(storedData).state.accessToken
-    : null;
+    : // eslint-disable-next-line unicorn/no-null
+      null;
   config.headers.authorization = `Bearer ${accessToken}`;
   return config;
 };
