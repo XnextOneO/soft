@@ -15,7 +15,7 @@
 **Docker compose:**
 
 first launch 
-- `git pull`
+- `git clone`
 - `npm install`
 - `cp .env.example .env`
 - Edit `.env`
