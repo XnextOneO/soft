@@ -3,7 +3,7 @@ import React, { FC, HTMLAttributes, SVGProps } from "react";
 import classes from "./SvgWrapper.module.scss";
 
 interface SvgButtonProperties extends HTMLAttributes<HTMLDivElement> {
-  SvgIcon: SVGProps<SVGSVGElement>;
+  SvgIcon: React.FC<SVGProps<SVGSVGElement>>;
   fillColor: string;
 }
 

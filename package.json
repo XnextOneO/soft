@@ -11,7 +11,7 @@
     "start:prod": "vite preview",
     "____________________TESTING___________________________________________": "",
     "test:dev": "vitest",
-    "test:prod": "vitest run",
+    "test:  prod": "vitest run",
     "test:e2e:dev": "playwright test --ui",
     "test:e2e:prod": "playwright test",
     "test:e2e:show-trace": "playwright show-trace",

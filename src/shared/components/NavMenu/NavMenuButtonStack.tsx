@@ -12,7 +12,7 @@ interface INavMenuButtonStackProperties {
   active?: boolean;
   width: number;
   marginLeft: number;
-  icon: SVGProps<SVGSVGElement>;
+  icon: React.FC<SVGProps<SVGSVGElement>>;
   children?: React.ReactNode;
 }
 

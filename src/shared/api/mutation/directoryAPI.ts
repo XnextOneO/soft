@@ -9,8 +9,8 @@ import { $authHost } from "../index";
  */
 const convertToSnakeCase = (input: string): string => {
   return input
-    .replaceAll(/(?<=[a-z])([A-Z])/gm, (match) => `_${match}`)
-    .replaceAll(/(?<!^)\s/gm, "_")
+    .replace(/(?<=[a-z])([A-Z])/gm, (match) => `_${match}`)
+    .replace(/(?<!^)\s/gm, "_")
     .toUpperCase();
 };
 

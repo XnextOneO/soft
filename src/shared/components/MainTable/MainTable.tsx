@@ -63,7 +63,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
     const formattedColumn = sort.id
-      .replaceAll(/([a-z])([A-Z])/g, "$1_$2")
+      .replace(/([a-z])([A-Z])/g, "$1_$2")
       .toUpperCase();
     sortCriteria[formattedColumn] = sort.desc ? "DESC" : "ASC";
   }
@@ -72,14 +72,14 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   for (const columnFilter of debouncedColumnFilter[0]) {
     if (columnFilter.value) {
       const formattedColumn = columnFilter.id
-        .replaceAll(/([a-z])([A-Z])/g, "$1_$2")
+        .replace(/([a-z])([A-Z])/g, "$1_$2")
         .toUpperCase();
       columnSearchCriteria[formattedColumn] = String(columnFilter.value);
     }
   }
 
   useEffect(() => {
-    const handleLanguageChange = (lng: string) => {
+    const handleLanguageChange = (lng: string): void => {
       setLocalization(lng === "by" ? MRT_Localization_BY : MRT_Localization_RU);
     };
 
@@ -276,7 +276,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       />
     ),
     onCreatingRowSave: async ({ exitCreatingMode }) => {
-      // setData((prevData) => [...prevData, { ...values, id: newId }]);
       exitCreatingMode();
     },
     enableFilters: true,

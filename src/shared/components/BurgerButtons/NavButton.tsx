@@ -11,7 +11,7 @@ const NavButton = ({
   children,
   className,
   ...rest
-}: NavButtonProperties): JSX.Element => {
+}: NavButtonProperties): React.ReactElement => {
   return (
     <Flex align="center" className={className} {...rest}>
       {children}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Anchor,
@@ -10,7 +10,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 
 import classes from "./Breadcrumbs.module.scss";
 
-const MyBreadcrumbs = (): JSX.Element => {
+const MyBreadcrumbs = (): React.ReactElement => {
   const location = useLocation();
   const colorScheme = useMantineColorScheme();
   const { t } = useTranslation(["bread-crumbs"]);
