@@ -19,7 +19,7 @@ const LanguageSwitcherButton: FC = () => {
             c="#ffffff"
             style={{ textAlign: "center", lineHeight: "52px" }}
           >
-            {i18n.language === "en" ? "EN" : "RU"}
+            {i18n.language === "by" ? "BY" : "RU"}
           </Text>
         </Group>
       </Menu.Target>

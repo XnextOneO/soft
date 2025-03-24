@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
 
@@ -14,25 +15,34 @@ interface PostApiDataParameters {
   dataStatus: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const postApiData = async (parameters: PostApiDataParameters): Promise<any> => {
+export const postApiData = async (
+  parameters: PostApiDataParameters,
+): Promise<any> => {
   const storedData = localStorage.getItem("auth-storage");
-  // eslint-disable-next-line unicorn/no-null
-  const accessToken = storedData ? JSON.parse(storedData).state.accessToken : null;
-  console.log(accessToken, "accestoken");
+
+  const accessToken = storedData
+    ? JSON.parse(storedData).state.accessToken
+    : // eslint-disable-next-line unicorn/no-null
+      null;
   try {
     const { link } = parameters;
-    const response = await $authHost.post(`reference-book/${link}/search`, parameters, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await $authHost.post(
+      `reference-book/${link}/search`,
+      parameters,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       notifications.show({
         title: "Ошибка",
-        message: error.response?.data?.message || "Произошла ошибка при отправке данных",
+        message:
+          error.response?.data?.message ||
+          "Произошла ошибка при отправке данных",
         color: "red",
         autoClose: 5000,
       });
