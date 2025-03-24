@@ -16,10 +16,16 @@ import {
 import { useLogin } from "@shared/api/mutation/auth.ts";
 import Header from "@shared/components/Header/Header.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
+import { userStore } from "@shared/store/userStore.ts";
 import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 import { useRouter } from "@tanstack/react-router";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 import styles from "./index.module.scss";
+
+interface CustomJwtPayload extends JwtPayload {
+  name: string;
+}
 
 export const LoginPage: FC = () => {
   const colorScheme = useMantineColorScheme();
@@ -34,6 +40,7 @@ export const LoginPage: FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { setTokens } = useAuthStore();
   const { t } = useTranslation(["login"]);
+  const { setName } = userStore();
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onLogin = async () => {
     setIsLoginClicked(true);
@@ -57,12 +64,15 @@ export const LoginPage: FC = () => {
             expires_in,
             refresh_expires_in,
           } = data;
+          const decodedToken = jwtDecode<CustomJwtPayload>(access_token);
+          const name = decodedToken.name;
           setTokens(
             access_token,
             refresh_token,
             expires_in,
             refresh_expires_in,
           );
+          setName(name);
           router.navigate({ to: "/", replace: true });
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
