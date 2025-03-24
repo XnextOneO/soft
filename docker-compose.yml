@@ -1,7 +1,14 @@
 services:
   app:
-    build: .
-    container_name: iis-gui
-    ports:
-      - "3000:3000"
+    build:
+      context: .
     restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:80"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"

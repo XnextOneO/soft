@@ -1,0 +1,93 @@
+import React, { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Menu, TextInput } from "@mantine/core";
+import { Link } from "@tanstack/react-router";
+import { observer } from "mobx-react-lite";
+
+import { Context } from "../../providers/AppContextProvider.tsx";
+
+const DropdownMenu = observer(
+  ({
+    onOpen,
+    children,
+  }: {
+    onOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    children: React.ReactNode;
+  }) => {
+    const { directoriesStore } = useContext(Context);
+    const [directories, setDirectories] = useState(
+      directoriesStore.directories,
+    );
+    const { t } = useTranslation(["directories-menu"]);
+
+    const handleItemClick = (event: React.MouseEvent): void => {
+      event.stopPropagation();
+    };
+
+    const searchDirectoryByName = (value: string): void => {
+      setDirectories(
+        directoriesStore.directories.filter((directory) =>
+          directory.name.toLowerCase().includes(value.toLowerCase()),
+        ),
+      );
+    };
+
+    const resetDirectories = (): void => {
+      setDirectories(directoriesStore.directories);
+    };
+
+    return (
+      <Menu
+        onChange={(value) => {
+          onOpen(value);
+          if (!value) {
+            setDirectories(directoriesStore.directories);
+          }
+        }}
+        offset={1}
+        radius="xs"
+        width={450}
+        transitionProps={{ transition: "rotate-right", duration: 150 }}
+        position="right-start"
+        styles={{ dropdown: { maxHeight: 300, overflowY: "auto" } }}
+      >
+        <Menu.Target>{children}</Menu.Target>
+
+        <Menu.Dropdown
+          style={{ boxShadow: "0px 6px 35px 6px rgba(48, 48, 48, 0.2)" }}
+        >
+          <TextInput
+            p="xs"
+            w="100%"
+            placeholder={t(
+              "directories-menu:directories-menu.search-by-directories",
+            )}
+            onClick={handleItemClick}
+            onChange={(event) => searchDirectoryByName(event.target.value)}
+          />
+          {directories.map((directory, index) => {
+            const encodedLink = directory.link.replace("/", "__");
+
+            return (
+              <Link
+                style={{ textDecoration: "none" }}
+                key={index}
+                to={`/directories/$slug`}
+                params={{
+                  slug: encodedLink,
+                }}
+                onClick={() => {
+                  resetDirectories();
+                }}
+              >
+                <Menu.Item>{directory.name}</Menu.Item>
+              </Link>
+            );
+          })}
+        </Menu.Dropdown>
+      </Menu>
+    );
+  },
+);
+
+export default DropdownMenu;

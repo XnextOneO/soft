@@ -5,7 +5,7 @@ export default {
   defaultValue: "not translated",
   indentation: 2,
   keepRemoved: false,
-  keySeparator: false,
+  keySeparator: ".",
   lexers: {
     hbs: ["HandlebarsLexer"],
     handlebars: ["HandlebarsLexer"],
@@ -19,9 +19,9 @@ export default {
     default: ["JsxLexer"],
   },
   lineEnding: "auto",
-  locales: ["ru", "by"],
+  locales: ["by", "ru"],
   namespaceSeparator: ":",
-  output: "public/locales/$LOCALE.json",
+  output: "public/locales/$LOCALE/$NAMESPACE.json",
   pluralSeparator: "_",
   input: undefined,
   sort: true,
@@ -32,5 +32,4 @@ export default {
   resetDefaultValueLocale: undefined,
   i18nextOptions: undefined,
   yamlOptions: undefined,
-  nested: true,
 };
