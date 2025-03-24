@@ -20,7 +20,8 @@ const MyBreadcrumbs = (): JSX.Element => {
       .split("/")
       .filter(Boolean);
     return pathSegments.filter(
-      (segment) => segment !== "nsi" && segment !== "scbank",
+      (segment) =>
+        segment !== "nsi" && segment !== "scbank" && segment !== "directories",
     );
   }, [location.pathname]);
   const [items, setItems] = useState<{ title: string; href: string }[]>([]);
