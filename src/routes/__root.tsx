@@ -7,7 +7,7 @@ import { AppContextProvider } from "@shared/providers/AppContextProvider.tsx";
 import AuthProvider from "@shared/providers/AuthProvider.tsx";
 import { ThemeManager } from "@shared/providers/ThemeProvider.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRoute, Outlet, useLocation } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import "@mantine/core/styles.css";
@@ -25,6 +25,9 @@ const RootComponent: React.FC = () => {
     },
   });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isLoginPage = location.pathname === "/login";
 
   const toggleMenu = (): void => {
     setIsMenuOpen((previous) => !previous);
@@ -35,13 +38,15 @@ const RootComponent: React.FC = () => {
         <ThemeManager>
           <AuthProvider>
             <AppContextProvider>
-              <Header
-                isBurger={true}
-                isProfile={true}
-                link={true}
-                toggleMenu={toggleMenu}
-                isMenuOpen={isMenuOpen}
-              />
+              {!isLoginPage && (
+                <Header
+                  isBurger={true}
+                  isProfile={true}
+                  link={true}
+                  toggleMenu={toggleMenu}
+                  isMenuOpen={isMenuOpen}
+                />
+              )}
               <Container
                 fluid
                 className={styles.mainContainer}
@@ -50,9 +55,9 @@ const RootComponent: React.FC = () => {
                 maw="100vw"
               >
                 <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
-                  <NavMenu isMenuOpen={isMenuOpen} />
+                  {!isLoginPage && <NavMenu isMenuOpen={isMenuOpen} />}
                   <div className={styles.contentWrapper}>
-                    <MyBreadcrumbs />
+                    {!isLoginPage && <MyBreadcrumbs />}
                     <Outlet />
                   </div>
                 </Flex>
