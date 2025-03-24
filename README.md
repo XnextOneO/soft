@@ -14,6 +14,13 @@
 
 **Docker compose:**
 
+first launch 
+- `git pull`
+- `npm install`
+- `cp .env.example .env`
+- Edit `.env`
+- `docker-compose up -d`
+
 launch
 - `docker-compose up -d`
 
@@ -25,3 +32,4 @@ rebuild and launch
 
 LiteFront is licensed under the MIT License.
 
+1
