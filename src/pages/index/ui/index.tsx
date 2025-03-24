@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Button,
   Container,
   Group,
   Stack,
@@ -29,22 +28,7 @@ export const IndexPage: FC = () => {
         <Group w="100%" p={20} justify="center">
           <Stack className={styles.stackContainer}>
             <Title>{t("home:home.main-page")}</Title>
-            <Button color="#006040">{t("home:home.directories")}</Button>
           </Stack>
-          {/* <DatesProvider settings={{ consistentWeeks: true, locale: "ru" }}>
-                        {/* <DatePicker />
-                        <DateInput
-                            // w="20%"
-                            leftSection={
-                                <SvgButton
-                                    fillColor={colorScheme.colorScheme === "light" ? "#333333" : "#FFFFFF"}
-                                    SvgIcon={IconCalendar}
-                                />
-                            }
-                            valueFormat="DD MMM YYYY"
-                            placeholder="Выберите дату"
-                        />
-                    </DatesProvider> */}
         </Group>
       </Container>
     </Stack>
