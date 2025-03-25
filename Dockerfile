@@ -26,6 +26,7 @@ WORKDIR /usr/share/caddy
 # Copy built files from the build stage
 COPY --from=build /app/dist /usr/share/caddy/html
 
+
 # Copy the Caddyfile configuration
 COPY Caddyfile /etc/caddy/Caddyfile
 
