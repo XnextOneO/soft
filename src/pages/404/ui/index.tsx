@@ -20,8 +20,6 @@ export const NotFoundPage: FC = () => {
           : styles.mainContainerDark
       }
       fluid
-      w={"100%"}
-      h={"100%"}
     >
       <Group h={150}>
         <Image src={Logo404} h={150} />

@@ -1,61 +1,99 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu, TextInput } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
-import { observer } from "mobx-react-lite";
 
-import { Context } from "../../providers/AppContextProvider.tsx";
+const DropdownMenu = ({
+  onOpen,
+  items = [], // Установите пустой массив по умолчанию
+  children,
+  searchable,
+}: {
+  onOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  items: any[];
+  searchable: boolean;
+  children: React.ReactNode;
+}) => {
+  const [data, setData] = useState(items);
+  const { t } = useTranslation(["directories-menu"]);
 
-const DropdownMenu = observer(
-  ({
-    onOpen,
-    children,
-  }: {
-    onOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    children: React.ReactNode;
-  }) => {
-    const { directoriesStore } = useContext(Context);
-    const [directories, setDirectories] = useState(
-      directoriesStore.directories,
+  // Обновление состояния data при изменении items
+  useEffect(() => {
+    setData(items);
+    console.log("searchable -------", searchable);
+  }, [items]); // Добавьте items в зависимости
+
+  const handleItemClick = (event: React.MouseEvent): void => {
+    event.stopPropagation();
+  };
+
+  const searchDataByName = (value: string): void => {
+    setData(
+      items.filter((item: any) =>
+        item.name.toLowerCase().includes(value.toLowerCase()),
+      ),
     );
-    const { t } = useTranslation(["directories-menu"]);
+  };
 
-    const handleItemClick = (event: React.MouseEvent): void => {
-      event.stopPropagation();
-    };
+  const resetData = (): void => {
+    setData(items);
+  };
 
-    const searchDirectoryByName = (value: string): void => {
-      setDirectories(
-        directoriesStore.directories.filter((directory) =>
-          directory.name.toLowerCase().includes(value.toLowerCase()),
-        ),
+  const renderMenuItems = (items: any[]) => {
+    return items.map((item: any, index: number) => {
+      // let encodedLink: string = "";
+      const hasSubItems = item.items && item.items.length > 0;
+      // if (hasSubItems) {
+      //   encodedLink = item.href.replace("/", "__");
+      // }
+      return (
+        <React.Fragment key={index}>
+          {hasSubItems ? (
+            <DropdownMenu
+              onOpen={onOpen}
+              items={item.items}
+              searchable={searchable}
+            >
+              <Menu.Item>{item.name}</Menu.Item>
+            </DropdownMenu>
+          ) : (
+            <Link
+              to={`/directories/$slug`}
+              params={{
+                slug: item.href,
+              }}
+              style={{ textDecoration: "none" }}
+            >
+              <Menu.Item onClick={handleItemClick}>{item.name}</Menu.Item>
+            </Link>
+          )}
+        </React.Fragment>
       );
-    };
+    });
+  };
 
-    const resetDirectories = (): void => {
-      setDirectories(directoriesStore.directories);
-    };
+  return (
+    <Menu
+      onChange={(value) => {
+        onOpen(value);
+        if (!value) {
+          resetData();
+        }
+      }}
+      closeOnItemClick={false}
+      offset={5}
+      radius="xs"
+      width={450}
+      transitionProps={{ transition: "rotate-right", duration: 150 }}
+      position="right-start"
+      styles={{ dropdown: { maxHeight: 300, overflowY: "auto" } }}
+    >
+      <Menu.Target>{children}</Menu.Target>
 
-    return (
-      <Menu
-        onChange={(value) => {
-          onOpen(value);
-          if (!value) {
-            setDirectories(directoriesStore.directories);
-          }
-        }}
-        offset={1}
-        radius="xs"
-        width={450}
-        transitionProps={{ transition: "rotate-right", duration: 150 }}
-        position="right-start"
-        styles={{ dropdown: { maxHeight: 300, overflowY: "auto" } }}
+      <Menu.Dropdown
+        style={{ boxShadow: "0px 6px 35px 6px rgba(48, 48, 48, 0.2)" }}
       >
-        <Menu.Target>{children}</Menu.Target>
-
-        <Menu.Dropdown
-          style={{ boxShadow: "0px 6px 35px 6px rgba(48, 48, 48, 0.2)" }}
-        >
+        {searchable && (
           <TextInput
             p="xs"
             w="100%"
@@ -63,31 +101,20 @@ const DropdownMenu = observer(
               "directories-menu:directories-menu.search-by-directories",
             )}
             onClick={handleItemClick}
-            onChange={(event) => searchDirectoryByName(event.target.value)}
+            onChange={(event) => searchDataByName(event.target.value)}
           />
-          {directories.map((directory, index) => {
-            const encodedLink = directory.link.replace("/", "__");
+        )}
 
-            return (
-              <Link
-                style={{ textDecoration: "none" }}
-                key={index}
-                to={`/directories/$slug`}
-                params={{
-                  slug: encodedLink,
-                }}
-                onClick={() => {
-                  resetDirectories();
-                }}
-              >
-                <Menu.Item>{directory.name}</Menu.Item>
-              </Link>
-            );
-          })}
-        </Menu.Dropdown>
-      </Menu>
-    );
-  },
-);
+        {data.length > 0 ? (
+          renderMenuItems(data)
+        ) : (
+          <Menu.Item disabled>
+            {t("directories-menu:directories-menu.no-data")}
+          </Menu.Item>
+        )}
+      </Menu.Dropdown>
+    </Menu>
+  );
+};
 
 export default DropdownMenu;
