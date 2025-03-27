@@ -38,11 +38,11 @@ const DropdownMenu = ({
     setData(items);
   };
 
-  const renderMenuItems = (items: MenuItem[]): React.ReactNode => {
-    if (!Array.isArray(items) || items.length === 0) {
+  const renderMenuItems = (menuItems: MenuItem[]): React.ReactNode => {
+    if (!Array.isArray(menuItems) || menuItems.length === 0) {
       return <></>;
     }
-    return items.map((item: MenuItem, index: number) => {
+    return menuItems.map((item: MenuItem, index: number) => {
       const hasSubItems = item.items && item.items.length > 0;
       return (
         <React.Fragment key={index}>
@@ -62,7 +62,7 @@ const DropdownMenu = ({
               }}
               style={{ textDecoration: "none" }}
             >
-              <Menu.Item onClick={handleItemClick}>{item.name}</Menu.Item>
+              <Menu.Item>{item.name}</Menu.Item>
             </Link>
           )}
         </React.Fragment>
@@ -82,7 +82,6 @@ const DropdownMenu = ({
       offset={5}
       radius="xs"
       width={450}
-      transitionProps={{ transition: "rotate-right", duration: 150 }}
       position="right-start"
       styles={{ dropdown: { maxHeight: 300, overflowY: "auto" } }}
     >
