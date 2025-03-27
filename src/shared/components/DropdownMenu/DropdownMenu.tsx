@@ -1,27 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { JSX, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu, TextInput } from "@mantine/core";
+import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import { Link } from "@tanstack/react-router";
 
 const DropdownMenu = ({
   onOpen,
-  items = [], // Установите пустой массив по умолчанию
+  items = [],
   children,
   searchable,
 }: {
   onOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  items: any[];
+  items: MenuItem[];
   searchable: boolean;
   children: React.ReactNode;
-}) => {
+}): JSX.Element => {
   const [data, setData] = useState(items);
   const { t } = useTranslation(["directories-menu"]);
 
-  // Обновление состояния data при изменении items
   useEffect(() => {
     setData(items);
-    console.log("searchable -------", searchable);
-  }, [items]); // Добавьте items в зависимости
+  }, [items]);
 
   const handleItemClick = (event: React.MouseEvent): void => {
     event.stopPropagation();
@@ -29,7 +28,7 @@ const DropdownMenu = ({
 
   const searchDataByName = (value: string): void => {
     setData(
-      items.filter((item: any) =>
+      items.filter((item: MenuItem) =>
         item.name.toLowerCase().includes(value.toLowerCase()),
       ),
     );
@@ -39,19 +38,18 @@ const DropdownMenu = ({
     setData(items);
   };
 
-  const renderMenuItems = (items: any[]) => {
-    return items.map((item: any, index: number) => {
-      // let encodedLink: string = "";
+  const renderMenuItems = (items: MenuItem[]): React.ReactNode => {
+    if (!Array.isArray(items) || items.length === 0) {
+      return <></>;
+    }
+    return items.map((item: MenuItem, index: number) => {
       const hasSubItems = item.items && item.items.length > 0;
-      // if (hasSubItems) {
-      //   encodedLink = item.href.replace("/", "__");
-      // }
       return (
         <React.Fragment key={index}>
           {hasSubItems ? (
             <DropdownMenu
               onOpen={onOpen}
-              items={item.items}
+              items={item.items ?? []}
               searchable={searchable}
             >
               <Menu.Item>{item.name}</Menu.Item>
@@ -60,7 +58,7 @@ const DropdownMenu = ({
             <Link
               to={`/directories/$slug`}
               params={{
-                slug: item.href,
+                slug: item.href ?? "",
               }}
               style={{ textDecoration: "none" }}
             >
