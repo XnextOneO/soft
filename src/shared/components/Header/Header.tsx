@@ -1,11 +1,13 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Burger, Container, Flex, Group, Image, Text } from "@mantine/core";
+import Favicon from "@public/assets/favicon.svg";
 import LanguageSwitcher from "@shared/components/LanguageSwitcher/LanguageSwitcher.tsx";
+import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { Link } from "@tanstack/react-router";
 
-import Favicon from "../../../../public/assets/favicon.png";
+import BelarusbankLogo from "../../../../public/assets/belarusbank-logo.svg?react";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
 import classes from "./Header.module.scss";
@@ -54,6 +56,11 @@ const Header: FC<HeaderProperties> = ({
           {link ? (
             <Link to={"/"}>
               <Group gap="xs">
+                <SvgButton
+                  fillColor={"#FFFFFF"}
+                  SvgIcon={BelarusbankLogo}
+                  style={{ width: "30px", height: "30px" }}
+                />
                 <Image src={Favicon} w={30} h={30} alt="logo" />
                 <Text c="white" size="20px" fw={700} className={classes.title}>
                   IIS {t("header:header.belarusbank")}

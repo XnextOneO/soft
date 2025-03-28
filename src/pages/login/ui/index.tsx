@@ -114,7 +114,7 @@ export const LoginPage: FC = () => {
             }}
           >
             {/* <Group gap="xs" my={20}>
-                        <Image src="../../favicon.png" w={40} h={40} alt="IIS Logo" />
+                        <Image src="../../favicon.svg" w={40} h={40} alt="IIS Logo" />
                         <Text size="44px" fw={700}>
                             IIS
                         </Text>
