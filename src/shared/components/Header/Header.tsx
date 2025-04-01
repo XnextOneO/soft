@@ -1,13 +1,19 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Burger, Container, Flex, Group, Image, Text } from "@mantine/core";
+import {
+  Burger,
+  Container,
+  Flex,
+  Group,
+  Image,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import BelarusbankLogo from "@public/assets/belarusbank-logo.svg";
 import Favicon from "@public/assets/favicon.svg";
-import LanguageSwitcher from "@shared/components/LanguageSwitcher/LanguageSwitcher.tsx";
-import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
+import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { Link } from "@tanstack/react-router";
-
-import BelarusbankLogo from "../../../../public/assets/belarusbank-logo.svg?react";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
 import classes from "./Header.module.scss";
@@ -26,7 +32,26 @@ const Header: FC<HeaderProperties> = ({
   isMenuOpen,
 }) => {
   const { t } = useTranslation(["header"]);
-
+  // const [searchTerm, setSearchTerm] = useState("");
+  // const flattenMenuItems = (items: MenuItem[]): MenuItem[] => {
+  //   const flatItems: MenuItem[] = [];
+  //
+  //   const recurseItems = (subItems: MenuItem[]): void => {
+  //     for (const item of subItems) {
+  //       flatItems.push(item);
+  //       if (item.items) {
+  //         recurseItems(item.items);
+  //       }
+  //     }
+  //   };
+  //
+  //   recurseItems(items);
+  //   return flatItems;
+  // };
+  // const flatMenuItems = flattenMenuItems(menuItems);
+  // const filteredItems = flatMenuItems.filter((item) =>
+  //   item.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  // );
   return (
     <Container className={classes.headerContainer} fluid p={0}>
       <Flex w="100%" h="100%" direction="row">
@@ -36,8 +61,8 @@ const Header: FC<HeaderProperties> = ({
             align="center"
             className={classes.buttonContainer}
             onClick={toggleMenu}
-            w={52}
-            miw={52}
+            w={72}
+            miw={72}
           >
             <Burger
               size="sm"
@@ -52,32 +77,43 @@ const Header: FC<HeaderProperties> = ({
             />
           </Flex>
         )}
-        <Group justify="space-between" w="100%" pl="md">
+        <Group justify="space-between" w="100%" pl={link ? 0 : "md"}>
           {link ? (
             <Link to={"/"}>
-              <Group gap="xs">
-                <SvgButton
-                  fillColor={"#FFFFFF"}
-                  SvgIcon={BelarusbankLogo}
-                  style={{ width: "30px", height: "30px" }}
+              <Group gap="xs" miw={280}>
+                <Image
+                  src={BelarusbankLogo}
+                  w={24}
+                  h={24}
+                  alt="belarusbank-logo"
                 />
-                <Image src={Favicon} w={30} h={30} alt="logo" />
-                <Text c="white" size="20px" fw={700} className={classes.title}>
+                <Image src={Favicon} w={24} h={24} alt="logo" />
+                <Text c="white" fw={700} className={classes.title}>
                   IIS {t("header:header.belarusbank")}
                 </Text>
+                <TextInput
+                  w={350}
+                  placeholder={t("header:header.search-placeholder")}
+                />
               </Group>
             </Link>
           ) : (
-            <Group gap="xs">
-              <Image src={Favicon} w={30} h={30} alt="logo" />
-              <Text c="white" size="20px" fw={700} className={classes.title}>
+            <Group gap="xs" maw={280}>
+              <Image
+                src={BelarusbankLogo}
+                w={24}
+                h={24}
+                alt="belarusbank-logo"
+              />
+              <Image src={Favicon} w={24} h={24} alt="logo" />
+              <Text c="white" fw={700} className={classes.title}>
                 IIS {t("header:header.belarusbank")}
               </Text>
             </Group>
           )}
           <Group gap={0} justify="flex-end" align="center">
             <ThemeSwitcher />
-            <LanguageSwitcher />
+            {/*<LanguageSwitcher />*/}
             {isProfile && <ProfileButton />}
           </Group>
         </Group>

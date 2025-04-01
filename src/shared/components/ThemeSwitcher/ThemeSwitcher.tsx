@@ -1,5 +1,6 @@
 import {
   Group,
+  Tooltip,
   useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
@@ -14,22 +15,24 @@ const ThemeSwitcher: React.FC = () => {
   });
 
   return (
-    <Group
-      justify="center"
-      w={52}
-      h="52px"
-      className={classes.themeSwitcher}
-      onClick={() =>
-        setColorScheme(computedColorScheme === "light" ? "dark" : "light")
-      }
-      aria-label="Toggle color scheme"
-    >
-      {computedColorScheme === "dark" ? (
-        <IconSun className={classes.icon} stroke={1.5} color="#FFFFFF" />
-      ) : (
-        <IconMoon className={classes.icon} stroke={1.5} color="#FFFFFF" />
-      )}
-    </Group>
+    <Tooltip label="Тема" withArrow>
+      <Group
+        justify="center"
+        w={52}
+        h="52px"
+        className={classes.themeSwitcher}
+        onClick={() =>
+          setColorScheme(computedColorScheme === "light" ? "dark" : "light")
+        }
+        aria-label="Toggle color scheme"
+      >
+        {computedColorScheme === "dark" ? (
+          <IconSun className={classes.icon} stroke={1.5} color="#FFFFFF" />
+        ) : (
+          <IconMoon className={classes.icon} stroke={1.5} color="#FFFFFF" />
+        )}
+      </Group>
+    </Tooltip>
   );
 };
 

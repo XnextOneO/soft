@@ -79,10 +79,30 @@
             "subject-statuses": "N061 Справочник статусов субъектов"
           }
         },
-        "rf-reference-book": "Справочник БИК Российской Федерации",
-        "swift-reference-book": "Справочник участников системы SWIFT",
-        "regulatory-capital-by-calculations": "Величина нормативного капитала по корсчетам",
-        "calendar": "Календарь"
+        "bic-reference-books": {
+          "name": "Справочники БИК",
+          "items": {
+            "rf-reference-book": "Справочник БИК Российской Федерации",
+            "swift-reference-book": "Справочник участников системы SWIFT"
+          }
+        },
+        "normative-values": {
+          "name": "Нормативные величины",
+          "items": {
+            "regulatory-capital-by-calculations": "Величина нормативного капитала по корсчетам",
+            "calendar": "Календарь"
+          }
+        },
+        "reference-books-for-international-payments-investigation": {
+          "name": "Справочники для расследования международных платежей",
+          "items": {
+            "table-message-templates": "Таблица шаблонов сообщений",
+            "currency-precious-metals": "Справочник кодов наименований валют и драгоценных металлов",
+            "table-describing-field-57-interpretation": "Таблица описания неадекватной информации в поле 57 и ее трактовки при обработке",
+            "table-headers-transfer-amount-ranges": "Таблица заголовков диапазонов сумм переводов",
+            "table-transfer-amount-ranges": "Таблица диапазонов сумм переводов"
+          }
+        }
       }
     },
     "e-documents": {
@@ -132,9 +152,26 @@
         "mutual-nostro-balances": "Остатки по взаимным корсчетам",
         "actual-loro-balances": "Фактические остатки на счетах ЛОРО",
         "account-balance-report": "Отчет об остатках на счетах",
-        "individual-transfers-report": "Отчет по переводам ФЛ"
+        "individual-transfers-report": "Отчет по переводам ФЛ",
+        "turnover-and-balance-statement": "Ведомость оборотов и остатков",
+        "accrued-interest-statement": "Ведомость начисленных процентов",
+        "report-info-28216": "Информация для отчета 28216",
+        "currency-exchange-operations-report": "Отчет \"Валютно-обменные операции\"",
+        "accrued-commissions-report": "Отчет о начисленных комиссиях",
+        "nostro-account-balance-report": "Отчет об остатках по корсчетам",
+        "reporting": "Отчетность",
+        "transit-payments": "Транзитные платежи",
+        "mt950-940-excel-export": "Выгрузка входящих выписок MT950/940 в Excel",
+        "loro-correspondent-funds-volume": "Объем средств лоро-корреспондентов для внешних платежей",
+        "gpi-status-requests-journal": "Журнал количества запросов статуса ПП в GPI",
+        "transfer-volumes-by-country-report": "Отчет по объемам переводов в разрезе стран",
+        "statistical-loro-report": "Отчет статистический ЛОРО",
+        "statistical-nostro-report": "Отчет статистический НОСТРО",
+        "nostro-payment-report": "Отчет исп.плат. НОСТРО",
+        "outgoing-payments-report": "Отчет по исходящим платежам"
       }
     },
+
     "operational-archive": {
       "name": "Оперативный архив",
       "items": {
@@ -162,7 +199,16 @@
         "payment-transport-system": "Платежно-транспортная система",
         "payment-transport-system-settings": "Настройка ПТС",
         "transport-handlers": "Транспорт.Обработчики",
-        "api-handler-management": "Управление обработчиками через API"
+        "api-handler-management": "IIS-BPS-ПР-Справочники_API-сервис v1.0 IIS-PTS-ПР-CBCB v1.0"
+      }
+    },
+    "payment-investigation": {
+      "name": "Расследование платежей",
+      "items": {
+        "cases": "Кейсы",
+        "messages": "Сообщения",
+        "create-message": "Создать сообщение",
+        "analytics": "Аналитика"
       }
     },
 

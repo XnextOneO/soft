@@ -4,16 +4,17 @@
   height: 54px;
   display: flex;
   align-items: center;
+  background-color: #006040;
 }
 
 .nav-button:hover {
-  background-color: #c7c7c7;
+  background-color: #004830;
 }
 
 .nav-button-dark:hover {
-  background-color: #444;
+  background-color: #004830;
 }
 
 .nav-button-active {
-  background-color: #006040;
+  background-color: #FFFFFF;
 }

@@ -11,7 +11,6 @@ interface INavMenuButtonStackProperties {
   colorScheme: string;
   active?: boolean;
   width: number;
-  marginLeft: number;
   icon: React.FC<SVGProps<SVGSVGElement>> | undefined;
   children?: React.ReactNode;
 }
@@ -20,7 +19,6 @@ const NavMenuButtonStack: React.FC<INavMenuButtonStackProperties> = ({
   colorScheme,
   active,
   width,
-  marginLeft,
   icon,
   children,
 }) => {
@@ -31,13 +29,13 @@ const NavMenuButtonStack: React.FC<INavMenuButtonStackProperties> = ({
 
   if (active) {
     navButtonClass = classes.navButtonActive;
-    pathColor = "#FFFFFF";
+    pathColor = "#333333";
   } else if (colorScheme === "dark") {
     navButtonClass = classes.navButtonDark;
     pathColor = "#FFFFFF";
   } else {
     navButtonClass = classes.navButton;
-    pathColor = "#333333";
+    pathColor = "#FFFFFF";
   }
 
   useEffect(() => {
@@ -50,15 +48,15 @@ const NavMenuButtonStack: React.FC<INavMenuButtonStackProperties> = ({
         SvgIcon={icon}
         fillColor={iconColorState}
         style={{
-          minWidth: "52px",
+          minWidth: "72px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       />
       <Text
-        c={active ? "#c9c9c9" : ""}
-        ml={marginLeft}
+        mr={"20px"}
+        c={active ? "#333333" : "#c9c9c9"}
         style={{ lineHeight: "20px" }}
       >
         {children}

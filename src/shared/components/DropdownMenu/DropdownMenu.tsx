@@ -6,11 +6,13 @@ import { Link } from "@tanstack/react-router";
 
 const DropdownMenu = ({
   onOpen,
+  onDismiss,
   items = [],
   children,
   searchable,
 }: {
   onOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onDismiss: (value: boolean) => void; // Измените тип на (value: boolean)
   items: MenuItem[];
   searchable: boolean;
   children: React.ReactNode;
@@ -22,8 +24,8 @@ const DropdownMenu = ({
     setData(items);
   }, [items]);
 
-  const handleItemClick = (event: React.MouseEvent): void => {
-    event.stopPropagation();
+  const handleItemClick = (): void => {
+    onDismiss(true);
   };
 
   const searchDataByName = (value: string): void => {
@@ -33,22 +35,22 @@ const DropdownMenu = ({
       ),
     );
   };
-
   const resetData = (): void => {
     setData(items);
   };
-
   const renderMenuItems = (menuItems: MenuItem[]): React.ReactNode => {
     if (!Array.isArray(menuItems) || menuItems.length === 0) {
       return <></>;
     }
     return menuItems.map((item: MenuItem, index: number) => {
       const hasSubItems = item.items && item.items.length > 0;
+      // console.log("aaaaaaaaaa", item);
       return (
         <React.Fragment key={index}>
           {hasSubItems ? (
             <DropdownMenu
               onOpen={onOpen}
+              onDismiss={onDismiss}
               items={item.items ?? []}
               searchable={searchable}
             >
@@ -62,7 +64,7 @@ const DropdownMenu = ({
               }}
               style={{ textDecoration: "none" }}
             >
-              <Menu.Item>{item.name}</Menu.Item>
+              <Menu.Item onClick={handleItemClick}>{item.name}</Menu.Item>
             </Link>
           )}
         </React.Fragment>
@@ -76,6 +78,7 @@ const DropdownMenu = ({
         onOpen(value);
         if (!value) {
           resetData();
+          onDismiss(false); // Передаем false, чтобы указать, что меню закрыто без выбора
         }
       }}
       closeOnItemClick={false}
@@ -97,7 +100,7 @@ const DropdownMenu = ({
             placeholder={t(
               "directories-menu:directories-menu.search-by-directories",
             )}
-            onClick={handleItemClick}
+            onClick={(event) => event.stopPropagation()}
             onChange={(event) => searchDataByName(event.target.value)}
           />
         )}
