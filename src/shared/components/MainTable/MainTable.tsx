@@ -202,7 +202,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
               return (
                 <div className={classes.statusCell}>
                   {/*<IconRosetteDiscountCheckFilled color={"green"} />*/}
-                  <Text c={"orange"}>В оиждании</Text>
+                  <Text c={"orange"}>В ожидании</Text>
                 </div>
               );
             }
