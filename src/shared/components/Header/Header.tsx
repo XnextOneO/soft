@@ -1,11 +1,10 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { Burger, Container, Flex, Group, Image, Text } from "@mantine/core";
+import { Burger, Container, Flex, Group, Text } from "@mantine/core";
 import LanguageSwitcher from "@shared/components/LanguageSwitcher/LanguageSwitcher.tsx";
+import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { Link } from "@tanstack/react-router";
-
-import Favicon from "../../../../public/assets/favicon.png";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
 import classes from "./Header.module.scss";
@@ -16,6 +15,8 @@ interface HeaderProperties {
   toggleMenu?: () => void;
   isMenuOpen?: boolean;
 }
+import BelarusbankLogo from "../../../../public/assets/belarusbank-logo.svg?react";
+
 const Header: FC<HeaderProperties> = ({
   isBurger,
   isProfile,
@@ -54,7 +55,11 @@ const Header: FC<HeaderProperties> = ({
           {link ? (
             <Link to={"/"}>
               <Group gap="xs">
-                <Image src={Favicon} w={30} h={30} alt="logo" />
+                <SvgButton
+                  fillColor={"#FFFFFF"}
+                  SvgIcon={BelarusbankLogo}
+                  style={{ width: "30px", height: "30px" }}
+                />
                 <Text c="white" size="20px" fw={700} className={classes.title}>
                   IIS {t("header:header.belarusbank")}
                 </Text>
@@ -62,7 +67,11 @@ const Header: FC<HeaderProperties> = ({
             </Link>
           ) : (
             <Group gap="xs">
-              <Image src={Favicon} w={30} h={30} alt="logo" />
+              <SvgButton
+                fillColor={"#FFFFFF"}
+                SvgIcon={BelarusbankLogo}
+                style={{ width: "30px", height: "30px" }}
+              />
               <Text c="white" size="20px" fw={700} className={classes.title}>
                 IIS {t("header:header.belarusbank")}
               </Text>
