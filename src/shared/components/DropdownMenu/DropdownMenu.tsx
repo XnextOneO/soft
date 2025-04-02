@@ -44,7 +44,6 @@ const DropdownMenu = ({
     }
     return menuItems.map((item: MenuItem, index: number) => {
       const hasSubItems = item.items && item.items.length > 0;
-      // console.log("aaaaaaaaaa", item);
       return (
         <React.Fragment key={index}>
           {hasSubItems ? (
@@ -54,7 +53,7 @@ const DropdownMenu = ({
               items={item.items ?? []}
               searchable={searchable}
             >
-              <Menu.Item>{item.name}</Menu.Item>
+              <Menu.Item>{t(item.name)}</Menu.Item>
             </DropdownMenu>
           ) : (
             <Link
@@ -64,7 +63,7 @@ const DropdownMenu = ({
               }}
               style={{ textDecoration: "none" }}
             >
-              <Menu.Item onClick={handleItemClick}>{item.name}</Menu.Item>
+              <Menu.Item onClick={handleItemClick}>{t(item.name)}</Menu.Item>
             </Link>
           )}
         </React.Fragment>
@@ -78,7 +77,7 @@ const DropdownMenu = ({
         onOpen(value);
         if (!value) {
           resetData();
-          onDismiss(false); // Передаем false, чтобы указать, что меню закрыто без выбора
+          onDismiss(false);
         }
       }}
       closeOnItemClick={false}

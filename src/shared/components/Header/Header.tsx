@@ -2,15 +2,20 @@ import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Burger,
+  Combobox,
   Container,
   Flex,
   Group,
   Image,
+  ScrollArea,
   Text,
   TextInput,
+  useCombobox,
+  useMantineColorScheme,
 } from "@mantine/core";
 import BelarusbankLogo from "@public/assets/belarusbank-logo.svg";
 import Favicon from "@public/assets/favicon.svg";
+import menuItems from "@public/menuItems.json";
 import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { Link } from "@tanstack/react-router";
@@ -24,6 +29,24 @@ interface HeaderProperties {
   toggleMenu?: () => void;
   isMenuOpen?: boolean;
 }
+const flattenMenuItems = (items: MenuItem[]): MenuItem[] => {
+  const flatItems: MenuItem[] = [];
+
+  const recurseItems = (subItems: MenuItem[]): void => {
+    for (const item of subItems) {
+      if (item.href) {
+        flatItems.push(item);
+      }
+      if (item.items) {
+        recurseItems(item.items);
+      }
+    }
+  };
+
+  recurseItems(items);
+  return flatItems;
+};
+
 const Header: FC<HeaderProperties> = ({
   isBurger,
   isProfile,
@@ -31,27 +54,37 @@ const Header: FC<HeaderProperties> = ({
   toggleMenu,
   isMenuOpen,
 }) => {
+  const combobox = useCombobox();
+  const colorScheme = useMantineColorScheme();
   const { t } = useTranslation(["header"]);
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const flattenMenuItems = (items: MenuItem[]): MenuItem[] => {
-  //   const flatItems: MenuItem[] = [];
-  //
-  //   const recurseItems = (subItems: MenuItem[]): void => {
-  //     for (const item of subItems) {
-  //       flatItems.push(item);
-  //       if (item.items) {
-  //         recurseItems(item.items);
-  //       }
-  //     }
-  //   };
-  //
-  //   recurseItems(items);
-  //   return flatItems;
-  // };
-  // const flatMenuItems = flattenMenuItems(menuItems);
-  // const filteredItems = flatMenuItems.filter((item) =>
-  //   item.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  // );
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const flatMenuItems = flattenMenuItems(menuItems);
+  const shouldFilterOptions = !flatMenuItems.some(
+    (item) => t(item.name) === searchTerm,
+  );
+  const filteredItems = shouldFilterOptions
+    ? flatMenuItems.filter((item) =>
+        t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim()),
+      )
+    : flatMenuItems;
+
+  const options = filteredItems.map((item) => (
+    <Link
+      key={item.key + item.href}
+      to={`/directories/$slug`}
+      params={{
+        slug: item.href ?? "",
+      }}
+      style={{
+        textDecoration: "none",
+        color: colorScheme.colorScheme === "light" ? "#333333" : "#CCCCCC",
+      }}
+    >
+      <Combobox.Option value={t(item.name)}>{t(item.name)}</Combobox.Option>
+    </Link>
+  ));
+
   return (
     <Container className={classes.headerContainer} fluid p={0}>
       <Flex w="100%" h="100%" direction="row">
@@ -79,24 +112,57 @@ const Header: FC<HeaderProperties> = ({
         )}
         <Group justify="space-between" w="100%" pl={link ? 0 : "md"}>
           {link ? (
-            <Link to={"/"}>
-              <Group gap="xs" miw={280}>
-                <Image
-                  src={BelarusbankLogo}
-                  w={24}
-                  h={24}
-                  alt="belarusbank-logo"
-                />
-                <Image src={Favicon} w={24} h={24} alt="logo" />
-                <Text c="white" fw={700} className={classes.title}>
-                  IIS {t("header:header.belarusbank")}
-                </Text>
-                <TextInput
-                  w={350}
-                  placeholder={t("header:header.search-placeholder")}
-                />
-              </Group>
-            </Link>
+            <Group miw={280} gap={"sm"}>
+              <Link to={"/"}>
+                <Group gap="xs">
+                  <Image
+                    src={BelarusbankLogo}
+                    w={24}
+                    h={24}
+                    alt="belarusbank-logo"
+                  />
+                  <Image src={Favicon} w={24} h={24} alt="logo" />
+                  <Text c="white" fw={700} className={classes.title}>
+                    IIS {t("header:header.belarusbank")}
+                  </Text>
+                </Group>
+              </Link>
+              <Combobox
+                onOptionSubmit={() => {
+                  setSearchTerm("");
+                  combobox.closeDropdown();
+                }}
+                store={combobox}
+              >
+                <Combobox.Target>
+                  <TextInput
+                    w={"350px"}
+                    placeholder={t("header:header.search-placeholder")}
+                    value={searchTerm}
+                    onChange={(event) => {
+                      setSearchTerm(event.currentTarget.value);
+                      combobox.openDropdown();
+                      combobox.updateSelectedOptionIndex();
+                    }}
+                    onClick={() => combobox.openDropdown()}
+                    onFocus={() => combobox.openDropdown()}
+                    onBlur={() => combobox.closeDropdown()}
+                  />
+                </Combobox.Target>
+
+                <Combobox.Dropdown>
+                  <Combobox.Options>
+                    <ScrollArea.Autosize mah={200} type="scroll">
+                      {options.length === 0 ? (
+                        <Combobox.Empty>Ничего не найдено</Combobox.Empty>
+                      ) : (
+                        options
+                      )}
+                    </ScrollArea.Autosize>
+                  </Combobox.Options>
+                </Combobox.Dropdown>
+              </Combobox>
+            </Group>
           ) : (
             <Group gap="xs" maw={280}>
               <Image

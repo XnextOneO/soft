@@ -3,7 +3,6 @@
     "icon": "IconBusinessPartner",
     "key": "business-partner",
     "name": "nav-menu-stack:nav-menu-stack.business-partner.name",
-    "href": "/business-partner",
     "items": [
       {
         "key": "customer-file",
@@ -16,7 +15,6 @@
     "icon": "IconAccounts",
     "key": "accounts",
     "name": "nav-menu-stack:nav-menu-stack.accounts.name",
-    "href": "/accounts",
     "items": [
       {
         "key": "accounts-file",
@@ -34,7 +32,6 @@
     "icon": "IconAccountManagement",
     "key": "account-management",
     "name": "nav-menu-stack:nav-menu-stack.account-management.name",
-    "href": "/account-management",
     "items": [
       {
         "key": "financial-conditions-LORO",
@@ -62,7 +59,6 @@
     "icon": "IconAccountsOperations",
     "key": "accounts-operations",
     "name": "nav-menu-stack:nav-menu-stack.accounts-operations.name",
-    "href": "/accounts-operations",
     "items": [
       {
         "key": "making-transactions-on-personal-account",
@@ -85,7 +81,6 @@
     "icon": "IconPaymentManagement",
     "key": "payment-management",
     "name": "nav-menu-stack:nav-menu-stack.payment-management.name",
-    "href": "/payment-management",
     "items": [
       {
         "key": "payment-management-settings-highway",
@@ -115,7 +110,6 @@
     "icon": "IconReconciliationsReports",
     "key": "reconciliations-reports",
     "name": "nav-menu-stack:nav-menu-stack.reconciliations-reports.name",
-    "href": "/reconciliations-reports",
     "items": [
       {
         "key": "sum-reconciliation-UP-NOSTRO",
@@ -222,74 +216,54 @@
           },
           {
             "key": "processing-code",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.processing-code",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.processing-code",
             "href": "nsi__processing-code"
           },
           {
             "key": "budget-payment-code",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.budget-payment-code",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.budget-payment-code",
             "href": "nsi__budget-payment-code"
           },
           {
             "key": "country-codifier",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.country-codifier",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.country-codifier",
             "href": "nsi__country-codifier"
           },
           {
             "key": "republican-budget-account",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.republican-budget-account",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.republican-budget-account",
             "href": "nsi__republican-budget-account"
           },
           {
             "key": "bank-id-code",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.bank-id-code",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.bank-id-code",
             "href": "nsi__bank-id-code"
           },
           {
             "key": "biss-member",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.biss-member",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.biss-member",
             "href": "nsi__biss-member"
           },
           {
             "key": "payment-priority-code",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.payment-priority-code",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.payment-priority-code",
             "href": "nsi__payment-priority-code"
           },
           {
             "key": "local-budget-account",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.local-budget-account",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.local-budget-account",
             "href": "nsi__local-budget-account"
           },
           {
             "key": "subject-statuses",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.subject-statuses",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.subject-statuses",
             "href": "nsi__subject-statuses"
           }
         ]
       },
       {
         "key": "bic-reference-books",
-        "name":
-        "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.name",
-
+        "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.name",
         "items": [
           {
             "key": "rf-reference-book",
@@ -305,9 +279,7 @@
       },
       {
         "key": "normative-values",
-        "name":
-        "nav-menu-stack:nav-menu-stack.reference-books.items.normative-values.name",
-
+        "name": "nav-menu-stack:nav-menu-stack.reference-books.items.normative-values.name",
         "items": [
           {
             "key": "regulatory-capital-by-calculations",
@@ -323,43 +295,31 @@
       },
       {
         "key": "reference-books-for-international-payments-investigation",
-        "name":
-        "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.name",
-
+        "name": "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.name",
         "items": [
           {
             "key": "table-message-templates",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.table-message-templates",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.table-message-templates",
             "href": "/international-payments/table-message-templates"
           },
           {
             "key": "currency-precious-metals",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.currency-precious-metals",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.currency-precious-metals",
             "href": "/international-payments/currency-precious-metals"
           },
           {
             "key": "table-describing-field-57-interpretation",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.table-describing-field-57-interpretation",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.table-describing-field-57-interpretation",
             "href": "/international-payments/table-describing-field-57-interpretation"
           },
           {
             "key": "table-headers-transfer-amount-ranges",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.table-headers-transfer-amount-ranges",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.table-headers-transfer-amount-ranges",
             "href": "/international-payments/table-headers-transfer-amount-ranges"
           },
           {
             "key": "table-transfer-amount-ranges",
-            "name":
-            "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.table-transfer-amount-ranges",
-
+            "name": "nav-menu-stack:nav-menu-stack.reference-books.items.reference-books-for-international-payments-investigation.items.table-transfer-amount-ranges",
             "href": "/international-payments/table-transfer-amount-ranges"
           }
         ]

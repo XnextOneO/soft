@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import IconReferenceBooks from "@public/assets/reference-books.svg?react";
 import DropdownMenu from "@shared/components/DropdownMenu/DropdownMenu.tsx";
+import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
 import { useRouter } from "@tanstack/react-router";
 
@@ -37,14 +38,6 @@ interface INavMenuStackProperties {
   width: number;
   opened: boolean;
   menuItems: MenuItem[];
-}
-
-interface MenuItem {
-  icon?: string;
-  key: string;
-  name: string;
-  href?: string;
-  items?: MenuItem[];
 }
 
 const NavMenuStack: FC<INavMenuStackProperties> = ({
@@ -102,7 +95,10 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
       .map((item) => {
         const { key, name, items: subItems, icon } = item;
         const isActive = activeKey === key;
-        const IconComponent = item ? iconMap[icon] : undefined;
+        let iconComponent: FC<SVGProps<SVGSVGElement>> | undefined;
+        if (icon) {
+          iconComponent = item ? iconMap[icon] : undefined;
+        }
         return (
           <DropdownMenu
             key={key}
@@ -112,9 +108,9 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
             searchable={true}
           >
             <Tooltip label={t(name)} withArrow>
-              <UnstyledButton onClick={() => handleMenuItemClick(key)}>
+              <UnstyledButton>
                 <NavMenuButtonStack
-                  icon={IconComponent}
+                  icon={iconComponent}
                   colorScheme={colorScheme}
                   active={isActive}
                   width={width}
