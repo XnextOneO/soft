@@ -43,7 +43,7 @@ const NavMenuStack: React.FC<INavMenuStackProperties> = ({
 
   const handleLogout = (): void => {
     clearTokens();
-    router.navigate({ to: "/login", replace: true });
+    router.navigate({ to: "/login", replace: false });
   };
 
   const menuItems = [
