@@ -330,7 +330,6 @@
     "icon": "IconEDocuments",
     "key": "e-documents",
     "name": "nav-menu-stack:nav-menu-stack.e-documents.name",
-    "href": "/e-documents",
     "items": [
       {
         "key": "e-documents",
@@ -343,7 +342,6 @@
     "icon": "IconFrontOfficeEDocuments",
     "key": "front-office-e-documents",
     "name": "nav-menu-stack:nav-menu-stack.front-office-e-documents.name",
-    "href": "/front-office-e-documents",
     "items": [
       {
         "key": "e-documents",
@@ -356,7 +354,6 @@
     "icon": "IconPercentageCommissionsCorrAccounts",
     "key": "percentage-commissions-corr-accounts",
     "name": "nav-menu-stack:nav-menu-stack.percentage-commissions-corr-accounts.name",
-    "href": "/percentage-commissions-corr-accounts",
     "items": [
       {
         "key": "percents-fees-LORO",
@@ -384,7 +381,6 @@
     "icon": "IconRoutineProcedures",
     "key": "routine-procedures",
     "name": "nav-menu-stack:nav-menu-stack.routine-procedures.name",
-    "href": "/routine-procedures",
     "items": [
       {
         "key": "reconciliation-IIS-SC",
@@ -437,7 +433,6 @@
     "icon": "IconReporting",
     "key": "reporting",
     "name": "nav-menu-stack:nav-menu-stack.reporting.name",
-    "href": "/reporting",
     "items": [
       {
         "key": "nostro-exit-report",
@@ -490,7 +485,6 @@
     "icon": "IconOperationalArchive",
     "key": "operational-archive",
     "name": "nav-menu-stack:nav-menu-stack.operational-archive.name",
-    "href": "/operational-archive",
     "items": [
       {
         "key": "operational-archive",
@@ -503,7 +497,6 @@
     "icon": "IconSystemMonitoring",
     "key": "system-monitoring",
     "name": "nav-menu-stack:nav-menu-stack.system-monitoring.name",
-    "href": "/system-monitoring",
     "items": [
       {
         "key": "system-monitoring",
@@ -516,7 +509,6 @@
     "icon": "IconComplianceControl",
     "key": "compliance-control",
     "name": "nav-menu-stack:nav-menu-stack.compliance-control.name",
-    "href": "/compliance-control",
     "items": [
       {
         "key": "compliance-control-payments-reference-books",
@@ -539,7 +531,6 @@
     "icon": "IconPaymentTransportSystem",
     "key": "payment-transport-system",
     "name": "nav-menu-stack:nav-menu-stack.payment-transport-system.name",
-    "href": "/payment-transport-system",
     "items": [
       {
         "key": "payment-transport-system",
@@ -567,7 +558,6 @@
     "icon": "IconPaymentInvestigation",
     "key": "payment-investigation",
     "name": "nav-menu-stack:nav-menu-stack.payment-investigation.name",
-    "href": "/payment-investigation",
     "items": [
       {
         "key": "cases",
@@ -595,12 +585,6 @@
     "icon": "IconAccountManagement",
     "key": "statuses",
     "name": "nav-menu-stack:nav-menu-stack.statuses",
-    "href": "/statuses"
-  },
-  {
-    "icon": "IconAccountManagement",
-    "key": "logout",
-    "name": "nav-menu-stack:nav-menu-stack.logout",
-    "href": "/logout"
+    "href": "statuses"
   }
 ]

@@ -7,6 +7,8 @@ import {
   Title,
   useMantineColorScheme,
 } from "@mantine/core";
+import IconCalendar from "@public/assets/calendar.svg";
+import { SimpleMainTable } from "@shared/components/SimpleMainTable/SimpleMainTable.tsx";
 
 import styles from "./index.module.scss";
 
@@ -22,12 +24,31 @@ export const IndexPage: FC = () => {
     }
   }, [colorScheme.colorScheme]);
 
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
   return (
     <Stack>
       <Container fluid className={backgroundState}>
-        <Group w="100%" p={20} justify="center">
+        <Group
+          align={"flex-start"}
+          justify={"flex-start"}
+          w="100%"
+          h={"100%"}
+          p={20}
+        >
           <Stack className={styles.stackContainer}>
-            <Title>{t("home:home.main-page")}</Title>
+            <Group align={"flex-start"} justify={"flex-start"}>
+              {/*<Title>{t("home:home.main-page")}</Title>*/}
+              <SimpleMainTable
+                headerIcon={IconCalendar}
+                headerTitle={`Выходные в банках корреспондентах "${new Date().toLocaleDateString()}"`}
+              />
+              <SimpleMainTable
+                headerIcon={IconCalendar}
+                headerTitle={`Выходные в банках корреспондентах "${tomorrow.toLocaleDateString()}"`}
+              />
+            </Group>
           </Stack>
         </Group>
       </Container>
