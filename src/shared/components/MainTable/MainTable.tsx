@@ -105,6 +105,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const { data, refetch, isFetching, isLoading } = useQuery({
     queryKey: ["apiData", parametersPost],
     queryFn: async () => {
+      // eslint-disable-next-line unicorn/no-null
+      setError(null);
       try {
         return await postApiData(parametersPost);
       } catch (error_) {
