@@ -8,7 +8,6 @@ import {
   ScrollArea,
   Stack,
   Text,
-  Title,
   useMantineColorScheme,
 } from "@mantine/core";
 import IconNews from "@public/assets/news.svg";

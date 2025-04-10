@@ -16,6 +16,7 @@ import {
 import BelarusbankLogo from "@public/assets/belarusbank-logo.svg";
 import Favicon from "@public/assets/favicon.svg";
 import menuItems from "@public/menuItems.json";
+import DocumentationButton from "@shared/components/Header/DocumentationButton/DocumentationButton.tsx";
 import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { Link } from "@tanstack/react-router";
@@ -178,6 +179,7 @@ const Header: FC<HeaderProperties> = ({
             </Group>
           )}
           <Group gap={0} justify="flex-end" align="center">
+            <DocumentationButton />
             <ThemeSwitcher />
             {/*<LanguageSwitcher />*/}
             {isProfile && <ProfileButton />}
