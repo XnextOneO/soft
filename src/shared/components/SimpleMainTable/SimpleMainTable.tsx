@@ -21,6 +21,7 @@ import {
 } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru/index.esm.mjs";
 
+import styles from "./SimpleMainTable.module.scss";
 import classes from "./SimpleMainTable.module.scss";
 
 interface SimpleMainTableProperties {
@@ -255,7 +256,6 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
       style: {
         height: 400,
         overflowY: "auto",
-        overflowX: "hidden",
       },
     },
     localization: localization,
@@ -297,7 +297,7 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
   }
 
   return data ? (
-    <Flex direction={"column"}>
+    <Flex direction={"column"} className={styles.wrapper}>
       <Accordion
         chevronPosition="right"
         variant="contained"

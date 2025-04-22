@@ -53,7 +53,26 @@ const newsData = [
     title: "Обновление системы",
     description: "Внедрение новых функций и улучшений.",
   },
-  // Добавьте больше новостей по необходимости
+  {
+    date: "2025-04-09 10:00",
+    title: "Технические работы",
+    description: "Система будет недоступна с 10:00 до 12:00.",
+  },
+  {
+    date: "2025-04-10 14:00",
+    title: "Обновление системы",
+    description: "Внедрение новых функций и улучшений.",
+  },
+  {
+    date: "2025-04-09 10:00",
+    title: "Технические работы",
+    description: "Система будет недоступна с 10:00 до 12:00.",
+  },
+  {
+    date: "2025-04-10 14:00",
+    title: "Обновление системы",
+    description: "Внедрение новых функций и улучшений.",
+  },
 ];
 
 const NewsComponent: FC = () => {
@@ -80,7 +99,7 @@ const NewsComponent: FC = () => {
           </Container>
         </Accordion.Control>
         <Accordion.Panel>
-          <ScrollArea style={{ maxHeight: 600, overflowY: "auto" }}>
+          <ScrollArea style={{ height: "83vh", overflowY: "auto" }}>
             <Stack gap={5}>
               {newsData.map((item, index) => (
                 <Card withBorder key={index}>

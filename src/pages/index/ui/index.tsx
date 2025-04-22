@@ -1,12 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import {
-  Container,
-  Group,
-  Stack,
-  Title,
-  useMantineColorScheme,
-} from "@mantine/core";
+import { Container, Group, Stack, useMantineColorScheme } from "@mantine/core";
 import IconCalendar from "@public/assets/calendar.svg";
 import NewsComponent from "@shared/components/NewsComponent/NewsComponent.tsx";
 import { SimpleMainTable } from "@shared/components/SimpleMainTable/SimpleMainTable.tsx";
@@ -16,7 +9,6 @@ import styles from "./index.module.scss";
 export const IndexPage: FC = () => {
   const colorScheme = useMantineColorScheme();
   const [backgroundState, setBackgroundState] = useState<string>("");
-  const { t } = useTranslation(["home"]);
   useEffect(() => {
     if (colorScheme.colorScheme === "light") {
       setBackgroundState(styles.mainContainerLight);
@@ -40,7 +32,7 @@ export const IndexPage: FC = () => {
         >
           <Stack className={styles.stackContainer} w={"100%"}>
             <Group align={"flex-start"} justify={"space-between"} w={"100%"}>
-              <Group align={"flex-start"} justify={"flex-start"}>
+              <Group align={"flex-start"} justify={"flex-start"} wrap={"wrap"}>
                 {/*<Title>{t("home:home.main-page")}</Title>*/}
                 <SimpleMainTable
                   headerIcon={IconCalendar}
