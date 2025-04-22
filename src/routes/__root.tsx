@@ -53,6 +53,7 @@ const RootComponent: React.FC = () => {
                 m={0}
                 p={0}
                 maw="100vw"
+                mih={isLoginPage ? "100vh" : "calc(100vh - 52px)"}
               >
                 <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
                   {!isLoginPage && <NavMenu isMenuOpen={isMenuOpen} />}
