@@ -34,7 +34,12 @@ export const IndexPage: FC = () => {
           p={20}
         >
           <Stack className={styles.stackContainer} w={"100%"}>
-            <Group align={"flex-start"} justify={"space-between"} w={"100%"}>
+            <Group
+              align={"flex-start"}
+              justify={"space-between"}
+              w={"100%"}
+              h={"100%"}
+            >
               {matches ? (
                 <Group align={"flex-start"} justify={"flex-start"}>
                   <SimpleMainTable
