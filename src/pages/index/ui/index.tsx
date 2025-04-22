@@ -21,7 +21,7 @@ export const IndexPage: FC = () => {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  const matches = useMediaQuery("(min-width: 994px)");
+  const matches = useMediaQuery("(min-width: 1410px)");
 
   return (
     <Stack>
