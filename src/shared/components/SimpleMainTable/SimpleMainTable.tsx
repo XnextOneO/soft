@@ -22,18 +22,17 @@ import {
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru/index.esm.mjs";
 
 import styles from "./SimpleMainTable.module.scss";
-import classes from "./SimpleMainTable.module.scss";
 
 interface SimpleMainTableProperties {
   headerTitle: string;
   headerIcon?: string;
+  width: string;
 }
 export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
   headerTitle,
   headerIcon,
+  width,
 }) => {
-  const [page, setPage] = useState<number>(1);
-  const [size, setSize] = useState<number>(20);
   const [localization, setLocalization] = useState(MRT_Localization_RU);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
@@ -41,7 +40,7 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
   const colorScheme = useMantineColorScheme();
   const { i18n } = useTranslation();
   // eslint-disable-next-line unicorn/no-null
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
 
   interface SortCriteria {
     [key: string]: "ASC" | "DESC";
@@ -81,32 +80,6 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
       i18n.off("languageChanged", handleLanguageChange);
     };
   }, [i18n]);
-
-  // const parametersPost = {
-  //   link: link,
-  //   page: page - 1,
-  //   size: size,
-  //   sortCriteria: sortCriteria,
-  //   columnSearchCriteria: columnSearchCriteria,
-  //   dataStatus: "NOT_DELETED",
-  // };
-
-  // const { data, refetch, isFetching, isLoading } = useQuery({
-  //   queryKey: ["apiData", parametersPost],
-  //   queryFn: async () => {
-  //     try {
-  //       return await postApiData(parametersPost);
-  //     } catch (error_) {
-  //       setError("ошибка сервера");
-  //       throw error_;
-  //     }
-  //   },
-  //   staleTime: 0,
-  //   placeholderData: keepPreviousData,
-  //   retryDelay: 10_000,
-  //   retry: false,
-  // });
-
   const data = {
     content: [
       {
@@ -191,6 +164,7 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
 
   const translateColumns = (
     tableColumns: string[],
+    // eslint-disable-next-line unicorn/consistent-function-scoping
   ): { accessorKey: string; header: string }[] => {
     return tableColumns.map((column) => {
       return {
@@ -254,7 +228,7 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
     },
     mantineTableContainerProps: {
       style: {
-        height: 400,
+        height: "35vh",
         overflowY: "auto",
       },
     },
@@ -297,18 +271,18 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
   }
 
   return data ? (
-    <Flex direction={"column"} className={styles.wrapper}>
+    <Flex direction={"column"} style={{ width: width }}>
       <Accordion
         chevronPosition="right"
         variant="contained"
-        classNames={{ content: classes.content, chevron: classes.chevron }}
+        classNames={{ content: styles.content, chevron: styles.chevron }}
       >
         <Accordion.Item value={"table"} p={0}>
           <Accordion.Control
             bg={colorScheme.colorScheme === "light" ? "#999999" : "#777778"}
           >
             <Container p={0} mr={"sm"}>
-              <Group align={"center"}>
+              <Group align={"center"} wrap={"nowrap"}>
                 {headerIcon && <Image w={20} h={20} src={headerIcon} />}
                 <Text
                   c={
