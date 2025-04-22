@@ -1,8 +1,23 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Burger, Container, Flex, Group, Text } from "@mantine/core";
-import LanguageSwitcher from "@shared/components/LanguageSwitcher/LanguageSwitcher.tsx";
-import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
+import {
+  Burger,
+  Combobox,
+  Container,
+  Flex,
+  Group,
+  Image,
+  ScrollArea,
+  Text,
+  TextInput,
+  useCombobox,
+  useMantineColorScheme,
+} from "@mantine/core";
+import BelarusbankLogo from "@public/assets/belarusbank-logo.svg";
+import Favicon from "@public/assets/favicon.svg";
+import menuItems from "@public/menuItems.json";
+import DocumentationButton from "@shared/components/Header/DocumentationButton/DocumentationButton.tsx";
+import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { Link } from "@tanstack/react-router";
 
@@ -15,7 +30,23 @@ interface HeaderProperties {
   toggleMenu?: () => void;
   isMenuOpen?: boolean;
 }
-import BelarusbankLogo from "../../../../public/assets/belarusbank-logo.svg?react";
+const flattenMenuItems = (items: MenuItem[]): MenuItem[] => {
+  const flatItems: MenuItem[] = [];
+
+  const recurseItems = (subItems: MenuItem[]): void => {
+    for (const item of subItems) {
+      if (item.href) {
+        flatItems.push(item);
+      }
+      if (item.items) {
+        recurseItems(item.items);
+      }
+    }
+  };
+
+  recurseItems(items);
+  return flatItems;
+};
 
 const Header: FC<HeaderProperties> = ({
   isBurger,
@@ -24,7 +55,36 @@ const Header: FC<HeaderProperties> = ({
   toggleMenu,
   isMenuOpen,
 }) => {
+  const combobox = useCombobox();
+  const colorScheme = useMantineColorScheme();
   const { t } = useTranslation(["header"]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const flatMenuItems = flattenMenuItems(menuItems);
+  const shouldFilterOptions = !flatMenuItems.some(
+    (item) => t(item.name) === searchTerm,
+  );
+  const filteredItems = shouldFilterOptions
+    ? flatMenuItems.filter((item) =>
+        t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim()),
+      )
+    : flatMenuItems;
+
+  const options = filteredItems.map((item) => (
+    <Link
+      key={item.key + item.href}
+      to={`/directories/$slug`}
+      params={{
+        slug: item.href ?? "",
+      }}
+      style={{
+        textDecoration: "none",
+        color: colorScheme.colorScheme === "light" ? "#333333" : "#CCCCCC",
+      }}
+    >
+      <Combobox.Option value={t(item.name)}>{t(item.name)}</Combobox.Option>
+    </Link>
+  ));
 
   return (
     <Container className={classes.headerContainer} fluid p={0}>
@@ -35,8 +95,8 @@ const Header: FC<HeaderProperties> = ({
             align="center"
             className={classes.buttonContainer}
             onClick={toggleMenu}
-            w={52}
-            miw={52}
+            w={72}
+            miw={72}
           >
             <Burger
               size="sm"
@@ -51,35 +111,77 @@ const Header: FC<HeaderProperties> = ({
             />
           </Flex>
         )}
-        <Group justify="space-between" w="100%" pl="md">
+        <Group justify="space-between" w="100%" pl={link ? 0 : "md"}>
           {link ? (
-            <Link to={"/"}>
-              <Group gap="xs">
-                <SvgButton
-                  fillColor={"#FFFFFF"}
-                  SvgIcon={BelarusbankLogo}
-                  style={{ width: "30px", height: "30px" }}
-                />
-                <Text c="white" size="20px" fw={700} className={classes.title}>
-                  IIS {t("header:header.belarusbank")}
-                </Text>
-              </Group>
-            </Link>
+            <Group miw={280} gap={"sm"}>
+              <Link to={"/"}>
+                <Group gap="xs">
+                  <Image
+                    src={BelarusbankLogo}
+                    w={24}
+                    h={24}
+                    alt="belarusbank-logo"
+                  />
+                  <Image src={Favicon} w={24} h={24} alt="logo" />
+                  <Text c="white" fw={700} className={classes.title}>
+                    IIS {t("header:header.belarusbank")}
+                  </Text>
+                </Group>
+              </Link>
+              <Combobox
+                onOptionSubmit={() => {
+                  setSearchTerm("");
+                  combobox.closeDropdown();
+                }}
+                store={combobox}
+              >
+                <Combobox.Target>
+                  <TextInput
+                    w={"350px"}
+                    placeholder={t("header:header.search-placeholder")}
+                    value={searchTerm}
+                    onChange={(event) => {
+                      setSearchTerm(event.currentTarget.value);
+                      combobox.openDropdown();
+                      combobox.updateSelectedOptionIndex();
+                    }}
+                    onClick={() => combobox.openDropdown()}
+                    onFocus={() => combobox.openDropdown()}
+                    onBlur={() => combobox.closeDropdown()}
+                  />
+                </Combobox.Target>
+
+                <Combobox.Dropdown>
+                  <Combobox.Options>
+                    <ScrollArea.Autosize mah={200} type="scroll">
+                      {options.length === 0 ? (
+                        <Combobox.Empty>Ничего не найдено</Combobox.Empty>
+                      ) : (
+                        options
+                      )}
+                    </ScrollArea.Autosize>
+                  </Combobox.Options>
+                </Combobox.Dropdown>
+              </Combobox>
+            </Group>
           ) : (
-            <Group gap="xs">
-              <SvgButton
-                fillColor={"#FFFFFF"}
-                SvgIcon={BelarusbankLogo}
-                style={{ width: "30px", height: "30px" }}
+            <Group gap="xs" maw={280}>
+              <Image
+                src={BelarusbankLogo}
+                w={24}
+                h={24}
+                alt="belarusbank-logo"
               />
-              <Text c="white" size="20px" fw={700} className={classes.title}>
+              <Image src={Favicon} w={24} h={24} alt="logo" />
+              <Text c="white" fw={700} className={classes.title}>
                 IIS {t("header:header.belarusbank")}
               </Text>
             </Group>
           )}
           <Group gap={0} justify="flex-end" align="center">
+            <DocumentationButton />
             <ThemeSwitcher />
-            <LanguageSwitcher />
+            {/*<LanguageSwitcher />*/}
             {isProfile && <ProfileButton />}
           </Group>
         </Group>

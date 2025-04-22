@@ -1,6 +1,7 @@
 {
   "header": {
     "belarusbank": "Беларусбанк",
-    "navigation": "навигация"
+    "navigation": "навигация",
+    "search-placeholder": "Поиск"
   }
 }

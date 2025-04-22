@@ -1,5 +1,6 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { useMantineColorScheme } from "@mantine/core";
+import menuItemsData from "@public/menuItems.json"; // Импортируйте ваш JSON-файл
 
 import NavMenuStack from "./NavMenuStack";
 
@@ -7,29 +8,33 @@ interface NavMenuProperties {
   isMenuOpen: boolean;
 }
 
+export interface MenuItem {
+  icon?: string;
+  key: string;
+  name: string;
+  href?: string;
+  items?: MenuItem[];
+}
+
 const NavMenu: FC<NavMenuProperties> = ({ isMenuOpen }) => {
   const colorScheme = useMantineColorScheme();
+  const menuItems: MenuItem[] = menuItemsData;
 
-  const [active, setActive] = useState(false);
   return (
     <>
       {isMenuOpen ? (
         <NavMenuStack
           colorScheme={colorScheme.colorScheme}
-          active={active}
-          setActive={setActive}
-          width={250}
+          width={280}
           opened={isMenuOpen}
-          marginLeft={10}
+          menuItems={menuItems}
         />
       ) : (
         <NavMenuStack
           colorScheme={colorScheme.colorScheme}
-          active={active}
-          setActive={setActive}
-          width={52}
+          width={72}
           opened={isMenuOpen}
-          marginLeft={0}
+          menuItems={menuItems}
         />
       )}
     </>
