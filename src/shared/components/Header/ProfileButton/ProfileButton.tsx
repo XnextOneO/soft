@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { Avatar, Group, Text, UnstyledButton } from "@mantine/core";
+import { Avatar, Group, Stack, Text, UnstyledButton } from "@mantine/core";
 import { userStore } from "@shared/store/userStore.ts";
 import { IconChevronRight } from "@tabler/icons-react";
 import { useRouter } from "@tanstack/react-router";
@@ -25,9 +25,14 @@ const ProfileButton: FC = () => {
             .map((word) => word.slice(0, 1))
             .join("")}
         </Avatar>
-        <Text size="md" fw={600} c="white" className={classes.nickname}>
-          {name}
-        </Text>
+        <Stack gap={0}>
+          <Text size="md" fw={600} c="white" className={classes.nickname}>
+            {name}
+          </Text>
+          <Text size="sm" fw={600} c="white" className={classes.nickname}>
+            B00000000
+          </Text>
+        </Stack>
 
         <IconChevronRight
           color="white"
