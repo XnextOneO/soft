@@ -11,7 +11,7 @@ import IconReferenceBooks from "@public/assets/reference-books.svg?react";
 import DropdownMenu from "@shared/components/DropdownMenu/DropdownMenu.tsx";
 import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
-import { useRouter } from "@tanstack/react-router";
+import { useLocation, useRouter } from "@tanstack/react-router";
 
 import IconAccountManagement from "../../../../public/assets/account-management.svg?react";
 import IconAccounts from "../../../../public/assets/accounts.svg?react";
@@ -49,6 +49,7 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
   const router = useRouter();
   const { clearTokens } = useAuthStore();
   const { t } = useTranslation(["nav-menu-stack"]);
+  const location = useLocation();
   const iconMap: Record<string, FC<SVGProps<SVGSVGElement>>> = {
     IconReferenceBooks,
     IconAccountManagement,
@@ -95,6 +96,11 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
       .map((item) => {
         const { key, name, items: subItems, icon } = item;
         const isActive = activeKey === key;
+        const isParentActive = subItems?.some((subItem) => {
+          console.log(location.pathname, "-123-------------------");
+          console.log(subItem.href, "-1234-------------------");
+          return location.pathname === subItem.href;
+        });
         let iconComponent: FC<SVGProps<SVGSVGElement>> | undefined;
         if (icon) {
           iconComponent = item ? iconMap[icon] : undefined;
@@ -112,7 +118,7 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
                 <NavMenuButtonStack
                   icon={iconComponent}
                   colorScheme={colorScheme}
-                  active={isActive}
+                  active={isActive || isParentActive}
                   width={width}
                 >
                   {opened ? t(name) : ""}

@@ -56,13 +56,7 @@ const DropdownMenu = ({
               <Menu.Item>{t(item.name)}</Menu.Item>
             </DropdownMenu>
           ) : (
-            <Link
-              to={`/directories/$slug`}
-              params={{
-                slug: item.href ?? "",
-              }}
-              style={{ textDecoration: "none" }}
-            >
+            <Link to={item.href} style={{ textDecoration: "none" }}>
               <Menu.Item onClick={handleItemClick}>{t(item.name)}</Menu.Item>
             </Link>
           )}
