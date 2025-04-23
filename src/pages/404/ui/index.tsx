@@ -7,7 +7,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 
-import Logo404 from "../../../../public/assets/404.png";
+import Logo404 from "../../../../public/assets/404.svg";
 
 import styles from "./index.module.scss";
 export const NotFoundPage: FC = () => {
