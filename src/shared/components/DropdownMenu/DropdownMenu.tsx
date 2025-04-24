@@ -10,11 +10,13 @@ const DropdownMenu = ({
   items = [],
   children,
   searchable,
+  isDisabled,
 }: {
   onOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onDismiss: (value: boolean) => void; // Измените тип на (value: boolean)
   items: MenuItem[];
   searchable: boolean;
+  isDisabled?: boolean;
   children: React.ReactNode;
 }): JSX.Element => {
   const [data, setData] = useState(items);
@@ -56,8 +58,15 @@ const DropdownMenu = ({
               <Menu.Item>{t(item.name)}</Menu.Item>
             </DropdownMenu>
           ) : (
-            <Link to={item.href} style={{ textDecoration: "none" }}>
-              <Menu.Item onClick={handleItemClick}>{t(item.name)}</Menu.Item>
+            <Link to={isDisabled ? "#" : item.href}>
+              <Menu.Item
+                onClick={handleItemClick}
+                style={{
+                  color: isDisabled ? "#EBEDF0" : "black",
+                }}
+              >
+                {t(item.name)}
+              </Menu.Item>
             </Link>
           )}
         </React.Fragment>

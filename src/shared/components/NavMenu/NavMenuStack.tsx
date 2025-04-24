@@ -11,6 +11,7 @@ import IconReferenceBooks from "@public/assets/reference-books.svg?react";
 import DropdownMenu from "@shared/components/DropdownMenu/DropdownMenu.tsx";
 import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
+import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { useLocation, useRouter } from "@tanstack/react-router";
 
 import IconAccountManagement from "../../../../public/assets/account-management.svg?react";
@@ -50,6 +51,7 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
   const { clearTokens } = useAuthStore();
   const { t } = useTranslation(["nav-menu-stack"]);
   const location = useLocation();
+  const { permissions } = usePermissionsStore();
   const iconMap: Record<string, FC<SVGProps<SVGSVGElement>>> = {
     IconReferenceBooks,
     IconAccountManagement,
@@ -86,6 +88,12 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
     }
   };
 
+  const hasReadPermission = (key: string): boolean => {
+    return permissions.some((permission) =>
+      permission.startsWith(`${key}:read`),
+    );
+  };
+
   const renderMenuItems = (items: MenuItem[]): React.ReactNode => {
     if (!Array.isArray(items) || items.length === 0) {
       return <></>;
@@ -101,8 +109,10 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
           console.log(subItem.href, "-1234-------------------");
           return location.pathname === subItem.href;
         });
+        const isDisabled = !hasReadPermission(key);
         let iconComponent: FC<SVGProps<SVGSVGElement>> | undefined;
         if (icon) {
+          // eslint-disable-next-line security/detect-object-injection
           iconComponent = item ? iconMap[icon] : undefined;
         }
         return (
@@ -112,6 +122,7 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
             onDismiss={handleDismiss}
             items={subItems ?? []}
             searchable={true}
+            isDisabled={isDisabled}
           >
             <Tooltip label={t(name)} withArrow>
               <UnstyledButton>

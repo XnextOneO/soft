@@ -170,92 +170,92 @@
 
         "items": [
           {
-            "key": "transfer-destination-category-code",
+            "key": "e004",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-destination-category-code",
             "href": "/directories/nsi__transfer-destination-category-code"
           },
           {
-            "key": "organization-identification-code",
+            "key": "e009",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.organization-identification-code",
             "href": "/directories/nsi__organization-identification-code"
           },
           {
-            "key": "transfer-cancellation-code",
+            "key": "e016",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-cancellation-code",
             "href": "/directories/nsi__transfer-cancellation-code"
           },
           {
-            "key": "transfer-status-code",
+            "key": "e065",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-status-code",
             "href": "/directories/nsi__transfer-status-code"
           },
           {
-            "key": "balance-account-nb",
+            "key": "n001",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.balance-account-nb",
             "href": "/directories/nsi__balance-account-nb"
           },
           {
-            "key": "balance-account",
+            "key": "n002",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.balance-account",
             "href": "/directories/nsi__balance-account"
           },
           {
-            "key": "currency",
+            "key": "n003",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.currency",
             "href": "/directories/nsi__currency"
           },
           {
-            "key": "exchange-rate",
+            "key": "n004",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.exchange-rate",
             "href": "/directories/nsi__exchange-rate"
           },
           {
-            "key": "bank",
+            "key": "n008",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.bank",
             "href": "/directories/nsi__bank"
           },
           {
-            "key": "processing-code",
+            "key": "n010",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.processing-code",
             "href": "/directories/nsi__processing-code"
           },
           {
-            "key": "budget-payment-code",
+            "key": "n011",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.budget-payment-code",
             "href": "/directories/nsi__budget-payment-code"
           },
           {
-            "key": "country-codifier",
+            "key": "n013",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.country-codifier",
             "href": "/directories/nsi__country-codifier"
           },
           {
-            "key": "republican-budget-account",
+            "key": "n015",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.republican-budget-account",
             "href": "/directories/nsi__republican-budget-account"
           },
           {
-            "key": "bank-id-code",
+            "key": "n029",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.bank-id-code",
             "href": "/directories/nsi__bank-id-code"
           },
           {
-            "key": "biss-member",
+            "key": "n031",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.biss-member",
             "href": "/directories/nsi__biss-member"
           },
           {
-            "key": "payment-priority-code",
+            "key": "n034",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.payment-priority-code",
             "href": "/directories/nsi__payment-priority-code"
           },
           {
-            "key": "local-budget-account",
+            "key": "n060",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.local-budget-account",
             "href": "/directories/nsi__local-budget-account"
           },
           {
-            "key": "subject-statuses",
+            "key": "n061",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.subject-statuses",
             "href": "/directories/nsi__subject-statuses"
           }
@@ -266,12 +266,12 @@
         "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.name",
         "items": [
           {
-            "key": "rf-reference-book",
+            "key": "rf",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.items.rf-reference-book",
             "href": "/directories/rf"
           },
           {
-            "key": "swift-reference-book",
+            "key": "swift",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.items.swift-reference-book",
             "href": "/directories/swift"
           }
