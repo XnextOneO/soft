@@ -4,6 +4,8 @@ import { createJSONStorage, persist } from "zustand/middleware";
 interface StoreState {
   name: string;
   setName: (value: string) => void;
+  b: string | undefined;
+  setB: (value: string | undefined) => void;
   email: string;
   setEmail: (value: string) => void;
   isEdit: boolean;
@@ -20,6 +22,8 @@ export const userStore = create(
     (set) => ({
       name: "",
       setName: (value: string): void => set({ name: value }),
+      b: "",
+      setB: (value: string | undefined): void => set({ b: value }),
       email: "",
       setEmail: (value: string): void => set({ email: value }),
       isEdit: true,

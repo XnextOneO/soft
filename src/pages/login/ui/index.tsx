@@ -42,7 +42,7 @@ export const LoginPage: FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { setTokens } = useAuthStore();
   const { t } = useTranslation(["login"]);
-  const { setName } = userStore();
+  const { setName, setB } = userStore();
   const { setPermissions } = usePermissionsStore();
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onLogin = async () => {
@@ -70,6 +70,7 @@ export const LoginPage: FC = () => {
           const decodedToken = jwtDecode<CustomJwtPayload>(access_token);
           const name = decodedToken.name;
           const permissions = decodedToken.permissions;
+          const b = decodedToken.sub;
           setPermissions(permissions);
           setTokens(
             access_token,
@@ -78,6 +79,7 @@ export const LoginPage: FC = () => {
             refresh_expires_in,
           );
           setName(name);
+          setB(b);
           router.navigate({ to: "/", replace: true });
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

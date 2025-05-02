@@ -1,4 +1,4 @@
-import React, { FC, SVGProps, useState } from "react";
+import React, { FC, SVGProps, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Flex,
@@ -32,6 +32,7 @@ import IconReporting from "../../../../public/assets/reporting.svg?react";
 import IconRoutineProcedures from "../../../../public/assets/routine-procedures.svg?react";
 import IconSystemMonitoring from "../../../../public/assets/system-monitoring.svg?react";
 
+import classes from "./NavMenu.module.scss";
 import NavMenuButtonStack from "./NavMenuButtonStack";
 
 interface INavMenuStackProperties {
@@ -73,6 +74,15 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
   };
   const [activeKey, setActiveKey] = useState<string | null>("");
 
+  // Логируем permissions и localStorage при монтировании
+  useEffect(() => {
+    console.log("Permissions from store:", permissions);
+    console.log(
+      "LocalStorage permissions-storage:",
+      localStorage.getItem("permissions-storage"),
+    );
+  }, [permissions]);
+
   const handleLogout = (): void => {
     clearTokens();
     router.navigate({ to: "/login", replace: false });
@@ -89,9 +99,10 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
   };
 
   const hasReadPermission = (key: string): boolean => {
-    return permissions.some((permission) =>
-      permission.startsWith(`${key}:read`),
-    );
+    const permission = `${key}:read`;
+    const hasPermission = permissions.includes(permission);
+    console.log(`Checking permission for ${permission}: ${hasPermission}`);
+    return hasPermission;
   };
 
   const renderMenuItems = (items: MenuItem[]): React.ReactNode => {
@@ -104,28 +115,37 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
       .map((item) => {
         const { key, name, items: subItems, icon } = item;
         const isActive = activeKey === key;
-        const isParentActive = subItems?.some((subItem) => {
-          console.log(location.pathname, "-123-------------------");
-          console.log(subItem.href, "-1234-------------------");
-          return location.pathname === subItem.href;
-        });
+        const isParentActive = subItems?.some(
+          (subItem) => location.pathname === subItem.href,
+        );
         const isDisabled = !hasReadPermission(key);
         let iconComponent: FC<SVGProps<SVGSVGElement>> | undefined;
         if (icon) {
-          // eslint-disable-next-line security/detect-object-injection
-          iconComponent = item ? iconMap[icon] : undefined;
+          iconComponent = iconMap[icon];
         }
+
+        // Передаём дочерние элементы с пометкой disabled
+        const subItemsWithPermissions = subItems
+          ? subItems.map((subItem) => {
+              const disabled = !hasReadPermission(subItem.key);
+              console.log(`SubItem ${subItem.key} disabled: ${disabled}`);
+              return {
+                ...subItem,
+                disabled,
+              };
+            })
+          : [];
+
         return (
           <DropdownMenu
             key={key}
             onOpen={() => handleMenuItemClick(key)}
             onDismiss={handleDismiss}
-            items={subItems ?? []}
+            items={subItemsWithPermissions}
             searchable={true}
-            isDisabled={isDisabled}
           >
             <Tooltip label={t(name)} withArrow>
-              <UnstyledButton>
+              <UnstyledButton className={isDisabled ? classes.disabled : ""}>
                 <NavMenuButtonStack
                   icon={iconComponent}
                   colorScheme={colorScheme}

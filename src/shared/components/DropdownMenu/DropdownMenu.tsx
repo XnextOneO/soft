@@ -4,19 +4,19 @@ import { Menu, TextInput } from "@mantine/core";
 import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import { Link } from "@tanstack/react-router";
 
+import classes from "../NavMenu/NavMenu.module.scss";
+
 const DropdownMenu = ({
   onOpen,
   onDismiss,
   items = [],
   children,
   searchable,
-  isDisabled,
 }: {
   onOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onDismiss: (value: boolean) => void; // Измените тип на (value: boolean)
+  onDismiss: (value: boolean) => void;
   items: MenuItem[];
   searchable: boolean;
-  isDisabled?: boolean;
   children: React.ReactNode;
 }): JSX.Element => {
   const [data, setData] = useState(items);
@@ -33,19 +33,22 @@ const DropdownMenu = ({
   const searchDataByName = (value: string): void => {
     setData(
       items.filter((item: MenuItem) =>
-        item.name.toLowerCase().includes(value.toLowerCase()),
+        t(item.name).toLowerCase().includes(value.toLowerCase()),
       ),
     );
   };
+
   const resetData = (): void => {
     setData(items);
   };
+
   const renderMenuItems = (menuItems: MenuItem[]): React.ReactNode => {
     if (!Array.isArray(menuItems) || menuItems.length === 0) {
       return <></>;
     }
     return menuItems.map((item: MenuItem, index: number) => {
       const hasSubItems = item.items && item.items.length > 0;
+      const isDisabled = item.disabled ?? false;
       return (
         <React.Fragment key={index}>
           {hasSubItems ? (
@@ -55,15 +58,17 @@ const DropdownMenu = ({
               items={item.items ?? []}
               searchable={searchable}
             >
-              <Menu.Item>{t(item.name)}</Menu.Item>
+              <Menu.Item disabled={isDisabled}>{t(item.name)}</Menu.Item>
             </DropdownMenu>
           ) : (
-            <Link to={isDisabled ? "#" : item.href}>
+            <Link
+              to={isDisabled ? "#" : item.href}
+              style={{ pointerEvents: isDisabled ? "none" : "auto" }}
+            >
               <Menu.Item
                 onClick={handleItemClick}
-                style={{
-                  color: isDisabled ? "#EBEDF0" : "black",
-                }}
+                disabled={isDisabled}
+                className={isDisabled ? classes.disabled : ""}
               >
                 {t(item.name)}
               </Menu.Item>
