@@ -73,10 +73,7 @@ const Header: FC<HeaderProperties> = ({
   const options = filteredItems.map((item) => (
     <Link
       key={item.key + item.href}
-      to={`/directories/$slug`}
-      params={{
-        slug: item.href ?? "",
-      }}
+      to={item.href}
       style={{
         textDecoration: "none",
         color: colorScheme.colorScheme === "light" ? "#333333" : "#CCCCCC",
