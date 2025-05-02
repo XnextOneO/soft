@@ -10,7 +10,7 @@ import classes from "./ProfileButton.module.scss";
 
 const ProfileButton: FC = () => {
   const router = useRouter();
-  const { name } = userStore();
+  const { name, b } = userStore();
 
   return (
     <UnstyledButton
@@ -30,7 +30,7 @@ const ProfileButton: FC = () => {
             {name}
           </Text>
           <Text size="sm" fw={600} c="white" className={classes.nickname}>
-            B00000000
+            {b}
           </Text>
         </Stack>
 

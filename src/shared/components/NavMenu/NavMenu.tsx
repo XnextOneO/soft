@@ -14,6 +14,7 @@ export interface MenuItem {
   name: string;
   href?: string;
   items?: MenuItem[];
+  disabled?: boolean;
 }
 
 const NavMenu: FC<NavMenuProperties> = ({ isMenuOpen }) => {

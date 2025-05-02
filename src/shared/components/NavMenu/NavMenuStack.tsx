@@ -1,4 +1,4 @@
-import React, { FC, SVGProps, useState } from "react";
+import React, { FC, SVGProps, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Flex,
@@ -11,6 +11,7 @@ import IconReferenceBooks from "@public/assets/reference-books.svg?react";
 import DropdownMenu from "@shared/components/DropdownMenu/DropdownMenu.tsx";
 import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
+import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { useLocation, useRouter } from "@tanstack/react-router";
 
 import IconAccountManagement from "../../../../public/assets/account-management.svg?react";
@@ -31,6 +32,7 @@ import IconReporting from "../../../../public/assets/reporting.svg?react";
 import IconRoutineProcedures from "../../../../public/assets/routine-procedures.svg?react";
 import IconSystemMonitoring from "../../../../public/assets/system-monitoring.svg?react";
 
+import classes from "./NavMenu.module.scss";
 import NavMenuButtonStack from "./NavMenuButtonStack";
 
 interface INavMenuStackProperties {
@@ -50,6 +52,7 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
   const { clearTokens } = useAuthStore();
   const { t } = useTranslation(["nav-menu-stack"]);
   const location = useLocation();
+  const { permissions } = usePermissionsStore();
   const iconMap: Record<string, FC<SVGProps<SVGSVGElement>>> = {
     IconReferenceBooks,
     IconAccountManagement,
@@ -71,6 +74,15 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
   };
   const [activeKey, setActiveKey] = useState<string | null>("");
 
+  // Логируем permissions и localStorage при монтировании
+  useEffect(() => {
+    console.log("Permissions from store:", permissions);
+    console.log(
+      "LocalStorage permissions-storage:",
+      localStorage.getItem("permissions-storage"),
+    );
+  }, [permissions]);
+
   const handleLogout = (): void => {
     clearTokens();
     router.navigate({ to: "/login", replace: false });
@@ -86,6 +98,13 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
     }
   };
 
+  const hasReadPermission = (key: string): boolean => {
+    const permission = `${key}:read`;
+    const hasPermission = permissions.includes(permission);
+    console.log(`Checking permission for ${permission}: ${hasPermission}`);
+    return hasPermission;
+  };
+
   const renderMenuItems = (items: MenuItem[]): React.ReactNode => {
     if (!Array.isArray(items) || items.length === 0) {
       return <></>;
@@ -96,23 +115,37 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
       .map((item) => {
         const { key, name, items: subItems, icon } = item;
         const isActive = activeKey === key;
-        const isParentActive = subItems?.some((subItem) => {
-          return location.pathname === subItem.href;
-        });
+        const isParentActive = subItems?.some(
+          (subItem) => location.pathname === subItem.href,
+        );
+        const isDisabled = !hasReadPermission(key);
         let iconComponent: FC<SVGProps<SVGSVGElement>> | undefined;
         if (icon) {
-          iconComponent = item ? iconMap[icon] : undefined;
+          iconComponent = iconMap[icon];
         }
+
+        // Передаём дочерние элементы с пометкой disabled
+        const subItemsWithPermissions = subItems
+          ? subItems.map((subItem) => {
+              const disabled = !hasReadPermission(subItem.key);
+              console.log(`SubItem ${subItem.key} disabled: ${disabled}`);
+              return {
+                ...subItem,
+                disabled,
+              };
+            })
+          : [];
+
         return (
           <DropdownMenu
             key={key}
             onOpen={() => handleMenuItemClick(key)}
             onDismiss={handleDismiss}
-            items={subItems ?? []}
+            items={subItemsWithPermissions}
             searchable={true}
           >
             <Tooltip label={t(name)} withArrow>
-              <UnstyledButton>
+              <UnstyledButton className={isDisabled ? classes.disabled : ""}>
                 <NavMenuButtonStack
                   icon={iconComponent}
                   colorScheme={colorScheme}

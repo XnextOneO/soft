@@ -16,6 +16,7 @@ import {
 import { useLogin } from "@shared/api/mutation/auth.ts";
 import Header from "@shared/components/Header/Header.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
+import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { userStore } from "@shared/store/userStore.ts";
 import { IconAt, IconEye, IconEyeOff, IconLock } from "@tabler/icons-react";
 import { useRouter } from "@tanstack/react-router";
@@ -25,6 +26,8 @@ import styles from "./index.module.scss";
 
 interface CustomJwtPayload extends JwtPayload {
   name: string;
+  permissions: string[];
+  preferred_username: string;
 }
 
 export const LoginPage: FC = () => {
@@ -40,7 +43,8 @@ export const LoginPage: FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { setTokens } = useAuthStore();
   const { t } = useTranslation(["login"]);
-  const { setName } = userStore();
+  const { setName, setB } = userStore();
+  const { setPermissions } = usePermissionsStore();
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const onLogin = async () => {
     setIsLoginClicked(true);
@@ -66,6 +70,9 @@ export const LoginPage: FC = () => {
           } = data;
           const decodedToken = jwtDecode<CustomJwtPayload>(access_token);
           const name = decodedToken.name;
+          const permissions = decodedToken.permissions;
+          const b = decodedToken.preferred_username;
+          setPermissions(permissions);
           setTokens(
             access_token,
             refresh_token,
@@ -73,6 +80,7 @@ export const LoginPage: FC = () => {
             refresh_expires_in,
           );
           setName(name);
+          setB(b);
           router.navigate({ to: "/", replace: true });
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

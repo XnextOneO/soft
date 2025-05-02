@@ -170,92 +170,92 @@
 
         "items": [
           {
-            "key": "transfer-destination-category-code",
+            "key": "e004",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-destination-category-code",
             "href": "/reference-book/nsi__transfer-destination-category-code"
           },
           {
-            "key": "organization-identification-code",
+            "key": "e009",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.organization-identification-code",
             "href": "/reference-book/nsi__organization-identification-code"
           },
           {
-            "key": "transfer-cancellation-code",
+            "key": "e016",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-cancellation-code",
             "href": "/reference-book/nsi__transfer-cancellation-code"
           },
           {
-            "key": "transfer-status-code",
+            "key": "e065",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-status-code",
             "href": "/reference-book/nsi__transfer-status-code"
           },
           {
-            "key": "balance-account-nb",
+            "key": "n001",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.balance-account-nb",
             "href": "/reference-book/nsi__balance-account-nb"
           },
           {
-            "key": "balance-account",
+            "key": "n002",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.balance-account",
             "href": "/reference-book/nsi__balance-account"
           },
           {
-            "key": "currency",
+            "key": "n003",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.currency",
             "href": "/reference-book/nsi__currency"
           },
           {
-            "key": "exchange-rate",
+            "key": "n004",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.exchange-rate",
             "href": "/reference-book/nsi__exchange-rate"
           },
           {
-            "key": "bank",
+            "key": "n008",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.bank",
             "href": "/reference-book/nsi__bank"
           },
           {
-            "key": "processing-code",
+            "key": "n010",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.processing-code",
             "href": "/reference-book/nsi__processing-code"
           },
           {
-            "key": "budget-payment-code",
+            "key": "n011",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.budget-payment-code",
             "href": "/reference-book/nsi__budget-payment-code"
           },
           {
-            "key": "country-codifier",
+            "key": "n013",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.country-codifier",
             "href": "/reference-book/nsi__country-codifier"
           },
           {
-            "key": "republican-budget-account",
+            "key": "n015",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.republican-budget-account",
             "href": "/reference-book/nsi__republican-budget-account"
           },
           {
-            "key": "bank-id-code",
+            "key": "n029",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.bank-id-code",
             "href": "/reference-book/nsi__bank-id-code"
           },
           {
-            "key": "biss-member",
+            "key": "n031",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.biss-member",
             "href": "/reference-book/nsi__biss-member"
           },
           {
-            "key": "payment-priority-code",
+            "key": "n034",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.payment-priority-code",
             "href": "/reference-book/nsi__payment-priority-code"
           },
           {
-            "key": "local-budget-account",
+            "key": "n060",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.local-budget-account",
             "href": "/reference-book/nsi__local-budget-account"
           },
           {
-            "key": "subject-statuses",
+            "key": "n061",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.subject-statuses",
             "href": "/reference-book/nsi__subject-statuses"
           }
@@ -266,12 +266,12 @@
         "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.name",
         "items": [
           {
-            "key": "rf-reference-book",
+            "key": "rf",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.items.rf-reference-book",
             "href": "/reference-book/rf"
           },
           {
-            "key": "swift-reference-book",
+            "key": "swift",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.items.swift-reference-book",
             "href": "/reference-book/swift"
           }
@@ -282,7 +282,7 @@
         "name": "nav-menu-stack:nav-menu-stack.reference-books.items.normative-values.name",
         "items": [
           {
-            "key": "regulatory-capital-by-calculations",
+            "key": "ф",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.normative-values.items.regulatory-capital-by-calculations",
             "href": "/"
           },
