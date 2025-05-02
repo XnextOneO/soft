@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Checkbox, Flex, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -8,6 +8,7 @@ import IconExport from "@public/assets/export.svg?react";
 import IconFilter from "@public/assets/filter.svg?react";
 import IconSum from "@public/assets/sum.svg?react";
 import { syncDataSCBank } from "@shared/api/mutation/bpAPI.ts";
+import { ClientStatus } from "@shared/components/MainTable/MainTable.tsx";
 import { IconReload } from "@tabler/icons-react";
 import {
   MRT_GlobalFilterTextInput,
@@ -22,6 +23,7 @@ interface TopToolbarProperties {
   table: any;
   canCreate: boolean;
   updateTable?: boolean;
+  setClientStatus: React.Dispatch<React.SetStateAction<ClientStatus>>;
 }
 
 const TopToolbar: FC<TopToolbarProperties> = ({
@@ -31,9 +33,17 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   table,
   canCreate,
   updateTable,
+  setClientStatus,
 }) => {
   const [t] = useTranslation(["top-toolbar"]);
   const [checked, setChecked] = useState(false);
+  useEffect(() => {
+    if (checked) {
+      setClientStatus("ALL");
+    } else {
+      setClientStatus("OPEN");
+    }
+  }, [checked, setClientStatus]);
   return (
     <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
       <Group gap="xs">

@@ -40,6 +40,8 @@ interface BusinessPartnerInfo {
   columnName: Record<string, string>;
 }
 
+export type ClientStatus = "ALL" | "CLOSED" | "OPEN";
+
 export const translateColumns = (
   tableColumnsRaw: string[],
   tableColumnsTranslated: Record<string, string> | undefined,
@@ -66,6 +68,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
   const debouncedColumnFilter = useDebouncedValue(filter, 200);
+  const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
   // eslint-disable-next-line unicorn/no-null
@@ -121,6 +124,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     searchText: debouncedGlobalFilter[0],
     sortCriteria: sortCriteria,
     columnSearchCriteria: columnSearchCriteria,
+    clientStatus: clientStatus,
   };
   const { data, refetch, isFetching, isLoading } = useQuery({
     queryKey: ["apiData", parametersPost],
@@ -280,6 +284,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         table={table}
         canCreate={canCreate}
         updateTable={updateTable}
+        setClientStatus={setClientStatus}
       />
     ),
     onCreatingRowSave: async ({ exitCreatingMode }) => {
