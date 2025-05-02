@@ -12,7 +12,7 @@ interface PostApiDataParameters {
   sortCriteria?: {
     [key: string]: string;
   };
-  dataStatus: string;
+  // dataStatus: string;
 }
 
 export const postApiData = async (
@@ -26,15 +26,11 @@ export const postApiData = async (
       null;
   try {
     const { link } = parameters;
-    const response = await $authHost.post(
-      `reference-book/${link}/search`,
-      parameters,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+    const response = await $authHost.post(`${link}/search`, parameters, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       },
-    );
+    });
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {

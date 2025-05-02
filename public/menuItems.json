@@ -172,92 +172,92 @@
           {
             "key": "transfer-destination-category-code",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-destination-category-code",
-            "href": "/directories/nsi__transfer-destination-category-code"
+            "href": "/reference-book/nsi__transfer-destination-category-code"
           },
           {
             "key": "organization-identification-code",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.organization-identification-code",
-            "href": "/directories/nsi__organization-identification-code"
+            "href": "/reference-book/nsi__organization-identification-code"
           },
           {
             "key": "transfer-cancellation-code",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-cancellation-code",
-            "href": "/directories/nsi__transfer-cancellation-code"
+            "href": "/reference-book/nsi__transfer-cancellation-code"
           },
           {
             "key": "transfer-status-code",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-status-code",
-            "href": "/directories/nsi__transfer-status-code"
+            "href": "/reference-book/nsi__transfer-status-code"
           },
           {
             "key": "balance-account-nb",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.balance-account-nb",
-            "href": "/directories/nsi__balance-account-nb"
+            "href": "/reference-book/nsi__balance-account-nb"
           },
           {
             "key": "balance-account",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.balance-account",
-            "href": "/directories/nsi__balance-account"
+            "href": "/reference-book/nsi__balance-account"
           },
           {
             "key": "currency",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.currency",
-            "href": "/directories/nsi__currency"
+            "href": "/reference-book/nsi__currency"
           },
           {
             "key": "exchange-rate",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.exchange-rate",
-            "href": "/directories/nsi__exchange-rate"
+            "href": "/reference-book/nsi__exchange-rate"
           },
           {
             "key": "bank",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.bank",
-            "href": "/directories/nsi__bank"
+            "href": "/reference-book/nsi__bank"
           },
           {
             "key": "processing-code",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.processing-code",
-            "href": "/directories/nsi__processing-code"
+            "href": "/reference-book/nsi__processing-code"
           },
           {
             "key": "budget-payment-code",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.budget-payment-code",
-            "href": "/directories/nsi__budget-payment-code"
+            "href": "/reference-book/nsi__budget-payment-code"
           },
           {
             "key": "country-codifier",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.country-codifier",
-            "href": "/directories/nsi__country-codifier"
+            "href": "/reference-book/nsi__country-codifier"
           },
           {
             "key": "republican-budget-account",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.republican-budget-account",
-            "href": "/directories/nsi__republican-budget-account"
+            "href": "/reference-book/nsi__republican-budget-account"
           },
           {
             "key": "bank-id-code",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.bank-id-code",
-            "href": "/directories/nsi__bank-id-code"
+            "href": "/reference-book/nsi__bank-id-code"
           },
           {
             "key": "biss-member",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.biss-member",
-            "href": "/directories/nsi__biss-member"
+            "href": "/reference-book/nsi__biss-member"
           },
           {
             "key": "payment-priority-code",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.payment-priority-code",
-            "href": "/directories/nsi__payment-priority-code"
+            "href": "/reference-book/nsi__payment-priority-code"
           },
           {
             "key": "local-budget-account",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.local-budget-account",
-            "href": "/directories/nsi__local-budget-account"
+            "href": "/reference-book/nsi__local-budget-account"
           },
           {
             "key": "subject-statuses",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.subject-statuses",
-            "href": "/directories/nsi__subject-statuses"
+            "href": "/reference-book/nsi__subject-statuses"
           }
         ]
       },
@@ -268,12 +268,12 @@
           {
             "key": "rf-reference-book",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.items.rf-reference-book",
-            "href": "/directories/rf"
+            "href": "/reference-book/rf"
           },
           {
             "key": "swift-reference-book",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.items.swift-reference-book",
-            "href": "/directories/swift"
+            "href": "/reference-book/swift"
           }
         ]
       },

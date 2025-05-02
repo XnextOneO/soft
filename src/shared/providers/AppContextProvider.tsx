@@ -1,17 +1,17 @@
 import { createContext, useState } from "react";
 
 import BurgerStore from "../store/burgerStore.ts";
-import DirectoriesStore from "../store/directoriesStore.ts";
+import ReferenceBookStore from "../store/referenceBookStore.ts";
 
 interface AppContextType {
   burgerStore: BurgerStore;
-  directoriesStore: DirectoriesStore;
+  directoriesStore: ReferenceBookStore;
   toggleBurgerMenu: () => void;
 }
 
 export const Context = createContext<AppContextType>({
   burgerStore: new BurgerStore(),
-  directoriesStore: new DirectoriesStore(),
+  directoriesStore: new ReferenceBookStore(),
   toggleBurgerMenu: () => {},
 });
 
@@ -21,7 +21,7 @@ export function AppContextProvider({
   children: React.ReactNode;
 }): React.ReactNode {
   const [burgerStore] = useState(() => new BurgerStore());
-  const [directoriesStore] = useState(() => new DirectoriesStore());
+  const [directoriesStore] = useState(() => new ReferenceBookStore());
 
   const toggleBurgerMenu = (): void => {
     burgerStore.toggleOpened();

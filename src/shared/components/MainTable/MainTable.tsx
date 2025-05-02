@@ -4,7 +4,12 @@ import { Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
+import { getBPInfo } from "@shared/api/mutation/bpAPI.ts";
 import { postApiData } from "@shared/api/mutation/fetchTableData.ts";
+import {
+  BusinessPartnerData,
+  BusinessPartnerInfoModal,
+} from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
 import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
 import BottomToolbar from "@shared/components/MainTable/components/bottomToolbar.tsx";
 import CreateRowModalContent from "@shared/components/MainTable/components/CreateRowModalContent.tsx";
@@ -13,7 +18,6 @@ import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx
 import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
-import DirectoriesStore from "@shared/store/directoriesStore.ts";
 import { userStore } from "@shared/store/userStore.ts";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
@@ -31,6 +35,23 @@ interface MainTableProperties {
   link: string;
 }
 
+interface BusinessPartnerInfo {
+  data: BusinessPartnerData;
+  columnName: Record<string, string>;
+}
+
+export const translateColumns = (
+  tableColumnsRaw: string[],
+  tableColumnsTranslated: Record<string, string> | undefined,
+): { header: string; accessorKey: string }[] => {
+  return tableColumnsRaw.map((column) => {
+    return {
+      accessorKey: column,
+      header: tableColumnsTranslated?.[`${column}`] || column,
+    };
+  });
+};
+
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(20);
@@ -40,7 +61,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
   const { isEdit, canDelete, canCreate } = userStore();
-  const [opened, setOpened] = useState(false);
+  const [openedUpdateModal, setOpenedUpdateModal] = useState(false);
+  const [openedBPInfoModal, setOpenedBPInfoModal] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
   const debouncedColumnFilter = useDebouncedValue(filter, 200);
@@ -48,11 +70,11 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const colorScheme = useMantineColorScheme();
   // eslint-disable-next-line unicorn/no-null
   const [error, setError] = useState<string | null>(null);
+  const [BPInfo, setBPInfo] = useState<BusinessPartnerInfo | undefined>();
   const handleGlobalFilterChange = (value: string): void => {
     setGlobalFilter(value);
     setPage(1);
   };
-  const directoriesStore = new DirectoriesStore();
   interface SortCriteria {
     [key: string]: "ASC" | "DESC";
   }
@@ -65,7 +87,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     const formattedColumn = sort.id
       .replace(/([a-z])([A-Z])/g, "$1_$2")
       .toUpperCase();
-    sortCriteria[formattedColumn] = sort.desc ? "DESC" : "ASC";
+    sortCriteria[`${formattedColumn}`] = sort.desc ? "DESC" : "ASC";
   }
 
   const columnSearchCriteria: FilterCriteria = {};
@@ -74,7 +96,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       const formattedColumn = columnFilter.id
         .replace(/([a-z])([A-Z])/g, "$1_$2")
         .toUpperCase();
-      columnSearchCriteria[formattedColumn] = String(columnFilter.value);
+      columnSearchCriteria[`${formattedColumn}`] = String(columnFilter.value);
     }
   }
 
@@ -99,9 +121,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     searchText: debouncedGlobalFilter[0],
     sortCriteria: sortCriteria,
     columnSearchCriteria: columnSearchCriteria,
-    dataStatus: "NOT_DELETED",
   };
-
   const { data, refetch, isFetching, isLoading } = useQuery({
     queryKey: ["apiData", parametersPost],
     queryFn: async () => {
@@ -120,28 +140,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     retry: false,
   });
 
-  const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
-
-  const translateColumns = (
-    tableColumns: string[],
-    tableLink: string,
-  ): { accessorKey: string; header: string }[] => {
-    const directoryEntry = directoriesStore._directories.find(
-      (directory) => directory.link === tableLink,
-    );
-
-    const columnsToTranslate = directoryEntry ? directoryEntry.columns : {};
-
-    return tableColumns.map((column) => {
-      // eslint-disable-next-line security/detect-object-injection
-      const translatedHeader = columnsToTranslate[column] || column;
-
-      return {
-        accessorKey: column,
-        header: translatedHeader,
-      };
-    });
-  };
+  const columnsRaw = data?.content[0] ? Object.keys(data.content[0]) : [];
+  const columnsTranslated = data?.columnName;
 
   const cellValues = data?.content
     ? data.content.map((item: Record<string, string>) => {
@@ -157,7 +157,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
   const countPages = data?.page?.totalPages || 0;
 
-  const columnsWithAccessorKey = translateColumns(columns, link);
+  const columnsWithAccessorKey = translateColumns(
+    columnsRaw,
+    columnsTranslated,
+  );
 
   const processedColumns = columnsWithAccessorKey.map((column) => {
     return {
@@ -165,7 +168,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: { cell: any }): JSX.Element => {
         const cellValue = cell.getValue();
-
         if (column.accessorKey === "status") {
           switch (cellValue) {
             case "IN_PROCESSING": {
@@ -225,7 +227,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           </div>
         );
       },
-      size: column.header.length > 12 ? 360 : 200,
+      size:
+        typeof column.header !== "boolean" && column.header?.length > 12
+          ? 360
+          : 200,
       sortDescFirst: true,
     };
   });
@@ -263,15 +268,15 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         classes={classes}
       />
     ),
-
     // eslint-disable-next-line @typescript-eslint/no-shadow
     renderRowActions: ({ row, table }) => (
       <RowActions row={row} table={table} />
     ),
     renderTopToolbar: () => (
       <TopToolbar
+        link={link}
         refetch={refetch}
-        setOpened={setOpened}
+        setOpened={setOpenedUpdateModal}
         table={table}
         canCreate={canCreate}
         updateTable={updateTable}
@@ -279,6 +284,32 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     ),
     onCreatingRowSave: async ({ exitCreatingMode }) => {
       exitCreatingMode();
+    },
+    getRowId: (row) => row.userId,
+    mantineTableBodyRowProps: ({ row }) => {
+      if (link === "/business-partner") {
+        return {
+          onClick: async (): Promise<void> => {
+            const response = await getBPInfo(
+              "/business-partner",
+              row.original.clientId,
+            );
+            if (response) {
+              setBPInfo({
+                data: response.data,
+                columnName: response.columnName,
+              });
+              setOpenedBPInfoModal(true);
+            } else {
+              setBPInfo(undefined);
+            }
+          },
+          style: {
+            cursor: "pointer",
+          },
+        };
+      }
+      return {};
     },
     enableFilters: true,
     displayColumnDefOptions: {
@@ -288,7 +319,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       },
     },
     editDisplayMode: "modal",
-    enableEditing: isEdit,
+    enableEditing: isEdit && link !== "/business-partner",
     columns: processedColumns,
     data: cellValues,
     state: {
@@ -330,6 +361,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     enableDensityToggle: false,
     enableStickyHeader: true,
     enableRowSelection: false,
+    enableMultiRowSelection: false,
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
@@ -367,7 +399,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       </Flex>
     );
   }
-
   return data ? (
     <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"}>
       <MantineReactTable table={table} />
@@ -375,8 +406,15 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       {updateTable && (
         <UpdateTableModal
           link={link}
-          opened={opened}
-          close={() => setOpened(false)}
+          opened={openedUpdateModal}
+          close={() => setOpenedUpdateModal(false)}
+        />
+      )}
+      {link === "/business-partner" && (
+        <BusinessPartnerInfoModal
+          data={BPInfo}
+          opened={openedBPInfoModal}
+          close={() => setOpenedBPInfoModal(false)}
         />
       )}
     </Flex>

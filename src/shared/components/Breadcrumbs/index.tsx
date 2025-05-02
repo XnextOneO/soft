@@ -21,7 +21,9 @@ const MyBreadcrumbs = (): React.ReactElement => {
       .filter(Boolean);
     return pathSegments.filter(
       (segment) =>
-        segment !== "nsi" && segment !== "scbank" && segment !== "directories",
+        segment !== "nsi" &&
+        segment !== "scbank" &&
+        segment !== "reference-book",
     );
   }, [location.pathname]);
   const [items, setItems] = useState<{ title: string; href: string }[]>([]);

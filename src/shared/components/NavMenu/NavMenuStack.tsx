@@ -97,8 +97,6 @@ const NavMenuStack: FC<INavMenuStackProperties> = ({
         const { key, name, items: subItems, icon } = item;
         const isActive = activeKey === key;
         const isParentActive = subItems?.some((subItem) => {
-          console.log(location.pathname, "-123-------------------");
-          console.log(subItem.href, "-1234-------------------");
           return location.pathname === subItem.href;
         });
         let iconComponent: FC<SVGProps<SVGSVGElement>> | undefined;
