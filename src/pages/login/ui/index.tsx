@@ -27,6 +27,7 @@ import styles from "./index.module.scss";
 interface CustomJwtPayload extends JwtPayload {
   name: string;
   permissions: string[];
+  preferred_username: string;
 }
 
 export const LoginPage: FC = () => {
@@ -70,7 +71,7 @@ export const LoginPage: FC = () => {
           const decodedToken = jwtDecode<CustomJwtPayload>(access_token);
           const name = decodedToken.name;
           const permissions = decodedToken.permissions;
-          const b = decodedToken.sub;
+          const b = decodedToken.preferred_username;
           setPermissions(permissions);
           setTokens(
             access_token,
