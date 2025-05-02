@@ -1,4 +1,13 @@
-import { FC, JSX, useEffect, useState } from "react";
+import {
+  FC,
+  JSX,
+  type UIEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { LoadingOverlay } from "@mantine/core";
@@ -19,7 +28,7 @@ import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
 import { userStore } from "@shared/store/userStore.ts";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
   MRT_ColumnFiltersState,
@@ -55,7 +64,7 @@ export const translateColumns = (
 };
 
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
-  const [page, setPage] = useState<number>(1);
+  const tableContainerReference = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<number>(20);
   const [localization, setLocalization] = useState(MRT_Localization_RU);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
@@ -76,7 +85,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [BPInfo, setBPInfo] = useState<BusinessPartnerInfo | undefined>();
   const handleGlobalFilterChange = (value: string): void => {
     setGlobalFilter(value);
-    setPage(1);
   };
   interface SortCriteria {
     [key: string]: "ASC" | "DESC";
@@ -119,47 +127,58 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
   const parametersPost = {
     link: link,
-    page: page - 1,
+    page: 0,
     size: size,
     searchText: debouncedGlobalFilter[0],
     sortCriteria: sortCriteria,
     columnSearchCriteria: columnSearchCriteria,
     clientStatus: clientStatus,
   };
-  const { data, refetch, isFetching, isLoading } = useQuery({
-    queryKey: ["apiData", parametersPost],
-    queryFn: async () => {
-      // eslint-disable-next-line unicorn/no-null
-      setError(null);
-      try {
-        return await postApiData(parametersPost);
-      } catch (error_) {
-        setError("ошибка сервера");
-        throw error_;
+  const { data, refetch, fetchNextPage, isFetching, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["apiData", parametersPost],
+      queryFn: async () => {
+        // eslint-disable-next-line unicorn/no-null
+        setError(null);
+        try {
+          return await postApiData(parametersPost);
+        } catch (error_) {
+          setError("ошибка сервера");
+          throw error_;
+        }
+      },
+      getNextPageParam: (_lastGroup, groups) => groups.length,
+      initialPageParam: 0,
+      refetchOnWindowFocus: false,
+    });
+
+  const columnsRaw = data?.pages?.[0]?.content[0]
+    ? Object.keys(data?.pages?.[0]?.content[0])
+    : [];
+  const columnsTranslated = data?.pages?.[0]?.columnName;
+
+  const cellValues = useMemo(
+    () => data?.pages.flatMap((page) => page.content) ?? [],
+    [data],
+  );
+  const totalDBRowCount = data?.pages?.[0]?.page?.totalElements ?? 0;
+  const totalFetched = cellValues.length;
+  const fetchMoreOnBottomReached = useCallback(
+    (containerReferenceElement?: HTMLDivElement | null) => {
+      if (containerReferenceElement) {
+        const { scrollHeight, scrollTop, clientHeight } =
+          containerReferenceElement;
+        if (
+          scrollHeight - scrollTop - clientHeight < 400 &&
+          !isFetching &&
+          totalFetched < totalDBRowCount
+        ) {
+          fetchNextPage();
+        }
       }
     },
-    staleTime: 0,
-    placeholderData: keepPreviousData,
-    retryDelay: 10_000,
-    retry: false,
-  });
-
-  const columnsRaw = data?.content[0] ? Object.keys(data.content[0]) : [];
-  const columnsTranslated = data?.columnName;
-
-  const cellValues = data?.content
-    ? data.content.map((item: Record<string, string>) => {
-        const object: Record<string, string | boolean> = {};
-        for (const key of Object.keys(item)) {
-          object[key as string] = item[key as string];
-        }
-        return object;
-      })
-    : [];
-
-  const totalElements = data?.page?.totalElements || 0;
-
-  const countPages = data?.page?.totalPages || 0;
+    [fetchNextPage, isFetching, totalFetched, totalDBRowCount],
+  );
 
   const columnsWithAccessorKey = translateColumns(
     columnsRaw,
@@ -231,10 +250,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           </div>
         );
       },
-      size:
-        typeof column.header !== "boolean" && column.header?.length > 12
-          ? 360
-          : 200,
+      size: column.header?.length > 12 ? 360 : 200,
       sortDescFirst: true,
     };
   });
@@ -253,13 +269,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     ),
     renderBottomToolbarCustomActions: (): JSX.Element => (
       <BottomToolbar
-        page={page}
         size={size}
-        totalElements={totalElements}
-        countPages={countPages}
-        parameters={parametersPost}
-        setPage={setPage}
         setSize={setSize}
+        totalFetched={totalFetched}
+        totalDBRowCount={totalDBRowCount}
       />
     ),
     renderEditRowModalContent: ({ row }) => (
@@ -351,6 +364,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       },
     },
     mantineTableContainerProps: {
+      ref: tableContainerReference,
+      onScroll: (event: UIEvent<HTMLDivElement>) =>
+        fetchMoreOnBottomReached(event.target as HTMLDivElement),
       style: {
         height: "calc(100vh - 192px)",
         overflowY: "auto",
