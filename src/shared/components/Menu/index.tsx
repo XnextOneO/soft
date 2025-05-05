@@ -29,26 +29,25 @@ const MenuItems: FC<{ items?: MenuItem[] }> = ({ items }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
   // eslint-disable-next-line unicorn/no-null
   if (!items) return null;
-
   return (
     <>
       {items.map((item) => (
         <Menu.Item key={item.key}>
           <Link to={item.href}>
-            <Menu.Sub withArrow={false}>
-              <Menu.Sub.Target>
-                <Menu.Sub.Item className={styles.transparent}>
-                  {t(item.name)}
-                </Menu.Sub.Item>
-              </Menu.Sub.Target>
-              {item.items ? (
-                <Menu.Sub.Dropdown className={styles.dropdown}>
-                  <MenuItems items={item.items} />
-                </Menu.Sub.Dropdown>
-              ) : (
-                ""
-              )}
-            </Menu.Sub>
+            <Menu>
+              <Menu.Sub>
+                <Menu.Sub.Target>
+                  <Menu.Sub.Item>{t(item.name)}</Menu.Sub.Item>
+                </Menu.Sub.Target>
+                {item.items ? (
+                  <Menu.Sub.Dropdown className={styles.dropdown}>
+                    <MenuItems items={item.items} />
+                  </Menu.Sub.Dropdown>
+                ) : (
+                  ""
+                )}
+              </Menu.Sub>
+            </Menu>
           </Link>
         </Menu.Item>
       ))}
@@ -68,7 +67,7 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
       }}
     >
       {isMenuOpen && (
-        <Menu position={"right-start"}>
+        <Menu>
           {menuData.map((group) => (
             <Menu.Sub key={group.key}>
               <Link to={group.href ?? ""}>
