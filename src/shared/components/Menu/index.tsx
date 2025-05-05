@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { Menu } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
 
@@ -25,23 +26,30 @@ interface IMenu {
 }
 
 const MenuItems: FC<{ items?: MenuItem[] }> = ({ items }) => {
+  const { t } = useTranslation(["nav-menu-stack"]);
+  // eslint-disable-next-line unicorn/no-null
   if (!items) return null;
 
   return (
     <>
       {items.map((item) => (
-        <Menu.Item key={item.key} component="a" href={item.href}>
-          {item.name}
-          {item.items && item.items.length > 0 && (
+        <Menu.Item key={item.key}>
+          <Link to={item.href}>
             <Menu.Sub withArrow={false}>
               <Menu.Sub.Target>
-                <Menu.Sub.Item>{item.name}</Menu.Sub.Item>
+                <Menu.Sub.Item className={styles.transparent}>
+                  {t(item.name)}
+                </Menu.Sub.Item>
               </Menu.Sub.Target>
-              <Menu.Sub.Dropdown>
-                <MenuItems items={item.items} />
-              </Menu.Sub.Dropdown>
+              {item.items ? (
+                <Menu.Sub.Dropdown className={styles.dropdown}>
+                  <MenuItems items={item.items} />
+                </Menu.Sub.Dropdown>
+              ) : (
+                ""
+              )}
             </Menu.Sub>
-          )}
+          </Link>
         </Menu.Item>
       ))}
     </>
@@ -49,6 +57,7 @@ const MenuItems: FC<{ items?: MenuItem[] }> = ({ items }) => {
 };
 
 export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
+  const { t } = useTranslation(["nav-menu-stack"]);
   return (
     <div
       style={{
@@ -59,13 +68,13 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
       }}
     >
       {isMenuOpen && (
-        <Menu>
+        <Menu position={"right-start"}>
           {menuData.map((group) => (
             <Menu.Sub key={group.key}>
               <Link to={group.href ?? ""}>
                 <Menu.Sub.Target>
                   <Menu.Sub.Item className={styles.item}>
-                    <span>{group.name}</span>
+                    <span>{t(group.name)}</span>
                   </Menu.Sub.Item>
                 </Menu.Sub.Target>
               </Link>
