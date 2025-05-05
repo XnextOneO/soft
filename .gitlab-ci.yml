@@ -33,18 +33,19 @@ build_job:
     - echo "The job's REGISTRY IMAGE is '$CI_REGISTRY_IMAGE'"
     - echo "The job's CI PIPELINE ID is '$CI_PIPELINE_ID'"
     - pwd
-    - cp ~/iis_configs/web_ui/.* . -a -f #-v
-    - cp ~/iis_configs/web_ui/* . -a -f #-v
+    - cp ~/iis_configs/$CI_PROJECT_NAME/.* . -a -f #-v
+    - cp ~/iis_configs/$CI_PROJECT_NAME/* . -a -f #-v
+    - docker compose down --rmi all
     - docker compose build
 
 execute_job:
   stage: execute
   script:
-    - cp ~/iis_configs/web_ui/.* . -a -f #-v
-    - cp ~/iis_configs/web_ui/* . -a -f #-v
+    - cp ~/iis_configs/$CI_PROJECT_NAME/.* . -a -f #-v
+    - cp ~/iis_configs/$CI_PROJECT_NAME/* . -a -f #-v
     - docker compose down || true  
     - docker compose up -d
-    - sleep 3
+    - sleep 10
   dependencies:
     - build_job
 
@@ -62,6 +63,7 @@ test_job:
       else
         echo "Success: Received HTTP response code $RESPONSE"
       fi
+    - docker logs --tail 50 $CI_PROJECT_NAME
   dependencies:
    - build_job
    - execute_job
@@ -72,8 +74,8 @@ push_image_job:
     - echo "Pushing Docker image to local registry..."
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
 
-    - docker tag web-ui-app $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
-    - docker tag web-ui-app $CI_REGISTRY_IMAGE:v.0.0.$CI_PIPELINE_ID-$CI_COMMIT_BRANCH
+    - docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
+    - docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:v.0.0.$CI_PIPELINE_ID-$CI_COMMIT_BRANCH
     - docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH   
     - docker push $CI_REGISTRY_IMAGE:v.0.0.$CI_PIPELINE_ID-$CI_COMMIT_BRANCH
 
