@@ -172,7 +172,14 @@
           {
             "key": "e004",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-destination-category-code",
-            "href": "/directories/nsi__transfer-destination-category-code"
+            "href": "/directories/nsi__transfer-destination-category-code",
+            "items" : [
+              {
+                "key": "e004",
+                "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-destination-category-code",
+                "href": "/directories/nsi__transfer-destination-category-code"
+              }
+            ]
           },
           {
             "key": "e009",
