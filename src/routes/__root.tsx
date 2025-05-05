@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Container, Flex, MantineProvider } from "@mantine/core";
+import menuData from "@public/menuItems.json";
 import MyBreadcrumbs from "@shared/components/Breadcrumbs";
 import Header from "@shared/components/Header/Header.tsx";
-import NavMenu from "@shared/components/NavMenu/NavMenu.tsx";
+import { NavMenu } from "@shared/components/Menu";
 import { AppContextProvider } from "@shared/providers/AppContextProvider.tsx";
 import AuthProvider from "@shared/providers/AuthProvider.tsx";
 import { ThemeManager } from "@shared/providers/ThemeProvider.tsx";
@@ -56,7 +57,9 @@ const RootComponent: React.FC = () => {
                 mih={isLoginPage ? "100vh" : "calc(100vh - 52px)"}
               >
                 <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
-                  {!isLoginPage && <NavMenu isMenuOpen={isMenuOpen} />}
+                  {!isLoginPage && (
+                    <NavMenu isMenuOpen={isMenuOpen} menuData={menuData} />
+                  )}
                   <div className={styles.contentWrapper}>
                     {!isLoginPage && <MyBreadcrumbs />}
                     <Outlet />

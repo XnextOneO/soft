@@ -1,0 +1,15 @@
+.item {
+  color: transparent !important;
+}
+
+.item:hover {
+  background-color: white;
+}
+
+.item span {
+  color: white ;
+}
+
+.item:hover span {
+  color: black;
+}
