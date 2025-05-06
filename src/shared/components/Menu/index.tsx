@@ -82,26 +82,34 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
       }}
     >
       <Menu trigger={"click"}>
-        {menuData.map((group) => (
-          <Menu.Sub key={group.key}>
-            <Link to={group.href ?? ""}>
-              <Menu.Sub.Target>
-                <Menu.Sub.Item className={styles.item} disabled={false}>
-                  <span className={styles.iconSpan}> {group.icon}</span>
-                  <span> </span>
-                  {isMenuOpen ? <span>{t(group.name)}</span> : ""}
-                </Menu.Sub.Item>
-              </Menu.Sub.Target>
-            </Link>
+        {menuData.map((group) => {
+          const hasPermission = permissions.includes(`${group.key}:read`); // Проверка наличия разрешения для группы
 
-            <Menu.Sub.Dropdown
-              className={styles.menuSubDropdown}
-              style={{ padding: 0 }}
-            >
-              <MenuItems items={group.items} permissions={permissions} />
-            </Menu.Sub.Dropdown>
-          </Menu.Sub>
-        ))}
+          return (
+            <Menu.Sub key={group.key}>
+              <Link to={group.href ?? ""}>
+                <Menu.Sub.Target>
+                  <Menu.Sub.Item
+                    className={styles.item}
+                    disabled={!hasPermission}
+                  >
+                    {" "}
+                    <span className={styles.iconSpan}> {group.icon}</span>
+                    <span> </span>
+                    {isMenuOpen ? <span>{t(group.name)}</span> : ""}
+                  </Menu.Sub.Item>
+                </Menu.Sub.Target>
+              </Link>
+
+              <Menu.Sub.Dropdown
+                className={styles.menuSubDropdown}
+                style={{ padding: 0 }}
+              >
+                <MenuItems items={group.items} permissions={permissions} />
+              </Menu.Sub.Dropdown>
+            </Menu.Sub>
+          );
+        })}
       </Menu>
     </div>
   );
