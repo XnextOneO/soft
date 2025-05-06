@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu } from "@mantine/core";
+import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
 
 import styles from "./index.module.scss";
@@ -25,43 +26,52 @@ interface IMenu {
   menuData: MenuGroup[];
 }
 
-const MenuItems: FC<{ items?: MenuItem[] }> = ({ items }) => {
+const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
+  items,
+  permissions,
+}) => {
   const { t } = useTranslation(["nav-menu-stack"]);
   // eslint-disable-next-line unicorn/no-null
   if (!items) return null;
+
   return (
     <>
-      {items.map((item) => (
-        <Menu.Item key={item.key}>
-          <Link to={item.href}>
-            <Menu>
-              <Menu.Sub>
-                <Menu.Sub.Target>
-                  <Menu.Sub.Item
-                    disabled={false}
-                    className={styles.menuSubItem}
-                  >
-                    {t(item.name)}
-                  </Menu.Sub.Item>
-                </Menu.Sub.Target>
-                {item.items ? (
-                  <Menu.Sub.Dropdown className={styles.dropdown}>
-                    <MenuItems items={item.items} />
-                  </Menu.Sub.Dropdown>
-                ) : (
-                  ""
-                )}
-              </Menu.Sub>
-            </Menu>
-          </Link>
-        </Menu.Item>
-      ))}
+      {items.map((item) => {
+        const hasPermission = permissions.includes(`${item.key}:read`);
+
+        return (
+          <Menu.Item key={item.key}>
+            <Link to={item.href}>
+              <Menu>
+                <Menu.Sub>
+                  <Menu.Sub.Target>
+                    <Menu.Sub.Item
+                      disabled={!hasPermission}
+                      className={styles.menuSubItem}
+                    >
+                      {t(item.name)}
+                    </Menu.Sub.Item>
+                  </Menu.Sub.Target>
+                  {item.items ? (
+                    <Menu.Sub.Dropdown className={styles.dropdown}>
+                      <MenuItems items={item.items} permissions={permissions} />
+                    </Menu.Sub.Dropdown>
+                  ) : // eslint-disable-next-line unicorn/no-null
+                  null}
+                </Menu.Sub>
+              </Menu>
+            </Link>
+          </Menu.Item>
+        );
+      })}
     </>
   );
 };
 
 export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
+  const { permissions } = usePermissionsStore(); // Получение разрешений
+
   return (
     <div
       style={{
@@ -88,7 +98,7 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
               className={styles.menuSubDropdown}
               style={{ padding: 0 }}
             >
-              <MenuItems items={group.items} />
+              <MenuItems items={group.items} permissions={permissions} />
             </Menu.Sub.Dropdown>
           </Menu.Sub>
         ))}
