@@ -1,6 +1,10 @@
 .item {
   color: transparent !important;
   height: 54px;
+  text-wrap: wrap;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
 }
 
 .item:hover {
@@ -13,5 +17,23 @@
 
 .item:hover span {
   color: black;
+}
+
+.dropdown {
+  padding: 0 !important;
+  height: inherit;
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: -10px;
+}
+
+.menu-sub-item {
+  padding: 0 !important;
+  height: 100% !important;
+}
+
+.menu-sub-dropdown {
+  padding: 0 !important;
 }
 

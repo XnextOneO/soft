@@ -159,27 +159,18 @@
     ]
   },
   {
-    "icon": "IconReferenceBooks",
+    "icon": "@public/assets/account-management.svg?react",
     "key": "reference-books",
     "name": "nav-menu-stack:nav-menu-stack.reference-books.name",
     "items": [
       {
         "key": "nsi-reference-books",
-        "name":
-        "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.name",
-
+        "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.name",
         "items": [
           {
             "key": "e004",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-destination-category-code",
-            "href": "/directories/nsi__transfer-destination-category-code",
-            "items" : [
-              {
-                "key": "e004",
-                "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-destination-category-code",
-                "href": "/directories/nsi__transfer-destination-category-code"
-              }
-            ]
+            "href": "/directories/nsi__transfer-destination-category-code"
           },
           {
             "key": "e009",
