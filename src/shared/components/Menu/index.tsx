@@ -1,26 +1,7 @@
-import { FC, SVGProps } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu } from "@mantine/core";
-import IconReferenceBooks from "@public/assets/reference-books.svg?react";
 import { Link } from "@tanstack/react-router";
-
-import IconAccountManagement from "../../../../public/assets/account-management.svg?react";
-import IconAccounts from "../../../../public/assets/accounts.svg?react";
-import IconAccountsOperations from "../../../../public/assets/accounts-operations.svg?react";
-import IconBusinessPartner from "../../../../public/assets/business-partner.svg?react";
-import IconComplianceControl from "../../../../public/assets/comliance-control.svg?react";
-import IconEDocuments from "../../../../public/assets/e-documents.svg?react";
-import IconFrontOfficeEDocuments from "../../../../public/assets/front-office-e-documents.svg?react";
-import IconLogout from "../../../../public/assets/logout.svg?react";
-import IconOperationalArchive from "../../../../public/assets/operational-archive.svg?react";
-import IconPaymentInvestigation from "../../../../public/assets/payment-investigation.svg?react";
-import IconPaymentManagement from "../../../../public/assets/payment-management.svg?react";
-import IconPaymentTransportSystem from "../../../../public/assets/payment-transport-system.svg?react";
-import IconPercentageCommissionsCorrAccounts from "../../../../public/assets/percentage-commissions-corr-accounts.svg?react";
-import IconReconciliationsReports from "../../../../public/assets/reconciliations-reports.svg?react";
-import IconReporting from "../../../../public/assets/reporting.svg?react";
-import IconRoutineProcedures from "../../../../public/assets/routine-procedures.svg?react";
-import IconSystemMonitoring from "../../../../public/assets/system-monitoring.svg?react";
 
 import styles from "./index.module.scss";
 
@@ -44,26 +25,6 @@ interface IMenu {
   menuData: MenuGroup[];
 }
 
-const iconMap: Record<string, FC<SVGProps<SVGSVGElement>>> = {
-  IconReferenceBooks,
-  IconAccountManagement,
-  IconAccounts,
-  IconPaymentInvestigation,
-  IconReporting,
-  IconAccountsOperations,
-  IconBusinessPartner,
-  IconComplianceControl,
-  IconEDocuments,
-  IconFrontOfficeEDocuments,
-  IconOperationalArchive,
-  IconPaymentManagement,
-  IconPaymentTransportSystem,
-  IconPercentageCommissionsCorrAccounts,
-  IconReconciliationsReports,
-  IconRoutineProcedures,
-  IconSystemMonitoring,
-};
-
 const MenuItems: FC<{ items?: MenuItem[] }> = ({ items }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
   // eslint-disable-next-line unicorn/no-null
@@ -76,7 +37,10 @@ const MenuItems: FC<{ items?: MenuItem[] }> = ({ items }) => {
             <Menu>
               <Menu.Sub>
                 <Menu.Sub.Target>
-                  <Menu.Sub.Item className={styles.menuSubItem}>
+                  <Menu.Sub.Item
+                    disabled={false}
+                    className={styles.menuSubItem}
+                  >
                     {t(item.name)}
                   </Menu.Sub.Item>
                 </Menu.Sub.Target>
@@ -112,8 +76,9 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
           <Menu.Sub key={group.key}>
             <Link to={group.href ?? ""}>
               <Menu.Sub.Target>
-                <Menu.Sub.Item className={styles.item}>
-                  <img src={group.icon} alt={"icon"}></img>
+                <Menu.Sub.Item className={styles.item} disabled={false}>
+                  <span className={styles.iconSpan}> {group.icon}</span>
+                  <span> </span>
                   {isMenuOpen ? <span>{t(group.name)}</span> : ""}
                 </Menu.Sub.Item>
               </Menu.Sub.Target>

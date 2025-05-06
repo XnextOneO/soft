@@ -1,6 +1,6 @@
 [
   {
-    "icon": "IconBusinessPartner",
+    "icon": "BP",
     "key": "business-partner",
     "name": "nav-menu-stack:nav-menu-stack.business-partner.name",
     "items": [
@@ -12,7 +12,7 @@
     ]
   },
   {
-    "icon": "IconAccounts",
+    "icon": "LS",
     "key": "accounts",
     "name": "nav-menu-stack:nav-menu-stack.accounts.name",
     "items": [
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "icon": "IconAccountManagement",
+    "icon": "MCA",
     "key": "account-management",
     "name": "nav-menu-stack:nav-menu-stack.account-management.name",
     "items": [
@@ -56,7 +56,7 @@
     ]
   },
   {
-    "icon": "IconAccountsOperations",
+    "icon": "TCA",
     "key": "accounts-operations",
     "name": "nav-menu-stack:nav-menu-stack.accounts-operations.name",
     "items": [
@@ -78,7 +78,7 @@
     ]
   },
   {
-    "icon": "IconPaymentManagement",
+    "icon": "PM",
     "key": "payment-management",
     "name": "nav-menu-stack:nav-menu-stack.payment-management.name",
     "items": [
@@ -107,7 +107,7 @@
     ]
   },
   {
-    "icon": "IconReconciliationsReports",
+    "icon": "RCA",
     "key": "reconciliations-reports",
     "name": "nav-menu-stack:nav-menu-stack.reconciliations-reports.name",
     "items": [
@@ -159,7 +159,7 @@
     ]
   },
   {
-    "icon": "@public/assets/account-management.svg?react",
+    "icon": "BPS",
     "key": "reference-books",
     "name": "nav-menu-stack:nav-menu-stack.reference-books.name",
     "items": [
@@ -325,7 +325,7 @@
     ]
   },
   {
-    "icon": "IconEDocuments",
+    "icon": "ED",
     "key": "e-documents",
     "name": "nav-menu-stack:nav-menu-stack.e-documents.name",
     "items": [
@@ -337,7 +337,7 @@
     ]
   },
   {
-    "icon": "IconFrontOfficeEDocuments",
+    "icon": "FO-ED",
     "key": "front-office-e-documents",
     "name": "nav-menu-stack:nav-menu-stack.front-office-e-documents.name",
     "items": [
@@ -349,7 +349,7 @@
     ]
   },
   {
-    "icon": "IconPercentageCommissionsCorrAccounts",
+    "icon": "BCA",
     "key": "percentage-commissions-corr-accounts",
     "name": "nav-menu-stack:nav-menu-stack.percentage-commissions-corr-accounts.name",
     "items": [
@@ -376,7 +376,7 @@
     ]
   },
   {
-    "icon": "IconRoutineProcedures",
+    "icon": "RP",
     "key": "routine-procedures",
     "name": "nav-menu-stack:nav-menu-stack.routine-procedures.name",
     "items": [
@@ -428,7 +428,7 @@
     ]
   },
   {
-    "icon": "IconReporting",
+    "icon": "RCA",
     "key": "reporting",
     "name": "nav-menu-stack:nav-menu-stack.reporting.name",
     "items": [
@@ -480,7 +480,7 @@
     ]
   },
   {
-    "icon": "IconOperationalArchive",
+    "icon": "OA",
     "key": "operational-archive",
     "name": "nav-menu-stack:nav-menu-stack.operational-archive.name",
     "items": [
@@ -492,7 +492,7 @@
     ]
   },
   {
-    "icon": "IconSystemMonitoring",
+    "icon": "SM",
     "key": "system-monitoring",
     "name": "nav-menu-stack:nav-menu-stack.system-monitoring.name",
     "items": [
@@ -504,7 +504,7 @@
     ]
   },
   {
-    "icon": "IconComplianceControl",
+    "icon": "CC",
     "key": "compliance-control",
     "name": "nav-menu-stack:nav-menu-stack.compliance-control.name",
     "items": [
@@ -526,7 +526,7 @@
     ]
   },
   {
-    "icon": "IconPaymentTransportSystem",
+    "icon": "PTS",
     "key": "payment-transport-system",
     "name": "nav-menu-stack:nav-menu-stack.payment-transport-system.name",
     "items": [
@@ -553,7 +553,7 @@
     ]
   },
   {
-    "icon": "IconPaymentInvestigation",
+    "icon": "PI",
     "key": "payment-investigation",
     "name": "nav-menu-stack:nav-menu-stack.payment-investigation.name",
     "items": [
@@ -580,7 +580,7 @@
     ]
   },
   {
-    "icon": "IconAccountManagement",
+    "icon": "AC",
     "key": "statuses",
     "name": "nav-menu-stack:nav-menu-stack.statuses",
     "href": "statuses"
