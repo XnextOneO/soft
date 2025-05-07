@@ -1,10 +1,14 @@
+.menu-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-wrapper {
+  min-width: 70px;
+}
+
 .item {
   color: transparent !important;
   height: 54px;
-  text-wrap: wrap;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
 }
 
 .item:hover {
@@ -12,25 +16,23 @@
 }
 
 .item span {
-  color: white ;
+  color: white;
 }
 
 .item:hover span {
   color: black;
 }
 
+
 .dropdown {
-  padding: 0 !important;
   height: inherit;
   max-height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-top: -10px;
 }
 
 .menu-sub-item {
-  padding: 0 !important;
-  height: 100% !important;
+  height: 34px;
 }
 
 .menu-sub-dropdown {
@@ -38,10 +40,24 @@
 }
 
 .icon-span {
-  font-family: Roboto, sans-serif ;
+  font-family: Roboto, sans-serif;
   font-weight: 700;
   font-size: 14px;
   line-height: 100%;
   vertical-align: middle;
+  text-wrap: nowrap;
+}
 
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-text-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 350px;
+  margin-left: 10px;
 }

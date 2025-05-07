@@ -41,7 +41,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
 
         return (
           <Menu.Item key={item.key}>
-            <Link to={item.href}>
+            <Link to={item.href} style={{ width: "100%", marginRight: "10px" }}>
               <Menu>
                 <Menu.Sub>
                   <Menu.Sub.Target>
@@ -80,10 +80,11 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
         overflowY: "scroll",
         background: "#006040",
       }}
+      className={styles.menuWrapper}
     >
       <Menu trigger={"click"}>
         {menuData.map((group) => {
-          const hasPermission = permissions.includes(`${group.key}:read`); // Проверка наличия разрешения для группы
+          const hasPermission = permissions.includes(`${group.key}:read`);
 
           return (
             <Menu.Sub key={group.key}>
@@ -93,10 +94,16 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
                     className={styles.item}
                     disabled={!hasPermission}
                   >
-                    {" "}
-                    <span className={styles.iconSpan}> {group.icon}</span>
-                    <span> </span>
-                    {isMenuOpen ? <span>{t(group.name)}</span> : ""}
+                    <div className={styles.iconWrapper}>
+                      <span className={styles.iconSpan}> {group.icon}</span>
+                    </div>
+                    {isMenuOpen ? (
+                      <div className={styles.menuTextWrapper}>
+                        <span>{t(group.name)}</span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </Menu.Sub.Item>
                 </Menu.Sub.Target>
               </Link>
