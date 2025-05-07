@@ -39,7 +39,6 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
     <>
       {items.map((item) => {
         const hasPermission = permissions.includes(`${item.key}:read`);
-
         return (
           <Menu.Item key={item.key}>
             <Menu>
@@ -49,7 +48,9 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                     disabled={!hasPermission}
                     className={styles.menuSubItem}
                   >
-                    {t(item.name)}
+                    <Link to={item.href} className={styles.link}>
+                      {t(item.name)}
+                    </Link>
                   </Menu.Sub.Item>
                 </Menu.Sub.Target>
                 {item.items ? (

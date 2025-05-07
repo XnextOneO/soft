@@ -26,9 +26,10 @@
 
 .dropdown {
   height: inherit;
-  max-height: 350px;
+  min-height: 364px;
   overflow-y: auto;
   overflow-x: hidden;
+
 }
 
 .menu-sub-item {
@@ -65,4 +66,11 @@
 .search-input {
   width: 100%;
   border: 1px solid #999999;
+}
+
+.link {
+  width: 100%;
+  margin-right: 10px;
+  color: black;
+  text-decoration: none;
 }
