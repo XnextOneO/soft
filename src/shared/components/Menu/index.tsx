@@ -11,6 +11,7 @@ interface MenuItem {
   name: string;
   href?: string;
   items?: MenuItem[];
+  search?: boolean;
 }
 
 interface MenuGroup {
@@ -41,26 +42,34 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
 
         return (
           <Menu.Item key={item.key}>
-            <Link to={item.href} style={{ width: "100%", marginRight: "10px" }}>
-              <Menu>
-                <Menu.Sub>
-                  <Menu.Sub.Target>
-                    <Menu.Sub.Item
-                      disabled={!hasPermission}
-                      className={styles.menuSubItem}
-                    >
-                      {t(item.name)}
-                    </Menu.Sub.Item>
-                  </Menu.Sub.Target>
-                  {item.items ? (
-                    <Menu.Sub.Dropdown className={styles.dropdown}>
-                      <MenuItems items={item.items} permissions={permissions} />
-                    </Menu.Sub.Dropdown>
-                  ) : // eslint-disable-next-line unicorn/no-null
-                  null}
-                </Menu.Sub>
-              </Menu>
-            </Link>
+            <Menu>
+              <Menu.Sub>
+                <Menu.Sub.Target>
+                  <Menu.Sub.Item
+                    disabled={!hasPermission}
+                    className={styles.menuSubItem}
+                  >
+                    {t(item.name)}
+                  </Menu.Sub.Item>
+                </Menu.Sub.Target>
+                {item.items ? (
+                  <Menu.Sub.Dropdown className={styles.dropdown}>
+                    {item.search && (
+                      <input
+                        type="text"
+                        placeholder={t("search-placeholder")}
+                        className={styles.searchInput}
+                        onClick={(event) => event.stopPropagation()}
+                        onKeyDown={(event) => event.stopPropagation()}
+                        onMouseDown={(event) => event.stopPropagation()}
+                      />
+                    )}
+                    <MenuItems items={item.items} permissions={permissions} />
+                  </Menu.Sub.Dropdown>
+                ) : // eslint-disable-next-line unicorn/no-null
+                null}
+              </Menu.Sub>
+            </Menu>
           </Menu.Item>
         );
       })}
@@ -70,7 +79,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
 
 export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
-  const { permissions } = usePermissionsStore(); // Получение разрешений
+  const { permissions } = usePermissionsStore();
 
   return (
     <div

@@ -164,6 +164,7 @@
     "name": "nav-menu-stack:nav-menu-stack.reference-books.name",
     "items": [
       {
+        "search": true,
         "key": "menu-nsi-reference-books",
         "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.name",
         "items": [
