@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu } from "@mantine/core";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
@@ -32,6 +32,8 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
   permissions,
 }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
+  const [searchQuery, setSearchQuery] = useState(""); // Состояние для поискового запроса
+
   // eslint-disable-next-line unicorn/no-null
   if (!items) return null;
 
@@ -39,6 +41,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
     <>
       {items.map((item) => {
         const hasPermission = permissions.includes(`${item.key}:read`);
+
         return (
           <Menu.Item key={item.key}>
             <Menu>
@@ -56,16 +59,54 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                 {item.items ? (
                   <Menu.Sub.Dropdown className={styles.dropdown}>
                     {item.search && (
-                      <input
-                        type="text"
-                        placeholder={t("search-placeholder")}
-                        className={styles.searchInput}
-                        onClick={(event) => event.stopPropagation()}
-                        onKeyDown={(event) => event.stopPropagation()}
-                        onMouseDown={(event) => event.stopPropagation()}
-                      />
+                      <>
+                        <input
+                          type="text"
+                          placeholder={t("search-placeholder")}
+                          className={styles.searchInput}
+                          value={searchQuery}
+                          onChange={(event) =>
+                            setSearchQuery(event.target.value)
+                          }
+                          onClick={(event) => event.stopPropagation()}
+                          onKeyDown={(event) => event.stopPropagation()}
+                          onMouseDown={(event) => event.stopPropagation()}
+                        />
+                        {item.items
+                          .filter((subItem) =>
+                            t(subItem.name)
+                              .toLowerCase()
+                              .includes(searchQuery.toLowerCase()),
+                          )
+                          .map((subItem) => {
+                            const subItemHasPermission = permissions.includes(
+                              `${subItem.key}:read`,
+                            );
+                            return (
+                              <Menu.Item
+                                key={subItem.key}
+                                disabled={!subItemHasPermission}
+                              >
+                                <Link to={subItem.href} className={styles.link}>
+                                  {t(subItem.name)}
+                                </Link>
+                              </Menu.Item>
+                            );
+                          })}
+                        {item.items.filter((subItem) =>
+                          t(subItem.name)
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()),
+                        ).length === 0 && (
+                          <div className={styles.noResults}>
+                            ничего не найдено
+                          </div>
+                        )}
+                      </>
                     )}
-                    <MenuItems items={item.items} permissions={permissions} />
+                    {!item.search && (
+                      <MenuItems items={item.items} permissions={permissions} />
+                    )}
                   </Menu.Sub.Dropdown>
                 ) : // eslint-disable-next-line unicorn/no-null
                 null}
@@ -77,7 +118,6 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
     </>
   );
 };
-
 export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
   const { permissions } = usePermissionsStore();

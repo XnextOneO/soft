@@ -27,6 +27,7 @@
 .dropdown {
   height: inherit;
   min-height: 364px;
+  width: 450px !important;
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -64,8 +65,15 @@
 }
 
 .search-input {
-  width: 100%;
+  width: 96%;
   border: 1px solid #999999;
+  margin-left: 20px;
+  padding: 6px 10px;
+}
+
+.search-input:focus {
+  border: 1px solid #999999 !important;
+  outline: none;
 }
 
 .link {
