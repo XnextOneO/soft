@@ -1,11 +1,11 @@
 [
   {
     "icon": "BP",
-    "key": "business-partner",
+    "key": "menu-business-partner",
     "name": "nav-menu-stack:nav-menu-stack.business-partner.name",
     "items": [
       {
-        "key": "customer-file",
+        "key": "menu-customer-file",
         "name": "nav-menu-stack:nav-menu-stack.business-partner.items.customer-file",
         "href": "/business-partner/customer-file"
       }
@@ -160,11 +160,11 @@
   },
   {
     "icon": "BPS",
-    "key": "reference-books",
+    "key": "menu-reference-books",
     "name": "nav-menu-stack:nav-menu-stack.reference-books.name",
     "items": [
       {
-        "key": "nsi-reference-books",
+        "key": "menu-nsi-reference-books",
         "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.name",
         "items": [
           {
