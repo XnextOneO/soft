@@ -42,10 +42,13 @@ body {
   margin: 0;
   padding: 0;
   width: 100% !important;
-  padding-bottom: 4px;
 }
 //noinspection ALL
 .mantine-Menu-item:hover {
   border-radius: 0;
   width: 100% !important;
+}
+//noinspection ALL
+.mantine-Popover-dropdown {
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 20%) !important;
 }
