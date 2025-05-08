@@ -196,17 +196,18 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
             </Menu.Sub>
           );
         })}
-        <Link
-          to={"/login"}
-          className={styles.logout}
-          onClick={() => {
-            handleLogout();
-          }}
-        >
-          <img src={logout} alt="" />
-          <span>{isMenuOpen ? "Выход" : ""}</span>
-        </Link>
       </Menu>
+      <Link
+        to={"/login"}
+        style={{ width: isMenuOpen ? "299px" : "70px" }}
+        className={`${styles.logout} ${isMenuOpen ? styles.open : ""}`}
+        onClick={() => {
+          handleLogout();
+        }}
+      >
+        <img src={logout} alt="" />
+        <span>{isMenuOpen ? "Выход" : ""}</span>
+      </Link>
     </div>
   );
 };

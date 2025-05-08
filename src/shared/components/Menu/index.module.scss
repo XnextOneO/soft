@@ -5,6 +5,7 @@
 .menu-wrapper {
   min-width: 70px;
   transition: width 0.3s ease;
+  padding-bottom: 20px;
 }
 
 .menu-text-wrapper {
@@ -100,14 +101,27 @@
   align-items: center;
   padding-top: 10px;
   padding-bottom: 10px;
-  margin-left: 30px;
+  padding-left: 30px;
   gap: 46px;
+  position: absolute;
+  bottom: 0;
+  background: #006040;
+  transition: width 0.3s ease;
 }
 
 .logout span {
   line-height: 0;
   color: white;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.1s ease, transform 0.1s ease;
 }
+
+.logout.open span {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 
 .item:hover span {
   color: black;
