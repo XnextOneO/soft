@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu, useMantineColorScheme } from "@mantine/core";
+import logout from "@public/assets/logout.svg";
 import { useAuthStore } from "@shared/store/authStore.ts";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link, useRouter } from "@tanstack/react-router";
@@ -202,7 +203,7 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
             handleLogout();
           }}
         >
-          <img src="../../../../public/assets/logout.svg" alt="" />
+          <img src={logout} alt="" />
           <span>{isMenuOpen ? "Выход" : ""}</span>
         </Link>
       </Menu>
