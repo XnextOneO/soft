@@ -53,14 +53,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     return () => clearInterval(intervalId);
   }, [accessToken, refreshToken, clearTokens, refreshMutate]);
-
-  useEffect(() => {
-    if (!accessToken) {
-      router.navigate({ to: "/login", replace: true });
-      console.log("log");
-    }
-  });
-
   return <>{children}</>;
 };
 

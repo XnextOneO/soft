@@ -1,6 +1,6 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Menu } from "@mantine/core";
+import { Menu, useMantineColorScheme } from "@mantine/core";
 import { useAuthStore } from "@shared/store/authStore.ts";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link, useRouter } from "@tanstack/react-router";
@@ -34,7 +34,16 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
 }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
   const [searchQuery, setSearchQuery] = useState("");
+  const colorScheme = useMantineColorScheme();
+  const [color, setColor] = useState("");
 
+  useEffect(() => {
+    if (colorScheme.colorScheme === "light") {
+      setColor("black");
+    } else {
+      setColor("white");
+    }
+  }, [colorScheme.colorScheme]);
   // eslint-disable-next-line unicorn/no-null
   if (!items) return null;
 
@@ -56,6 +65,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                       to={item.href}
                       className={styles.link}
                       disabled={!hasPermission}
+                      style={{ color: color }}
                     >
                       {t(item.name)}
                     </Link>
@@ -67,7 +77,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                       <>
                         <input
                           type="text"
-                          placeholder={t("search-placeholder")}
+                          placeholder={"Поиск по справочникам"}
                           className={styles.searchInput}
                           value={searchQuery}
                           onChange={(event) =>
@@ -92,7 +102,11 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                                 key={subItem.key}
                                 disabled={!subItemHasPermission}
                               >
-                                <Link to={subItem.href} className={styles.link}>
+                                <Link
+                                  to={subItem.href}
+                                  className={styles.link}
+                                  style={{ color: color }}
+                                >
                                   {t(subItem.name)}
                                 </Link>
                               </Menu.Item>
