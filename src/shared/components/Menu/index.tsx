@@ -51,7 +51,11 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                     disabled={!hasPermission}
                     className={styles.menuSubItem}
                   >
-                    <Link to={item.href} className={styles.link}>
+                    <Link
+                      to={item.href}
+                      className={styles.link}
+                      disabled={!hasPermission}
+                    >
                       {t(item.name)}
                     </Link>
                   </Menu.Sub.Item>
