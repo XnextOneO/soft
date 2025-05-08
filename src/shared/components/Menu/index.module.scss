@@ -5,7 +5,6 @@
 .menu-wrapper {
   min-width: 70px;
   transition: width 0.3s ease;
-  padding-bottom: 20px;
 }
 
 .menu-text-wrapper {
@@ -41,7 +40,7 @@
   width: 450px !important;
   overflow: hidden auto;
   padding: 0 !important;
-  padding-top: 4px !important;
+  padding-top: 8px !important;
   box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 20%) !important;
 }
 
@@ -104,7 +103,7 @@
   padding-bottom: 10px;
   padding-left: 30px;
   gap: 46px;
-  position: absolute;
+  position: sticky;
   bottom: 0;
   background: #006040;
   transition: width 0.3s ease;

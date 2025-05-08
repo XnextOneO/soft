@@ -199,7 +199,7 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
       </Menu>
       <Link
         to={"/login"}
-        style={{ width: isMenuOpen ? "299px" : "70px" }}
+        style={{ width: isMenuOpen ? "100%" : "70px" }}
         className={`${styles.logout} ${isMenuOpen ? styles.open : ""}`}
         onClick={() => {
           handleLogout();

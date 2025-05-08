@@ -89,45 +89,47 @@ const Header: FC<HeaderProperties> = ({
   return (
     <Container className={classes.headerContainer} fluid p={0}>
       <Flex w="100%" h="100%" direction="row">
-        {isBurger && (
-          <Flex
-            justify="center"
-            align="center"
-            className={classes.buttonContainer}
-            onClick={toggleMenu}
-            w={72}
-            miw={72}
-          >
-            <Burger
-              size="sm"
-              color="white"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              opened={isMenuOpen}
-              aria-label={t("header:header.navigation")}
-            />
-          </Flex>
-        )}
+        <Flex w={350} align={"center"}>
+          {isBurger && (
+            <Flex
+              justify="center"
+              align="center"
+              className={classes.buttonContainer}
+              onClick={toggleMenu}
+              w={72}
+              miw={72}
+            >
+              <Burger
+                size="sm"
+                color="white"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                opened={isMenuOpen}
+                aria-label={t("header:header.navigation")}
+              />
+            </Flex>
+          )}
+          <Link to={"/"}>
+            <Flex direction={"row"} align={"center"} gap="xs">
+              <Image
+                src={BelarusbankLogo}
+                w={24}
+                h={24}
+                alt="belarusbank-logo"
+              />
+              <Image src={Favicon} w={24} h={24} alt="logo" />
+              <Text c="white" fw={700} className={classes.title}>
+                IIS {t("header:header.belarusbank")}
+              </Text>
+            </Flex>
+          </Link>
+        </Flex>
         <Group justify="space-between" w="100%" pl={link ? 0 : "md"}>
           {link ? (
             <Group miw={280} gap={"sm"}>
-              <Link to={"/"}>
-                <Group gap="xs">
-                  <Image
-                    src={BelarusbankLogo}
-                    w={24}
-                    h={24}
-                    alt="belarusbank-logo"
-                  />
-                  <Image src={Favicon} w={24} h={24} alt="logo" />
-                  <Text c="white" fw={700} className={classes.title}>
-                    IIS {t("header:header.belarusbank")}
-                  </Text>
-                </Group>
-              </Link>
               <Combobox
                 onOptionSubmit={() => {
                   setSearchTerm("");
@@ -137,7 +139,7 @@ const Header: FC<HeaderProperties> = ({
               >
                 <Combobox.Target>
                   <TextInput
-                    w={"350px"}
+                    w={"450px"}
                     placeholder={t("header:header.search-placeholder")}
                     value={searchTerm}
                     onChange={(event) => {
