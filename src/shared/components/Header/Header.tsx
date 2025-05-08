@@ -17,7 +17,7 @@ import BelarusbankLogo from "@public/assets/belarusbank-logo.svg";
 import Favicon from "@public/assets/favicon.svg";
 import menuItems from "@public/menuItems.json";
 import DocumentationButton from "@shared/components/Header/DocumentationButton/DocumentationButton.tsx";
-import { MenuItem } from "@shared/components/NavMenu/NavMenu.tsx";
+import { MenuItem } from "@shared/components/Menu";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { Link } from "@tanstack/react-router";
 
@@ -73,10 +73,10 @@ const Header: FC<HeaderProperties> = ({
   const options = filteredItems.map((item) => (
     <Link
       key={item.key + item.href}
-      to={`/directories/$slug`}
-      params={{
-        slug: item.href ?? "",
-      }}
+      to={item.href}
+      // params={{
+      //   slug: item.href ?? "",
+      // }}
       style={{
         textDecoration: "none",
         color: colorScheme.colorScheme === "light" ? "#333333" : "#CCCCCC",

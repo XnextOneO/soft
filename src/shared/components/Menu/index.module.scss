@@ -1,0 +1,97 @@
+.menu-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-wrapper {
+  min-width: 70px;
+}
+
+.item {
+  color: transparent !important;
+  height: 54px;
+}
+
+
+.item span {
+  color: white;
+}
+
+
+.dropdown {
+  height: inherit;
+  min-height: 364px;
+  width: 450px !important;
+  overflow: hidden auto;
+
+}
+
+.menu-sub-item {
+  height: 34px;
+}
+
+.menu-sub-dropdown {
+  padding: 0 !important;
+}
+
+.icon-span {
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 100%;
+  vertical-align: middle;
+  text-wrap: nowrap;
+}
+
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-text-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 350px;
+  margin-left: 10px;
+}
+
+.search-input {
+  width: 96%;
+  border: 1px solid #999;
+  margin-left: 20px;
+  padding: 6px 10px;
+}
+
+.search-input:focus {
+  border: 1px solid #999 !important;
+  outline: none;
+}
+
+.link {
+  width: 100%;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 20px;
+  gap: 20px;
+}
+
+.logout span {
+  line-height: 0;
+  color: white;
+}
+
+.item:hover span {
+  color: black;
+}
+
+.item:hover {
+  background-color: white;
+}

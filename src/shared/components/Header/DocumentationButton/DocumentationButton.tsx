@@ -9,8 +9,8 @@ const DocumentationButton: FC = () => {
     <Tooltip label="Справка (F1)" withArrow>
       <Group
         justify="center"
-        w={52}
-        h="52px"
+        w={22}
+        h="22px"
         className={classes.documentationButton}
       >
         <Image src={IconInfo} />
