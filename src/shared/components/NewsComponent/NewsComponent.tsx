@@ -99,7 +99,7 @@ const NewsComponent: FC = () => {
           </Container>
         </Accordion.Control>
         <Accordion.Panel>
-          <ScrollArea style={{ height: "70vh", overflowY: "auto" }}>
+          <ScrollArea style={{ height: "80vh", overflowY: "auto" }}>
             <Stack gap={5}>
               {newsData.map((item, index) => (
                 <Card withBorder key={index}>
