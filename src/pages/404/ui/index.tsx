@@ -7,7 +7,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 
-import Logo404 from "../../../../public/assets/404.svg";
+import Logo404 from "../../../../public/assets/404.png";
 
 import styles from "./index.module.scss";
 export const NotFoundPage: FC = () => {
@@ -21,8 +21,8 @@ export const NotFoundPage: FC = () => {
       }
       fluid
     >
-      <Group h={150}>
-        <Image src={Logo404} h={150} />
+      <Group>
+        <Image src={Logo404} w={328} />
         <Group justify={"space-between"} w={300} h={150}>
           <Text style={{ fontSize: "24px", lineHeight: "100%" }} fw={700}>
             Нам очень жаль, что-то пошло не так...

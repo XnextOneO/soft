@@ -22,11 +22,12 @@ body {
   min-height: 100vh;
   justify-content: center;
 }
-
+//noinspection ALL
 .mantine-Menu-itemSection {
   display: none;
 }
 
+//noinspection ALL
 .mantine-Menu-itemLabel {
   display: flex;
   justify-content: start;
@@ -35,7 +36,7 @@ body {
   width: max-content;
   height: 34px;
 }
-
+//noinspection ALL
 .mantine-Menu-item {
   margin: 0;
   padding: 0;

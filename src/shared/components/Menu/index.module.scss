@@ -11,16 +11,9 @@
   height: 54px;
 }
 
-.item:hover {
-  background-color: white;
-}
 
 .item span {
   color: white;
-}
-
-.item:hover span {
-  color: black;
 }
 
 
@@ -28,8 +21,7 @@
   height: inherit;
   min-height: 364px;
   width: 450px !important;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
 
 }
 
@@ -50,7 +42,7 @@
   text-wrap: nowrap;
 }
 
-.iconWrapper {
+.icon-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,13 +58,13 @@
 
 .search-input {
   width: 96%;
-  border: 1px solid #999999;
+  border: 1px solid #999;
   margin-left: 20px;
   padding: 6px 10px;
 }
 
 .search-input:focus {
-  border: 1px solid #999999 !important;
+  border: 1px solid #999 !important;
   outline: none;
 }
 
@@ -94,4 +86,12 @@
 .logout span {
   line-height: 0;
   color: white;
+}
+
+.item:hover span {
+  color: black;
+}
+
+.item:hover {
+  background-color: white;
 }
