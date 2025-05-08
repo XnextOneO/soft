@@ -146,7 +146,7 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
     clearTokens();
     router.navigate({ to: "/login", replace: true });
     // eslint-disable-next-line unicorn/no-null
-    globalThis.history.pushState(null, "", "/login"); // Перезаписываем историю
+    globalThis.history.pushState(null, "", "/login");
   };
 
   return (
@@ -156,8 +156,9 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
         flexDirection: "column",
         overflowY: "scroll",
         background: "#006040",
+        width: isMenuOpen ? "350px" : "70px",
       }}
-      className={styles.menuWrapper}
+      className={`${styles.menuWrapper} ${isMenuOpen ? styles.open : ""}`}
     >
       <Menu trigger={"click"}>
         {menuData.map((group) => {
