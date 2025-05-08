@@ -9,7 +9,6 @@ import AuthProvider from "@shared/providers/AuthProvider.tsx";
 import { ThemeManager } from "@shared/providers/ThemeProvider.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRootRoute, Outlet, useLocation } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import "@mantine/core/styles.css";
 import "mantine-react-table/styles.css";
@@ -17,7 +16,6 @@ import "mantine-react-table/styles.css";
 import styles from "./index.module.scss";
 
 const RootComponent: React.FC = () => {
-  const isDevelopment = import.meta.env.MODE === "development";
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -66,8 +64,6 @@ const RootComponent: React.FC = () => {
                   </div>
                 </Flex>
               </Container>
-
-              {isDevelopment && <TanStackRouterDevtools />}
             </AppContextProvider>
           </AuthProvider>
         </ThemeManager>

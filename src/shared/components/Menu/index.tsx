@@ -1,8 +1,9 @@
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu } from "@mantine/core";
+import { useAuthStore } from "@shared/store/authStore.ts";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 
 import styles from "./index.module.scss";
 
@@ -32,7 +33,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
   permissions,
 }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
-  const [searchQuery, setSearchQuery] = useState(""); // Состояние для поискового запроса
+  const [searchQuery, setSearchQuery] = useState("");
 
   // eslint-disable-next-line unicorn/no-null
   if (!items) return null;
@@ -125,6 +126,14 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
 export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
   const { permissions } = usePermissionsStore();
+  const { clearTokens } = useAuthStore();
+  const router = useRouter();
+  const handleLogout = (): void => {
+    clearTokens();
+    router.navigate({ to: "/login", replace: true });
+    // eslint-disable-next-line unicorn/no-null
+    globalThis.history.pushState(null, "", "/login"); // Перезаписываем историю
+  };
 
   return (
     <div
@@ -171,6 +180,16 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
             </Menu.Sub>
           );
         })}
+        <Link
+          to={"/login"}
+          className={styles.logout}
+          onClick={() => {
+            handleLogout();
+          }}
+        >
+          <img src="../../../../public/assets/logout.svg" alt="" />
+          <span>{isMenuOpen ? "Выход" : ""}</span>
+        </Link>
       </Menu>
     </div>
   );

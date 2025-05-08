@@ -54,6 +54,13 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => clearInterval(intervalId);
   }, [accessToken, refreshToken, clearTokens, refreshMutate]);
 
+  useEffect(() => {
+    if (!accessToken) {
+      router.navigate({ to: "/login", replace: true });
+      console.log("log");
+    }
+  });
+
   return <>{children}</>;
 };
 
