@@ -34,10 +34,18 @@ body {
   align-items: center;
   width: max-content;
   height: 34px;
+  padding-left: 10px;
 }
+
 //noinspection ALL
 .mantine-Menu-item {
   margin: 0;
   padding: 0;
+  width: 100% !important;
+  padding-bottom: 4px;
+}
+//noinspection ALL
+.mantine-Menu-item:hover {
+  border-radius: 0;
   width: 100% !important;
 }
