@@ -6,7 +6,7 @@ import { Link } from "@tanstack/react-router";
 
 import styles from "./index.module.scss";
 
-interface MenuItem {
+export interface MenuItem {
   key: string;
   name: string;
   href?: string;
