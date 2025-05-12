@@ -281,6 +281,7 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
         <Accordion.Item value={"table"} p={0}>
           <Accordion.Control
             bg={colorScheme.colorScheme === "light" ? "#999999" : "#777778"}
+            style={{ borderRadius: "0" }}
           >
             <Container p={0} mr={"sm"}>
               <Group align={"center"} wrap={"nowrap"}>
