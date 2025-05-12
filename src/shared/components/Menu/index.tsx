@@ -37,6 +37,8 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const colorScheme = useMantineColorScheme();
   const [color, setColor] = useState("");
+  // eslint-disable-next-line unicorn/no-null
+  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
 
   useEffect(() => {
     if (colorScheme.colorScheme === "light") {
@@ -45,6 +47,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
       setColor("white");
     }
   }, [colorScheme.colorScheme]);
+
   // eslint-disable-next-line unicorn/no-null
   if (!items) return null;
 
@@ -52,6 +55,11 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
     <>
       {items.map((item) => {
         const hasPermission = permissions.includes(`${item.key}:read`);
+
+        const toggleSubMenu = (): void => {
+          // eslint-disable-next-line unicorn/no-null
+          setOpenSubMenu(openSubMenu === item.key ? null : item.key); // Переключение состояния подменю
+        };
 
         return (
           <Menu.Item key={item.key}>
@@ -61,6 +69,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                   <Menu.Sub.Item
                     disabled={!hasPermission}
                     className={styles.menuSubItem}
+                    onClick={toggleSubMenu} // Обработчик клика для открытия/закрытия подменю
                   >
                     <Link
                       to={item.href}
@@ -72,8 +81,13 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                     </Link>
                   </Menu.Sub.Item>
                 </Menu.Sub.Target>
-                {item.items ? (
-                  <Menu.Sub.Dropdown className={styles.dropdown}>
+                {item.items && (
+                  <Menu.Sub.Dropdown
+                    className={styles.dropdown}
+                    style={{
+                      display: openSubMenu === item.key ? "block" : "none",
+                    }}
+                  >
                     {item.search && (
                       <>
                         <input
@@ -129,8 +143,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                       <MenuItems items={item.items} permissions={permissions} />
                     )}
                   </Menu.Sub.Dropdown>
-                ) : // eslint-disable-next-line unicorn/no-null
-                null}
+                )}
               </Menu.Sub>
             </Menu>
           </Menu.Item>
@@ -151,6 +164,14 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
     globalThis.history.pushState(null, "", "/login");
   };
 
+  // eslint-disable-next-line unicorn/no-null
+  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
+
+  const toggleSubMenu = (key: string): void => {
+    // eslint-disable-next-line unicorn/no-null
+    setOpenSubMenu(openSubMenu === key ? null : key);
+  };
+
   return (
     <div
       style={{
@@ -162,7 +183,7 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
       }}
       className={`${styles.menuWrapper} ${isMenuOpen ? styles.open : ""}`}
     >
-      <Menu trigger={"click"}>
+      <Menu trigger="click">
         {menuData.map((group) => {
           const hasPermission = permissions.includes(`${group.key}:read`);
 
@@ -173,6 +194,10 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
                   <Menu.Sub.Item
                     className={styles.item}
                     disabled={!hasPermission}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      toggleSubMenu(group.key);
+                    }}
                   >
                     <div className={styles.iconWrapper}>
                       <span className={styles.iconSpan}> {group.icon}</span>
@@ -190,7 +215,10 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
 
               <Menu.Sub.Dropdown
                 className={styles.menuSubDropdown}
-                style={{ padding: 0 }}
+                style={{
+                  padding: 0,
+                  display: openSubMenu === group.key ? "block" : "none",
+                }}
               >
                 <MenuItems items={group.items} permissions={permissions} />
               </Menu.Sub.Dropdown>
