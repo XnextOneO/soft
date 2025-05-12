@@ -69,7 +69,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                   <Menu.Sub.Item
                     disabled={!hasPermission}
                     className={styles.menuSubItem}
-                    onClick={toggleSubMenu} // Обработчик клика для открытия/закрытия подменю
+                    onClick={toggleSubMenu}
                   >
                     <Link
                       to={item.href}
@@ -116,6 +116,10 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                               <Menu.Item
                                 key={subItem.key}
                                 disabled={!subItemHasPermission}
+                                style={{
+                                  paddingTop: "2px",
+                                  paddingBottom: "2px",
+                                }}
                               >
                                 <Link
                                   to={subItem.href}
