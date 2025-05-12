@@ -106,6 +106,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                                 <Link
                                   to={subItem.href}
                                   className={styles.link}
+                                  disabled={!subItemHasPermission}
                                   style={{ color: color }}
                                 >
                                   {t(subItem.name)}

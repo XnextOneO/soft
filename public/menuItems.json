@@ -169,7 +169,7 @@
         "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.name",
         "items": [
           {
-            "key": "e004",
+            "key": "e00s4",
             "name": "nav-menu-stack:nav-menu-stack.reference-books.items.nsi-reference-books.items.transfer-destination-category-code",
             "href": "/directories/nsi__transfer-destination-category-code"
           },
