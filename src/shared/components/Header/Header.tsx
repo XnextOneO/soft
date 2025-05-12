@@ -19,6 +19,7 @@ import menuItems from "@public/menuItems.json";
 import DocumentationButton from "@shared/components/Header/DocumentationButton/DocumentationButton.tsx";
 import { MenuItem } from "@shared/components/Menu";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
+import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
@@ -59,17 +60,21 @@ const Header: FC<HeaderProperties> = ({
   const colorScheme = useMantineColorScheme();
   const { t } = useTranslation(["header"]);
   const [searchTerm, setSearchTerm] = useState("");
+  const { permissions } = usePermissionsStore();
 
   const flatMenuItems = flattenMenuItems(menuItems);
   const shouldFilterOptions = !flatMenuItems.some(
     (item) => t(item.name) === searchTerm,
   );
   const filteredItems = shouldFilterOptions
-    ? flatMenuItems.filter((item) =>
-        t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim()),
-      )
-    : flatMenuItems;
-
+    ? flatMenuItems.filter((item) => {
+        const hasPermission = permissions.includes(`${item.key}:read`);
+        return (
+          hasPermission &&
+          t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim())
+        );
+      })
+    : flatMenuItems.filter((item) => permissions.includes(`${item.key}:read`));
   const options = filteredItems.map((item) => (
     <Link
       key={item.key + item.href}
