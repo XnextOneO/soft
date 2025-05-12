@@ -47,7 +47,7 @@ const MyBreadcrumbs = (): React.ReactElement => {
       <Link to={"/"} color="">
         <Anchor
           size="sm"
-          c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#006040"}
+          c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#333333"}
           className={classes.breadCrumbLink}
         >
           {t("bread-crumbs:bread-crumbs.main-page")}
@@ -65,7 +65,7 @@ const MyBreadcrumbs = (): React.ReactElement => {
             <Anchor
               size="sm"
               className={classes.breadCrumbLink}
-              c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#006040"}
+              c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#333333"}
             >
               {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
             </Anchor>
