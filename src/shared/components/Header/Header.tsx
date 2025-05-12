@@ -89,7 +89,7 @@ const Header: FC<HeaderProperties> = ({
   return (
     <Container className={classes.headerContainer} fluid p={0}>
       <Flex w="100%" h="100%" direction="row">
-        <Flex w={350} align={"center"}>
+        <Flex w={link ? 350 : ""} align={"center"}>
           {isBurger && (
             <Flex
               justify="center"
@@ -112,20 +112,22 @@ const Header: FC<HeaderProperties> = ({
               />
             </Flex>
           )}
-          <Link to={"/"}>
-            <Flex direction={"row"} align={"center"} gap="xs">
-              <Image
-                src={BelarusbankLogo}
-                w={24}
-                h={24}
-                alt="belarusbank-logo"
-              />
-              <Image src={Favicon} w={24} h={24} alt="logo" />
-              <Text c="white" fw={700} className={classes.title}>
-                IIS {t("header:header.belarusbank")}
-              </Text>
-            </Flex>
-          </Link>
+          {link && (
+            <Link to={"/"}>
+              <Flex direction={"row"} align={"center"} gap="xs">
+                <Image
+                  src={BelarusbankLogo}
+                  w={24}
+                  h={24}
+                  alt="belarusbank-logo"
+                />
+                <Image src={Favicon} w={24} h={24} alt="logo" />
+                <Text c="white" fw={700} className={classes.title}>
+                  IIS {t("header:header.belarusbank")}
+                </Text>
+              </Flex>
+            </Link>
+          )}
         </Flex>
         <Group justify="space-between" w="100%" pl={link ? 0 : "md"}>
           {link ? (
