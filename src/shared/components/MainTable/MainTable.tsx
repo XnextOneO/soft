@@ -14,7 +14,6 @@ import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
 import DirectoriesStore from "@shared/store/directoriesStore.ts";
-import { userStore } from "@shared/store/userStore.ts";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
@@ -39,7 +38,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [createModalOpened, setCreateModalOpened] = useState(false);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
-  const { isEdit, canDelete, canCreate } = userStore();
   const [opened, setOpened] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
@@ -258,7 +256,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         row={row}
         deleteModalOpened={deleteModalOpened}
         setDeleteModalOpened={setDeleteModalOpened}
-        canDelete={canDelete}
+        canDelete={false}
         table={table}
         classes={classes}
       />
@@ -273,7 +271,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         refetch={refetch}
         setOpened={setOpened}
         table={table}
-        canCreate={canCreate}
+        canCreate={false}
         updateTable={updateTable}
       />
     ),
@@ -288,7 +286,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       },
     },
     editDisplayMode: "modal",
-    enableEditing: isEdit,
+    enableEditing: false,
     columns: processedColumns,
     data: cellValues,
     state: {

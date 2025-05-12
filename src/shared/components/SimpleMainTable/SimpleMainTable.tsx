@@ -275,6 +275,7 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
       <Accordion
         chevronPosition="right"
         variant="contained"
+        defaultValue={"table"}
         classNames={{ content: styles.content, chevron: styles.chevron }}
       >
         <Accordion.Item value={"table"} p={0}>

@@ -81,6 +81,7 @@ const NewsComponent: FC = () => {
     <Accordion
       chevronPosition="right"
       variant="contained"
+      defaultValue={"table"}
       classNames={{ content: classes.content, chevron: classes.chevron }}
     >
       <Accordion.Item value={"table"} w={350}>
