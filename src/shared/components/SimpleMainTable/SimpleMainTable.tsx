@@ -278,7 +278,7 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
         defaultValue={"table"}
         classNames={{ content: styles.content, chevron: styles.chevron }}
       >
-        <Accordion.Item value={"table"} p={0}>
+        <Accordion.Item value={"table"} p={0} style={{ borderRadius: "0" }}>
           <Accordion.Control
             bg={colorScheme.colorScheme === "light" ? "#999999" : "#777778"}
             style={{ borderRadius: "0" }}
