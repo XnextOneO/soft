@@ -100,11 +100,16 @@ const NewsComponent: FC = () => {
             </Group>
           </Container>
         </Accordion.Control>
-        <Accordion.Panel style={{ background: "white" }}>
+        <Accordion.Panel
+          style={{
+            background:
+              colorScheme.colorScheme === "light" ? "white" : "#2e2e2e",
+          }}
+        >
           <ScrollArea style={{ height: "80vh", overflowY: "auto" }}>
             <Stack gap={0} style={{ background: "white" }}>
               {newsData.map((item, index) => (
-                <Card key={index} p={5}>
+                <Card key={index} p={5} style={{ borderRadius: "0" }}>
                   <Text size="sm" c="dimmed">
                     {new Date(item.date).toLocaleDateString()}
                   </Text>
