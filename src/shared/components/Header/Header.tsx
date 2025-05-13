@@ -8,13 +8,11 @@ import {
   Group,
   Image,
   ScrollArea,
-  Text,
   TextInput,
   useCombobox,
   useMantineColorScheme,
 } from "@mantine/core";
-import BelarusbankLogo from "@public/assets/belarusbank-logo.svg";
-import Favicon from "@public/assets/favicon.svg";
+import BelarusbankLogo from "@public/assets/logotip.svg";
 import menuItems from "@public/menuItems.json";
 import DocumentationButton from "@shared/components/Header/DocumentationButton/DocumentationButton.tsx";
 import { MenuItem } from "@shared/components/Menu";
@@ -120,16 +118,7 @@ const Header: FC<HeaderProperties> = ({
           {link && (
             <Link to={"/"}>
               <Flex direction={"row"} align={"center"} gap="xs">
-                <Image
-                  src={BelarusbankLogo}
-                  w={24}
-                  h={24}
-                  alt="belarusbank-logo"
-                />
-                <Image src={Favicon} w={24} h={24} alt="logo" />
-                <Text c="white" fw={700} className={classes.title}>
-                  IIS {t("header:header.belarusbank")}
-                </Text>
+                <Image src={BelarusbankLogo} />
               </Flex>
             </Link>
           )}
@@ -175,16 +164,7 @@ const Header: FC<HeaderProperties> = ({
             </Group>
           ) : (
             <Group gap="xs" maw={280}>
-              <Image
-                src={BelarusbankLogo}
-                w={24}
-                h={24}
-                alt="belarusbank-logo"
-              />
-              <Image src={Favicon} w={24} h={24} alt="logo" />
-              <Text c="white" fw={700} className={classes.title}>
-                IIS {t("header:header.belarusbank")}
-              </Text>
+              <Image src={BelarusbankLogo} />
             </Group>
           )}
           <Group gap={0} justify="flex-end" align="center">
