@@ -58,7 +58,7 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
 
         const toggleSubMenu = (): void => {
           // eslint-disable-next-line unicorn/no-null
-          setOpenSubMenu(openSubMenu === item.key ? null : item.key); // Переключение состояния подменю
+          setOpenSubMenu(openSubMenu === item.key ? null : item.key);
         };
 
         return (

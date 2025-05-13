@@ -35,8 +35,8 @@
 
 
 .dropdown {
-  height: inherit;
-  min-height: 364px;
+  height: initial;
+  max-height: 300px;
   width: 450px !important;
   overflow: hidden auto;
   padding: 0 !important;
