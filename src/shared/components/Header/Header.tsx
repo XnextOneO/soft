@@ -168,7 +168,7 @@ const Header: FC<HeaderProperties> = ({
             </Group>
           )}
           <Group gap={0} justify="flex-end" align="center">
-            <DocumentationButton />
+            {link && <DocumentationButton />}
             <ThemeSwitcher />
             {/*<LanguageSwitcher />*/}
             {isProfile && <ProfileButton />}
