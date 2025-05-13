@@ -71,14 +71,18 @@ const MenuItems: FC<{ items?: MenuItem[]; permissions: string[] }> = ({
                     className={styles.menuSubItem}
                     onClick={toggleSubMenu}
                   >
-                    <Link
-                      to={item.href}
-                      className={styles.link}
-                      disabled={!hasPermission}
-                      style={{ color: color }}
-                    >
-                      {t(item.name)}
-                    </Link>
+                    {item.href ? (
+                      <Link
+                        to={item.href}
+                        className={styles.link}
+                        disabled={!hasPermission}
+                        style={{ color: color }}
+                      >
+                        {t(item.name)}
+                      </Link>
+                    ) : (
+                      t(item.name)
+                    )}
                   </Menu.Sub.Item>
                 </Menu.Sub.Target>
                 {item.items && (
