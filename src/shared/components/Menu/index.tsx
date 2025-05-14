@@ -188,6 +188,8 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
         overflowY: "scroll",
         background: "#006040",
         width: isMenuOpen ? "350px" : "70px",
+        overflowX: "hidden",
+        scrollbarWidth: "none",
       }}
       className={`${styles.menuWrapper} ${isMenuOpen ? styles.open : ""}`}
     >
