@@ -30,7 +30,6 @@ import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx
 import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
-import { userStore } from "@shared/store/userStore.ts";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
@@ -94,7 +93,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [createModalOpened, setCreateModalOpened] = useState(false);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
-  const { isEdit, canDelete, canCreate } = userStore();
   const [openedUpdateModal, setOpenedUpdateModal] = useState(false);
   const [openedBPInfoModal, setOpenedBPInfoModal] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -302,7 +300,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         row={row}
         deleteModalOpened={deleteModalOpened}
         setDeleteModalOpened={setDeleteModalOpened}
-        canDelete={canDelete}
+        canDelete={false}
         table={table}
         classes={classes}
       />
@@ -317,7 +315,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         refetch={refetch}
         setOpened={setOpenedUpdateModal}
         table={table}
-        canCreate={canCreate}
+        canCreate={false}
         updateTable={updateTable}
         setClientStatus={setClientStatus}
       />
@@ -360,7 +358,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     },
     editDisplayMode: "modal",
     enableRowVirtualization: true,
-    enableEditing: isEdit && link !== "/business-partner",
+    // enableEditing: isEdit && link !== "/business-partner",
+    enableEditing: false,
     columns: processedColumns,
     data: cellValues,
     state: {
