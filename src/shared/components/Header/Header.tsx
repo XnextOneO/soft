@@ -8,17 +8,16 @@ import {
   Group,
   Image,
   ScrollArea,
-  Text,
   TextInput,
   useCombobox,
   useMantineColorScheme,
 } from "@mantine/core";
-import BelarusbankLogo from "@public/assets/belarusbank-logo.svg";
-import Favicon from "@public/assets/favicon.svg";
+import BelarusbankLogo from "@public/assets/logotip.svg";
 import menuItems from "@public/menuItems.json";
 import DocumentationButton from "@shared/components/Header/DocumentationButton/DocumentationButton.tsx";
 import { MenuItem } from "@shared/components/Menu";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
+import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
 
 import ProfileButton from "./ProfileButton/ProfileButton";
@@ -59,17 +58,21 @@ const Header: FC<HeaderProperties> = ({
   const colorScheme = useMantineColorScheme();
   const { t } = useTranslation(["header"]);
   const [searchTerm, setSearchTerm] = useState("");
+  const { permissions } = usePermissionsStore();
 
   const flatMenuItems = flattenMenuItems(menuItems);
   const shouldFilterOptions = !flatMenuItems.some(
     (item) => t(item.name) === searchTerm,
   );
   const filteredItems = shouldFilterOptions
-    ? flatMenuItems.filter((item) =>
-        t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim()),
-      )
-    : flatMenuItems;
-
+    ? flatMenuItems.filter((item) => {
+        const hasPermission = permissions.includes(`${item.key}:read`);
+        return (
+          hasPermission &&
+          t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim())
+        );
+      })
+    : flatMenuItems.filter((item) => permissions.includes(`${item.key}:read`));
   const options = filteredItems.map((item) => (
     <Link
       key={item.key + item.href}
@@ -89,7 +92,7 @@ const Header: FC<HeaderProperties> = ({
   return (
     <Container className={classes.headerContainer} fluid p={0}>
       <Flex w="100%" h="100%" direction="row">
-        <Flex w={350} align={"center"}>
+        <Flex w={link ? 350 : ""} align={"center"}>
           {isBurger && (
             <Flex
               justify="center"
@@ -112,20 +115,13 @@ const Header: FC<HeaderProperties> = ({
               />
             </Flex>
           )}
-          <Link to={"/"}>
-            <Flex direction={"row"} align={"center"} gap="xs">
-              <Image
-                src={BelarusbankLogo}
-                w={24}
-                h={24}
-                alt="belarusbank-logo"
-              />
-              <Image src={Favicon} w={24} h={24} alt="logo" />
-              <Text c="white" fw={700} className={classes.title}>
-                IIS {t("header:header.belarusbank")}
-              </Text>
-            </Flex>
-          </Link>
+          {link && (
+            <Link to={"/"}>
+              <Flex direction={"row"} align={"center"} gap="xs">
+                <Image src={BelarusbankLogo} />
+              </Flex>
+            </Link>
+          )}
         </Flex>
         <Group justify="space-between" w="100%" pl={link ? 0 : "md"}>
           {link ? (
@@ -168,20 +164,11 @@ const Header: FC<HeaderProperties> = ({
             </Group>
           ) : (
             <Group gap="xs" maw={280}>
-              <Image
-                src={BelarusbankLogo}
-                w={24}
-                h={24}
-                alt="belarusbank-logo"
-              />
-              <Image src={Favicon} w={24} h={24} alt="logo" />
-              <Text c="white" fw={700} className={classes.title}>
-                IIS {t("header:header.belarusbank")}
-              </Text>
+              <Image src={BelarusbankLogo} />
             </Group>
           )}
           <Group gap={0} justify="flex-end" align="center">
-            <DocumentationButton />
+            {link && <DocumentationButton />}
             <ThemeSwitcher />
             {/*<LanguageSwitcher />*/}
             {isProfile && <ProfileButton />}

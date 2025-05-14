@@ -81,11 +81,13 @@ const NewsComponent: FC = () => {
     <Accordion
       chevronPosition="right"
       variant="contained"
+      defaultValue={"table"}
       classNames={{ content: classes.content, chevron: classes.chevron }}
     >
       <Accordion.Item value={"table"} w={350}>
         <Accordion.Control
           bg={colorScheme.colorScheme === "light" ? "#999999" : "#777778"}
+          style={{ borderRadius: "0" }}
         >
           <Container p={0} mr={"sm"}>
             <Group align={"center"}>
@@ -98,11 +100,16 @@ const NewsComponent: FC = () => {
             </Group>
           </Container>
         </Accordion.Control>
-        <Accordion.Panel>
+        <Accordion.Panel
+          style={{
+            background:
+              colorScheme.colorScheme === "light" ? "white" : "#2e2e2e",
+          }}
+        >
           <ScrollArea style={{ height: "80vh", overflowY: "auto" }}>
-            <Stack gap={5}>
+            <Stack gap={0} style={{ background: "white" }}>
               {newsData.map((item, index) => (
-                <Card withBorder key={index}>
+                <Card key={index} p={5} style={{ borderRadius: "0" }}>
                   <Text size="sm" c="dimmed">
                     {new Date(item.date).toLocaleDateString()}
                   </Text>

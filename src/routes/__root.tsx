@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { routeTree } from "@generated/routeTree.gen.ts";
 import { Container, Flex, MantineProvider } from "@mantine/core";
 import menuData from "@public/menuItems.json";
 import MyBreadcrumbs from "@shared/components/Breadcrumbs";
@@ -28,9 +29,12 @@ const RootComponent: React.FC = () => {
 
   const isLoginPage = location.pathname === "/login";
 
+  const isNotFoundRoute = routeTree.useMatch().globalNotFound;
+
   const toggleMenu = (): void => {
     setIsMenuOpen((previous) => !previous);
   };
+
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider>
@@ -59,7 +63,7 @@ const RootComponent: React.FC = () => {
                     <NavMenu isMenuOpen={isMenuOpen} menuData={menuData} />
                   )}
                   <div className={styles.contentWrapper}>
-                    {!isLoginPage && <MyBreadcrumbs />}
+                    {!isLoginPage && !isNotFoundRoute && <MyBreadcrumbs />}
                     <Outlet />
                   </div>
                 </Flex>

@@ -22,6 +22,7 @@ stages:
   - execute
   - test
   - push
+  - cleanup
 
 default:
   tags:
@@ -55,7 +56,7 @@ execute_job:
     - cp ~/iis_configs/$CI_PROJECT_NAME/* . -a -f #-v
     - docker compose down || true  
     - docker compose up -d
-    - sleep 10
+    - sleep 12
   dependencies:
     - build_job
 
@@ -96,4 +97,10 @@ push_image_job:
    - build_job
    - execute_job
    - test_job
+
+cleanup_job:
+  stage: cleanup
+  script:
+    - echo "Build dir is $CI_PROJECT_DIR"
+    - rm -rf $CI_PROJECT_DIR
 

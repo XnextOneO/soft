@@ -35,8 +35,8 @@
 
 
 .dropdown {
-  height: inherit;
-  min-height: 364px;
+  height: initial;
+  max-height: 300px;
   width: 450px !important;
   overflow: hidden auto;
   padding: 0 !important;
@@ -92,15 +92,18 @@
 
 .link {
   width: 100%;
+  height: 100%;
   margin-right: 10px;
   text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 
 .logout {
   display: flex;
   align-items: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   padding-left: 30px;
   gap: 46px;
   position: sticky;

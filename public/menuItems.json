@@ -261,7 +261,7 @@
         ]
       },
       {
-        "key": "bic-reference-books",
+        "key": "menu-bic-reference-books",
         "name": "nav-menu-stack:nav-menu-stack.reference-books.items.bic-reference-books.name",
         "items": [
           {

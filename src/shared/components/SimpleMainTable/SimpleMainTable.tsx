@@ -274,11 +274,18 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
       <Accordion
         chevronPosition="right"
         variant="contained"
+        defaultValue={"table"}
         classNames={{ content: styles.content, chevron: styles.chevron }}
       >
-        <Accordion.Item value={"table"} p={0}>
+        <Accordion.Item value={"table"} p={0} style={{ borderRadius: "2px" }}>
           <Accordion.Control
             bg={colorScheme.colorScheme === "light" ? "#999999" : "#777778"}
+            style={{
+              borderTopLeftRadius: "2px",
+              borderTopRightRadius: "2px",
+              borderBottomLeftRadius: "0",
+              borderBottomRightRadius: "0",
+            }}
           >
             <Container p={0} mr={"sm"}>
               <Group align={"center"} wrap={"nowrap"}>
