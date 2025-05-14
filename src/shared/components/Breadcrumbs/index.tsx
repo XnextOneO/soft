@@ -6,7 +6,7 @@ import {
   Text,
   useMantineColorScheme,
 } from "@mantine/core";
-import { Link, useLocation } from "@tanstack/react-router";
+import { useLocation } from "@tanstack/react-router";
 
 import classes from "./Breadcrumbs.module.scss";
 
@@ -44,15 +44,13 @@ const MyBreadcrumbs = (): React.ReactElement => {
         borderBottom: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
       }}
     >
-      <Link to={"/"} color="">
-        <Anchor
-          size="sm"
-          c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#333333"}
-          className={classes.breadCrumbLink}
-        >
-          {t("bread-crumbs:bread-crumbs.main-page")}
-        </Anchor>
-      </Link>
+      <Anchor
+        size="sm"
+        c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#333333"}
+        className={classes.breadCrumbLink}
+      >
+        {t("bread-crumbs:bread-crumbs.main-page")}
+      </Anchor>
       {items.map((item, index) =>
         index === items.length - 1 ? (
           <span key={index}>
@@ -61,15 +59,14 @@ const MyBreadcrumbs = (): React.ReactElement => {
             </Text>
           </span>
         ) : (
-          <Link key={index} to={item.href}>
-            <Anchor
-              size="sm"
-              className={classes.breadCrumbLink}
-              c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#333333"}
-            >
-              {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
-            </Anchor>
-          </Link>
+          <Anchor
+            size="sm"
+            className={classes.breadCrumbLink}
+            c={colorScheme.colorScheme === "dark" ? "#8B8B8B" : "#333333"}
+            key={index}
+          >
+            {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
+          </Anchor>
         ),
       )}
     </Breadcrumbs>
