@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import { routeTree } from "@generated/routeTree.gen.ts";
 import { Container, Flex, MantineProvider } from "@mantine/core";
+import menuData from "@public/menuItems.json";
 import MyBreadcrumbs from "@shared/components/Breadcrumbs";
 import Header from "@shared/components/Header/Header.tsx";
-import NavMenu from "@shared/components/NavMenu/NavMenu.tsx";
+import { NavMenu } from "@shared/components/Menu";
 import { AppContextProvider } from "@shared/providers/AppContextProvider.tsx";
 import AuthProvider from "@shared/providers/AuthProvider.tsx";
 import { ThemeManager } from "@shared/providers/ThemeProvider.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRootRoute, Outlet, useLocation } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import "@mantine/core/styles.css";
 import "mantine-react-table/styles.css";
@@ -16,7 +17,6 @@ import "mantine-react-table/styles.css";
 import styles from "./index.module.scss";
 
 const RootComponent: React.FC = () => {
-  const isDevelopment = import.meta.env.MODE === "development";
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -29,9 +29,12 @@ const RootComponent: React.FC = () => {
 
   const isLoginPage = location.pathname === "/login";
 
+  const isNotFoundRoute = routeTree.useMatch().globalNotFound;
+
   const toggleMenu = (): void => {
     setIsMenuOpen((previous) => !previous);
   };
+
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider>
@@ -56,15 +59,15 @@ const RootComponent: React.FC = () => {
                 mih={isLoginPage ? "100vh" : "calc(100vh - 52px)"}
               >
                 <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
-                  {!isLoginPage && <NavMenu isMenuOpen={isMenuOpen} />}
+                  {!isLoginPage && (
+                    <NavMenu isMenuOpen={isMenuOpen} menuData={menuData} />
+                  )}
                   <div className={styles.contentWrapper}>
-                    {!isLoginPage && <MyBreadcrumbs />}
+                    {!isLoginPage && !isNotFoundRoute && <MyBreadcrumbs />}
                     <Outlet />
                   </div>
                 </Flex>
               </Container>
-
-              {isDevelopment && <TanStackRouterDevtools />}
             </AppContextProvider>
           </AuthProvider>
         </ThemeManager>
