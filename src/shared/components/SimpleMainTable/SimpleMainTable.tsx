@@ -228,7 +228,7 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
     },
     mantineTableContainerProps: {
       style: {
-        height: "35vh",
+        height: "30vh",
         overflowY: "auto",
       },
     },

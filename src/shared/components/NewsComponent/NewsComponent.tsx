@@ -106,7 +106,7 @@ const NewsComponent: FC = () => {
               colorScheme.colorScheme === "light" ? "white" : "#2e2e2e",
           }}
         >
-          <ScrollArea style={{ height: "80vh", overflowY: "auto" }}>
+          <ScrollArea className={classes.scrollArea}>
             <Stack gap={0} style={{ background: "white" }}>
               {newsData.map((item, index) => (
                 <Card key={index} p={5} style={{ borderRadius: "0" }}>
