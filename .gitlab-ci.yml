@@ -46,7 +46,7 @@ build_job:
     - pwd
     - cp ~/iis_configs/$CI_PROJECT_NAME/.* . -a -f #-v
     - cp ~/iis_configs/$CI_PROJECT_NAME/* . -a -f #-v
-    - docker compose down --rmi all
+    - docker compose down --rmi all || true
     - docker compose build
 
 execute_job:
@@ -54,7 +54,7 @@ execute_job:
   script:
     - cp ~/iis_configs/$CI_PROJECT_NAME/.* . -a -f #-v
     - cp ~/iis_configs/$CI_PROJECT_NAME/* . -a -f #-v
-    - docker compose down || true  
+    - docker compose down || true
     - docker compose up -d
     - sleep 12
   dependencies:
