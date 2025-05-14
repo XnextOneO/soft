@@ -4,7 +4,7 @@ import { Container, Flex, MantineProvider } from "@mantine/core";
 import menuData from "@public/menuItems.json";
 import MyBreadcrumbs from "@shared/components/Breadcrumbs";
 import Header from "@shared/components/Header/Header.tsx";
-import { NavMenu } from "@shared/components/Menu";
+import { MenuItem, NavMenu } from "@shared/components/Menu";
 import { AppContextProvider } from "@shared/providers/AppContextProvider.tsx";
 import AuthProvider from "@shared/providers/AuthProvider.tsx";
 import { ThemeManager } from "@shared/providers/ThemeProvider.tsx";
@@ -35,6 +35,8 @@ const RootComponent: React.FC = () => {
     setIsMenuOpen((previous) => !previous);
   };
 
+  const menuItems = menuData as MenuItem[];
+
   return (
     <QueryClientProvider client={queryClient}>
       <MantineProvider>
@@ -60,7 +62,7 @@ const RootComponent: React.FC = () => {
               >
                 <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
                   {!isLoginPage && (
-                    <NavMenu isMenuOpen={isMenuOpen} menuData={menuData} />
+                    <NavMenu isMenuOpen={isMenuOpen} menuItems={menuItems} />
                   )}
                   <div className={styles.contentWrapper}>
                     {!isLoginPage && !isNotFoundRoute && <MyBreadcrumbs />}
