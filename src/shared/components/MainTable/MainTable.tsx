@@ -9,8 +9,12 @@ import {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { Flex, Text, useMantineColorScheme } from "@mantine/core";
-import { LoadingOverlay } from "@mantine/core";
+import {
+  Flex,
+  LoadingOverlay,
+  Text,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
 import { getBPInfo } from "@shared/api/mutation/bpAPI.ts";
@@ -20,7 +24,6 @@ import {
   BusinessPartnerInfoModal,
 } from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
 import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
-import BottomToolbar from "@shared/components/MainTable/components/bottomToolbar.tsx";
 import CreateRowModalContent from "@shared/components/MainTable/components/CreateRowModalContent.tsx";
 import EditRowModalContent from "@shared/components/MainTable/components/EditRowModalContent.tsx";
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
@@ -32,6 +35,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
   MRT_ColumnFiltersState,
+  MRT_RowVirtualizer,
   MRT_SortingState,
   useMantineReactTable,
 } from "mantine-react-table";
@@ -49,6 +53,23 @@ interface BusinessPartnerInfo {
   columnName: Record<string, string>;
 }
 
+export interface SortCriteria {
+  [key: string]: "ASC" | "DESC";
+}
+export interface FilterCriteria {
+  [key: string]: string;
+}
+
+export interface ParametersPost {
+  link: string;
+  page: number;
+  size: number;
+  searchText: string;
+  sortCriteria: SortCriteria;
+  columnSearchCriteria: FilterCriteria;
+  clientStatus: ClientStatus;
+}
+
 export type ClientStatus = "ALL" | "CLOSED" | "OPEN";
 
 export const translateColumns = (
@@ -64,8 +85,10 @@ export const translateColumns = (
 };
 
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
+  const size = 25;
   const tableContainerReference = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState<number>(20);
+  const rowVirtualizerInstanceReference = useRef<MRT_RowVirtualizer>(null);
+
   const [localization, setLocalization] = useState(MRT_Localization_RU);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [createModalOpened, setCreateModalOpened] = useState(false);
@@ -80,24 +103,18 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
-  // eslint-disable-next-line unicorn/no-null
-  const [error, setError] = useState<string | null>(null);
+
+  const [error, setError] = useState<string | undefined>();
   const [BPInfo, setBPInfo] = useState<BusinessPartnerInfo | undefined>();
   const handleGlobalFilterChange = (value: string): void => {
     setGlobalFilter(value);
   };
-  interface SortCriteria {
-    [key: string]: "ASC" | "DESC";
-  }
-  interface FilterCriteria {
-    [key: string]: string;
-  }
 
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
-    const formattedColumn = sort.id
-      .replace(/([a-z])([A-Z])/g, "$1_$2")
-      .toUpperCase();
+    const formattedColumn = sort.id;
+    // .replace(/([a-z])([A-Z])/g, "$1_$2")
+    // .toUpperCase();
     sortCriteria[`${formattedColumn}`] = sort.desc ? "DESC" : "ASC";
   }
 
@@ -125,7 +142,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     };
   }, [i18n]);
 
-  const parametersPost = {
+  const parametersPost: ParametersPost = {
     link: link,
     page: 0,
     size: size,
@@ -137,17 +154,16 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const { data, refetch, fetchNextPage, isFetching, isLoading } =
     useInfiniteQuery({
       queryKey: ["apiData", parametersPost],
-      queryFn: async () => {
-        // eslint-disable-next-line unicorn/no-null
-        setError(null);
-        try {
-          return await postApiData(parametersPost);
-        } catch (error_) {
-          setError("ошибка сервера");
-          throw error_;
-        }
+      queryFn: async ({ pageParam: pageParameter = 0 }) => {
+        setError(undefined);
+        return await postApiData({
+          ...parametersPost,
+          page: pageParameter,
+        });
       },
-      getNextPageParam: (_lastGroup, groups) => groups.length,
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.content.length > 0 ? allPages.length : undefined;
+      },
       initialPageParam: 0,
       refetchOnWindowFocus: false,
     });
@@ -179,6 +195,20 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     },
     [fetchNextPage, isFetching, totalFetched, totalDBRowCount],
   );
+
+  useEffect(() => {
+    if (rowVirtualizerInstanceReference.current) {
+      try {
+        rowVirtualizerInstanceReference.current.scrollToIndex(0);
+      } catch (error_) {
+        console.error(error_);
+      }
+    }
+  }, [sorting, globalFilter]);
+
+  useEffect(() => {
+    fetchMoreOnBottomReached(tableContainerReference.current);
+  }, [fetchMoreOnBottomReached]);
 
   const columnsWithAccessorKey = translateColumns(
     columnsRaw,
@@ -267,14 +297,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         setCreateRowModalOpened={setCreateModalOpened}
       />
     ),
-    renderBottomToolbarCustomActions: (): JSX.Element => (
-      <BottomToolbar
-        size={size}
-        setSize={setSize}
-        totalFetched={totalFetched}
-        totalDBRowCount={totalDBRowCount}
-      />
-    ),
     renderEditRowModalContent: ({ row }) => (
       <EditRowModalContent
         row={row}
@@ -291,7 +313,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     ),
     renderTopToolbar: () => (
       <TopToolbar
-        link={link}
+        parameters={parametersPost}
         refetch={refetch}
         setOpened={setOpenedUpdateModal}
         table={table}
@@ -337,6 +359,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       },
     },
     editDisplayMode: "modal",
+    enableRowVirtualization: true,
     enableEditing: isEdit && link !== "/business-partner",
     columns: processedColumns,
     data: cellValues,
@@ -368,7 +391,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       onScroll: (event: UIEvent<HTMLDivElement>) =>
         fetchMoreOnBottomReached(event.target as HTMLDivElement),
       style: {
-        height: "calc(100vh - 192px)",
+        height: "calc(100vh - 140px)",
         overflowY: "auto",
         borderTop: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
       },

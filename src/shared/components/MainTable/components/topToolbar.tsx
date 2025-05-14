@@ -1,14 +1,17 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Checkbox, Flex, Group } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import IconDetails from "@public/assets/details.svg?react";
 import IconDoubleSum from "@public/assets/double-sum.svg?react";
-import IconExport from "@public/assets/export.svg?react";
 import IconFilter from "@public/assets/filter.svg?react";
 import IconSum from "@public/assets/sum.svg?react";
 import { syncDataSCBank } from "@shared/api/mutation/bpAPI.ts";
-import { ClientStatus } from "@shared/components/MainTable/MainTable.tsx";
+import { DataExportButton } from "@shared/components/DataExportButton/DataExportButton.tsx";
+import {
+  ClientStatus,
+  ParametersPost,
+} from "@shared/components/MainTable/MainTable.tsx";
 import { IconReload } from "@tabler/icons-react";
 import {
   MRT_GlobalFilterTextInput,
@@ -17,8 +20,8 @@ import {
 
 interface TopToolbarProperties {
   refetch: () => void;
+  parameters: ParametersPost;
   setOpened: (opened: boolean) => void;
-  link: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table: any;
   canCreate: boolean;
@@ -28,7 +31,7 @@ interface TopToolbarProperties {
 
 const TopToolbar: FC<TopToolbarProperties> = ({
   refetch,
-  link,
+  parameters,
   setOpened,
   table,
   canCreate,
@@ -37,6 +40,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
 }) => {
   const [t] = useTranslation(["top-toolbar"]);
   const [checked, setChecked] = useState(false);
+  const { link } = parameters;
   useEffect(() => {
     if (checked) {
       setClientStatus("ALL");
@@ -133,9 +137,13 @@ const TopToolbar: FC<TopToolbarProperties> = ({
         <Button w={36} p={5} radius="xs" color="#007458">
           <IconSum />
         </Button>
-        <Button w={36} p={5} radius="xs" color="#007458">
-          <IconExport />
-        </Button>
+        <DataExportButton
+          w={36}
+          p={5}
+          radius={"xs"}
+          color={"#007458"}
+          parameters={parameters}
+        />
         <Button w={36} p={5} radius="xs" color="#007458">
           <IconFilter />
         </Button>
