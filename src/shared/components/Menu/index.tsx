@@ -50,7 +50,11 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
           {renderMenuItems(item.items as MenuItem[], true)}
         </Menu.SubMenu>
       ) : (
-        <Menu.Item key={item.key} disabled={!itemHasPermission}>
+        <Menu.Item
+          key={item.key}
+          disabled={!itemHasPermission}
+          className={styles.subMenu}
+        >
           <Link
             to={item.href}
             style={{ pointerEvents: itemHasPermission ? "auto" : "none" }}
