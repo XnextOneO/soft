@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
-import { Menu } from "antd";
+import { Input, Menu } from "antd";
 
 import styles from "./index.module.scss";
 
@@ -18,6 +18,7 @@ export interface MenuItem {
   name: string;
   items?: (MenuItem | SubMenuItem)[];
   href?: string;
+  search?: boolean; // Добавлено свойство search
 }
 
 interface NavMenuProperties {
@@ -28,9 +29,16 @@ interface NavMenuProperties {
 export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
   const { permissions } = usePermissionsStore();
+  const [searchValues, setSearchValues] = useState<{ [key: string]: string }>(
+    {},
+  );
 
   const hasPermission = (key: string): boolean => {
     return permissions.includes(`${key}:read`);
+  };
+
+  const handleSearchChange = (key: string, value: string): void => {
+    setSearchValues((previous) => ({ ...previous, [key]: value }));
   };
 
   const renderMenuItems = (
@@ -39,6 +47,12 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
   ): React.ReactNode[] => {
     return items.map((item) => {
       const itemHasPermission = hasPermission(item.key);
+      const searchValue = searchValues[item.key] || "";
+
+      // Фильтруем дочерние элементы, если у родителя есть свойство search
+      const filteredItems = item.items?.filter((subItem) =>
+        t(subItem.name).toLowerCase().includes(searchValue.toLowerCase()),
+      );
 
       return item.items && item.items.length > 0 ? (
         <Menu.SubMenu
@@ -47,7 +61,23 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
           icon={item.icon}
           disabled={!itemHasPermission}
         >
-          {renderMenuItems(item.items as MenuItem[], true)}
+          {item.search && (
+            <Menu.Item key={`${item.key}-search`} className={styles.subMenu}>
+              <Input
+                placeholder={t("search")}
+                value={searchValue}
+                onChange={(event) =>
+                  handleSearchChange(item.key, event.target.value)
+                }
+                onClick={(event) => event.stopPropagation()}
+              />
+            </Menu.Item>
+          )}
+          {filteredItems && filteredItems.length > 0 ? (
+            renderMenuItems(filteredItems as MenuItem[], true)
+          ) : (
+            <Menu.Item disabled>{t("noResults")}</Menu.Item>
+          )}
         </Menu.SubMenu>
       ) : (
         <Menu.Item
