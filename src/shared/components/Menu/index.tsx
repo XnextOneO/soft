@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useMenuContext } from "@shared/providers/MenuContextProvider.tsx";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
 import { Input, Menu } from "antd";
@@ -32,6 +33,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
   const [searchValues, setSearchValues] = useState<{ [key: string]: string }>(
     {},
   );
+  const { setSelectedKeys, selectedKeys } = useMenuContext();
 
   const hasPermission = (key: string): boolean => {
     return permissions.includes(`${key}:read`);
@@ -41,9 +43,15 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
     setSearchValues((previous) => ({ ...previous, [key]: value }));
   };
 
+  const handleMenuItemClick = (parentKey: string): void => {
+    setSelectedKeys([parentKey]);
+  };
+
   const renderMenuItems = (
     items: MenuItem[],
     isSubMenu: boolean = false,
+    // eslint-disable-next-line unicorn/no-null
+    parentKey: string | null = null,
   ): React.ReactNode[] => {
     return items.map((item) => {
       const itemHasPermission = hasPermission(item.key);
@@ -87,7 +95,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
               </Menu.Item>
             )}
             {filteredItems && filteredItems.length > 0 ? (
-              renderMenuItems(filteredItems as MenuItem[], true)
+              renderMenuItems(filteredItems as MenuItem[], true, item.key)
             ) : (
               <Menu.Item disabled>Сожалеем, поиск не дал результатов</Menu.Item>
             )}
@@ -99,6 +107,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
             key={item.key}
             disabled={!itemHasPermission}
             className={"subMenuItem"}
+            onClick={() => handleMenuItemClick(parentKey || item.key)}
           >
             <Link to={item.href} className={"link"}>
               <span>{item.icon}</span>
@@ -117,9 +126,10 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
       triggerSubMenuAction={"click"}
       className={"menu"}
       style={{ width: isMenuOpen ? "350px" : "72px" }}
+      selectedKeys={selectedKeys}
     >
       {renderMenuItems(menuItems)}
-      <Link to={"/login"}> выход</Link>
+      <Link to={"/login"}> выход</Link>{" "}
     </Menu>
   );
 };

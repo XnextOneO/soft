@@ -17,6 +17,7 @@ import menuItems from "@public/menuItems.json";
 import DocumentationButton from "@shared/components/Header/DocumentationButton/DocumentationButton.tsx";
 import { MenuItem, SubMenuItem } from "@shared/components/Menu";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
+import { useMenuContext } from "@shared/providers/MenuContextProvider.tsx";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
 
@@ -60,6 +61,7 @@ const Header: FC<HeaderProperties> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const { permissions } = usePermissionsStore();
 
+  const { clearActiveMenuItem } = useMenuContext();
   const flatMenuItems = flattenMenuItems(menuItems as MenuItem[]);
 
   const shouldFilterOptions = !flatMenuItems.some(
@@ -117,7 +119,7 @@ const Header: FC<HeaderProperties> = ({
             </Flex>
           )}
           {link && (
-            <Link to={"/"}>
+            <Link to={"/"} onClick={clearActiveMenuItem}>
               <Flex direction={"row"} align={"center"} gap="xs">
                 <Image src={BelarusbankLogo} />
               </Flex>
