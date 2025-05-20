@@ -1,0 +1,111 @@
+.menu {
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.menu::-webkit-scrollbar {
+  display: none;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  width: 100% !important;
+  height: 54px;
+  background: transparent;
+}
+
+
+//noinspection ALL
+.mainMenuItem {
+  background-color: #006040;
+  color: white;
+  border-radius: 0 !important;
+
+  &.ant-menu-item-disabled {
+    background-color: red !important;
+    color: red !important;
+  }
+}
+
+//noinspection ALL
+.subMenuItem {
+  background-color: #fff;
+  color: #555;
+
+  &:hover {
+    background-color: #F1F3F5;
+  }
+}
+
+//noinspection ALL
+.mainMenuTitle {
+  display: flex;
+  gap: 16px;
+  padding-left: 16px;
+}
+
+//noinspection ALL
+.mainMenuText {
+  text-wrap: wrap;
+  line-height: 100%;
+  font-size: 16px;
+  width: 180px;
+}
+
+.icon {
+  width: 40px !important;
+  display: flex;
+  justify-content: center;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+  font-weight: normal;
+}
+
+//noinspection ALL
+.subMenuTitle {
+  font-weight: normal;
+}
+
+//noinspection ALL
+.ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-title-content > .mainMenuTitle {
+  background: #006040 !important;
+
+}
+
+//noinspection ALL
+.ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-title-content > .mainMenuTitle > .mainMenuText {
+  color: #EBEDF0 !important;
+  opacity: 0.4;
+}
+
+//noinspection ALL
+.ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-title-content > .mainMenuTitle > .icon {
+  color: #EBEDF0 !important;
+  opacity: 0.4;
+}
+
+.ant-menu-submenu > .ant-menu-submenu-title > .ant-menu-title-content > .mainMenuTitle {
+  background: #006040 !important;
+  color: #FFF !important;
+
+  &:hover {
+    background: #004830 !important;
+    color: #FFF !important;
+  }
+}
+
+.ant-menu-submenu > .ant-menu-submenu-title > .ant-menu-title-content > .subMenuTitle {
+  height: 34px !important;
+  padding-left: 12px;
+}
+
+
+//noinspection ALL
+.ant-menu-submenu-selected > .ant-menu-submenu-title > .ant-menu-title-content > .mainMenuTitle {
+  color: #333 !important;
+  background: #FFF !important;
+}

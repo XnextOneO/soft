@@ -15,7 +15,7 @@ import {
 import BelarusbankLogo from "@public/assets/logotip.svg";
 import menuItems from "@public/menuItems.json";
 import DocumentationButton from "@shared/components/Header/DocumentationButton/DocumentationButton.tsx";
-import { MenuItem } from "@shared/components/Menu";
+import { MenuItem, SubMenuItem } from "@shared/components/Menu";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
@@ -29,15 +29,15 @@ interface HeaderProperties {
   toggleMenu?: () => void;
   isMenuOpen?: boolean;
 }
-const flattenMenuItems = (items: MenuItem[]): MenuItem[] => {
+const flattenMenuItems = (items: (MenuItem | SubMenuItem)[]): MenuItem[] => {
   const flatItems: MenuItem[] = [];
 
-  const recurseItems = (subItems: MenuItem[]): void => {
+  const recurseItems = (subItems: (MenuItem | SubMenuItem)[]): void => {
     for (const item of subItems) {
-      if (item.href) {
+      if ("icon" in item) {
         flatItems.push(item);
       }
-      if (item.items) {
+      if ("items" in item && item.items) {
         recurseItems(item.items);
       }
     }
@@ -60,7 +60,8 @@ const Header: FC<HeaderProperties> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const { permissions } = usePermissionsStore();
 
-  const flatMenuItems = flattenMenuItems(menuItems);
+  const flatMenuItems = flattenMenuItems(menuItems as MenuItem[]);
+
   const shouldFilterOptions = !flatMenuItems.some(
     (item) => t(item.name) === searchTerm,
   );

@@ -99,9 +99,7 @@
       },
       {
         "key": "managing-incoming-payments",
-        "name":
-        "nav-menu-stack:nav-menu-stack.payment-management.items.managing-incoming-payments",
-
+        "name": "nav-menu-stack:nav-menu-stack.payment-management.items.managing-incoming-payments",
         "href": "/payment-management/managing-incoming-payments"
       }
     ]
@@ -584,6 +582,10 @@
     "icon": "AC",
     "key": "statuses",
     "name": "nav-menu-stack:nav-menu-stack.statuses",
-    "href": "statuses"
+    "href": "statuses",
+    "items": [
+      {
+      }
+    ]
   }
 ]

@@ -60,17 +60,17 @@ body {
 .mantine-Avatar-placeholder {
   background: white;
 }
-
-
+//noinspection ALL
 .ant-menu-sub{
   max-height: 364px !important;
   min-width: 450px !important;
+  border-radius: 0 !important;
 }
-
+//noinspection ALL
 .ant-menu-submenu-popup {
   padding-left: 0 !important;
 }
-
+//noinspection ALL
 .ant-menu-submenu-title {
   width: 100% !important;
   height: 100% !important;
@@ -84,15 +84,3 @@ body {
 
 }
 
-
-.ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-title-content > ._mainMenuTitle_bm6w8_37  {
-  background: #006040 !important;
-}
-
-.ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-title-content > ._mainMenuTitle_bm6w8_37 > ._mainMenuText_bm6w8_43 {
-  color: #EBEDF0 !important;
-}
-
-.ant-menu-submenu-selected > .ant-menu-submenu-title > .ant-menu-title-content > ._mainMenuTitle_bm6w8_37{
-  color: red !important;
-}

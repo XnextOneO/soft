@@ -4,9 +4,9 @@ import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
 import { Input, Menu } from "antd";
 
-import styles from "./index.module.scss";
+import "./index.scss";
 
-interface SubMenuItem {
+export interface SubMenuItem {
   key: string;
   name: string;
   href: string;
@@ -59,14 +59,14 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
             key={item.key}
             title={
               <div
-                className={`${styles.title} ${isSubMenu ? styles.subMenuTitle : styles.mainMenuTitle}`}
+                className={`${"title"} ${isSubMenu ? "subMenuTitle" : "mainMenuTitle"}`}
               >
-                <div className={styles.icon}>{item.icon}</div>
+                {!isSubMenu && <div className={"icon"}>{item.icon}</div>}
                 {isSubMenu ? (
                   <span>{t(item.name)}</span>
                 ) : (
                   isMenuOpen && (
-                    <span className={styles.mainMenuText}>{t(item.name)}</span>
+                    <span className={"mainMenuText"}>{t(item.name)}</span>
                   )
                 )}
               </div>
@@ -94,19 +94,15 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
           </Menu.SubMenu>
         );
       } else {
-        // Убедитесь, что дочерние элементы получают правильный класс
         return (
           <Menu.Item
             key={item.key}
             disabled={!itemHasPermission}
-            className={styles.subMenuItem}
+            className={"subMenuItem"}
           >
-            <Link
-              to={item.href}
-              style={{ pointerEvents: itemHasPermission ? "auto" : "none" }}
-            >
-              {item.icon}
-              {t(item.name)}
+            <Link to={item.href} className={"link"}>
+              <span>{item.icon}</span>
+              <span>{isSubMenu && t(item.name)}</span>
             </Link>
           </Menu.Item>
         );
@@ -119,8 +115,8 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
       mode="vertical"
       theme="light"
       triggerSubMenuAction={"click"}
-      className={styles.menu}
-      style={{ width: isMenuOpen ? "280px" : "72px" }}
+      className={"menu"}
+      style={{ width: isMenuOpen ? "350px" : "72px" }}
     >
       {renderMenuItems(menuItems)}
       <Link to={"/login"}> выход</Link>
