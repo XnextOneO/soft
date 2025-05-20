@@ -23,9 +23,7 @@
   height: 54px;
   border-radius: 0 !important;
 
-  &:hover {
-    background-color: white; // Цвет при наведении
-  }
+
 
   &.ant-menu-item-disabled {
     background-color: red !important; // Цвет для отключенных главных кнопок

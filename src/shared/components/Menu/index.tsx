@@ -73,7 +73,6 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
             }
             expandIcon={<></>}
             disabled={!itemHasPermission}
-            className={`${styles.item} ${isSubMenu ? styles.subMenuItem : styles.mainMenuItem}`}
           >
             {item.search && (
               <Menu.Item key={`${item.key}-search`}>
@@ -107,7 +106,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
               style={{ pointerEvents: itemHasPermission ? "auto" : "none" }}
             >
               {item.icon}
-              {isMenuOpen && t(item.name)}
+              {t(item.name)}
             </Link>
           </Menu.Item>
         );

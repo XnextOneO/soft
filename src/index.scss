@@ -68,7 +68,7 @@ body {
 }
 
 .ant-menu-submenu-popup {
-  padding-left: 2px !important;
+  padding-left: 0 !important;
 }
 
 .ant-menu-submenu-title {
@@ -84,3 +84,15 @@ body {
 
 }
 
+
+.ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-title-content > ._mainMenuTitle_bm6w8_37  {
+  background: #006040 !important;
+}
+
+.ant-menu-submenu-disabled > .ant-menu-submenu-title > .ant-menu-title-content > ._mainMenuTitle_bm6w8_37 > ._mainMenuText_bm6w8_43 {
+  color: #EBEDF0 !important;
+}
+
+.ant-menu-submenu-selected > .ant-menu-submenu-title > .ant-menu-title-content > ._mainMenuTitle_bm6w8_37{
+  color: red !important;
+}
