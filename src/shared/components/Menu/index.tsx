@@ -18,7 +18,7 @@ export interface MenuItem {
   name: string;
   items?: (MenuItem | SubMenuItem)[];
   href?: string;
-  search?: boolean; // Добавлено свойство search
+  search?: boolean;
 }
 
 interface NavMenuProperties {
@@ -49,56 +49,82 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
       const itemHasPermission = hasPermission(item.key);
       const searchValue = searchValues[item.key] || "";
 
-      // Фильтруем дочерние элементы, если у родителя есть свойство search
-      const filteredItems = item.items?.filter((subItem) =>
-        t(subItem.name).toLowerCase().includes(searchValue.toLowerCase()),
-      );
+      if (item.items && item.items.length > 0) {
+        const filteredItems = item.items.filter((subItem) =>
+          t(subItem.name).toLowerCase().includes(searchValue.toLowerCase()),
+        );
 
-      return item.items && item.items.length > 0 ? (
-        <Menu.SubMenu
-          key={item.key}
-          title={isMenuOpen || isSubMenu ? t(item.name) : undefined}
-          icon={item.icon}
-          disabled={!itemHasPermission}
-        >
-          {item.search && (
-            <Menu.Item key={`${item.key}-search`} className={styles.subMenu}>
-              <Input
-                placeholder={t("search")}
-                value={searchValue}
-                onChange={(event) =>
-                  handleSearchChange(item.key, event.target.value)
-                }
-                onClick={(event) => event.stopPropagation()}
-              />
-            </Menu.Item>
-          )}
-          {filteredItems && filteredItems.length > 0 ? (
-            renderMenuItems(filteredItems as MenuItem[], true)
-          ) : (
-            <Menu.Item disabled>{t("noResults")}</Menu.Item>
-          )}
-        </Menu.SubMenu>
-      ) : (
-        <Menu.Item
-          key={item.key}
-          disabled={!itemHasPermission}
-          className={styles.subMenu}
-        >
-          <Link
-            to={item.href}
-            style={{ pointerEvents: itemHasPermission ? "auto" : "none" }}
+        return (
+          <Menu.SubMenu
+            key={item.key}
+            title={
+              <div
+                className={`${styles.title} ${isSubMenu ? styles.subMenuTitle : styles.mainMenuTitle}`}
+              >
+                <div className={styles.icon}>{item.icon}</div>
+                {isSubMenu ? (
+                  <span>{t(item.name)}</span>
+                ) : (
+                  isMenuOpen && (
+                    <span className={styles.mainMenuText}>{t(item.name)}</span>
+                  )
+                )}
+              </div>
+            }
+            expandIcon={<></>}
+            disabled={!itemHasPermission}
+            className={`${styles.item} ${isSubMenu ? styles.subMenuItem : styles.mainMenuItem}`}
           >
-            {t(item.name)}
-          </Link>
-        </Menu.Item>
-      );
+            {item.search && (
+              <Menu.Item key={`${item.key}-search`}>
+                <Input
+                  placeholder={t("search")}
+                  value={searchValue}
+                  onChange={(event) =>
+                    handleSearchChange(item.key, event.target.value)
+                  }
+                  onClick={(event) => event.stopPropagation()}
+                />
+              </Menu.Item>
+            )}
+            {filteredItems && filteredItems.length > 0 ? (
+              renderMenuItems(filteredItems as MenuItem[], true)
+            ) : (
+              <Menu.Item disabled>Сожалеем, поиск не дал результатов</Menu.Item>
+            )}
+          </Menu.SubMenu>
+        );
+      } else {
+        // Убедитесь, что дочерние элементы получают правильный класс
+        return (
+          <Menu.Item
+            key={item.key}
+            disabled={!itemHasPermission}
+            className={styles.subMenuItem}
+          >
+            <Link
+              to={item.href}
+              style={{ pointerEvents: itemHasPermission ? "auto" : "none" }}
+            >
+              {item.icon}
+              {isMenuOpen && t(item.name)}
+            </Link>
+          </Menu.Item>
+        );
+      }
     });
   };
 
   return (
-    <Menu mode="vertical" theme="light" triggerSubMenuAction={"click"}>
+    <Menu
+      mode="vertical"
+      theme="light"
+      triggerSubMenuAction={"click"}
+      className={styles.menu}
+      style={{ width: isMenuOpen ? "280px" : "72px" }}
+    >
       {renderMenuItems(menuItems)}
+      <Link to={"/login"}> выход</Link>
     </Menu>
   );
 };

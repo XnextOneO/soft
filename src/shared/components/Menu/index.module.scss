@@ -1,0 +1,68 @@
+.menu {
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.menu::-webkit-scrollbar {
+  display: none;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  width: 100% !important;
+  min-height: 54px;
+  background: transparent;
+}
+
+
+
+.mainMenuItem {
+  background-color: #006040; // Цвет для главных родительских кнопок
+  color: white; // Цвет текста для главных родительских кнопок
+  height: 54px;
+  border-radius: 0 !important;
+
+  &:hover {
+    background-color: white; // Цвет при наведении
+  }
+
+  &.ant-menu-item-disabled {
+    background-color: red !important; // Цвет для отключенных главных кнопок
+    color: red !important; // Цвет текста для отключенных главных кнопок
+  }
+}
+
+.subMenuItem {
+  background-color: #ffffff; // Цвет для дочерних кнопок
+  color: #555; // Цвет текста для дочерних кнопок
+
+  &:hover {
+    background-color: #F1F3F5; // Цвет при наведении
+  }
+}
+
+.mainMenuTitle {
+  display: flex;
+  gap: 16px;
+  padding-left: 16px;
+}
+
+.mainMenuText {
+  text-wrap: wrap;
+  line-height: 100%;
+  font-size: 16px;
+  width: 160px;
+}
+
+.icon {
+  width: 40px !important;
+  display: flex;
+  justify-content: center;
+}
+
+
+.subMenuTitle {
+  font-weight: normal; // Дополнительные стили для заголовков дочерних кнопок
+  height: 10px;
+}
