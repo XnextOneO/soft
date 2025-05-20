@@ -1,4 +1,4 @@
-import { JSX, useState } from "react";
+import { JSX } from "react";
 import { Button, Combobox, useCombobox } from "@mantine/core";
 import IconExport from "@public/assets/export.svg?react";
 import { exportData } from "@shared/api/mutation/dataExportAPI.ts";
@@ -20,21 +20,27 @@ export const DataExportButton = ({
   color,
   parameters,
 }: DataExportButtonProperties): JSX.Element => {
-  const [selectedFormat, setSelectedFormat] = useState<string | undefined>();
   const { link } = parameters;
   const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
+    onDropdownClose: () => {
+      combobox.resetSelectedOption();
+    },
   });
 
   // eslint-disable-next-line consistent-return
-  const exportDataInFormat = async (): Promise<void> => {
-    if (link && selectedFormat) {
-      return await exportData(parameters, link, selectedFormat);
+  const exportDataInFormat = async (format: string): Promise<void> => {
+    if (link) {
+      console.log(format);
+      return await exportData(parameters, link, format);
     }
   };
 
   const options = exports.map((item) => (
-    <Combobox.Option value={item} key={item} onClick={exportDataInFormat}>
+    <Combobox.Option
+      value={item}
+      key={item}
+      onClick={() => exportDataInFormat(item)}
+    >
       {item}
     </Combobox.Option>
   ));
@@ -42,12 +48,12 @@ export const DataExportButton = ({
   return (
     <>
       <Combobox
+        offset={0}
         store={combobox}
         width={65}
         position="bottom-start"
         withArrow
-        onOptionSubmit={(value) => {
-          setSelectedFormat(value);
+        onOptionSubmit={() => {
           combobox.closeDropdown();
         }}
       >

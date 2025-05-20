@@ -172,12 +172,10 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
     globalThis.history.pushState(null, "", "/login");
   };
 
-  // eslint-disable-next-line unicorn/no-null
-  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
+  const [openSubMenu, setOpenSubMenu] = useState<string | undefined>();
 
   const toggleSubMenu = (key: string): void => {
-    // eslint-disable-next-line unicorn/no-null
-    setOpenSubMenu(openSubMenu === key ? null : key);
+    setOpenSubMenu(openSubMenu === key ? undefined : key);
   };
 
   return (
@@ -196,7 +194,7 @@ export const NavMenu: FC<IMenu> = ({ isMenuOpen, menuData }) => {
           const hasPermission = permissions.includes(`${group.key}:read`);
 
           return (
-            <Menu.Sub key={group.key}>
+            <Menu.Sub key={group.key} onClose={() => setOpenSubMenu(undefined)}>
               <Link to={group.href ?? ""}>
                 <Menu.Sub.Target>
                   <Menu.Sub.Item

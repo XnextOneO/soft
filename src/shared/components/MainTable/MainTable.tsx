@@ -16,6 +16,9 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
+import IconSort from "@public/assets/IconSort.svg?react";
+import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
+import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
 import { getBPInfo } from "@shared/api/mutation/bpAPI.ts";
 import { postApiData } from "@shared/api/mutation/fetchTableData.ts";
@@ -29,11 +32,13 @@ import EditRowModalContent from "@shared/components/MainTable/components/EditRow
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
 import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
+import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
   MRT_ColumnFiltersState,
+  MRT_Icons,
   MRT_RowVirtualizer,
   MRT_SortingState,
   useMantineReactTable,
@@ -149,7 +154,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     columnSearchCriteria: columnSearchCriteria,
     clientStatus: clientStatus,
   };
-  const { data, refetch, fetchNextPage, isFetching, isLoading } =
+  const { data, refetch, fetchNextPage, isRefetching, isLoading } =
     useInfiniteQuery({
       queryKey: ["apiData", parametersPost],
       queryFn: async ({ pageParam: pageParameter = 0 }) => {
@@ -184,14 +189,14 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           containerReferenceElement;
         if (
           scrollHeight - scrollTop - clientHeight < 400 &&
-          !isFetching &&
+          !isRefetching &&
           totalFetched < totalDBRowCount
         ) {
           fetchNextPage();
         }
       }
     },
-    [fetchNextPage, isFetching, totalFetched, totalDBRowCount],
+    [fetchNextPage, isRefetching, totalFetched, totalDBRowCount],
   );
 
   useEffect(() => {
@@ -282,6 +287,18 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       sortDescFirst: true,
     };
   });
+
+  const customIcons: Partial<MRT_Icons> = {
+    IconArrowsSort: () => (
+      <SvgButton SvgIcon={IconSort} fillColor={"#999999"} />
+    ),
+    IconSortAscending: () => (
+      <SvgButton SvgIcon={IconSortAscending} fillColor={"#006040"} />
+    ),
+    IconSortDescending: () => (
+      <SvgButton SvgIcon={IconSortDescending} fillColor={"#006040"} />
+    ),
+  };
   const table = useMantineReactTable({
     onGlobalFilterChange: handleGlobalFilterChange,
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -349,6 +366,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       }
       return {};
     },
+    icons: customIcons,
     enableFilters: true,
     displayColumnDefOptions: {
       "mrt-row-actions": {
@@ -364,7 +382,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     data: cellValues,
     state: {
       isLoading: isLoading,
-      showProgressBars: isFetching,
+      showProgressBars: isRefetching,
       sorting,
     },
     initialState: {

@@ -39,15 +39,20 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   setClientStatus,
 }) => {
   const [t] = useTranslation(["top-toolbar"]);
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(parameters.clientStatus === "ALL");
   const { link } = parameters;
+
   useEffect(() => {
-    if (checked) {
-      setClientStatus("ALL");
-    } else {
-      setClientStatus("OPEN");
-    }
-  }, [checked, setClientStatus]);
+    setChecked(parameters.clientStatus === "ALL");
+  }, [parameters.clientStatus]);
+
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    const newChecked = event.currentTarget.checked;
+    setChecked(newChecked);
+    setClientStatus(newChecked ? "ALL" : "OPEN");
+  };
   return (
     <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
       <Group gap="xs">
@@ -123,7 +128,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
             color={"#007458"}
             checked={checked}
             label={"Показать все банки, включая закрытые"}
-            onChange={(event) => setChecked(event.currentTarget.checked)}
+            onChange={handleCheckboxChange}
           />
         )}
       </Group>
