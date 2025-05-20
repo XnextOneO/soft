@@ -35,9 +35,7 @@ const flattenMenuItems = (items: (MenuItem | SubMenuItem)[]): MenuItem[] => {
 
   const recurseItems = (subItems: (MenuItem | SubMenuItem)[]): void => {
     for (const item of subItems) {
-      if ("icon" in item) {
-        flatItems.push(item);
-      }
+      flatItems.push(item); // Добавляем как родительские, так и подменю элементы
       if ("items" in item && item.items) {
         recurseItems(item.items);
       }
@@ -47,7 +45,6 @@ const flattenMenuItems = (items: (MenuItem | SubMenuItem)[]): MenuItem[] => {
   recurseItems(items);
   return flatItems;
 };
-
 const Header: FC<HeaderProperties> = ({
   isBurger,
   isProfile,
@@ -64,18 +61,15 @@ const Header: FC<HeaderProperties> = ({
   const { clearActiveMenuItem } = useMenuContext();
   const flatMenuItems = flattenMenuItems(menuItems as MenuItem[]);
 
-  const shouldFilterOptions = !flatMenuItems.some(
-    (item) => t(item.name) === searchTerm,
-  );
-  const filteredItems = shouldFilterOptions
-    ? flatMenuItems.filter((item) => {
-        const hasPermission = permissions.includes(`${item.key}:read`);
-        return (
-          hasPermission &&
-          t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim())
-        );
-      })
-    : flatMenuItems.filter((item) => permissions.includes(`${item.key}:read`));
+  const filteredItems = flatMenuItems.filter((item) => {
+    const hasPermission = permissions.includes(`${item.key}:read`);
+    const hasHref = item.href !== undefined; // Проверка наличия поля href
+    return (
+      hasPermission &&
+      hasHref && // Убедитесь, что элемент имеет поле href
+      t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim())
+    );
+  });
   const options = filteredItems.map((item) => (
     <Link
       key={item.key + item.href}

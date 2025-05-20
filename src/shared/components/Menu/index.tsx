@@ -14,7 +14,7 @@ export interface SubMenuItem {
 }
 
 export interface MenuItem {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   key: string;
   name: string;
   items?: (MenuItem | SubMenuItem)[];
