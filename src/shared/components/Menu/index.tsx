@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useMenuContext } from "@shared/providers/MenuContextProvider.tsx";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
-import { Input, Menu } from "antd";
+import { Menu } from "antd";
 
 import "./index.scss";
 
@@ -83,9 +83,10 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
             disabled={!itemHasPermission}
           >
             {item.search && (
-              <Menu.Item key={`${item.key}-search`}>
-                <Input
-                  placeholder={t("search")}
+              <Menu.Item key={`${item.key}-search`} className={"topSearch"}>
+                <input
+                  className="search"
+                  placeholder={"Поиск по справочникам"}
                   value={searchValue}
                   onChange={(event) =>
                     handleSearchChange(item.key, event.target.value)
