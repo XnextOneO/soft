@@ -79,7 +79,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
             key={item.key}
             title={
               <div
-                className={`${"title"} ${isSubMenu ? "subMenuTitle" : "mainMenuTitle"} ${isMenuOpen ? "visible" : ""}`}
+                className={`${"title"} ${isSubMenu ? "subMenuTitle" : "mainMenuTitle"}`}
               >
                 {!isSubMenu && <div className={"icon"}>{item.icon}</div>}
                 {isSubMenu ? (
@@ -139,6 +139,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
       triggerSubMenuAction={"click"}
       className={`menu ${isMenuOpen ? "open" : ""}`}
       selectedKeys={selectedKeys}
+      inlineCollapsed={isMenuOpen}
     >
       {renderMenuItems(menuItems)}
       <Link

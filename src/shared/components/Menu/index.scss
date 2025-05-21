@@ -38,6 +38,7 @@
 
   &:hover {
     color: white;
+    background: #004830;
   }
 }
 
@@ -69,6 +70,7 @@
   display: flex;
   gap: 16px;
   padding-left: 14px;
+  height: 54px;
 }
 
 //noinspection ALL
@@ -76,8 +78,8 @@
   text-wrap: wrap;
   line-height: 100%;
   font-size: 16px;
-  width: 180px;
   font-family: Roboto, sans-serif;
+  margin-left: 60px;
 }
 
 .icon {
@@ -87,8 +89,7 @@
   font-family: Roboto, sans-serif;
   font-weight: 700;
   font-size: 14px;
-  line-height: 100%;
-  vertical-align: middle;
+  position: absolute;
 }
 
 .link {
@@ -111,13 +112,6 @@
   width: 100%;
 }
 
-//noinspection ALL
-.topSearch {
-  position: sticky !important;
-  top: 0px;
-  z-index: 999 !important;
-  background: white;
-}
 
 //noinspection ALL
 .subMenuTitle {
@@ -181,7 +175,6 @@
 
 
 .ant-menu-title-content {
-  padding-top: 9px !important;
   width: 100%;
 }
 
@@ -203,4 +196,11 @@
   }
 }
 
-
+//noinspection ALL
+.topSearch {
+  position: sticky !important;
+  top: 0px;
+  z-index: 999 !important;
+  background: white;
+  padding-top: 12px !important;
+}
