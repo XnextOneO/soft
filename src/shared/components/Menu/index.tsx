@@ -144,7 +144,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
       <Link
         to={"/login"}
         className={"logout"}
-        style={{ width: isMenuOpen ? "282px" : "auto" }}
+        style={{ width: isMenuOpen ? "100%" : "auto" }}
         onClick={handleLogout}
       >
         <img src={logout} alt="" className={"logout-icon"} />
