@@ -122,7 +122,7 @@ const Header: FC<HeaderProperties> = ({
         </Flex>
         <Group justify="space-between" w="100%" pl={link ? 0 : "md"}>
           {link ? (
-            <Group miw={280} gap={"sm"}>
+            <Group gap={"sm"}>
               <Combobox
                 onOptionSubmit={() => {
                   setSearchTerm("");
@@ -132,7 +132,7 @@ const Header: FC<HeaderProperties> = ({
               >
                 <Combobox.Target>
                   <TextInput
-                    w={"450px"}
+                    w={"20vw"}
                     placeholder={t("header:header.search-placeholder")}
                     value={searchTerm}
                     onChange={(event) => {
