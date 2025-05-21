@@ -188,7 +188,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         const { scrollHeight, scrollTop, clientHeight } =
           containerReferenceElement;
         if (
-          scrollHeight - scrollTop - clientHeight < 400 &&
+          scrollHeight - scrollTop - clientHeight < 200 &&
           !isRefetching &&
           totalFetched < totalDBRowCount
         ) {
