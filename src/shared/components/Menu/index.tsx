@@ -1,8 +1,10 @@
 import React, { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
+import logout from "@public/assets/logout.svg";
 import { useMenuContext } from "@shared/providers/MenuContextProvider.tsx";
+import { useAuthStore } from "@shared/store/authStore.ts";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Menu } from "antd";
 
 import "./index.scss";
@@ -35,6 +37,9 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
   );
   const { setSelectedKeys, selectedKeys } = useMenuContext();
 
+  const { clearTokens } = useAuthStore();
+  const router = useRouter();
+
   const hasPermission = (key: string): boolean => {
     return permissions.includes(`${key}:read`);
   };
@@ -45,6 +50,13 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
 
   const handleMenuItemClick = (parentKey: string): void => {
     setSelectedKeys([parentKey]);
+  };
+
+  const handleLogout = (): void => {
+    clearTokens();
+    router.navigate({ to: "/login", replace: true });
+    // eslint-disable-next-line unicorn/no-null
+    globalThis.history.pushState(null, "", "/login");
   };
 
   const renderMenuItems = (
@@ -67,7 +79,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
             key={item.key}
             title={
               <div
-                className={`${"title"} ${isSubMenu ? "subMenuTitle" : "mainMenuTitle"}`}
+                className={`${"title"} ${isSubMenu ? "subMenuTitle" : "mainMenuTitle"} ${isMenuOpen ? "visible" : ""}`}
               >
                 {!isSubMenu && <div className={"icon"}>{item.icon}</div>}
                 {isSubMenu ? (
@@ -108,7 +120,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
             key={item.key}
             disabled={!itemHasPermission}
             className={"subMenuItem"}
-            onClick={() => handleMenuItemClick(parentKey || item.key)}
+            onClick={() => handleMenuItemClick(parentKey ?? item.key)}
           >
             <Link to={item.href} className={"link"}>
               <span>{item.icon}</span>
@@ -125,12 +137,19 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
       mode="vertical"
       theme="light"
       triggerSubMenuAction={"click"}
-      className={"menu"}
-      style={{ width: isMenuOpen ? "350px" : "72px" }}
+      className={`menu ${isMenuOpen ? "open" : ""}`}
       selectedKeys={selectedKeys}
     >
       {renderMenuItems(menuItems)}
-      <Link to={"/login"}> выход</Link>{" "}
+      <Link
+        to={"/login"}
+        className={"logout"}
+        style={{ width: isMenuOpen ? "282px" : "auto" }}
+        onClick={handleLogout}
+      >
+        <img src={logout} alt="" className={"logout-icon"} />
+        {isMenuOpen && <span>Выход</span>}
+      </Link>{" "}
     </Menu>
   );
 };
