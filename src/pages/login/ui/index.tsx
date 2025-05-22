@@ -3,7 +3,6 @@
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Alert,
   Button,
   Card,
   Group,
@@ -50,12 +49,6 @@ export const LoginPage: FC = () => {
     setIsLoginClicked(true);
     // eslint-disable-next-line unicorn/no-null
     setError(null);
-
-    if (!username || !password) {
-      console.log("Пожалуйста, введите все необходимые данные для входа.");
-      return;
-    }
-
     mutate(
       { username, password },
       {
@@ -111,9 +104,9 @@ export const LoginPage: FC = () => {
     <div className={backgroundState}>
       <Stack gap={0}>
         <Header isBurger={false} isProfile={false} link={false} />
-        <Card w="25%" py={70} miw={400} shadow="xl" withBorder>
+        <Card w="25%" py={70} px={80} miw={510} shadow="xl" withBorder>
           <Group
-            gap="sm"
+            gap="0"
             w="100%"
             style={{
               display: "flex",
@@ -121,57 +114,55 @@ export const LoginPage: FC = () => {
               padding: "0",
             }}
           >
-            {/* <Group gap="xs" my={20}>
-                        <Image src="../../favicon.svg" w={40} h={40} alt="IIS Logo" />
-                        <Text size="44px" fw={700}>
-                            IIS
-                        </Text>
-                    </Group> */}
-            <Text fw={400} size="34px">
+            <Text fw={500} size="34px" className={styles.loginTitle}>
               {t("login:auth.authorization")}
             </Text>
-            {error && (
-              <Alert
-                w="90%"
-                radius="md"
-                title="Ошибка"
-                color="red"
-                // onClick={closeError}
-              >
-                {error}
-              </Alert>
-            )}
             <TextInput
-              w="90%"
+              w="350px"
+              mb={"16px"}
               placeholder={t("login:auth.login-input")}
               label={t("login:auth.login")}
               error={
                 isLoginClicked && !username
                   ? t("login:auth.login-required")
-                  : ""
+                  : // eslint-disable-next-line sonarjs/no-nested-conditional
+                    error
+                    ? "Неверные учетные данные пользователя"
+                    : ""
               }
               inputWrapperOrder={["label", "input", "error"]}
               value={username}
-              radius="md"
+              radius="2px"
               leftSection={<IconAt size={16} />}
-              onChange={(event) => setUsername(event.target.value)}
+              onChange={(event) => {
+                setUsername(event.target.value);
+                if (isLoginClicked) {
+                  // eslint-disable-next-line unicorn/no-null
+                  setError(null);
+                }
+              }}
               onKeyUp={(event) => {
                 if (event.key === "Enter") {
                   onLogin();
                 }
               }}
             />
+
             <TextInput
-              w="90%"
+              w="350px"
+              mb={"26px"}
               placeholder={t("login:auth.enter-password")}
               label={t("login:auth.password")}
               error={
                 isLoginClicked && !password
                   ? t("login:auth.password-required")
-                  : ""
+                  : // eslint-disable-next-line sonarjs/no-nested-conditional
+                    error
+                    ? "Неверные учетные данные пользователя"
+                    : ""
               }
               inputWrapperOrder={["label", "input", "error"]}
-              radius="md"
+              radius="2px"
               type={showPassword ? "text" : "password"}
               leftSection={<IconLock size={16} />}
               rightSection={
@@ -192,18 +183,25 @@ export const LoginPage: FC = () => {
                 </div>
               }
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                if (isLoginClicked) {
+                  // eslint-disable-next-line unicorn/no-null
+                  setError(null);
+                }
+              }}
               onKeyUp={(event) => {
                 if (event.key === "Enter") {
                   onLogin();
                 }
               }}
-            />{" "}
-            <Group w="90%" my={10}>
+            />
+
+            <Group w="350px" my={10}>
               <Button
                 variant="filled"
                 radius="xs"
-                color="#008858"
+                color="#006040"
                 w="100%"
                 size="md"
                 onKeyDown={(event) => {
@@ -212,6 +210,7 @@ export const LoginPage: FC = () => {
                   }
                 }}
                 onClick={onLogin}
+                className={styles.loginBtn}
               >
                 {t("login:auth.sign-in")}
               </Button>

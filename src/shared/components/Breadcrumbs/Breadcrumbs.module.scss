@@ -1,6 +1,8 @@
 .wrapper {
-  padding: 5px 10px;
-  height: 32px;
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 16px;
 }
 
 .bread-crumb-link {

@@ -15,8 +15,9 @@ import {
 import BelarusbankLogo from "@public/assets/logotip.svg";
 import menuItems from "@public/menuItems.json";
 import DocumentationButton from "@shared/components/Header/DocumentationButton/DocumentationButton.tsx";
-import { MenuItem } from "@shared/components/Menu";
+import { MenuItem, SubMenuItem } from "@shared/components/Menu";
 import ThemeSwitcher from "@shared/components/ThemeSwitcher/ThemeSwitcher.tsx";
+import { useMenuContext } from "@shared/providers/MenuContextProvider.tsx";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { Link } from "@tanstack/react-router";
 
@@ -29,15 +30,13 @@ interface HeaderProperties {
   toggleMenu?: () => void;
   isMenuOpen?: boolean;
 }
-const flattenMenuItems = (items: MenuItem[]): MenuItem[] => {
+const flattenMenuItems = (items: (MenuItem | SubMenuItem)[]): MenuItem[] => {
   const flatItems: MenuItem[] = [];
 
-  const recurseItems = (subItems: MenuItem[]): void => {
+  const recurseItems = (subItems: (MenuItem | SubMenuItem)[]): void => {
     for (const item of subItems) {
-      if (item.href) {
-        flatItems.push(item);
-      }
-      if (item.items) {
+      flatItems.push(item); // Добавляем как родительские, так и подменю элементы
+      if ("items" in item && item.items) {
         recurseItems(item.items);
       }
     }
@@ -46,7 +45,6 @@ const flattenMenuItems = (items: MenuItem[]): MenuItem[] => {
   recurseItems(items);
   return flatItems;
 };
-
 const Header: FC<HeaderProperties> = ({
   isBurger,
   isProfile,
@@ -60,19 +58,18 @@ const Header: FC<HeaderProperties> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const { permissions } = usePermissionsStore();
 
-  const flatMenuItems = flattenMenuItems(menuItems);
-  const shouldFilterOptions = !flatMenuItems.some(
-    (item) => t(item.name) === searchTerm,
-  );
-  const filteredItems = shouldFilterOptions
-    ? flatMenuItems.filter((item) => {
-        const hasPermission = permissions.includes(`${item.key}:read`);
-        return (
-          hasPermission &&
-          t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim())
-        );
-      })
-    : flatMenuItems.filter((item) => permissions.includes(`${item.key}:read`));
+  const { clearActiveMenuItem } = useMenuContext();
+  const flatMenuItems = flattenMenuItems(menuItems as MenuItem[]);
+
+  const filteredItems = flatMenuItems.filter((item) => {
+    const hasPermission = permissions.includes(`${item.key}:read`);
+    const hasHref = item.href !== undefined; // Проверка наличия поля href
+    return (
+      hasPermission &&
+      hasHref && // Убедитесь, что элемент имеет поле href
+      t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim())
+    );
+  });
   const options = filteredItems.map((item) => (
     <Link
       key={item.key + item.href}
@@ -103,7 +100,7 @@ const Header: FC<HeaderProperties> = ({
               miw={72}
             >
               <Burger
-                size="sm"
+                size="20px"
                 color="white"
                 style={{
                   display: "flex",
@@ -116,7 +113,7 @@ const Header: FC<HeaderProperties> = ({
             </Flex>
           )}
           {link && (
-            <Link to={"/"}>
+            <Link to={"/"} onClick={clearActiveMenuItem}>
               <Flex direction={"row"} align={"center"} gap="xs">
                 <Image src={BelarusbankLogo} />
               </Flex>
@@ -125,17 +122,23 @@ const Header: FC<HeaderProperties> = ({
         </Flex>
         <Group justify="space-between" w="100%" pl={link ? 0 : "md"}>
           {link ? (
-            <Group miw={280} gap={"sm"}>
+            <Group gap={"sm"}>
               <Combobox
                 onOptionSubmit={() => {
                   setSearchTerm("");
                   combobox.closeDropdown();
                 }}
                 store={combobox}
+                offset={0}
               >
                 <Combobox.Target>
                   <TextInput
-                    w={"450px"}
+                    classNames={{
+                      wrapper: classes.searchInput,
+                      input: classes.searchInput,
+                    }}
+                    radius={"2px"}
+                    w={"20vw"}
                     placeholder={t("header:header.search-placeholder")}
                     value={searchTerm}
                     onChange={(event) => {
@@ -149,11 +152,13 @@ const Header: FC<HeaderProperties> = ({
                   />
                 </Combobox.Target>
 
-                <Combobox.Dropdown>
+                <Combobox.Dropdown style={{ borderRadius: 0 }}>
                   <Combobox.Options>
                     <ScrollArea.Autosize mah={200} type="scroll">
                       {options.length === 0 ? (
-                        <Combobox.Empty>Ничего не найдено</Combobox.Empty>
+                        <Combobox.Empty style={{ textAlign: "start" }}>
+                          Сожалеем, поиск не дал результатов
+                        </Combobox.Empty>
                       ) : (
                         options
                       )}
