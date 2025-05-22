@@ -100,7 +100,7 @@ const Header: FC<HeaderProperties> = ({
               miw={72}
             >
               <Burger
-                size="sm"
+                size="20px"
                 color="white"
                 style={{
                   display: "flex",
@@ -129,9 +129,14 @@ const Header: FC<HeaderProperties> = ({
                   combobox.closeDropdown();
                 }}
                 store={combobox}
+                offset={0}
               >
                 <Combobox.Target>
                   <TextInput
+                    classNames={{
+                      wrapper: classes.searchInput,
+                      input: classes.searchInput,
+                    }}
                     radius={"2px"}
                     w={"20vw"}
                     placeholder={t("header:header.search-placeholder")}
@@ -147,11 +152,13 @@ const Header: FC<HeaderProperties> = ({
                   />
                 </Combobox.Target>
 
-                <Combobox.Dropdown>
+                <Combobox.Dropdown style={{ borderRadius: 0 }}>
                   <Combobox.Options>
                     <ScrollArea.Autosize mah={200} type="scroll">
                       {options.length === 0 ? (
-                        <Combobox.Empty>Ничего не найдено</Combobox.Empty>
+                        <Combobox.Empty style={{ textAlign: "start" }}>
+                          Сожалеем, поиск не дал результатов
+                        </Combobox.Empty>
                       ) : (
                         options
                       )}
