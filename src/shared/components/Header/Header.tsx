@@ -132,6 +132,7 @@ const Header: FC<HeaderProperties> = ({
               >
                 <Combobox.Target>
                   <TextInput
+                    radius={"2px"}
                     w={"20vw"}
                     placeholder={t("header:header.search-placeholder")}
                     value={searchTerm}

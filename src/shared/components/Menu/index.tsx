@@ -52,12 +52,16 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
     setSelectedKeys([parentKey]);
   };
 
+  const { clearActiveMenuItem } = useMenuContext();
   const handleLogout = (): void => {
+    clearActiveMenuItem();
     clearTokens();
     router.navigate({ to: "/login", replace: true });
     // eslint-disable-next-line unicorn/no-null
     globalThis.history.pushState(null, "", "/login");
   };
+
+  console.log("LOG");
 
   const renderMenuItems = (
     items: MenuItem[],

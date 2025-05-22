@@ -3,7 +3,6 @@
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Alert,
   Button,
   Card,
   Group,
@@ -50,12 +49,6 @@ export const LoginPage: FC = () => {
     setIsLoginClicked(true);
     // eslint-disable-next-line unicorn/no-null
     setError(null);
-
-    if (!username || !password) {
-      console.log("Пожалуйста, введите все необходимые данные для входа.");
-      return;
-    }
-
     mutate(
       { username, password },
       {
@@ -130,17 +123,6 @@ export const LoginPage: FC = () => {
             <Text fw={400} size="34px">
               {t("login:auth.authorization")}
             </Text>
-            {error && (
-              <Alert
-                w="90%"
-                radius="md"
-                title="Ошибка"
-                color="red"
-                // onClick={closeError}
-              >
-                {error}
-              </Alert>
-            )}
             <TextInput
               w="90%"
               placeholder={t("login:auth.login-input")}
@@ -148,7 +130,10 @@ export const LoginPage: FC = () => {
               error={
                 isLoginClicked && !username
                   ? t("login:auth.login-required")
-                  : ""
+                  : // eslint-disable-next-line sonarjs/no-nested-conditional
+                    error
+                    ? "Неверные учетные данные пользователя"
+                    : ""
               }
               inputWrapperOrder={["label", "input", "error"]}
               value={username}
@@ -168,7 +153,10 @@ export const LoginPage: FC = () => {
               error={
                 isLoginClicked && !password
                   ? t("login:auth.password-required")
-                  : ""
+                  : // eslint-disable-next-line sonarjs/no-nested-conditional
+                    error
+                    ? "Неверные учетные данные пользователя"
+                    : ""
               }
               inputWrapperOrder={["label", "input", "error"]}
               radius="md"
