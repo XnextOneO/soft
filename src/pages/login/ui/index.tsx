@@ -139,13 +139,20 @@ export const LoginPage: FC = () => {
               value={username}
               radius="md"
               leftSection={<IconAt size={16} />}
-              onChange={(event) => setUsername(event.target.value)}
+              onChange={(event) => {
+                setUsername(event.target.value);
+                if (isLoginClicked) {
+                  // eslint-disable-next-line unicorn/no-null
+                  setError(null);
+                }
+              }}
               onKeyUp={(event) => {
                 if (event.key === "Enter") {
                   onLogin();
                 }
               }}
             />
+
             <TextInput
               w="90%"
               placeholder={t("login:auth.enter-password")}
@@ -180,13 +187,20 @@ export const LoginPage: FC = () => {
                 </div>
               }
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                if (isLoginClicked) {
+                  // eslint-disable-next-line unicorn/no-null
+                  setError(null);
+                }
+              }}
               onKeyUp={(event) => {
                 if (event.key === "Enter") {
                   onLogin();
                 }
               }}
-            />{" "}
+            />
+
             <Group w="90%" my={10}>
               <Button
                 variant="filled"
