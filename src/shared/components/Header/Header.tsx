@@ -136,6 +136,10 @@ const Header: FC<HeaderProperties> = ({
                 <Combobox.Target>
                   <TextInput
                     w={"450px"}
+                    classNames={{
+                      wrapper: classes.searchInput,
+                      input: classes.searchInput,
+                    }}
                     placeholder={t("header:header.search-placeholder")}
                     value={searchTerm}
                     onChange={(event) => {

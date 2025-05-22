@@ -408,7 +408,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       onScroll: (event: UIEvent<HTMLDivElement>) =>
         fetchMoreOnBottomReached(event.target as HTMLDivElement),
       style: {
-        height: "calc(100vh - 140px)",
+        height: "calc(100vh - 124px)",
         overflowY: "auto",
         borderTop: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
       },

@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Checkbox, Flex, Group } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import IconDetails from "@public/assets/details.svg?react";
 import IconDoubleSum from "@public/assets/double-sum.svg?react";
@@ -12,11 +13,13 @@ import {
   ClientStatus,
   ParametersPost,
 } from "@shared/components/MainTable/MainTable.tsx";
-import { IconReload } from "@tabler/icons-react";
+import { IconCloudUp, IconReload } from "@tabler/icons-react";
 import {
   MRT_GlobalFilterTextInput,
   MRT_ShowHideColumnsButton,
 } from "mantine-react-table";
+
+import classes from "../MainTable.module.scss";
 
 interface TopToolbarProperties {
   refetch: () => void;
@@ -41,6 +44,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   const [t] = useTranslation(["top-toolbar"]);
   const [checked, setChecked] = useState(parameters.clientStatus === "ALL");
   const { link } = parameters;
+  const isSmallScreen = useMediaQuery("(max-width: 1180px)"); // Установите нужный вам порог
 
   useEffect(() => {
     setChecked(parameters.clientStatus === "ALL");
@@ -54,23 +58,30 @@ const TopToolbar: FC<TopToolbarProperties> = ({
     setClientStatus(newChecked ? "ALL" : "OPEN");
   };
   return (
-    <Flex direction={"row"} gap={"md"} p={10} justify={"space-between"}>
-      <Group gap="xs">
+    <Flex direction={"row"} gap={"md"} p={5} justify={"space-between"}>
+      <Group gap="8px">
         <Button
-          w={36}
+          w={30}
+          h={30}
           p={0}
           radius="xs"
           color="#007458"
           onClick={() => refetch()}
         >
-          <IconReload />
+          <IconReload width={20} height={20} />
         </Button>
         {updateTable && (
           <>
             {link === "/business-partner" ? (
               <Button
+                className={classes.button}
+                p={0}
+                h={30}
+                w={isSmallScreen ? 30 : "auto"}
+                px={isSmallScreen ? "0" : "sm"}
                 color="#007458"
                 size="sm"
+                style={{ fontSize: "12px" }}
                 radius="xs"
                 onClick={() => {
                   syncDataSCBank(link)
@@ -92,7 +103,11 @@ const TopToolbar: FC<TopToolbarProperties> = ({
                     });
                 }}
               >
-                {t("top-toolbar:top-toolbar.sync-clients")}
+                {isSmallScreen ? (
+                  <IconCloudUp width={20} height={20} />
+                ) : (
+                  t("top-toolbar:top-toolbar.sync-clients")
+                )}{" "}
               </Button>
             ) : (
               <Button
@@ -125,6 +140,10 @@ const TopToolbar: FC<TopToolbarProperties> = ({
         )}
         {link === "/business-partner" && (
           <Checkbox
+            classNames={{
+              label: classes.checkboxLabel,
+            }}
+            size={"xs"}
             color={"#007458"}
             checked={checked}
             label={"Показать все банки, включая закрытые"}
@@ -132,28 +151,29 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           />
         )}
       </Group>
-      <Flex gap={"5"}>
-        <Button w={36} p={5} radius="xs" color="#007458">
+      <Flex gap={"5"} direction={"row"} align={"center"}>
+        <Button w={30} h={30} p={5} radius="xs" color="#007458">
           <IconDetails />
         </Button>
-        <Button w={36} p={5} radius="xs" color="#007458">
+        <Button w={30} h={30} p={5} radius="xs" color="#007458">
           <IconDoubleSum />
         </Button>
-        <Button w={36} p={5} radius="xs" color="#007458">
+        <Button w={30} h={30} p={5} radius="xs" color="#007458">
           <IconSum />
         </Button>
         <DataExportButton
-          w={36}
+          w={30}
+          h={30}
           p={5}
           radius={"xs"}
           color={"#007458"}
           parameters={parameters}
         />
-        <Button w={36} p={5} radius="xs" color="#007458">
+        <Button w={30} h={30} p={5} radius="xs" color="#007458">
           <IconFilter />
         </Button>
-        <MRT_GlobalFilterTextInput table={table} />
-        <MRT_ShowHideColumnsButton table={table} />
+        <MRT_GlobalFilterTextInput size={"xs"} w={"240px"} table={table} />
+        <MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />
       </Flex>
     </Flex>
   );

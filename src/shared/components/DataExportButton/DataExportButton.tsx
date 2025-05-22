@@ -7,6 +7,7 @@ const exports = ["Excel", "Word", "PDF"];
 
 interface DataExportButtonProperties {
   w: number;
+  h: number;
   p: number;
   radius: string;
   color: string;
@@ -15,6 +16,7 @@ interface DataExportButtonProperties {
 
 export const DataExportButton = ({
   w,
+  h,
   p,
   radius,
   color,
@@ -60,6 +62,7 @@ export const DataExportButton = ({
         <Combobox.Target>
           <Button
             w={w}
+            h={h}
             p={p}
             radius={radius}
             color={color}
