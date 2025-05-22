@@ -27,6 +27,8 @@
     "payment-management": "Управление платежами",
     "account-management": "Ведение счетов НОСТРО/ЛОРО",
     "user-profile": "Профиль пользователя",
-    "login": "логин"
+    "login": "логин",
+    "business-partner": "Деловой партнер",
+    "customer-file": "Картотека клиентов"
   }
 }

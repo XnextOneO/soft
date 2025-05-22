@@ -1,0 +1,22 @@
+.mantine-modal-body	 {
+  padding-top: var(--mb-padding, var(--mantine-spacing-md));
+}
+
+.header {
+  background: #006040;
+  padding: 16px 12px;
+}
+
+.title {
+  color: #FFF;
+  font-weight: 500;
+  font-size: 18px
+}
+
+.close {
+  color: #FFF;
+}
+
+.close:hover {
+  background-color: transparent;
+}

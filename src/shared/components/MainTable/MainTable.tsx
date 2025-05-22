@@ -1,23 +1,45 @@
-import { FC, JSX, useEffect, useState } from "react";
+import {
+  FC,
+  JSX,
+  type UIEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
-import { Flex, Text, useMantineColorScheme } from "@mantine/core";
-import { LoadingOverlay } from "@mantine/core";
+import {
+  Flex,
+  LoadingOverlay,
+  Text,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
+import IconSort from "@public/assets/IconSort.svg?react";
+import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
+import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
+import { getBPInfo } from "@shared/api/mutation/bpAPI.ts";
 import { postApiData } from "@shared/api/mutation/fetchTableData.ts";
+import {
+  BusinessPartnerData,
+  BusinessPartnerInfoModal,
+} from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
 import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
-import BottomToolbar from "@shared/components/MainTable/components/bottomToolbar.tsx";
 import CreateRowModalContent from "@shared/components/MainTable/components/CreateRowModalContent.tsx";
 import EditRowModalContent from "@shared/components/MainTable/components/EditRowModalContent.tsx";
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
 import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
+import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
-import DirectoriesStore from "@shared/store/directoriesStore.ts";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   MantineReactTable,
   MRT_ColumnFiltersState,
+  MRT_Icons,
+  MRT_RowVirtualizer,
   MRT_SortingState,
   useMantineReactTable,
 } from "mantine-react-table";
@@ -30,40 +52,73 @@ interface MainTableProperties {
   link: string;
 }
 
+interface BusinessPartnerInfo {
+  data: BusinessPartnerData;
+  columnName: Record<string, string>;
+}
+
+export interface SortCriteria {
+  [key: string]: "ASC" | "DESC";
+}
+export interface FilterCriteria {
+  [key: string]: string;
+}
+
+export interface ParametersPost {
+  link: string;
+  page: number;
+  size: number;
+  searchText: string;
+  sortCriteria: SortCriteria;
+  columnSearchCriteria: FilterCriteria;
+  clientStatus: ClientStatus;
+}
+
+export type ClientStatus = "ALL" | "CLOSED" | "OPEN";
+
+export const translateColumns = (
+  tableColumnsRaw: string[],
+  tableColumnsTranslated: Record<string, string> | undefined,
+): { header: string; accessorKey: string }[] => {
+  return tableColumnsRaw.map((column) => {
+    return {
+      accessorKey: column,
+      header: tableColumnsTranslated?.[`${column}`] || column,
+    };
+  });
+};
+
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
-  const [page, setPage] = useState<number>(1);
-  const [size, setSize] = useState<number>(20);
+  const size = 25;
+  const tableContainerReference = useRef<HTMLDivElement>(null);
+  const rowVirtualizerInstanceReference = useRef<MRT_RowVirtualizer>(null);
+
   const [localization, setLocalization] = useState(MRT_Localization_RU);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [createModalOpened, setCreateModalOpened] = useState(false);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
-  const [opened, setOpened] = useState(false);
+  const [openedUpdateModal, setOpenedUpdateModal] = useState(false);
+  const [openedBPInfoModal, setOpenedBPInfoModal] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
   const debouncedColumnFilter = useDebouncedValue(filter, 200);
+  const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
-  // eslint-disable-next-line unicorn/no-null
-  const [error, setError] = useState<string | null>(null);
+
+  const [error, setError] = useState<string | undefined>();
+  const [BPInfo, setBPInfo] = useState<BusinessPartnerInfo | undefined>();
   const handleGlobalFilterChange = (value: string): void => {
     setGlobalFilter(value);
-    setPage(1);
   };
-  const directoriesStore = new DirectoriesStore();
-  interface SortCriteria {
-    [key: string]: "ASC" | "DESC";
-  }
-  interface FilterCriteria {
-    [key: string]: string;
-  }
 
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
-    const formattedColumn = sort.id
-      .replace(/([a-z])([A-Z])/g, "$1_$2")
-      .toUpperCase();
-    sortCriteria[formattedColumn] = sort.desc ? "DESC" : "ASC";
+    const formattedColumn = sort.id;
+    // .replace(/([a-z])([A-Z])/g, "$1_$2")
+    // .toUpperCase();
+    sortCriteria[`${formattedColumn}`] = sort.desc ? "DESC" : "ASC";
   }
 
   const columnSearchCriteria: FilterCriteria = {};
@@ -72,7 +127,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       const formattedColumn = columnFilter.id
         .replace(/([a-z])([A-Z])/g, "$1_$2")
         .toUpperCase();
-      columnSearchCriteria[formattedColumn] = String(columnFilter.value);
+      columnSearchCriteria[`${formattedColumn}`] = String(columnFilter.value);
     }
   }
 
@@ -90,72 +145,78 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     };
   }, [i18n]);
 
-  const parametersPost = {
+  const parametersPost: ParametersPost = {
     link: link,
-    page: page - 1,
+    page: 0,
     size: size,
     searchText: debouncedGlobalFilter[0],
     sortCriteria: sortCriteria,
     columnSearchCriteria: columnSearchCriteria,
-    dataStatus: "NOT_DELETED",
+    clientStatus: clientStatus,
   };
+  const { data, refetch, fetchNextPage, isRefetching, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["apiData", parametersPost],
+      queryFn: async ({ pageParam: pageParameter = 0 }) => {
+        setError(undefined);
+        return await postApiData({
+          ...parametersPost,
+          page: pageParameter,
+        });
+      },
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.content.length > 0 ? allPages.length : undefined;
+      },
+      initialPageParam: 0,
+      refetchOnWindowFocus: false,
+    });
 
-  const { data, refetch, isFetching, isLoading } = useQuery({
-    queryKey: ["apiData", parametersPost],
-    queryFn: async () => {
-      // eslint-disable-next-line unicorn/no-null
-      setError(null);
-      try {
-        return await postApiData(parametersPost);
-      } catch (error_) {
-        setError("ошибка сервера");
-        throw error_;
+  const columnsRaw = data?.pages?.[0]?.content[0]
+    ? Object.keys(data?.pages?.[0]?.content[0])
+    : [];
+  const columnsTranslated = data?.pages?.[0]?.columnName;
+
+  const cellValues = useMemo(
+    () => data?.pages.flatMap((page) => page.content) ?? [],
+    [data],
+  );
+  const totalDBRowCount = data?.pages?.[0]?.page?.totalElements ?? 0;
+  const totalFetched = cellValues.length;
+  const fetchMoreOnBottomReached = useCallback(
+    (containerReferenceElement?: HTMLDivElement | null) => {
+      if (containerReferenceElement) {
+        const { scrollHeight, scrollTop, clientHeight } =
+          containerReferenceElement;
+        if (
+          scrollHeight - scrollTop - clientHeight < 200 &&
+          !isRefetching &&
+          totalFetched < totalDBRowCount
+        ) {
+          fetchNextPage();
+        }
       }
     },
-    staleTime: 0,
-    placeholderData: keepPreviousData,
-    retryDelay: 10_000,
-    retry: false,
-  });
+    [fetchNextPage, isRefetching, totalFetched, totalDBRowCount],
+  );
 
-  const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
+  useEffect(() => {
+    if (rowVirtualizerInstanceReference.current) {
+      try {
+        rowVirtualizerInstanceReference.current.scrollToIndex(0);
+      } catch (error_) {
+        console.error(error_);
+      }
+    }
+  }, [sorting, globalFilter]);
 
-  const translateColumns = (
-    tableColumns: string[],
-    tableLink: string,
-  ): { accessorKey: string; header: string }[] => {
-    const directoryEntry = directoriesStore._directories.find(
-      (directory) => directory.link === tableLink,
-    );
+  useEffect(() => {
+    fetchMoreOnBottomReached(tableContainerReference.current);
+  }, [fetchMoreOnBottomReached]);
 
-    const columnsToTranslate = directoryEntry ? directoryEntry.columns : {};
-
-    return tableColumns.map((column) => {
-      // eslint-disable-next-line security/detect-object-injection
-      const translatedHeader = columnsToTranslate[column] || column;
-
-      return {
-        accessorKey: column,
-        header: translatedHeader,
-      };
-    });
-  };
-
-  const cellValues = data?.content
-    ? data.content.map((item: Record<string, string>) => {
-        const object: Record<string, string | boolean> = {};
-        for (const key of Object.keys(item)) {
-          object[key as string] = item[key as string];
-        }
-        return object;
-      })
-    : [];
-
-  const totalElements = data?.page?.totalElements || 0;
-
-  const countPages = data?.page?.totalPages || 0;
-
-  const columnsWithAccessorKey = translateColumns(columns, link);
+  const columnsWithAccessorKey = translateColumns(
+    columnsRaw,
+    columnsTranslated,
+  );
 
   const processedColumns = columnsWithAccessorKey.map((column) => {
     return {
@@ -163,7 +224,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: { cell: any }): JSX.Element => {
         const cellValue = cell.getValue();
-
         if (column.accessorKey === "status") {
           switch (cellValue) {
             case "IN_PROCESSING": {
@@ -223,10 +283,22 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           </div>
         );
       },
-      size: column.header.length > 12 ? 360 : 200,
+      size: column.header?.length > 12 ? 360 : 200,
       sortDescFirst: true,
     };
   });
+
+  const customIcons: Partial<MRT_Icons> = {
+    IconArrowsSort: () => (
+      <SvgButton SvgIcon={IconSort} fillColor={"#999999"} />
+    ),
+    IconSortAscending: () => (
+      <SvgButton SvgIcon={IconSortAscending} fillColor={"#006040"} />
+    ),
+    IconSortDescending: () => (
+      <SvgButton SvgIcon={IconSortDescending} fillColor={"#006040"} />
+    ),
+  };
   const table = useMantineReactTable({
     onGlobalFilterChange: handleGlobalFilterChange,
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -240,17 +312,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         setCreateRowModalOpened={setCreateModalOpened}
       />
     ),
-    renderBottomToolbarCustomActions: (): JSX.Element => (
-      <BottomToolbar
-        page={page}
-        size={size}
-        totalElements={totalElements}
-        countPages={countPages}
-        parameters={parametersPost}
-        setPage={setPage}
-        setSize={setSize}
-      />
-    ),
     renderEditRowModalContent: ({ row }) => (
       <EditRowModalContent
         row={row}
@@ -261,23 +322,51 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         classes={classes}
       />
     ),
-
     // eslint-disable-next-line @typescript-eslint/no-shadow
     renderRowActions: ({ row, table }) => (
       <RowActions row={row} table={table} />
     ),
     renderTopToolbar: () => (
       <TopToolbar
+        parameters={parametersPost}
         refetch={refetch}
-        setOpened={setOpened}
+        setOpened={setOpenedUpdateModal}
         table={table}
         canCreate={false}
         updateTable={updateTable}
+        setClientStatus={setClientStatus}
       />
     ),
     onCreatingRowSave: async ({ exitCreatingMode }) => {
       exitCreatingMode();
     },
+    getRowId: (row) => row.userId,
+    mantineTableBodyRowProps: ({ row }) => {
+      if (link === "/business-partner") {
+        return {
+          onClick: async (): Promise<void> => {
+            const response = await getBPInfo(
+              "/business-partner",
+              row.original.clientId,
+            );
+            if (response) {
+              setBPInfo({
+                data: response.data,
+                columnName: response.columnName,
+              });
+              setOpenedBPInfoModal(true);
+            } else {
+              setBPInfo(undefined);
+            }
+          },
+          style: {
+            cursor: "pointer",
+          },
+        };
+      }
+      return {};
+    },
+    icons: customIcons,
     enableFilters: true,
     displayColumnDefOptions: {
       "mrt-row-actions": {
@@ -286,12 +375,14 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       },
     },
     editDisplayMode: "modal",
+    enableRowVirtualization: true,
+    // enableEditing: isEdit && link !== "/business-partner",
     enableEditing: false,
     columns: processedColumns,
     data: cellValues,
     state: {
       isLoading: isLoading,
-      showProgressBars: isFetching,
+      showProgressBars: isRefetching,
       sorting,
     },
     initialState: {
@@ -313,8 +404,11 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       },
     },
     mantineTableContainerProps: {
+      ref: tableContainerReference,
+      onScroll: (event: UIEvent<HTMLDivElement>) =>
+        fetchMoreOnBottomReached(event.target as HTMLDivElement),
       style: {
-        height: "calc(100vh - 192px)",
+        height: "calc(100vh - 124px)",
         overflowY: "auto",
         borderTop: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
       },
@@ -328,6 +422,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     enableDensityToggle: false,
     enableStickyHeader: true,
     enableRowSelection: false,
+    enableMultiRowSelection: false,
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
@@ -365,7 +460,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       </Flex>
     );
   }
-
   return data ? (
     <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"}>
       <MantineReactTable table={table} />
@@ -373,8 +467,15 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       {updateTable && (
         <UpdateTableModal
           link={link}
-          opened={opened}
-          close={() => setOpened(false)}
+          opened={openedUpdateModal}
+          close={() => setOpenedUpdateModal(false)}
+        />
+      )}
+      {link === "/business-partner" && (
+        <BusinessPartnerInfoModal
+          data={BPInfo}
+          opened={openedBPInfoModal}
+          close={() => setOpenedBPInfoModal(false)}
         />
       )}
     </Flex>
