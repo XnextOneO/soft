@@ -104,9 +104,9 @@ export const LoginPage: FC = () => {
     <div className={backgroundState}>
       <Stack gap={0}>
         <Header isBurger={false} isProfile={false} link={false} />
-        <Card w="25%" py={70} miw={400} shadow="xl" withBorder>
+        <Card w="25%" py={70} px={80} miw={510} shadow="xl" withBorder>
           <Group
-            gap="sm"
+            gap="0"
             w="100%"
             style={{
               display: "flex",
@@ -114,17 +114,12 @@ export const LoginPage: FC = () => {
               padding: "0",
             }}
           >
-            {/* <Group gap="xs" my={20}>
-                        <Image src="../../favicon.svg" w={40} h={40} alt="IIS Logo" />
-                        <Text size="44px" fw={700}>
-                            IIS
-                        </Text>
-                    </Group> */}
-            <Text fw={400} size="34px">
+            <Text fw={500} size="34px" className={styles.loginTitle}>
               {t("login:auth.authorization")}
             </Text>
             <TextInput
-              w="90%"
+              w="350px"
+              mb={"16px"}
               placeholder={t("login:auth.login-input")}
               label={t("login:auth.login")}
               error={
@@ -137,7 +132,7 @@ export const LoginPage: FC = () => {
               }
               inputWrapperOrder={["label", "input", "error"]}
               value={username}
-              radius="md"
+              radius="2px"
               leftSection={<IconAt size={16} />}
               onChange={(event) => {
                 setUsername(event.target.value);
@@ -154,7 +149,8 @@ export const LoginPage: FC = () => {
             />
 
             <TextInput
-              w="90%"
+              w="350px"
+              mb={"26px"}
               placeholder={t("login:auth.enter-password")}
               label={t("login:auth.password")}
               error={
@@ -166,7 +162,7 @@ export const LoginPage: FC = () => {
                     : ""
               }
               inputWrapperOrder={["label", "input", "error"]}
-              radius="md"
+              radius="2px"
               type={showPassword ? "text" : "password"}
               leftSection={<IconLock size={16} />}
               rightSection={
@@ -201,11 +197,11 @@ export const LoginPage: FC = () => {
               }}
             />
 
-            <Group w="90%" my={10}>
+            <Group w="350px" my={10}>
               <Button
                 variant="filled"
                 radius="xs"
-                color="#008858"
+                color="#006040"
                 w="100%"
                 size="md"
                 onKeyDown={(event) => {
@@ -214,6 +210,7 @@ export const LoginPage: FC = () => {
                   }
                 }}
                 onClick={onLogin}
+                className={styles.loginBtn}
               >
                 {t("login:auth.sign-in")}
               </Button>
