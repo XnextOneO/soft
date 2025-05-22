@@ -1,11 +1,15 @@
 .mantine-modal-body	 {
   padding: 0 !important;
+  border-radius: 2px 2px 0 0;
+
 }
 
 .header {
+  top: 0 !important;
+  z-index: 999 !important;
   background: #006040;
-  padding: 16px 12px;
-  border-radius: 2px 2px 0 0;
+  padding: 16px 12px !important;
+  border-radius: 0 !important;
 }
 
 .title {
