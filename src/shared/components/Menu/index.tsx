@@ -154,7 +154,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
       >
         <img src={logout} alt="" className={"logout-icon"} />
         {isMenuOpen && <span>Выход</span>}
-      </Link>{" "}
+      </Link>
     </Menu>
   );
 };
