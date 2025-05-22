@@ -1,10 +1,11 @@
 .mantine-modal-body	 {
-  padding-top: var(--mb-padding, var(--mantine-spacing-md));
+  padding: 0 !important;
 }
 
 .header {
   background: #006040;
   padding: 16px 12px;
+  border-radius: 2px 2px 0 0;
 }
 
 .title {

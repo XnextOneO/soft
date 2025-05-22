@@ -86,7 +86,7 @@ export const BusinessPartnerInfoModal = ({
       }}
       size={"80%"}
     >
-      <Stack gap={16}>
+      <Stack gap={16} p={"20px"}>
         <Card w="100%" p={4} style={{ borderBottom: "1px solid #EBEDF0" }}>
           <Group gap={16}>
             <DataField
