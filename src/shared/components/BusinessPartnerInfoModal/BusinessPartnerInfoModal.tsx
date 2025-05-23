@@ -79,6 +79,7 @@ export const BusinessPartnerInfoModal = ({
       }}
       centered
       classNames={{
+        content: classes.content,
         body: classes.mantineModalBody,
         header: classes.header,
         title: classes.title,
