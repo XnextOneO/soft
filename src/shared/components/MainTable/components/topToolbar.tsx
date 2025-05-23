@@ -114,6 +114,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
                 color="#007458"
                 size="sm"
                 radius="xs"
+                h={30}
                 onClick={() => setOpened(true)}
               >
                 {t("top-toolbar:top-toolbar.update-table")}
