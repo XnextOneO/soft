@@ -426,7 +426,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
-    enableColumnVirtualization: true,
+    enableColumnVirtualization: false,
     enableColumnActions: false,
     mantineTableProps: {
       striped: "even",
