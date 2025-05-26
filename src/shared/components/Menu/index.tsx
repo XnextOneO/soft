@@ -1,10 +1,9 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import logout from "@public/assets/logout.svg";
-import { useMenuContext } from "@shared/providers/MenuContextProvider.tsx";
 import { useAuthStore } from "@shared/store/authStore.ts";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { Menu } from "antd";
 
 import "./index.scss";
@@ -35,10 +34,11 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
   const [searchValues, setSearchValues] = useState<{ [key: string]: string }>(
     {},
   );
-  const { setSelectedKeys, selectedKeys } = useMenuContext();
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
   const { clearTokens } = useAuthStore();
   const router = useRouter();
+  const location = useLocation();
 
   const hasPermission = (key: string): boolean => {
     return permissions.includes(`${key}:read`);
@@ -52,16 +52,42 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
     setSelectedKeys([parentKey]);
   };
 
-  const { clearActiveMenuItem } = useMenuContext();
   const handleLogout = (): void => {
-    clearActiveMenuItem();
     clearTokens();
     router.navigate({ to: "/login", replace: true });
     // eslint-disable-next-line unicorn/no-null
     globalThis.history.pushState(null, "", "/login");
   };
 
-  console.log("LOG");
+  useEffect(() => {
+    const currentPath = location.pathname;
+
+    const setActiveKey = (
+      items: MenuItem[],
+      // eslint-disable-next-line unicorn/no-null
+      parentKey: string | null = null,
+    ): boolean => {
+      for (const item of items) {
+        if (item.href && currentPath === item.href) {
+          setSelectedKeys([parentKey ?? item.key]);
+          return true;
+        }
+        if (item.items) {
+          const found = setActiveKey(item.items as MenuItem[], item.key);
+          if (found) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    // Устанавливаем активный ключ при изменении URL
+    if (!setActiveKey(menuItems) || currentPath === "/") {
+      // Если совпадений не найдено или текущий путь корневой, очищаем массив активных ключей
+      setSelectedKeys([]);
+    }
+  }, [location.pathname, menuItems]);
 
   const renderMenuItems = (
     items: MenuItem[],
