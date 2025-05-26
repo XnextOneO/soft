@@ -82,9 +82,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
       return false;
     };
 
-    // Устанавливаем активный ключ при изменении URL
     if (!setActiveKey(menuItems) || currentPath === "/") {
-      // Если совпадений не найдено или текущий путь корневой, очищаем массив активных ключей
       setSelectedKeys([]);
     }
   }, [location.pathname, menuItems]);
