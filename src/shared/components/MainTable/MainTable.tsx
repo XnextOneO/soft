@@ -149,7 +149,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     link: link,
     page: 0,
     size: size,
-    searchText: debouncedGlobalFilter[0],
+    searchText: debouncedGlobalFilter[0] ?? "",
     sortCriteria: sortCriteria,
     columnSearchCriteria: columnSearchCriteria,
     clientStatus: clientStatus,
@@ -180,7 +180,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     () => data?.pages.flatMap((page) => page.content) ?? [],
     [data],
   );
-  const totalDBRowCount = data?.pages?.[0]?.page?.totalElements ?? 0;
+  const totalDBRowCount = data?.pages?.[0]?.pageInfo?.totalElements ?? 0;
   const totalFetched = cellValues.length;
   const fetchMoreOnBottomReached = useCallback(
     (containerReferenceElement?: HTMLDivElement | null) => {
@@ -351,7 +351,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             );
             if (response) {
               setBPInfo({
-                data: response.data,
+                data: response,
                 columnName: response.columnName,
               });
               setOpenedBPInfoModal(true);
@@ -405,8 +405,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     },
     mantineTableContainerProps: {
       ref: tableContainerReference,
-      onScroll: (event: UIEvent<HTMLDivElement>) =>
-        fetchMoreOnBottomReached(event.target as HTMLDivElement),
+      onScroll: (event: UIEvent<HTMLDivElement>) => {
+        fetchMoreOnBottomReached(event.target as HTMLDivElement);
+      },
       style: {
         height: "calc(100vh - 124px)",
         overflowY: "auto",
@@ -426,7 +427,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnResizing: true,
-    enableColumnVirtualization: true,
+    enableColumnVirtualization: false,
     enableColumnActions: false,
     mantineTableProps: {
       striped: "even",
