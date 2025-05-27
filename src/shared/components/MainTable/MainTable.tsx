@@ -94,7 +94,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     link: link,
     page: page - 1,
     size: size,
-    searchText: debouncedGlobalFilter[0],
+    searchText: debouncedGlobalFilter[0] ?? "",
     sortCriteria: sortCriteria,
     columnSearchCriteria: columnSearchCriteria,
     dataStatus: "NOT_DELETED",
