@@ -117,9 +117,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
   const [error, setError] = useState<string | undefined>();
   const [BPInfo, setBPInfo] = useState<BusinessPartnerInfo | undefined>();
-  const handleGlobalFilterChange = (value: string): void => {
-    setGlobalFilter(value);
-  };
 
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
@@ -157,14 +154,14 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     link: link,
     page: 0,
     size: size,
-    searchText: debouncedGlobalFilter[0] ?? "",
+    searchText: debouncedGlobalFilter[0],
     sortCriteria: sortCriteria,
     columnSearchCriteria: columnSearchCriteria,
     clientStatus: clientStatus,
   };
   const { data, refetch, fetchNextPage, isRefetching, isLoading } =
     useInfiniteQuery<ITableDataResponse>({
-      queryKey: ["apiData", parametersPost],
+      queryKey: ["apiData", parametersPost, debouncedGlobalFilter],
       queryFn: async ({ pageParam: pageParameter = 0 }) => {
         setError(undefined);
         return await postApiData({
@@ -329,7 +326,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     ),
   };
   const table = useMantineReactTable({
-    onGlobalFilterChange: handleGlobalFilterChange,
+    onGlobalFilterChange: setGlobalFilter,
     // eslint-disable-next-line @typescript-eslint/no-shadow
     renderCreateRowModalContent: ({ table, row }) => (
       <CreateRowModalContent
@@ -409,6 +406,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     columns: processedColumns,
     data: cellValues,
     state: {
+      globalFilter,
       isLoading: isLoading,
       showProgressBars: isRefetching,
       sorting,
