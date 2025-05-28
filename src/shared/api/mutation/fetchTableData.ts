@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
 
@@ -14,10 +13,22 @@ interface PostApiDataParameters {
   };
   // dataStatus: string;
 }
+interface ApiResponse {
+  columnName: {
+    [key: string]: string;
+  };
+  content: [];
+  pageInfo: {
+    number: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  };
+}
 
 export const postApiData = async (
   parameters: PostApiDataParameters,
-): Promise<any> => {
+): Promise<ApiResponse> => {
   const storedData = localStorage.getItem("auth-storage");
 
   const accessToken = storedData

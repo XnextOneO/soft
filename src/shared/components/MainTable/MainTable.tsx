@@ -34,7 +34,7 @@ import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import {
   MantineReactTable,
   MRT_ColumnFiltersState,
@@ -89,7 +89,7 @@ export const translateColumns = (
 };
 
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
-  const size = 25;
+  const size = 30;
   const tableContainerReference = useRef<HTMLDivElement>(null);
   const rowVirtualizerInstanceReference = useRef<MRT_RowVirtualizer>(null);
 
@@ -171,6 +171,21 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       refetchOnWindowFocus: false,
     });
 
+  const queryClient = useQueryClient();
+
+  const handleRefetch = async (): Promise<void> => {
+    queryClient.setQueryData(["apiData", parametersPost], (data) => ({
+      pages: data.pages.slice(0, 1),
+      pageParams: data.pageParams.slice(0, 1),
+    }));
+
+    await refetch();
+
+    if (tableContainerReference.current) {
+      tableContainerReference.current.scrollTo(0, 0);
+    }
+  };
+
   const columnsRaw = data?.pages?.[0]?.content[0]
     ? Object.keys(data?.pages?.[0]?.content[0])
     : [];
@@ -180,6 +195,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     () => data?.pages.flatMap((page) => page.content) ?? [],
     [data],
   );
+
   const totalDBRowCount = data?.pages?.[0]?.pageInfo?.totalElements ?? 0;
   const totalFetched = cellValues.length;
   const fetchMoreOnBottomReached = useCallback(
@@ -187,6 +203,14 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       if (containerReferenceElement) {
         const { scrollHeight, scrollTop, clientHeight } =
           containerReferenceElement;
+        console.log({
+          scrollHeight,
+          scrollTop,
+          clientHeight,
+          isRefetching,
+          totalFetched,
+          totalDBRowCount,
+        });
         if (
           scrollHeight - scrollTop - clientHeight < 200 &&
           !isRefetching &&
@@ -329,7 +353,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     renderTopToolbar: () => (
       <TopToolbar
         parameters={parametersPost}
-        refetch={refetch}
+        refetch={handleRefetch}
         setOpened={setOpenedUpdateModal}
         table={table}
         canCreate={false}
