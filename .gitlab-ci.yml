@@ -5,7 +5,7 @@ workflow:
         RUNNER_TAG: "sca-iis-dev"
     - if: '$CI_COMMIT_BRANCH == "dev"'
       variables:
-        RUNNER_TAG: "sca-iis-dev"  
+        RUNNER_TAG: "sca-iis-dev"
 
 variables:
   #DOCKER_HOST: tcp://docker:2375/
@@ -84,14 +84,14 @@ push_image_job:
   script:
     - echo "Pushing Docker image to local registry..."
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
-    - VERSION_TAG=$(git describe --tags --abbrev=0 | sed 's/-.*//')
-    - echo "Current version '$VERSION_TAG'"
-    - FULL_VERSION="$VERSION_TAG.$CI_PIPELINE_ID"
-    - echo "Full version '$FULL_VERSION'"
+    #- VERSION_TAG=$(git describe --tags --abbrev=0 | sed 's/-.*//')
+    #- echo "Current version '$VERSION_TAG'"
+    #- FULL_VERSION="$VERSION_TAG.$CI_PIPELINE_ID"
+    #- echo "Full version '$FULL_VERSION'"
     - docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
-    - docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:$FULL_VERSION-$CI_COMMIT_BRANCH
+    #- docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:$FULL_VERSION-$CI_COMMIT_BRANCH
     - docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
-    - docker push $CI_REGISTRY_IMAGE:$FULL_VERSION-$CI_COMMIT_BRANCH
+    #- docker push $CI_REGISTRY_IMAGE:$FULL_VERSION-$CI_COMMIT_BRANCH
 
   dependencies:
    - build_job
@@ -104,3 +104,4 @@ cleanup_job:
     - echo "Build dir is $CI_PROJECT_DIR"
     - rm -rf $CI_PROJECT_DIR
 
+  
