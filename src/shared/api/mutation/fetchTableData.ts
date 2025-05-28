@@ -13,11 +13,11 @@ interface PostApiDataParameters {
   };
   // dataStatus: string;
 }
-interface ApiResponse {
+export interface ITableDataResponse {
   columnName: {
     [key: string]: string;
   };
-  content: [];
+  content: IContentItem[];
   pageInfo: {
     number: number;
     size: number;
@@ -26,9 +26,14 @@ interface ApiResponse {
   };
 }
 
+export interface IContentItem {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}
+
 export const postApiData = async (
   parameters: PostApiDataParameters,
-): Promise<ApiResponse> => {
+): Promise<ITableDataResponse> => {
   const storedData = localStorage.getItem("auth-storage");
 
   const accessToken = storedData

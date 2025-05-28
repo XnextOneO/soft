@@ -21,7 +21,10 @@ import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
 import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
 import { getBPInfo } from "@shared/api/mutation/bpAPI.ts";
-import { postApiData } from "@shared/api/mutation/fetchTableData.ts";
+import {
+  ITableDataResponse,
+  postApiData,
+} from "@shared/api/mutation/fetchTableData.ts";
 import {
   BusinessPartnerData,
   BusinessPartnerInfoModal,
@@ -72,6 +75,11 @@ export interface ParametersPost {
   sortCriteria: SortCriteria;
   columnSearchCriteria: FilterCriteria;
   clientStatus: ClientStatus;
+}
+
+interface InfiniteTableDataResponse {
+  pages: ITableDataResponse[];
+  pageParams: number[];
 }
 
 export type ClientStatus = "ALL" | "CLOSED" | "OPEN";
@@ -155,13 +163,13 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     clientStatus: clientStatus,
   };
   const { data, refetch, fetchNextPage, isRefetching, isLoading } =
-    useInfiniteQuery({
+    useInfiniteQuery<ITableDataResponse>({
       queryKey: ["apiData", parametersPost],
       queryFn: async ({ pageParam: pageParameter = 0 }) => {
         setError(undefined);
         return await postApiData({
           ...parametersPost,
-          page: pageParameter,
+          page: Number(pageParameter),
         });
       },
       getNextPageParam: (lastPage, allPages) => {
@@ -174,10 +182,13 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const queryClient = useQueryClient();
 
   const handleRefetch = async (): Promise<void> => {
-    queryClient.setQueryData(["apiData", parametersPost], (data) => ({
-      pages: data.pages.slice(0, 1),
-      pageParams: data.pageParams.slice(0, 1),
-    }));
+    queryClient.setQueryData(
+      ["apiData", parametersPost],
+      (content: InfiniteTableDataResponse) => ({
+        pages: content.pages.slice(0, 1),
+        pageParams: content.pageParams.slice(0, 1),
+      }),
+    );
 
     await refetch();
 
@@ -186,9 +197,11 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     }
   };
 
-  const columnsRaw = data?.pages?.[0]?.content[0]
-    ? Object.keys(data?.pages?.[0]?.content[0])
-    : [];
+  const columnsRaw =
+    data?.pages?.length && data.pages[0]?.content.length
+      ? Object.keys(data.pages[0].content[0] || {})
+      : [];
+
   const columnsTranslated = data?.pages?.[0]?.columnName;
 
   const cellValues = useMemo(
@@ -203,14 +216,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       if (containerReferenceElement) {
         const { scrollHeight, scrollTop, clientHeight } =
           containerReferenceElement;
-        console.log({
-          scrollHeight,
-          scrollTop,
-          clientHeight,
-          isRefetching,
-          totalFetched,
-          totalDBRowCount,
-        });
         if (
           scrollHeight - scrollTop - clientHeight < 200 &&
           !isRefetching &&
@@ -364,7 +369,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     onCreatingRowSave: async ({ exitCreatingMode }) => {
       exitCreatingMode();
     },
-    getRowId: (row) => row.userId,
     mantineTableBodyRowProps: ({ row }) => {
       if (link === "/business-partner") {
         return {
@@ -375,7 +379,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             );
             if (response) {
               setBPInfo({
-                data: response,
+                data: response.data,
                 columnName: response.columnName,
               });
               setOpenedBPInfoModal(true);
