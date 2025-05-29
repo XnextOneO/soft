@@ -9,12 +9,7 @@ import {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Flex,
-  LoadingOverlay,
-  Text,
-  useMantineColorScheme,
-} from "@mantine/core";
+import { Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { useDebouncedCallback, useDebouncedValue } from "@mantine/hooks";
 import IconSort from "@public/assets/IconSort.svg?react";
 import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
@@ -29,7 +24,6 @@ import {
   BusinessPartnerData,
   BusinessPartnerInfoModal,
 } from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
-import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
 import CreateRowModalContent from "@shared/components/MainTable/components/CreateRowModalContent.tsx";
 import EditRowModalContent from "@shared/components/MainTable/components/EditRowModalContent.tsx";
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
@@ -331,6 +325,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       <SvgButton SvgIcon={IconSortDescending} fillColor={"#006040"} />
     ),
   };
+  console.log(isRefetching, "isRefetching");
   const table = useMantineReactTable({
     onGlobalFilterChange: handleGlobalFilterChange,
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -414,7 +409,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     state: {
       globalFilter,
       isLoading: isLoading,
-      showProgressBars: isRefetching,
       sorting,
     },
     initialState: {
@@ -493,10 +487,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       </Flex>
     );
   }
-  return data ? (
+  return (
     <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"}>
       <MantineReactTable table={table} />
-      <LoadingOverlay visible={isLoading} />
       {updateTable && (
         <UpdateTableModal
           link={link}
@@ -512,7 +505,5 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         />
       )}
     </Flex>
-  ) : (
-    <MainLoader />
   );
 };
