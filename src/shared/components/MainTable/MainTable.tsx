@@ -10,7 +10,7 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { Flex, Text, useMantineColorScheme } from "@mantine/core";
-import { useDebouncedCallback, useDebouncedValue } from "@mantine/hooks";
+import { useDebouncedCallback } from "@mantine/hooks";
 import IconSort from "@public/assets/IconSort.svg?react";
 import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
 import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
@@ -43,6 +43,7 @@ import {
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru/index.esm.mjs";
 
 import classes from "./MainTable.module.scss";
+type OnChangeFunction<T> = (updaterOrValue: T | ((old: T) => T)) => void;
 
 interface MainTableProperties {
   updateTable: boolean;
@@ -58,7 +59,7 @@ export interface SortCriteria {
   [key: string]: "ASC" | "DESC";
 }
 export interface FilterCriteria {
-  [key: string]: string;
+  [key: string]: string | number;
 }
 
 export interface ParametersPost {
@@ -67,7 +68,7 @@ export interface ParametersPost {
   size: number;
   searchText: string;
   sortCriteria: SortCriteria;
-  columnSearchCriteria: FilterCriteria;
+  searchCriteria: FilterCriteria;
   clientStatus: ClientStatus;
 }
 
@@ -94,16 +95,15 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const size = 30;
   const tableContainerReference = useRef<HTMLDivElement>(null);
   const rowVirtualizerInstanceReference = useRef<MRT_RowVirtualizer>(null);
-
+  const [showColumnFilters, setShowColumnFilters] = useState<boolean>(false);
   const [localization, setLocalization] = useState(MRT_Localization_RU);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [createModalOpened, setCreateModalOpened] = useState(false);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
+  const [filters, setFilters] = useState<MRT_ColumnFiltersState>([]);
   const [openedUpdateModal, setOpenedUpdateModal] = useState(false);
   const [openedBPInfoModal, setOpenedBPInfoModal] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
-  const debouncedColumnFilter = useDebouncedValue(filter, 200);
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
@@ -121,15 +121,33 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
   const debouncedGlobalFilter = useDebouncedCallback((value: string) => {
     setGlobalFilter(value);
-  }, 200);
+  }, 400);
+
+  const handleGlobalFilterChange = (value: string): void => {
+    debouncedGlobalFilter(value);
+  };
+
+  const debouncedColumnFilters = useDebouncedCallback((value) => {
+    setFilters(value);
+  }, 400);
+
+  const handleColumnFilterChange: OnChangeFunction<MRT_ColumnFiltersState> = (
+    updaterOrValue,
+  ) => {
+    if (typeof updaterOrValue === "function") {
+      // If it's a function, call it with the current filters
+      const newFilters = updaterOrValue(filters);
+      debouncedColumnFilters(newFilters);
+    } else {
+      // If it's a new state, just set it directly
+      debouncedColumnFilters(updaterOrValue);
+    }
+  };
 
   const columnSearchCriteria: FilterCriteria = {};
-  for (const columnFilter of debouncedColumnFilter[0]) {
-    if (columnFilter.value) {
-      const formattedColumn = columnFilter.id
-        .replace(/([a-z])([A-Z])/g, "$1_$2")
-        .toUpperCase();
-      columnSearchCriteria[`${formattedColumn}`] = String(columnFilter.value);
+  for (const filter of filters) {
+    if (typeof filter.value === "string" || typeof filter.value === "number") {
+      columnSearchCriteria[filter.id] = filter.value;
     }
   }
 
@@ -153,7 +171,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     size: size,
     searchText: globalFilter ?? "",
     sortCriteria: sortCriteria,
-    columnSearchCriteria: columnSearchCriteria,
+    searchCriteria: columnSearchCriteria,
     clientStatus: clientStatus,
   };
   const { data, refetch, fetchNextPage, isRefetching, isLoading } =
@@ -311,9 +329,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     };
   });
 
-  const handleGlobalFilterChange = (value: string): void => {
-    debouncedGlobalFilter(value);
-  };
   const customIcons: Partial<MRT_Icons> = {
     IconArrowsSort: () => (
       <SvgButton SvgIcon={IconSort} fillColor={"#999999"} />
@@ -325,7 +340,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       <SvgButton SvgIcon={IconSortDescending} fillColor={"#006040"} />
     ),
   };
-  console.log(isRefetching, "isRefetching");
   const table = useMantineReactTable({
     onGlobalFilterChange: handleGlobalFilterChange,
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -355,6 +369,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     ),
     renderTopToolbar: () => (
       <TopToolbar
+        showColumnFilters={showColumnFilters}
+        setShowColumnFilters={setShowColumnFilters}
         parameters={parametersPost}
         refetch={handleRefetch}
         setOpened={setOpenedUpdateModal}
@@ -400,6 +416,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         size: 50,
       },
     },
+    manualFiltering: true,
     editDisplayMode: "modal",
     enableRowVirtualization: true,
     // enableEditing: isEdit && link !== "/business-partner",
@@ -410,6 +427,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       globalFilter,
       isLoading: isLoading,
       sorting,
+      showColumnFilters: showColumnFilters,
     },
     initialState: {
       density: "xs",
@@ -468,7 +486,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     manualSorting: true,
     manualPagination: true,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setFilter,
+    onColumnFiltersChange: handleColumnFilterChange,
     isMultiSortEvent: () => true,
   });
 

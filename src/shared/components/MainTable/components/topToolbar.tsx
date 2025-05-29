@@ -30,6 +30,8 @@ interface TopToolbarProperties {
   canCreate: boolean;
   updateTable?: boolean;
   setClientStatus: React.Dispatch<React.SetStateAction<ClientStatus>>;
+  setShowColumnFilters: React.Dispatch<React.SetStateAction<boolean>>;
+  showColumnFilters: boolean;
 }
 
 const TopToolbar: FC<TopToolbarProperties> = ({
@@ -40,6 +42,8 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   canCreate,
   updateTable,
   setClientStatus,
+  setShowColumnFilters,
+  showColumnFilters,
 }) => {
   const [t] = useTranslation(["top-toolbar"]);
   const [checked, setChecked] = useState(parameters.clientStatus === "ALL");
@@ -170,7 +174,15 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           color={"#007458"}
           parameters={parameters}
         />
-        <Button w={30} h={30} p={5} radius="xs" color="#007458">
+        {/*<MRT_ToggleFiltersButton table={table} />*/}
+        <Button
+          w={30}
+          h={30}
+          p={5}
+          radius="xs"
+          color="#007458"
+          onClick={() => setShowColumnFilters(!showColumnFilters)}
+        >
           <IconFilter />
         </Button>
         <MRT_GlobalFilterTextInput size={"xs"} w={"240px"} table={table} />
