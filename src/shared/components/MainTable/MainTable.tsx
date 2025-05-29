@@ -158,7 +158,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   };
   const { data, refetch, fetchNextPage, isRefetching, isLoading } =
     useInfiniteQuery<ITableDataResponse>({
-      queryKey: ["apiData", parametersPost, debouncedGlobalFilter],
+      queryKey: ["apiData", parametersPost],
       queryFn: async ({ pageParam: pageParameter = 0 }) => {
         setError(undefined);
         return await postApiData({
