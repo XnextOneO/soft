@@ -15,7 +15,7 @@ import {
   Text,
   useMantineColorScheme,
 } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+import { useDebouncedCallback, useDebouncedValue } from "@mantine/hooks";
 import IconSort from "@public/assets/IconSort.svg?react";
 import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
 import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
@@ -109,7 +109,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [openedUpdateModal, setOpenedUpdateModal] = useState(false);
   const [openedBPInfoModal, setOpenedBPInfoModal] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
-  const debouncedGlobalFilter = useDebouncedValue(globalFilter, 200);
   const debouncedColumnFilter = useDebouncedValue(filter, 200);
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
@@ -125,6 +124,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     // .toUpperCase();
     sortCriteria[`${formattedColumn}`] = sort.desc ? "DESC" : "ASC";
   }
+
+  const debouncedGlobalFilter = useDebouncedCallback((value: string) => {
+    setGlobalFilter(value);
+  }, 200);
 
   const columnSearchCriteria: FilterCriteria = {};
   for (const columnFilter of debouncedColumnFilter[0]) {
@@ -154,7 +157,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     link: link,
     page: 0,
     size: size,
-    searchText: debouncedGlobalFilter[0],
+    searchText: globalFilter ?? "",
     sortCriteria: sortCriteria,
     columnSearchCriteria: columnSearchCriteria,
     clientStatus: clientStatus,
@@ -314,6 +317,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     };
   });
 
+  const handleGlobalFilterChange = (value: string): void => {
+    debouncedGlobalFilter(value);
+  };
   const customIcons: Partial<MRT_Icons> = {
     IconArrowsSort: () => (
       <SvgButton SvgIcon={IconSort} fillColor={"#999999"} />
@@ -326,7 +332,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     ),
   };
   const table = useMantineReactTable({
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: handleGlobalFilterChange,
     // eslint-disable-next-line @typescript-eslint/no-shadow
     renderCreateRowModalContent: ({ table, row }) => (
       <CreateRowModalContent
