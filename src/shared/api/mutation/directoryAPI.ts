@@ -77,7 +77,7 @@ export const uploadDirectory = async (
 ): Promise<number> => {
   try {
     const { status } = await $authHost.post(
-      `reference-book/${link}/upload-file`,
+      `${link}/upload-file`,
       formData,
       config,
     );

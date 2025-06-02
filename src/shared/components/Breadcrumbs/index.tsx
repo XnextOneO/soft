@@ -21,7 +21,9 @@ const MyBreadcrumbs = (): React.ReactElement => {
       .filter(Boolean);
     return pathSegments.filter(
       (segment) =>
-        segment !== "nsi" && segment !== "scbank" && segment !== "directories",
+        segment !== "nsi" &&
+        segment !== "scbank" &&
+        segment !== "reference-book",
     );
   }, [location.pathname]);
   const [items, setItems] = useState<{ title: string; href: string }[]>([]);
@@ -54,7 +56,7 @@ const MyBreadcrumbs = (): React.ReactElement => {
       {items.map((item, index) =>
         index === items.length - 1 ? (
           <span key={index}>
-            <Text size="sm">
+            <Text size="14px">
               {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
             </Text>
           </span>

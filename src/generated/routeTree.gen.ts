@@ -18,7 +18,10 @@ import { Route as rootRoute } from './../routes/__root'
 
 const IndexLazyImport = createFileRoute('/')()
 const LoginIndexLazyImport = createFileRoute('/login/')()
-const DirectoriesSlugLazyImport = createFileRoute('/directories/$slug')()
+const ReferenceBookSlugLazyImport = createFileRoute('/reference-book/$slug')()
+const BusinessPartnerSlugLazyImport = createFileRoute(
+  '/business-partner/$slug',
+)()
 
 // Create/Update Routes
 
@@ -36,12 +39,20 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   import('./../routes/login/index.lazy').then((d) => d.Route),
 )
 
-const DirectoriesSlugLazyRoute = DirectoriesSlugLazyImport.update({
-  id: '/directories/$slug',
-  path: '/directories/$slug',
+const ReferenceBookSlugLazyRoute = ReferenceBookSlugLazyImport.update({
+  id: '/reference-book/$slug',
+  path: '/reference-book/$slug',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./../routes/directories/$slug.lazy').then((d) => d.Route),
+  import('./../routes/reference-book/$slug.lazy').then((d) => d.Route),
+)
+
+const BusinessPartnerSlugLazyRoute = BusinessPartnerSlugLazyImport.update({
+  id: '/business-partner/$slug',
+  path: '/business-partner/$slug',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./../routes/business-partner/$slug.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -55,11 +66,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/directories/$slug': {
-      id: '/directories/$slug'
-      path: '/directories/$slug'
-      fullPath: '/directories/$slug'
-      preLoaderRoute: typeof DirectoriesSlugLazyImport
+    '/business-partner/$slug': {
+      id: '/business-partner/$slug'
+      path: '/business-partner/$slug'
+      fullPath: '/business-partner/$slug'
+      preLoaderRoute: typeof BusinessPartnerSlugLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/reference-book/$slug': {
+      id: '/reference-book/$slug'
+      path: '/reference-book/$slug'
+      fullPath: '/reference-book/$slug'
+      preLoaderRoute: typeof ReferenceBookSlugLazyImport
       parentRoute: typeof rootRoute
     }
     '/login/': {
@@ -76,41 +94,55 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/directories/$slug': typeof DirectoriesSlugLazyRoute
+  '/business-partner/$slug': typeof BusinessPartnerSlugLazyRoute
+  '/reference-book/$slug': typeof ReferenceBookSlugLazyRoute
   '/login': typeof LoginIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/directories/$slug': typeof DirectoriesSlugLazyRoute
+  '/business-partner/$slug': typeof BusinessPartnerSlugLazyRoute
+  '/reference-book/$slug': typeof ReferenceBookSlugLazyRoute
   '/login': typeof LoginIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/directories/$slug': typeof DirectoriesSlugLazyRoute
+  '/business-partner/$slug': typeof BusinessPartnerSlugLazyRoute
+  '/reference-book/$slug': typeof ReferenceBookSlugLazyRoute
   '/login/': typeof LoginIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/directories/$slug' | '/login'
+  fullPaths:
+    | '/'
+    | '/business-partner/$slug'
+    | '/reference-book/$slug'
+    | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/directories/$slug' | '/login'
-  id: '__root__' | '/' | '/directories/$slug' | '/login/'
+  to: '/' | '/business-partner/$slug' | '/reference-book/$slug' | '/login'
+  id:
+    | '__root__'
+    | '/'
+    | '/business-partner/$slug'
+    | '/reference-book/$slug'
+    | '/login/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  DirectoriesSlugLazyRoute: typeof DirectoriesSlugLazyRoute
+  BusinessPartnerSlugLazyRoute: typeof BusinessPartnerSlugLazyRoute
+  ReferenceBookSlugLazyRoute: typeof ReferenceBookSlugLazyRoute
   LoginIndexLazyRoute: typeof LoginIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  DirectoriesSlugLazyRoute: DirectoriesSlugLazyRoute,
+  BusinessPartnerSlugLazyRoute: BusinessPartnerSlugLazyRoute,
+  ReferenceBookSlugLazyRoute: ReferenceBookSlugLazyRoute,
   LoginIndexLazyRoute: LoginIndexLazyRoute,
 }
 
@@ -125,15 +157,19 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/directories/$slug",
+        "/business-partner/$slug",
+        "/reference-book/$slug",
         "/login/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/directories/$slug": {
-      "filePath": "directories/$slug.lazy.tsx"
+    "/business-partner/$slug": {
+      "filePath": "business-partner/$slug.lazy.tsx"
+    },
+    "/reference-book/$slug": {
+      "filePath": "reference-book/$slug.lazy.tsx"
     },
     "/login/": {
       "filePath": "login/index.lazy.tsx"

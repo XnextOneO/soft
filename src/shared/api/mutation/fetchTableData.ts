@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
 
@@ -12,29 +11,32 @@ interface PostApiDataParameters {
   sortCriteria?: {
     [key: string]: string;
   };
-  dataStatus: string;
+  // dataStatus: string;
+}
+export interface ITableDataResponse {
+  columnName: {
+    [key: string]: string;
+  };
+  content: IContentItem[];
+  page: {
+    number: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  };
+}
+
+export interface IContentItem {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }
 
 export const postApiData = async (
   parameters: PostApiDataParameters,
-): Promise<any> => {
-  const storedData = localStorage.getItem("auth-storage");
-
-  const accessToken = storedData
-    ? JSON.parse(storedData).state.accessToken
-    : // eslint-disable-next-line unicorn/no-null
-      null;
+): Promise<ITableDataResponse> => {
   try {
     const { link } = parameters;
-    const response = await $authHost.post(
-      `reference-book/${link}/search`,
-      parameters,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    );
+    const response = await $authHost.post(`${link}/search`, parameters);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {

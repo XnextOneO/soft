@@ -192,7 +192,6 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Cell: ({ cell }: { cell: any }): JSX.Element => {
         const cellValue = cell.getValue();
-
         return (
           <div>
             <PopoverCell>{cellValue}</PopoverCell>

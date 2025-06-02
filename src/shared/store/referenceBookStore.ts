@@ -1,16 +1,16 @@
 import { makeAutoObservable } from "mobx";
 
-export interface IDirectory {
+export interface IReferenceBook {
   name: string;
   link: string;
   columns: { [key: string]: string };
 }
 
-export default class DirectoriesStore {
-  public _directories: IDirectory[] = [
+export default class ReferenceBookStore {
+  public _referenceBooks: IReferenceBook[] = [
     {
       name: "Справочник кодов категории назначения перевода",
-      link: "nsi/transfer-destination-category-code",
+      link: "/reference-book/nsi/transfer-destination-category-code",
       columns: {
         code: "Код назначения платежа",
         name: "Наименование кода назначения платежа",
@@ -20,7 +20,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник кодов идентификации организации",
-      link: "nsi/organization-identification-code",
+      link: "/reference-book/nsi/organization-identification-code",
       columns: {
         code: "Код идентификации организации",
         name: "Наименование кода идентификации организации",
@@ -30,7 +30,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник кодов отмены перевода",
-      link: "nsi/transfer-cancellation-code",
+      link: "/reference-book/nsi/transfer-cancellation-code",
       columns: {
         code: "Код отмены перевода",
         name: "Наименование кода отмены перевода",
@@ -40,7 +40,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник кодов статусов перевода",
-      link: "nsi/transfer-status-code",
+      link: "/reference-book/nsi/transfer-status-code",
       columns: {
         code: "Код статуса перевода",
         name: "Наименование кода статуса перевода",
@@ -50,7 +50,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник балансовых счетов Национального банка",
-      link: "nsi/balance-account-nb",
+      link: "/reference-book/nsi/balance-account-nb",
       columns: {
         firstOrderBalanceAccountNumber:
           "Номер балансового счета 1-го порядка (класс)",
@@ -66,7 +66,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник балансовых счетов банков",
-      link: "nsi/balance-account",
+      link: "/reference-book/nsi/balance-account",
       columns: {
         firstOrderBalanceAccountNumber:
           "Номер балансового счета 1-го порядка (класс)",
@@ -82,7 +82,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник кодов и наименований валют и драгоценных металлов",
-      link: "nsi/currency",
+      link: "/reference-book/nsi/currency",
       columns: {
         digitalCurrencyCode: "Цифровой код валюты, драгоценного металла",
         letterCurrencyCode: "Буквенный код валюты, драгоценного металла",
@@ -98,7 +98,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник курсов валют",
-      link: "nsi/exchange-rate",
+      link: "/reference-book/nsi/exchange-rate",
       columns: {
         digitalCurrencyCode: "Цифровой код валюты",
         letterCurrencyCode: "Буквенный код валюты",
@@ -114,7 +114,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник банков и НКФО РБ",
-      link: "nsi/bank",
+      link: "/reference-book/nsi/bank",
       columns: {
         bankCode: "Условный номер участника расчетов (УНУР)",
         name: "Местоположение, наименование участника расчетов",
@@ -129,7 +129,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник кодов обработки",
-      link: "nsi/processing-code",
+      link: "/reference-book/nsi/processing-code",
       columns: {
         codeAS: "Код АС использования",
         code: "Код обработки",
@@ -140,7 +140,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник кодов платежей в бюджет",
-      link: "nsi/budget-payment-code",
+      link: "/reference-book/nsi/budget-payment-code",
       columns: {
         paymentCode: "Код платежа в бюджет",
         name: "Наименование кода платежа в бюджет",
@@ -161,7 +161,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Кодификатор стран",
-      link: "nsi/country-codifier",
+      link: "/reference-book/nsi/country-codifier",
       columns: {
         code: "Код страны цифровой",
         codeA2: "Код страны альфа-2",
@@ -176,7 +176,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник счетов по учету средств республиканского бюджета",
-      link: "nsi/republican-budget-account",
+      link: "/reference-book/nsi/republican-budget-account",
       columns: {
         identificationCode: "БИК банка бенефициара",
         republicanBudgetAccount:
@@ -194,7 +194,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник банковских идентификационных кодов",
-      link: "nsi/bank-id-code",
+      link: "/reference-book/nsi/bank-id-code",
       columns: {
         unu: "Условный номер участника",
         bic: "БИК банка",
@@ -212,7 +212,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник участников системы BISS",
-      link: "nsi/biss-member",
+      link: "/reference-book/nsi/biss-member",
       columns: {
         unur: "Условный номер участника расчетов",
         bankIdentificationCode: "БИК банка",
@@ -229,7 +229,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник кодов очередностей платежа",
-      link: "nsi/payment-priority-code",
+      link: "/reference-book/nsi/payment-priority-code",
       columns: {
         primaryCode: "Код очередности",
         name: "Наименование кода очередности",
@@ -239,7 +239,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник счетов по учету средств местных бюджетов",
-      link: "nsi/local-budget-account",
+      link: "/reference-book/nsi/local-budget-account",
       columns: {
         identificationCode: "БИК банка бенефициара",
         localBudgetAccount: "Счет по учету средств местного бюджета",
@@ -256,7 +256,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник статусов субъектов",
-      link: "nsi/subject-statuses",
+      link: "/reference-book/nsi/subject-statuses",
       columns: {
         code: "Код статуса субъекта",
         name: "Наименование cтатуcа субъекта",
@@ -270,7 +270,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник участников системы SWIFT",
-      link: "swift",
+      link: "/reference-book/swift",
       columns: {
         modificationFlag: "Флаг модификации",
         recordKey: "Ключ записи",
@@ -315,7 +315,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Справочник БИК Российской Федерации",
-      link: "rf",
+      link: "/reference-book/rf",
       columns: {
         bic: "Банковский идентификационный код",
         name: "Название",
@@ -335,7 +335,7 @@ export default class DirectoriesStore {
     },
     {
       name: "Журнал загрузок",
-      link: "statuses",
+      link: "/reference-book/statuses",
       columns: {
         id: "ID",
         dateTimeStart: "Дата и время начала действия",
@@ -352,7 +352,7 @@ export default class DirectoriesStore {
     makeAutoObservable(this);
   }
 
-  get directories(): IDirectory[] {
-    return this._directories;
+  get directories(): IReferenceBook[] {
+    return this._referenceBooks;
   }
 }
