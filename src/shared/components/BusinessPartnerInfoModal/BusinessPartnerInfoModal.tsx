@@ -52,7 +52,7 @@ export const BusinessPartnerInfoModal = ({
   data:
     | {
         data: BusinessPartnerData;
-        columnName: Record<string, string>; // Adjust this type as needed
+        columnName: Record<string, string>;
       }
     | undefined;
   opened: boolean;

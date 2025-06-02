@@ -15,7 +15,11 @@ import IconSort from "@public/assets/IconSort.svg?react";
 import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
 import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
-import { getBPInfo } from "@shared/api/mutation/bpAPI.ts";
+import {
+  getBPInfo,
+  getColumnsCard,
+  getColumnsTable,
+} from "@shared/api/mutation/bpAPI.ts";
 import {
   ITableDataResponse,
   postApiData,
@@ -107,6 +111,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
+  const [columns, setColumns] = useState<Record<string, string>>({});
+  const [columnsCard, setColumnsCard] = useState<Record<string, string>>({});
 
   const [error, setError] = useState<string | undefined>();
   const [BPInfo, setBPInfo] = useState<BusinessPartnerInfo | undefined>();
@@ -135,11 +141,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     updaterOrValue,
   ) => {
     if (typeof updaterOrValue === "function") {
-      // If it's a function, call it with the current filters
       const newFilters = updaterOrValue(filters);
       debouncedColumnFilters(newFilters);
     } else {
-      // If it's a new state, just set it directly
       debouncedColumnFilters(updaterOrValue);
     }
   };
@@ -208,13 +212,17 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       tableContainerReference.current.scrollTo(0, 0);
     }
   };
+  useEffect(() => {
+    getColumnsTable(link)
+      .then((columns_) => setColumns(columns_))
+      .catch((error_) => setError(error_));
+    getColumnsCard(link)
+      .then((columns_) => setColumnsCard(columns_))
+      .catch((error_) => setError(error_));
+  }, [link]);
 
-  const columnsRaw =
-    data?.pages?.length && data.pages[0]?.content.length
-      ? Object.keys(data.pages[0].content[0] || {})
-      : [];
-
-  const columnsTranslated = data?.pages?.[0]?.columnName;
+  const columnsRaw = Object.keys(columns);
+  const columnsTranslated = columns;
 
   const cellValues = useMemo(
     () => data?.pages.flatMap((page) => page.content) ?? [],
@@ -393,8 +401,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             );
             if (response) {
               setBPInfo({
-                data: response.data,
-                columnName: response.columnName,
+                data: response,
+                columnName: columnsCard,
               });
               setOpenedBPInfoModal(true);
             } else {
