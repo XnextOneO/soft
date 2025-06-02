@@ -4,18 +4,8 @@ import { $authHost } from "@shared/api";
 import { AxiosError } from "axios";
 
 export const syncDataSCBank = async (link: string): Promise<any> => {
-  const storedData = localStorage.getItem("auth-storage");
-
-  const accessToken = storedData
-    ? JSON.parse(storedData).state.accessToken
-    : // eslint-disable-next-line unicorn/no-null
-      null;
   try {
-    const response = await $authHost.post(`${link}/sync`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await $authHost.post(`${link}/sync`);
     if (response.status === 200) {
       notifications.show({
         title: "Успешно",
@@ -42,18 +32,8 @@ export const syncDataSCBank = async (link: string): Promise<any> => {
 };
 
 export const getBPInfo = async (link: string, id: number): Promise<any> => {
-  const storedData = localStorage.getItem("auth-storage");
-
-  const accessToken = storedData
-    ? JSON.parse(storedData).state.accessToken
-    : // eslint-disable-next-line unicorn/no-null
-      null;
   try {
-    const response = await $authHost.get(`${link}/${id}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await $authHost.get(`${link}/${id}`);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {

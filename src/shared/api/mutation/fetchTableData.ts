@@ -18,7 +18,7 @@ export interface ITableDataResponse {
     [key: string]: string;
   };
   content: IContentItem[];
-  pageInfo: {
+  page: {
     number: number;
     size: number;
     totalElements: number;
@@ -34,19 +34,9 @@ export interface IContentItem {
 export const postApiData = async (
   parameters: PostApiDataParameters,
 ): Promise<ITableDataResponse> => {
-  const storedData = localStorage.getItem("auth-storage");
-
-  const accessToken = storedData
-    ? JSON.parse(storedData).state.accessToken
-    : // eslint-disable-next-line unicorn/no-null
-      null;
   try {
     const { link } = parameters;
-    const response = await $authHost.post(`${link}/search`, parameters, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await $authHost.post(`${link}/search`, parameters);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {

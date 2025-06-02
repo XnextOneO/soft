@@ -237,7 +237,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     [data],
   );
 
-  const totalDBRowCount = data?.pages?.[0]?.pageInfo?.totalElements ?? 0;
+  const totalDBRowCount = data?.pages?.[0]?.page?.totalElements ?? 0;
   const totalFetched = cellValues.length;
   const fetchMoreOnBottomReached = useCallback(
     (containerReferenceElement?: HTMLDivElement | null) => {
