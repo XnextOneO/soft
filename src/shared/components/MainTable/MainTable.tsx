@@ -35,7 +35,11 @@ import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   MantineReactTable,
   MRT_ColumnFiltersState,
@@ -111,8 +115,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
-  const [columns, setColumns] = useState<Record<string, string>>({});
-  const [columnsCard, setColumnsCard] = useState<Record<string, string>>({});
 
   const [error, setError] = useState<string | undefined>();
   const [BPInfo, setBPInfo] = useState<BusinessPartnerInfo | undefined>();
@@ -212,17 +214,23 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       tableContainerReference.current.scrollTo(0, 0);
     }
   };
-  useEffect(() => {
-    getColumnsTable(link)
-      .then((columns_) => setColumns(columns_))
-      .catch((error_) => setError(error_));
-    getColumnsCard(link)
-      .then((columns_) => setColumnsCard(columns_))
-      .catch((error_) => setError(error_));
-  }, [link]);
 
-  const columnsRaw = Object.keys(columns);
-  const columnsTranslated = columns;
+  const { data: columnsTableData } = useQuery({
+    queryKey: ["getColumnsTable", link],
+    queryFn: async () => {
+      return await getColumnsTable(link);
+    },
+  });
+
+  const { data: columnsCardData } = useQuery({
+    queryKey: ["getColumnsCard", link],
+    queryFn: async () => {
+      return await getColumnsCard(link);
+    },
+  });
+
+  const columnsRaw = columnsTableData ? Object.keys(columnsTableData) : [];
+  const columnsTranslated = columnsTableData ?? [];
 
   const cellValues = useMemo(
     () => data?.pages.flatMap((page) => page.content) ?? [],
@@ -402,7 +410,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             if (response) {
               setBPInfo({
                 data: response,
-                columnName: columnsCard,
+                columnName: columnsCardData,
               });
               setOpenedBPInfoModal(true);
             } else {
