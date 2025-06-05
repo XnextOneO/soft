@@ -15,19 +15,12 @@ import IconSort from "@public/assets/IconSort.svg?react";
 import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
 import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
-import {
-  getBPInfo,
-  getColumnsCard,
-  getColumnsTable,
-} from "@shared/api/mutation/bpAPI.ts";
+import { getColumnsTable } from "@shared/api/mutation/bpAPI.ts";
 import {
   ITableDataResponse,
   postApiData,
 } from "@shared/api/mutation/fetchTableData.ts";
-import {
-  BusinessPartnerData,
-  BusinessPartnerInfoModal,
-} from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
+import { BusinessPartnerInfoModal } from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
 import CreateRowModalContent from "@shared/components/MainTable/components/CreateRowModalContent.tsx";
 import EditRowModalContent from "@shared/components/MainTable/components/EditRowModalContent.tsx";
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
@@ -56,11 +49,6 @@ type OnChangeFunction<T> = (updaterOrValue: T | ((old: T) => T)) => void;
 interface MainTableProperties {
   updateTable: boolean;
   link: string;
-}
-
-interface BusinessPartnerInfo {
-  data: BusinessPartnerData;
-  columnName: Record<string, string>;
 }
 
 export interface SortCriteria {
@@ -117,7 +105,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const colorScheme = useMantineColorScheme();
 
   const [error, setError] = useState<string | undefined>();
-  const [BPInfo, setBPInfo] = useState<BusinessPartnerInfo | undefined>();
+  const [clientId, setClientId] = useState<number | undefined>();
 
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
@@ -219,13 +207,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     queryKey: ["getColumnsTable", link],
     queryFn: async () => {
       return await getColumnsTable(link);
-    },
-  });
-
-  const { data: columnsCardData } = useQuery({
-    queryKey: ["getColumnsCard", link],
-    queryFn: async () => {
-      return await getColumnsCard(link);
     },
   });
 
@@ -345,6 +326,11 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     };
   });
 
+  const handleCloseBPInfoModal = (): void => {
+    setOpenedBPInfoModal(false);
+    setClientId(0);
+  };
+
   const customIcons: Partial<MRT_Icons> = {
     IconArrowsSort: () => (
       <SvgButton SvgIcon={IconSort} fillColor={"#999999"} />
@@ -403,19 +389,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       if (link === "/business-partner") {
         return {
           onClick: async (): Promise<void> => {
-            const response = await getBPInfo(
-              "/business-partner",
-              row.original.clientId,
-            );
-            if (response) {
-              setBPInfo({
-                data: response,
-                columnName: columnsCardData,
-              });
-              setOpenedBPInfoModal(true);
-            } else {
-              setBPInfo(undefined);
-            }
+            setClientId(row.original.clientId);
+            setOpenedBPInfoModal(true);
           },
           style: {
             cursor: "pointer",
@@ -531,11 +506,11 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           close={() => setOpenedUpdateModal(false)}
         />
       )}
-      {link === "/business-partner" && (
+      {link === "/business-partner" && clientId && (
         <BusinessPartnerInfoModal
-          data={BPInfo}
+          clientId={clientId}
           opened={openedBPInfoModal}
-          close={() => setOpenedBPInfoModal(false)}
+          close={handleCloseBPInfoModal}
         />
       )}
     </Flex>
