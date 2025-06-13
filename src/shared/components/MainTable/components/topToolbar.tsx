@@ -16,7 +16,7 @@ import {
 import { IconCloudUp, IconReload } from "@tabler/icons-react";
 import {
   MRT_GlobalFilterTextInput,
-  MRT_ShowHideColumnsButton,
+  // MRT_ShowHideColumnsButton,
 } from "mantine-react-table";
 
 import classes from "../MainTable.module.scss";
@@ -185,8 +185,13 @@ const TopToolbar: FC<TopToolbarProperties> = ({
         >
           <IconFilter />
         </Button>
-        <MRT_GlobalFilterTextInput size={"xs"} w={"240px"} table={table} />
-        <MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />
+        <MRT_GlobalFilterTextInput
+          size={"xs"}
+          w={"240px"}
+          mr={"16px"}
+          table={table}
+        />
+        {/*<MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />*/}
       </Flex>
     </Flex>
   );
