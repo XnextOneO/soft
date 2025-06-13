@@ -20,6 +20,7 @@ import {
   ITableDataResponse,
   postApiData,
 } from "@shared/api/mutation/fetchTableData.ts";
+import { BusinessPartnerAccountsInfoModal } from "@shared/components/BusinessPartnerAccountsInfoModal/BusinessPartnerAccountsInfoModal.tsx";
 import { BusinessPartnerInfoModal } from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
 import CreateRowModalContent from "@shared/components/MainTable/components/CreateRowModalContent.tsx";
 import EditRowModalContent from "@shared/components/MainTable/components/EditRowModalContent.tsx";
@@ -87,6 +88,7 @@ export const translateColumns = (
   });
 };
 
+// eslint-disable-next-line complexity
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const size = 30;
   const tableContainerReference = useRef<HTMLDivElement>(null);
@@ -99,6 +101,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [filters, setFilters] = useState<MRT_ColumnFiltersState>([]);
   const [openedUpdateModal, setOpenedUpdateModal] = useState(false);
   const [openedBPInfoModal, setOpenedBPInfoModal] = useState(false);
+  const [openedBPAInfoModal, setOpenedBPAInfoModal] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
@@ -326,11 +329,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     };
   });
 
-  const handleCloseBPInfoModal = (): void => {
-    setOpenedBPInfoModal(false);
-    setClientId(0);
-  };
-
   const customIcons: Partial<MRT_Icons> = {
     IconArrowsSort: () => (
       <SvgButton SvgIcon={IconSort} fillColor={"#999999"} />
@@ -396,6 +394,16 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             cursor: "pointer",
           },
         };
+      } else if (link === "/business-partner-accounts") {
+        return {
+          onDoubleClick: async (): Promise<void> => {
+            setClientId(row.original.accountInternalId);
+            setOpenedBPAInfoModal(true);
+          },
+          style: {
+            cursor: "pointer",
+          },
+        };
       }
       return {};
     },
@@ -444,7 +452,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         fetchMoreOnBottomReached(event.target as HTMLDivElement);
       },
       style: {
-        height: "calc(100vh - 124px)",
+        height: "calc(100vh - 130px)",
         overflowY: "auto",
         borderTop: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
       },
@@ -510,7 +518,14 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         <BusinessPartnerInfoModal
           clientId={clientId}
           opened={openedBPInfoModal}
-          close={handleCloseBPInfoModal}
+          setOpened={setOpenedBPInfoModal}
+        />
+      )}
+      {link === "/business-partner-accounts" && clientId && (
+        <BusinessPartnerAccountsInfoModal
+          accountInternalId={clientId}
+          opened={openedBPAInfoModal}
+          setOpened={setOpenedBPAInfoModal}
         />
       )}
     </Flex>

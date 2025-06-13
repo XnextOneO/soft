@@ -1,10 +1,10 @@
-import { JSX } from "react";
+import React, { JSX } from "react";
 import { ReactElement } from "react";
 import { Card, Group, Modal, Stack } from "@mantine/core";
-import { getBPInfo, getColumnsCard } from "@shared/api/mutation/bpAPI.ts";
+import { getColumnsCard, getInfo } from "@shared/api/mutation/bpAPI.ts";
 import { DataField } from "@shared/components/BusinessPartnerInfoModal/DataField.tsx";
 import { translateColumns } from "@shared/components/MainTable/MainTable.tsx";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import classes from "../BusinessPartnerInfoModal/BusinessPartnerInfoModal.module.scss";
 
@@ -64,24 +64,26 @@ const renderDataFields = (
 export const BusinessPartnerInfoModal = ({
   clientId,
   opened,
-  close,
+  setOpened,
 }: {
   clientId: number | undefined;
   opened: boolean;
-  close: () => void;
+  setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element => {
-  const { data: columnsCardData } = useQuery({
+  const queryClient = useQueryClient();
+
+  const { data: columnsCardData, isError: isColumnError } = useQuery({
     queryKey: ["getColumnsCard", "/business-partner"],
     queryFn: async () => {
       return await getColumnsCard("/business-partner");
     },
   });
 
-  const { data: businessPartnerData } = useQuery({
+  const { data: businessPartnerData, isError: isDataError } = useQuery({
     queryKey: ["getBusinessPartnerData", clientId],
     queryFn: async () => {
       if (clientId) {
-        return await getBPInfo("/business-partner", clientId);
+        return await getInfo("/business-partner", clientId);
       }
       throw new Error("Данные отсутствуют");
     },
@@ -123,44 +125,60 @@ export const BusinessPartnerInfoModal = ({
     ["id", "clientId", "registrationNumber", "foreignClientCode"],
   ];
 
-  return businessPartnerData && Object.keys(businessPartnerData).length > 0 ? (
-    <Modal
-      opened={opened}
-      onClose={close}
-      title={businessPartnerData.clientName}
-      overlayProps={{
-        backgroundOpacity: 0.55,
-      }}
-      centered
-      classNames={{
-        content: classes.content,
-        body: classes.mantineModalBody,
-        header: classes.header,
-        title: classes.title,
-        close: classes.close,
-      }}
-      size={"80%"}
-    >
-      <Stack gap={16} p={"20px"}>
-        {cardData.map((keys, index) => (
-          <Card
-            key={index}
-            w="100%"
-            p={4}
-            style={{ borderBottom: "1px solid #EBEDF0" }}
-          >
-            <Group gap={16}>
-              {renderDataFields(
-                businessPartnerData,
-                keys as BusinessPartnerDataKeys[],
-                getColumn,
-              )}
-            </Group>
-          </Card>
-        ))}
-      </Stack>
-    </Modal>
-  ) : (
-    <></>
-  );
+  const handleCloseBPInfoModal = (): void => {
+    queryClient.setQueryData(["getBusinessPartnerData", clientId], () => {});
+    setOpened(false);
+  };
+
+  const hasData =
+    businessPartnerData && Object.keys(businessPartnerData).length > 0;
+  const hasError = isDataError || isColumnError;
+
+  if (hasError) {
+    console.log("Errooooor", hasError);
+    return <>Error</>;
+  }
+
+  if (hasData) {
+    return (
+      <Modal
+        opened={opened}
+        onClose={handleCloseBPInfoModal}
+        title={businessPartnerData.clientName}
+        overlayProps={{
+          backgroundOpacity: 0.55,
+        }}
+        centered
+        classNames={{
+          content: classes.content,
+          body: classes.mantineModalBody,
+          header: classes.header,
+          title: classes.title,
+          close: classes.close,
+        }}
+        size={"80%"}
+      >
+        <Stack gap={16} p={"16px"}>
+          {cardData.map((keys, index) => (
+            <Card
+              key={index}
+              w="100%"
+              p={4}
+              style={{ borderBottom: "1px solid #EBEDF0" }}
+            >
+              <Group gap={16}>
+                {renderDataFields(
+                  businessPartnerData,
+                  keys as BusinessPartnerDataKeys[],
+                  getColumn,
+                )}
+              </Group>
+            </Card>
+          ))}
+        </Stack>
+      </Modal>
+    );
+  }
+
+  return <></>;
 };

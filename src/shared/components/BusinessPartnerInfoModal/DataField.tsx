@@ -3,7 +3,7 @@ import { Stack, Text } from "@mantine/core";
 
 interface IDataField {
   label: string;
-  value: string | boolean | undefined;
+  value: number | string | boolean | undefined;
 }
 
 export const DataField: FC<IDataField> = ({ label, value }) => (

@@ -5,7 +5,7 @@
     "name": "nav-menu-stack:nav-menu-stack.business-partner.name",
     "items": [
       {
-        "key": "menu-customer-file",
+        "key": "businessPartner",
         "name": "nav-menu-stack:nav-menu-stack.business-partner.items.customer-file",
         "href": "/business-partner/customer-file"
       }
@@ -13,18 +13,13 @@
   },
   {
     "icon": "LS",
-    "key": "accounts",
+    "key": "menu-accounts",
     "name": "nav-menu-stack:nav-menu-stack.accounts.name",
     "items": [
       {
-        "key": "accounts-file",
+        "key": "business-partner-account",
         "name": "nav-menu-stack:nav-menu-stack.accounts.items.accounts-file",
-        "href": "/accounts/accounts-file"
-      },
-      {
-        "key": "accounts-updating",
-        "name": "nav-menu-stack:nav-menu-stack.accounts.items.accounts-updating",
-        "href": "/accounts/accounts-updating"
+        "href": "/business-partner-accounts/accounts-file"
       }
     ]
   },

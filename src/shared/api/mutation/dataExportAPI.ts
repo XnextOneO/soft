@@ -16,7 +16,7 @@ export const exportData = async (
 
   try {
     const response = await $authHost.post(
-      `data-export/${link}/${format.toLowerCase()}`,
+      `data-export${link}/${format.toLowerCase()}`,
       parameters,
       {
         headers: {

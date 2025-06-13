@@ -2,6 +2,8 @@
   "top-toolbar": {
     "update-table": "Обновить таблицу",
     "create-new-row": "Создать запись",
-    "sync-clients": "Обновление клиентов из SC-Bank.360.Corporate"
+    "sync-clients": "Обновление клиентов из SC-Bank.360.Corporate",
+    "sync-accounts": "Обновление счетов из SC-Bank.360.Corporate"
+
   }
 }

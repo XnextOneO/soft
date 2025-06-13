@@ -22,6 +22,9 @@ const ReferenceBookSlugLazyImport = createFileRoute('/reference-book/$slug')()
 const BusinessPartnerSlugLazyImport = createFileRoute(
   '/business-partner/$slug',
 )()
+const BusinessPartnerAccountsSlugLazyImport = createFileRoute(
+  '/business-partner-accounts/$slug',
+)()
 
 // Create/Update Routes
 
@@ -55,6 +58,17 @@ const BusinessPartnerSlugLazyRoute = BusinessPartnerSlugLazyImport.update({
   import('./../routes/business-partner/$slug.lazy').then((d) => d.Route),
 )
 
+const BusinessPartnerAccountsSlugLazyRoute =
+  BusinessPartnerAccountsSlugLazyImport.update({
+    id: '/business-partner-accounts/$slug',
+    path: '/business-partner-accounts/$slug',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./../routes/business-partner-accounts/$slug.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -64,6 +78,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/business-partner-accounts/$slug': {
+      id: '/business-partner-accounts/$slug'
+      path: '/business-partner-accounts/$slug'
+      fullPath: '/business-partner-accounts/$slug'
+      preLoaderRoute: typeof BusinessPartnerAccountsSlugLazyImport
       parentRoute: typeof rootRoute
     }
     '/business-partner/$slug': {
@@ -94,6 +115,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/business-partner-accounts/$slug': typeof BusinessPartnerAccountsSlugLazyRoute
   '/business-partner/$slug': typeof BusinessPartnerSlugLazyRoute
   '/reference-book/$slug': typeof ReferenceBookSlugLazyRoute
   '/login': typeof LoginIndexLazyRoute
@@ -101,6 +123,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/business-partner-accounts/$slug': typeof BusinessPartnerAccountsSlugLazyRoute
   '/business-partner/$slug': typeof BusinessPartnerSlugLazyRoute
   '/reference-book/$slug': typeof ReferenceBookSlugLazyRoute
   '/login': typeof LoginIndexLazyRoute
@@ -109,6 +132,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/business-partner-accounts/$slug': typeof BusinessPartnerAccountsSlugLazyRoute
   '/business-partner/$slug': typeof BusinessPartnerSlugLazyRoute
   '/reference-book/$slug': typeof ReferenceBookSlugLazyRoute
   '/login/': typeof LoginIndexLazyRoute
@@ -118,14 +142,21 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/business-partner-accounts/$slug'
     | '/business-partner/$slug'
     | '/reference-book/$slug'
     | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/business-partner/$slug' | '/reference-book/$slug' | '/login'
+  to:
+    | '/'
+    | '/business-partner-accounts/$slug'
+    | '/business-partner/$slug'
+    | '/reference-book/$slug'
+    | '/login'
   id:
     | '__root__'
     | '/'
+    | '/business-partner-accounts/$slug'
     | '/business-partner/$slug'
     | '/reference-book/$slug'
     | '/login/'
@@ -134,6 +165,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  BusinessPartnerAccountsSlugLazyRoute: typeof BusinessPartnerAccountsSlugLazyRoute
   BusinessPartnerSlugLazyRoute: typeof BusinessPartnerSlugLazyRoute
   ReferenceBookSlugLazyRoute: typeof ReferenceBookSlugLazyRoute
   LoginIndexLazyRoute: typeof LoginIndexLazyRoute
@@ -141,6 +173,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  BusinessPartnerAccountsSlugLazyRoute: BusinessPartnerAccountsSlugLazyRoute,
   BusinessPartnerSlugLazyRoute: BusinessPartnerSlugLazyRoute,
   ReferenceBookSlugLazyRoute: ReferenceBookSlugLazyRoute,
   LoginIndexLazyRoute: LoginIndexLazyRoute,
@@ -157,6 +190,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/business-partner-accounts/$slug",
         "/business-partner/$slug",
         "/reference-book/$slug",
         "/login/"
@@ -164,6 +198,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/business-partner-accounts/$slug": {
+      "filePath": "business-partner-accounts/$slug.lazy.tsx"
     },
     "/business-partner/$slug": {
       "filePath": "business-partner/$slug.lazy.tsx"

@@ -29,6 +29,8 @@
     "user-profile": "Профиль пользователя",
     "login": "логин",
     "business-partner": "Деловой партнер",
-    "customer-file": "Картотека клиентов"
+    "customer-file": "Картотека клиентов",
+    "business-partner-accounts": "Счета",
+    "accounts-file": "Картотека счетов"
   }
 }
