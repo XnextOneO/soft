@@ -117,6 +117,7 @@ export const BusinessPartnerAccountsInfoModal = ({
       () => {},
     );
     setOpened(false);
+    setOpenedBPInfoModal(false);
   };
   return businessPartnerAccountsData &&
     Object.keys(businessPartnerAccountsData).length > 0 ? (
