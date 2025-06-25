@@ -324,7 +324,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           </div>
         );
       },
-      size: column.header?.length > 12 ? 360 : 200,
+      size: column.header?.length > 12 ? 270 : 180,
       sortDescFirst: true,
     };
   });

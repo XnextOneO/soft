@@ -7,21 +7,11 @@ export const exportData = async (
   link: string,
   format: string,
 ): Promise<void> => {
-  const storedData = localStorage.getItem("auth-storage");
-
-  const accessToken = storedData
-    ? JSON.parse(storedData).state.accessToken
-    : // eslint-disable-next-line unicorn/no-null
-      null;
-
   try {
     const response = await $authHost.post(
       `data-export${link}/${format.toLowerCase()}`,
       parameters,
       {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
         responseType: "blob",
       },
     );
@@ -37,13 +27,14 @@ export const exportData = async (
       document.body.append(linkForDownload);
       linkForDownload.click();
       linkForDownload.remove();
-
       notifications.show({
         title: "Успешно",
         message: `Выгрузка в ${format} прошла успешно`,
         color: "green",
         autoClose: 5000,
       });
+
+      globalThis.URL.revokeObjectURL(url);
     }
   } catch (error) {
     if (error instanceof AxiosError) {

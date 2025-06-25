@@ -1,11 +1,12 @@
 import React, { FC, ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Checkbox, Flex, Group } from "@mantine/core";
+import { Button, Checkbox, Flex, Group, Tooltip } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import IconDetails from "@public/assets/details.svg?react";
 import IconDoubleSum from "@public/assets/double-sum.svg?react";
 import IconFilter from "@public/assets/filter.svg?react";
+import IconSC360 from "@public/assets/IconSC360.svg?react";
 import IconSum from "@public/assets/sum.svg?react";
 import menuData from "@public/menuItems.json";
 import { syncDataSCBank } from "@shared/api/mutation/bpAPI.ts";
@@ -15,13 +16,11 @@ import {
   ParametersPost,
 } from "@shared/components/MainTable/MainTable.tsx";
 import { MenuItem } from "@shared/components/Menu";
+import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
-import { IconCloudUp, IconReload } from "@tabler/icons-react";
+import { IconReload } from "@tabler/icons-react";
 import { useLocation } from "@tanstack/react-router";
-import {
-  MRT_GlobalFilterTextInput,
-  MRT_ShowHideColumnsButton,
-} from "mantine-react-table";
+import { MRT_GlobalFilterTextInput } from "mantine-react-table";
 
 import classes from "../MainTable.module.scss";
 
@@ -123,7 +122,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
 
   const renderSyncButtonLabel = (): string | ReactElement => {
     if (isSmallScreen) {
-      return <IconCloudUp width={20} height={20} />;
+      return <SvgButton SvgIcon={IconSC360} fillColor={"#fff"} />;
     }
     switch (link) {
       case "/business-partner": {
@@ -141,18 +140,20 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   return (
     <Flex direction={"row"} gap={"md"} py={8} px={16} justify={"space-between"}>
       <Group gap="8px">
-        <Button
-          w={30}
-          h={30}
-          p={0}
-          radius="xs"
-          color="#007458"
-          onClick={refetch}
-        >
-          <IconReload width={20} height={20} />
-        </Button>
+        <Tooltip label="Обновить" withArrow>
+          <Button
+            w={30}
+            h={30}
+            p={0}
+            radius="xs"
+            color="#007458"
+            onClick={refetch}
+          >
+            <IconReload width={20} height={20} />
+          </Button>
+        </Tooltip>
         {updateTable && (
-          <>
+          <Tooltip label="SC360" withArrow>
             {link === "/business-partner" ||
             link === "/business-partner-accounts" ? (
               <Button
@@ -183,12 +184,14 @@ const TopToolbar: FC<TopToolbarProperties> = ({
                 {t("top-toolbar:top-toolbar.update-table")}
               </Button>
             )}
-          </>
+          </Tooltip>
         )}
         {canCreate && link !== "/business-partner" && (
-          <Button onClick={() => table.setCreatingRow(true)}>
-            {t("top-toolbar:top-toolbar.create-new-row")}
-          </Button>
+          <Tooltip label="Создать" withArrow>
+            <Button onClick={() => table.setCreatingRow(true)}>
+              {t("top-toolbar:top-toolbar.create-new-row")}
+            </Button>
+          </Tooltip>
         )}
         {link === "/business-partner" ||
         link === "/business-partner-accounts" ? (
@@ -199,7 +202,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
             size={"xs"}
             color={"#007458"}
             checked={checked}
-            label={"Показать все банки, включая закрытые"}
+            label={`Показать все ${link === "/business-partner-accounts" ? "счета" : "банки"}, включая закрытые`}
             onChange={handleCheckboxChange}
           />
         ) : (
@@ -207,13 +210,37 @@ const TopToolbar: FC<TopToolbarProperties> = ({
         )}
       </Group>
       <Flex gap={"5"} direction={"row"} align={"center"}>
-        <Button w={30} h={30} p={5} radius="xs" color="#007458">
+        <Button
+          w={30}
+          h={30}
+          p={5}
+          radius="xs"
+          color="#007458"
+          disabled
+          className={classes.button}
+        >
           <IconDetails />
         </Button>
-        <Button w={30} h={30} p={5} radius="xs" color="#007458">
+        <Button
+          w={30}
+          h={30}
+          p={5}
+          radius="xs"
+          color="#007458"
+          disabled
+          className={classes.button}
+        >
           <IconDoubleSum />
         </Button>
-        <Button w={30} h={30} p={5} radius="xs" color="#007458">
+        <Button
+          w={30}
+          h={30}
+          p={5}
+          radius="xs"
+          color="#007458"
+          disabled
+          className={classes.button}
+        >
           <IconSum />
         </Button>
         <DataExportButton
@@ -224,18 +251,26 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           color={"#007458"}
           parameters={parameters}
         />
-        <Button
-          w={30}
-          h={30}
-          p={5}
-          radius="xs"
-          color="#007458"
-          onClick={() => setShowColumnFilters(!showColumnFilters)}
-        >
-          <IconFilter />
-        </Button>
-        <MRT_GlobalFilterTextInput size={"xs"} w={"240px"} table={table} />
-        <MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />
+        <Tooltip label="Фильтры" withArrow>
+          <Button
+            w={30}
+            h={30}
+            p={5}
+            className={classes.button}
+            radius="xs"
+            color="#007458"
+            onClick={() => setShowColumnFilters(!showColumnFilters)}
+          >
+            <IconFilter />
+          </Button>
+        </Tooltip>
+        <MRT_GlobalFilterTextInput
+          placeholder={"Поиск по таблице"}
+          size={"xs"}
+          w={"240px"}
+          table={table}
+        />
+        {/*<MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />*/}
       </Flex>
     </Flex>
   );

@@ -29,6 +29,7 @@ export interface BusinessPartnerData {
   addressRegion?: string;
   addressDistrictName?: string;
   addressUnitaryArea?: string;
+  addressSettlementName?: string;
   addressSettlementType?: string;
   addressStreetType?: string;
   addressStreetName?: string;
@@ -113,6 +114,7 @@ export const BusinessPartnerInfoModal = ({
       "addressRegion",
       "addressDistrictName",
       "addressUnitaryArea",
+      "addressSettlementName",
       "addressSettlementType",
       "addressStreetType",
       "addressStreetName",
@@ -135,7 +137,6 @@ export const BusinessPartnerInfoModal = ({
   const hasError = isDataError || isColumnError;
 
   if (hasError) {
-    console.log("Errooooor", hasError);
     return <>Error</>;
   }
 

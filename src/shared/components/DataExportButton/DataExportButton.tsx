@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { Button, Combobox, useCombobox } from "@mantine/core";
+import { Button, Combobox, Tooltip, useCombobox } from "@mantine/core";
 import IconExport from "@public/assets/export.svg?react";
 import { exportData } from "@shared/api/mutation/dataExportAPI.ts";
 import { ParametersPost } from "@shared/components/MainTable/MainTable.tsx";
@@ -48,18 +48,18 @@ export const DataExportButton = ({
   ));
 
   return (
-    <>
-      <Combobox
-        offset={0}
-        store={combobox}
-        width={65}
-        position="bottom-start"
-        withArrow
-        onOptionSubmit={() => {
-          combobox.closeDropdown();
-        }}
-      >
-        <Combobox.Target>
+    <Combobox
+      offset={0}
+      store={combobox}
+      width={65}
+      position="bottom-start"
+      withArrow
+      onOptionSubmit={() => {
+        combobox.closeDropdown();
+      }}
+    >
+      <Combobox.Target>
+        <Tooltip label="Экспорт" withArrow>
           <Button
             w={w}
             h={h}
@@ -70,12 +70,12 @@ export const DataExportButton = ({
           >
             <IconExport />
           </Button>
-        </Combobox.Target>
+        </Tooltip>
+      </Combobox.Target>
 
-        <Combobox.Dropdown>
-          <Combobox.Options>{options}</Combobox.Options>
-        </Combobox.Dropdown>
-      </Combobox>
-    </>
+      <Combobox.Dropdown>
+        <Combobox.Options>{options}</Combobox.Options>
+      </Combobox.Dropdown>
+    </Combobox>
   );
 };

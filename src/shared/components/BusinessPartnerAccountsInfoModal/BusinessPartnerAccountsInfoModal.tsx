@@ -160,7 +160,11 @@ export const BusinessPartnerAccountsInfoModal = ({
           <Button className={classes.button}>Финансовые условия</Button>
           <Button
             className={classes.button}
-            onClick={() => setOpenedBPInfoModal(!openedBPInfoModal)}
+            onClick={() => {
+              if (businessPartnerAccountsData) {
+                setOpenedBPInfoModal(!openedBPInfoModal);
+              }
+            }}
           >
             Деловой партнер
           </Button>
