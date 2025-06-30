@@ -153,38 +153,42 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           </Button>
         </Tooltip>
         {updateTable && (
-          <Tooltip label="SC360" withArrow>
+          <>
             {link === "/business-partner" ||
             link === "/business-partner-accounts" ? (
-              <Button
-                disabled={!hasSyncPermission(permissions, permissionKey)}
-                className={classes.button}
-                p={0}
-                h={30}
-                w={isSmallScreen ? 30 : "auto"}
-                px={isSmallScreen ? "0" : "sm"}
-                color="#007458"
-                size="sm"
-                style={{ fontSize: "12px" }}
-                radius="xs"
-                onClick={handleSyncData}
-              >
-                {renderSyncButtonLabel()}
-              </Button>
+              <Tooltip label="SC360" withArrow>
+                <Button
+                  disabled={!hasSyncPermission(permissions, permissionKey)}
+                  className={classes.button}
+                  p={0}
+                  h={30}
+                  w={isSmallScreen ? 30 : "auto"}
+                  px={isSmallScreen ? "0" : "sm"}
+                  color="#007458"
+                  size="sm"
+                  style={{ fontSize: "12px" }}
+                  radius="xs"
+                  onClick={handleSyncData}
+                >
+                  {renderSyncButtonLabel()}
+                </Button>
+              </Tooltip>
             ) : (
-              <Button
-                disabled={!hasUpdatePermission(permissions, permissionKey)}
-                className={classes.button}
-                color="#007458"
-                size="sm"
-                radius="xs"
-                h={30}
-                onClick={() => setOpened(true)}
-              >
-                {t("top-toolbar:top-toolbar.update-table")}
-              </Button>
+              <Tooltip label="Обновить из файла" withArrow>
+                <Button
+                  disabled={!hasUpdatePermission(permissions, permissionKey)}
+                  className={classes.button}
+                  color="#007458"
+                  size="sm"
+                  radius="xs"
+                  h={30}
+                  onClick={() => setOpened(true)}
+                >
+                  {t("top-toolbar:top-toolbar.update-table")}
+                </Button>
+              </Tooltip>
             )}
-          </Tooltip>
+          </>
         )}
         {canCreate && link !== "/business-partner" && (
           <Tooltip label="Создать" withArrow>
