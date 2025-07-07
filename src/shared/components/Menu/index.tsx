@@ -28,6 +28,13 @@ interface NavMenuProperties {
   isMenuOpen: boolean;
 }
 
+export const hasReadPermission = (
+  permissions: string[],
+  key: string,
+): boolean => {
+  return permissions.includes(`${key}:read`);
+};
+
 export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
   const { t } = useTranslation(["nav-menu-stack"]);
   const { permissions } = usePermissionsStore();
@@ -39,10 +46,6 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
   const { clearTokens } = useAuthStore();
   const router = useRouter();
   const location = useLocation();
-
-  const hasPermission = (key: string): boolean => {
-    return permissions.includes(`${key}:read`);
-  };
 
   const handleSearchChange = (key: string, value: string): void => {
     setSearchValues((previous) => ({ ...previous, [key]: value }));
@@ -94,7 +97,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
     parentKey: string | null = null,
   ): React.ReactNode[] => {
     return items.map((item) => {
-      const itemHasPermission = hasPermission(item.key);
+      const itemHasPermission = hasReadPermission(permissions, item.key);
       const searchValue = searchValues[item.key] || "";
 
       if (item.items && item.items.length > 0) {

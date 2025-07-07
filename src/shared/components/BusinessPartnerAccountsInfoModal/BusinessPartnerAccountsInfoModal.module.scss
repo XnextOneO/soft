@@ -32,7 +32,7 @@
 .title {
   color: #FFF;
   font-weight: 500;
-  font-size: 18px
+  font-size: 21px
 }
 
 .close {
@@ -41,4 +41,13 @@
 
 .close:hover {
   background-color: transparent;
+}
+
+.button {
+  background: #007458 !important;
+  padding: 8px 16px !important;
+  border-radius: 2px !important;
+  font-size: 12px;
+  line-height: 14px;
+  height: 30px;
 }

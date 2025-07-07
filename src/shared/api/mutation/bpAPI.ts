@@ -31,21 +31,33 @@ export const syncDataSCBank = async (link: string): Promise<any> => {
   }
 };
 
-export const getBPInfo = async (link: string, id: number): Promise<any> => {
+export const getInfo = async (link: string, id: number): Promise<any> => {
   try {
     const response = await $authHost.get(`${link}/${id}`);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
-      notifications.show({
-        title: "Ошибка",
-        message:
-          error.response?.data?.message ||
-          "Произошла ошибка при синхронищации данных",
-        color: "red",
-        autoClose: 5000,
-      });
+      if (error.response?.status === 404) {
+        notifications.show({
+          title: "Ошибка",
+          message:
+            error.response?.data?.message ||
+            "Не существует указанного делового партнера",
+          color: "red",
+          autoClose: 5000,
+        });
+      } else {
+        notifications.show({
+          title: "Ошибка",
+          message:
+            error.response?.data?.message ||
+            "Произошла ошибка при получении данных",
+          color: "red",
+          autoClose: 5000,
+        });
+      }
     }
+
     console.error("Error posting API data:", error);
     throw new Error("Failed to post API data");
   }

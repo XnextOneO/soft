@@ -15,19 +15,13 @@ import IconSort from "@public/assets/IconSort.svg?react";
 import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
 import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
-import {
-  getBPInfo,
-  getColumnsCard,
-  getColumnsTable,
-} from "@shared/api/mutation/bpAPI.ts";
+import { getColumnsTable } from "@shared/api/mutation/bpAPI.ts";
 import {
   ITableDataResponse,
   postApiData,
 } from "@shared/api/mutation/fetchTableData.ts";
-import {
-  BusinessPartnerData,
-  BusinessPartnerInfoModal,
-} from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
+import { BusinessPartnerAccountsInfoModal } from "@shared/components/BusinessPartnerAccountsInfoModal/BusinessPartnerAccountsInfoModal.tsx";
+import { BusinessPartnerInfoModal } from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
 import CreateRowModalContent from "@shared/components/MainTable/components/CreateRowModalContent.tsx";
 import EditRowModalContent from "@shared/components/MainTable/components/EditRowModalContent.tsx";
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
@@ -56,11 +50,6 @@ type OnChangeFunction<T> = (updaterOrValue: T | ((old: T) => T)) => void;
 interface MainTableProperties {
   updateTable: boolean;
   link: string;
-}
-
-interface BusinessPartnerInfo {
-  data: BusinessPartnerData;
-  columnName: Record<string, string>;
 }
 
 export interface SortCriteria {
@@ -99,6 +88,7 @@ export const translateColumns = (
   });
 };
 
+// eslint-disable-next-line complexity
 export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const size = 30;
   const tableContainerReference = useRef<HTMLDivElement>(null);
@@ -111,13 +101,14 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [filters, setFilters] = useState<MRT_ColumnFiltersState>([]);
   const [openedUpdateModal, setOpenedUpdateModal] = useState(false);
   const [openedBPInfoModal, setOpenedBPInfoModal] = useState(false);
+  const [openedBPAInfoModal, setOpenedBPAInfoModal] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
 
   const [error, setError] = useState<string | undefined>();
-  const [BPInfo, setBPInfo] = useState<BusinessPartnerInfo | undefined>();
+  const [clientId, setClientId] = useState<number | undefined>();
 
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
@@ -219,13 +210,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     queryKey: ["getColumnsTable", link],
     queryFn: async () => {
       return await getColumnsTable(link);
-    },
-  });
-
-  const { data: columnsCardData } = useQuery({
-    queryKey: ["getColumnsCard", link],
-    queryFn: async () => {
-      return await getColumnsCard(link);
     },
   });
 
@@ -340,7 +324,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           </div>
         );
       },
-      size: column.header?.length > 12 ? 360 : 200,
+      size: column.header?.length > 12 ? 270 : 180,
       sortDescFirst: true,
     };
   });
@@ -403,19 +387,18 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       if (link === "/business-partner") {
         return {
           onClick: async (): Promise<void> => {
-            const response = await getBPInfo(
-              "/business-partner",
-              row.original.clientId,
-            );
-            if (response) {
-              setBPInfo({
-                data: response,
-                columnName: columnsCardData,
-              });
-              setOpenedBPInfoModal(true);
-            } else {
-              setBPInfo(undefined);
-            }
+            setClientId(row.original.clientId);
+            setOpenedBPInfoModal(true);
+          },
+          style: {
+            cursor: "pointer",
+          },
+        };
+      } else if (link === "/business-partner-accounts") {
+        return {
+          onDoubleClick: async (): Promise<void> => {
+            setClientId(row.original.accountInternalId);
+            setOpenedBPAInfoModal(true);
           },
           style: {
             cursor: "pointer",
@@ -469,7 +452,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         fetchMoreOnBottomReached(event.target as HTMLDivElement);
       },
       style: {
-        height: "calc(100vh - 124px)",
+        height: "calc(100vh - 130px)",
         overflowY: "auto",
         borderTop: `1px solid ${colorScheme.colorScheme === "dark" ? "#444444" : "#DFDFDF"}`,
       },
@@ -531,11 +514,18 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           close={() => setOpenedUpdateModal(false)}
         />
       )}
-      {link === "/business-partner" && (
+      {link === "/business-partner" && clientId && (
         <BusinessPartnerInfoModal
-          data={BPInfo}
+          clientId={clientId}
           opened={openedBPInfoModal}
-          close={() => setOpenedBPInfoModal(false)}
+          setOpened={setOpenedBPInfoModal}
+        />
+      )}
+      {link === "/business-partner-accounts" && clientId && (
+        <BusinessPartnerAccountsInfoModal
+          accountInternalId={clientId}
+          opened={openedBPAInfoModal}
+          setOpened={setOpenedBPAInfoModal}
         />
       )}
     </Flex>
