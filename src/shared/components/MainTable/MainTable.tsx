@@ -213,6 +213,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     },
   });
 
+  console.log("tablica");
+
   const columnsRaw = columnsTableData ? Object.keys(columnsTableData) : [];
   const columnsTranslated = columnsTableData ?? [];
 
