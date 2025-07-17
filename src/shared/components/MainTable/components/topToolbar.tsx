@@ -67,7 +67,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   const [t] = useTranslation(["top-toolbar"]);
   const [checked, setChecked] = useState(parameters.clientStatus === "ALL");
   const { link } = parameters;
-  const isSmallScreen = useMediaQuery("(max-width: 1180px)");
+  const isSmallScreen = useMediaQuery("(max-width: 1341px)");
   const menuItems = menuData as MenuItem[];
 
   const findPermissionKey = (items: MenuItem[], pathname: string): string => {
