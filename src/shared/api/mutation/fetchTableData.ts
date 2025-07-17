@@ -49,7 +49,16 @@ export const postApiData = async (
         autoClose: 5000,
       });
     }
-    console.error("Error posting API data:", error);
-    throw new Error("Failed to post API data");
+    // Возвращаем пустой объект, соответствующий ITableDataResponse
+    return {
+      columnName: {},
+      content: [],
+      page: {
+        number: 0,
+        size: 0,
+        totalElements: 0,
+        totalPages: 0,
+      },
+    };
   }
 };

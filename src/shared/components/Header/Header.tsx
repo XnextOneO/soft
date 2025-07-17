@@ -85,7 +85,15 @@ const Header: FC<HeaderProperties> = ({
   ));
 
   return (
-    <Container className={classes.headerContainer} fluid p={0}>
+    <Container
+      className={classes.headerContainer}
+      fluid
+      p={0}
+      style={{
+        borderTopRightRadius: link ? "0" : "2px",
+        borderTopLeftRadius: link ? "0" : "2px",
+      }}
+    >
       <Flex w="100%" h="100%" direction="row">
         <Flex w={link ? 350 : ""} align={"center"}>
           {isBurger && (

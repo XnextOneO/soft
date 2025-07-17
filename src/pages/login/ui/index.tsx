@@ -24,7 +24,7 @@ import { jwtDecode, JwtPayload } from "jwt-decode";
 import styles from "./index.module.scss";
 
 interface CustomJwtPayload extends JwtPayload {
-  name: string;
+  full_name: string;
   permissions: string[];
   preferred_username: string;
 }
@@ -62,7 +62,7 @@ export const LoginPage: FC = () => {
             refresh_expires_in,
           } = data;
           const decodedToken = jwtDecode<CustomJwtPayload>(access_token);
-          const name = decodedToken.name;
+          const name = decodedToken.full_name;
           const permissions = decodedToken.permissions;
           const b = decodedToken.preferred_username;
           setPermissions(permissions);
@@ -104,7 +104,20 @@ export const LoginPage: FC = () => {
     <div className={backgroundState}>
       <Stack gap={0}>
         <Header isBurger={false} isProfile={false} link={false} />
-        <Card w="25%" py={70} px={80} miw={510} shadow="xl" withBorder>
+        <Card
+          w=""
+          py={70}
+          px={80}
+          miw={510}
+          shadow="xl"
+          withBorder
+          radius={0}
+          style={{
+            borderTop: "0",
+            borderBottomRightRadius: "2px",
+            borderBottomLeftRadius: "2px",
+          }}
+        >
           <Group
             gap="0"
             w="100%"

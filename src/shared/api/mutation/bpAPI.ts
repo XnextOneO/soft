@@ -26,8 +26,8 @@ export const syncDataSCBank = async (link: string): Promise<any> => {
         autoClose: 5000,
       });
     }
-    console.error("Error posting API data:", error);
-    throw new Error("Failed to post API data");
+    // eslint-disable-next-line consistent-return
+    return;
   }
 };
 
@@ -58,8 +58,8 @@ export const getInfo = async (link: string, id: number): Promise<any> => {
       }
     }
 
-    console.error("Error posting API data:", error);
-    throw new Error("Failed to post API data");
+    // eslint-disable-next-line consistent-return
+    return;
   }
 };
 
@@ -78,8 +78,8 @@ export const getColumnsTable = async (link: string): Promise<any> => {
         autoClose: 5000,
       });
     }
-    console.error("Error posting API data:", error);
-    throw new Error("Failed to post API data");
+    // eslint-disable-next-line consistent-return
+    return;
   }
 };
 
@@ -98,7 +98,7 @@ export const getColumnsCard = async (link: string): Promise<any> => {
         autoClose: 5000,
       });
     }
-    console.error("Error posting API data:", error);
-    throw new Error("Failed to post API data");
+    // eslint-disable-next-line consistent-return
+    return;
   }
 };
