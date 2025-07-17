@@ -89,8 +89,7 @@
         "normative-values": {
           "name": "Нормативные величины",
           "items": {
-            "regulatory-capital-by-calculations": "Величина нормативного капитала по корсчетам",
-            "calendar": "Календарь"
+            "regulatory-capital-by-calculations": "Величина нормативного капитала по корсчетам"
           }
         },
         "reference-books-for-international-payments-investigation": {
@@ -102,6 +101,9 @@
             "table-headers-transfer-amount-ranges": "Таблица заголовков диапазонов сумм переводов",
             "table-transfer-amount-ranges": "Таблица диапазонов сумм переводов"
           }
+        },
+        "calendar": {
+          "name": "Календарь выходных дней"
         }
       }
     },
