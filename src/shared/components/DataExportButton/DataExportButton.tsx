@@ -41,6 +41,7 @@ export const DataExportButton = ({
     <Combobox.Option
       value={item}
       key={item}
+      disabled={item === "Word" || item === "PDF"}
       onClick={() => exportDataInFormat(item)}
     >
       {item}
@@ -59,7 +60,7 @@ export const DataExportButton = ({
       }}
     >
       <Combobox.Target>
-        <Tooltip label="Экспорт" withArrow>
+        <Tooltip label="Выгрузка данных" withArrow>
           <Button
             w={w}
             h={h}

@@ -40,7 +40,6 @@ export interface BusinessPartnerData {
   clientNameEng?: string;
   swiftRusAddress?: string;
   swiftAddress?: string;
-  id?: string;
   clientId?: string;
   registrationNumber?: string;
   foreignClientCode?: string;
@@ -124,7 +123,7 @@ export const BusinessPartnerInfoModal = ({
     ],
     ["swiftRusName", "clientNameEng"],
     ["swiftRusAddress", "swiftAddress"],
-    ["id", "clientId", "registrationNumber", "foreignClientCode"],
+    ["clientId", "registrationNumber", "foreignClientCode"],
   ];
 
   const handleCloseBPInfoModal = (): void => {

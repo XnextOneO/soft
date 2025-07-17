@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Checkbox, Flex, Group, Tooltip } from "@mantine/core";
+import { Button, Checkbox, Flex, Group, Loader, Tooltip } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import IconDetails from "@public/assets/details.svg?react";
@@ -19,6 +19,7 @@ import { MenuItem } from "@shared/components/Menu";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { IconReload } from "@tabler/icons-react";
+import { useMutation } from "@tanstack/react-query";
 import { useLocation } from "@tanstack/react-router";
 import { MRT_GlobalFilterTextInput } from "mantine-react-table";
 
@@ -65,7 +66,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   const { permissions } = usePermissionsStore();
   const location = useLocation();
   const [t] = useTranslation(["top-toolbar"]);
-  const [checked, setChecked] = useState(parameters.clientStatus === "ALL");
+  const [checked, setChecked] = useState(parameters.status === "ALL");
   const { link } = parameters;
   const isSmallScreen = useMediaQuery("(max-width: 1341px)");
   const menuItems = menuData as MenuItem[];
@@ -89,8 +90,8 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   const permissionKey = findPermissionKey(menuItems, location.pathname);
 
   useEffect(() => {
-    setChecked(parameters.clientStatus === "ALL");
-  }, [parameters.clientStatus]);
+    setChecked(parameters.status === "ALL");
+  }, [parameters.status]);
 
   const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -100,27 +101,27 @@ const TopToolbar: FC<TopToolbarProperties> = ({
     setClientStatus(newChecked ? "ALL" : "OPEN");
   };
 
-  const handleSyncData = (): void => {
-    syncDataSCBank(link)
-      .then((response) => {
-        if (response === 200) {
-          refetch();
-          return true;
-        } else return false;
-      })
-      .catch((error) => {
-        notifications.show({
-          title: "Ошибка",
-          message:
-            error.response?.data?.message ||
-            "Произошла ошибка при синхронизации данных",
-          color: "red",
-          autoClose: 5000,
-        });
+  const mutation = useMutation({
+    mutationFn: async (_link: string) => {
+      return await syncDataSCBank(_link);
+    },
+    onSuccess: () => {
+      refetch();
+    },
+    onError: (error) => {
+      notifications.show({
+        title: "Ошибка",
+        message: error.message || "Произошла ошибка при синхронизации данных",
+        color: "red",
+        autoClose: 5000,
       });
-  };
+    },
+  });
 
   const renderSyncButtonLabel = (): string | ReactElement => {
+    if (mutation.isPending) {
+      return <Loader color="#fff" size={15} />;
+    }
     if (isSmallScreen) {
       return <SvgButton SvgIcon={IconSC360} fillColor={"#fff"} />;
     }
@@ -158,17 +159,25 @@ const TopToolbar: FC<TopToolbarProperties> = ({
             link === "/business-partner-accounts" ? (
               <Tooltip label="SC360" withArrow>
                 <Button
-                  disabled={!hasSyncPermission(permissions, permissionKey)}
+                  disabled={
+                    !hasSyncPermission(permissions, permissionKey) ||
+                    mutation.isPending
+                  }
                   className={classes.button}
-                  p={0}
                   h={30}
                   w={isSmallScreen ? 30 : "auto"}
-                  px={isSmallScreen ? "0" : "sm"}
+                  px={isSmallScreen ? "0" : "16"}
                   color="#007458"
                   size="sm"
-                  style={{ fontSize: "12px" }}
+                  style={{
+                    fontSize: "12px",
+                    minWidth: isSmallScreen ? 30 : 320,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                   radius="xs"
-                  onClick={handleSyncData}
+                  onClick={() => mutation.mutate(link)}
                 >
                   {renderSyncButtonLabel()}
                 </Button>
@@ -255,7 +264,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           color={"#007458"}
           parameters={parameters}
         />
-        <Tooltip label="Фильтры" withArrow>
+        <Tooltip label="Фильтр" withArrow>
           <Button
             w={30}
             h={30}

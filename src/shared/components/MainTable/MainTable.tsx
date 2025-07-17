@@ -15,6 +15,7 @@ import IconSort from "@public/assets/IconSort.svg?react";
 import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
 import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
+import { MRT_Localization_RU_Custom } from "@public/locales/MRT_Localization_RU_Custom";
 import { getColumnsTable } from "@shared/api/mutation/bpAPI.ts";
 import {
   ITableDataResponse,
@@ -42,7 +43,6 @@ import {
   MRT_SortingState,
   useMantineReactTable,
 } from "mantine-react-table";
-import { MRT_Localization_RU } from "mantine-react-table/locales/ru/index.esm.mjs";
 
 import classes from "./MainTable.module.scss";
 type OnChangeFunction<T> = (updaterOrValue: T | ((old: T) => T)) => void;
@@ -66,7 +66,7 @@ export interface ParametersPost {
   searchText: string;
   sortCriteria: SortCriteria;
   searchCriteria: FilterCriteria;
-  clientStatus: ClientStatus;
+  status: ClientStatus;
 }
 
 interface InfiniteTableDataResponse {
@@ -94,7 +94,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const tableContainerReference = useRef<HTMLDivElement>(null);
   const rowVirtualizerInstanceReference = useRef<MRT_RowVirtualizer>(null);
   const [showColumnFilters, setShowColumnFilters] = useState<boolean>(false);
-  const [localization, setLocalization] = useState(MRT_Localization_RU);
+  const [localization, setLocalization] = useState(MRT_Localization_RU_Custom);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [createModalOpened, setCreateModalOpened] = useState(false);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
@@ -150,7 +150,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
   useEffect(() => {
     const handleLanguageChange = (lng: string): void => {
-      setLocalization(lng === "by" ? MRT_Localization_BY : MRT_Localization_RU);
+      setLocalization(
+        lng === "by" ? MRT_Localization_BY : MRT_Localization_RU_Custom,
+      );
     };
 
     handleLanguageChange(i18n.language);
@@ -169,7 +171,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     searchText: globalFilter ?? "",
     sortCriteria: sortCriteria,
     searchCriteria: columnSearchCriteria,
-    clientStatus: clientStatus,
+    status: clientStatus,
   };
   const { data, refetch, fetchNextPage, isRefetching, isLoading } =
     useInfiniteQuery<ITableDataResponse>({

@@ -53,8 +53,6 @@ export const LoginPage: FC = () => {
       { username, password },
       {
         onSuccess: (data) => {
-          console.log(data, "data");
-
           const {
             access_token,
             refresh_token,
