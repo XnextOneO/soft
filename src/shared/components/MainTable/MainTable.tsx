@@ -215,7 +215,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     },
   });
 
-  const columnsRaw = columnsTableData ? Object.keys(columnsTableData) : [];
+  const columnsFromData = Object.keys(data?.pages?.[0]?.content?.[0] ?? {});
+  const columnsRaw = columnsTableData ? columnsFromData : [];
   const columnsTranslated = columnsTableData ?? [];
 
   const cellValues = useMemo(
@@ -420,6 +421,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     manualFiltering: true,
     editDisplayMode: "modal",
     enableRowVirtualization: true,
+    rowVirtualizerOptions: {
+      overscan: 30,
+      estimateSize: () => 100,
+    },
     // enableEditing: isEdit && link !== "/business-partner",
     enableEditing: false,
     columns: processedColumns,
