@@ -106,6 +106,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
+  const [columnsFromData, setColumnsFromData] = useState<string[]>([]);
 
   const [error, setError] = useState<string | undefined>();
   const [clientId, setClientId] = useState<number | undefined>();
@@ -215,7 +216,12 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     },
   });
 
-  const columnsFromData = Object.keys(data?.pages?.[0]?.content?.[0] ?? {});
+  useEffect(() => {
+    if (data?.pages?.[0]?.content?.[0]) {
+      const newColumnsFromData = Object.keys(data.pages[0].content[0]);
+      setColumnsFromData(newColumnsFromData);
+    }
+  }, [data]);
   const columnsRaw = columnsTableData ? columnsFromData : [];
   const columnsTranslated = columnsTableData ?? [];
 
