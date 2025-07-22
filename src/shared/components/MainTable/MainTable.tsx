@@ -189,10 +189,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       },
       initialPageParam: 0,
       refetchOnWindowFocus: false,
+      staleTime: 0,
     });
 
   const queryClient = useQueryClient();
-
   const handleRefetch = async (): Promise<void> => {
     queryClient.setQueryData(
       ["apiData", parametersPost],
@@ -472,7 +472,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     },
     mantineEditRowModalProps: {
       closeOnClickOutside: true,
-      withCloseButton: true,
     },
     localization: localization,
     enableFullScreenToggle: false,
