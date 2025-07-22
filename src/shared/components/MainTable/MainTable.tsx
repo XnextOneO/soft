@@ -106,6 +106,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
+  const [columnsFromData, setColumnsFromData] = useState<string[]>([]);
 
   const [error, setError] = useState<string | undefined>();
   const [clientId, setClientId] = useState<number | undefined>();
@@ -215,7 +216,13 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     },
   });
 
-  const columnsRaw = columnsTableData ? Object.keys(columnsTableData) : [];
+  useEffect(() => {
+    if (data?.pages?.[0]?.content?.[0]) {
+      const newColumnsFromData = Object.keys(data.pages[0].content[0]);
+      setColumnsFromData(newColumnsFromData);
+    }
+  }, [data]);
+  const columnsRaw = columnsTableData ? columnsFromData : [];
   const columnsTranslated = columnsTableData ?? [];
 
   const cellValues = useMemo(
@@ -420,6 +427,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     manualFiltering: true,
     editDisplayMode: "modal",
     enableRowVirtualization: true,
+    rowVirtualizerOptions: {
+      overscan: 30,
+      estimateSize: () => 100,
+    },
     // enableEditing: isEdit && link !== "/business-partner",
     enableEditing: false,
     columns: processedColumns,

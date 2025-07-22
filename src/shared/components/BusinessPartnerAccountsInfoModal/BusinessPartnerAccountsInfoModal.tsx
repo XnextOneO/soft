@@ -158,7 +158,9 @@ export const BusinessPartnerAccountsInfoModal = ({
           ))}
         </Stack>
         <Group gap={8} px={"16px"} py={"8px"}>
-          <Button className={classes.button}>Финансовые условия</Button>
+          <Button className={classes.button} disabled>
+            Финансовые условия
+          </Button>
           <Button
             className={classes.button}
             onClick={() => {
@@ -169,9 +171,15 @@ export const BusinessPartnerAccountsInfoModal = ({
           >
             Деловой партнер
           </Button>
-          <Button className={classes.button}>Выписка по счету</Button>
-          <Button className={classes.button}>Ограничения по ЛС</Button>
-          <Button className={classes.button}>Прочее</Button>
+          <Button className={classes.button} disabled>
+            Выписка по счету
+          </Button>
+          <Button className={classes.button} disabled>
+            Ограничения по ЛС
+          </Button>
+          <Button className={classes.button} disabled>
+            Прочее
+          </Button>
         </Group>
       </Modal>
       <BusinessPartnerInfoModal
