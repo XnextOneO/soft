@@ -30,6 +30,7 @@ import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
+import { usePermissionsStore } from "@shared/store/permissionStore";
 import {
   useInfiniteQuery,
   useQuery,
@@ -107,7 +108,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const { i18n } = useTranslation();
   const colorScheme = useMantineColorScheme();
   const [columnsFromData, setColumnsFromData] = useState<string[]>([]);
-
   const [error, setError] = useState<string | undefined>();
   const [clientId, setClientId] = useState<number | undefined>();
 
@@ -382,9 +382,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         setShowColumnFilters={setShowColumnFilters}
         parameters={parametersPost}
         refetch={handleRefetch}
+        canCreate={false}
         setOpened={setOpenedUpdateModal}
         table={table}
-        canCreate={false}
         updateTable={updateTable}
         setClientStatus={setClientStatus}
       />

@@ -10,6 +10,7 @@ import IconSC360 from "@public/assets/IconSC360.svg?react";
 import IconSum from "@public/assets/sum.svg?react";
 import menuData from "@public/menuItems.json";
 import { syncDataSCBank } from "@shared/api/mutation/bpAPI.ts";
+import { useCreateCalendarRow } from "@shared/api/mutation/calendarAPI";
 import { DataExportButton } from "@shared/components/DataExportButton/DataExportButton.tsx";
 import {
   ClientStatus,
@@ -24,6 +25,8 @@ import { useLocation } from "@tanstack/react-router";
 import { MRT_GlobalFilterTextInput } from "mantine-react-table";
 
 import classes from "../MainTable.module.scss";
+
+import { CreateCalendarRowModal } from "./TopToolbar/CreateCalendarRowModal";
 
 interface TopToolbarProperties {
   refetch: () => void;
@@ -49,7 +52,17 @@ export const hasUpdatePermission = (
   permissions: string[],
   key: string | undefined,
 ): boolean => {
-  return permissions.includes(`${key}:fileUpdate`);
+  return (
+    permissions.includes(`${key}:fileUpdate`) ||
+    permissions.includes(`${key}:update-from-a-file`)
+  );
+};
+
+export const hasCreatePermission = (
+  permissions: string[],
+  key: string | undefined,
+): boolean => {
+  return permissions.includes(`${key}:create`);
 };
 
 const TopToolbar: FC<TopToolbarProperties> = ({
@@ -68,8 +81,13 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   const [t] = useTranslation(["top-toolbar"]);
   const [checked, setChecked] = useState(parameters.status === "ALL");
   const { link } = parameters;
-  const isSmallScreen = useMediaQuery("(max-width: 1341px)");
+  const isSmallScreen = useMediaQuery(
+    link === "/calendar" ? "(max-width: 1100px)" : "(max-width: 1341px)",
+  );
   const menuItems = menuData as MenuItem[];
+  const [openedCalendarRowCreateModal, setOpenedCalendarRowCreateModal] =
+    useState(false);
+  const { mutate } = useCreateCalendarRow();
 
   const findPermissionKey = (items: MenuItem[], pathname: string): string => {
     for (const item of items) {
@@ -138,154 +156,197 @@ const TopToolbar: FC<TopToolbarProperties> = ({
     }
   };
 
+  const create = (): void => {
+    setOpenedCalendarRowCreateModal(true);
+
+    // mutate();
+  };
+
   return (
-    <Flex direction={"row"} gap={"md"} py={8} px={16} justify={"space-between"}>
-      <Group gap="8px">
-        <Tooltip label="Обновить" withArrow>
-          <Button
-            w={30}
-            h={30}
-            p={0}
-            radius="xs"
-            color="#007458"
-            onClick={refetch}
-          >
-            <IconReload width={20} height={20} />
-          </Button>
-        </Tooltip>
-        {updateTable && (
-          <>
-            {link === "/business-partner" ||
-            link === "/business-partner-accounts" ? (
-              <Tooltip label="SC360" withArrow>
+    <>
+      <Flex
+        direction={"row"}
+        gap={"md"}
+        py={8}
+        px={16}
+        justify={"space-between"}
+      >
+        <Group gap="8px">
+          <Tooltip label="Обновить" withArrow>
+            <Button
+              w={30}
+              h={30}
+              p={0}
+              radius="xs"
+              color="#007458"
+              onClick={refetch}
+            >
+              <IconReload width={20} height={20} />
+            </Button>
+          </Tooltip>
+          {updateTable && (
+            <>
+              {link === "/business-partner" ||
+              link === "/business-partner-accounts" ? (
+                <Tooltip label="SC360" withArrow>
+                  <Button
+                    disabled={
+                      !hasSyncPermission(permissions, permissionKey) ||
+                      mutation.isPending
+                    }
+                    className={classes.button}
+                    h={30}
+                    w={isSmallScreen ? 30 : "auto"}
+                    px={isSmallScreen ? "0" : "16"}
+                    color="#007458"
+                    size="sm"
+                    style={{
+                      fontSize: "12px",
+                      minWidth: isSmallScreen ? 30 : 320,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    radius="xs"
+                    onClick={() => mutation.mutate(link)}
+                  >
+                    {renderSyncButtonLabel()}
+                  </Button>
+                </Tooltip>
+              ) : (
+                <Tooltip label="Обновить из файла" withArrow>
+                  <Button
+                    // disabled={!hasUpdatePermission(permissions, permissionKey)}
+                    disabled={true}
+                    className={classes.button}
+                    h={30}
+                    w={"auto"}
+                    px={"16"}
+                    color="#007458"
+                    size="sm"
+                    style={{
+                      fontSize: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    radius="xs"
+                    onClick={() => setOpened(true)}
+                  >
+                    {t("top-toolbar:top-toolbar.update-table")}
+                  </Button>
+                </Tooltip>
+              )}
+            </>
+          )}
+          {link !== "/business-partner" &&
+            hasCreatePermission(permissions, permissionKey) && (
+              <Tooltip label="Добавить" withArrow>
                 <Button
-                  disabled={
-                    !hasSyncPermission(permissions, permissionKey) ||
-                    mutation.isPending
-                  }
                   className={classes.button}
                   h={30}
-                  w={isSmallScreen ? 30 : "auto"}
-                  px={isSmallScreen ? "0" : "16"}
+                  w={"auto"}
+                  px={"16"}
                   color="#007458"
                   size="sm"
                   style={{
                     fontSize: "12px",
-                    minWidth: isSmallScreen ? 30 : 320,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                   radius="xs"
-                  onClick={() => mutation.mutate(link)}
+                  onClick={create}
                 >
-                  {renderSyncButtonLabel()}
-                </Button>
-              </Tooltip>
-            ) : (
-              <Tooltip label="Обновить из файла" withArrow>
-                <Button
-                  disabled={!hasUpdatePermission(permissions, permissionKey)}
-                  className={classes.button}
-                  color="#007458"
-                  size="sm"
-                  radius="xs"
-                  h={30}
-                  onClick={() => setOpened(true)}
-                >
-                  {t("top-toolbar:top-toolbar.update-table")}
+                  {t("top-toolbar:top-toolbar.create-new-row")}
                 </Button>
               </Tooltip>
             )}
-          </>
-        )}
-        {canCreate && link !== "/business-partner" && (
-          <Tooltip label="Создать" withArrow>
-            <Button onClick={() => table.setCreatingRow(true)}>
-              {t("top-toolbar:top-toolbar.create-new-row")}
-            </Button>
-          </Tooltip>
-        )}
-        {link === "/business-partner" ||
-        link === "/business-partner-accounts" ? (
-          <Checkbox
-            classNames={{
-              label: classes.checkboxLabel,
-            }}
-            size={"xs"}
-            color={"#007458"}
-            checked={checked}
-            label={`Показать все ${link === "/business-partner-accounts" ? "счета" : "банки"}, включая закрытые`}
-            onChange={handleCheckboxChange}
-          />
-        ) : (
-          <></>
-        )}
-      </Group>
-      <Flex gap={"5"} direction={"row"} align={"center"}>
-        <Button
-          w={30}
-          h={30}
-          p={5}
-          radius="xs"
-          color="#007458"
-          disabled
-          className={classes.button}
-        >
-          <IconDetails />
-        </Button>
-        <Button
-          w={30}
-          h={30}
-          p={5}
-          radius="xs"
-          color="#007458"
-          disabled
-          className={classes.button}
-        >
-          <IconDoubleSum />
-        </Button>
-        <Button
-          w={30}
-          h={30}
-          p={5}
-          radius="xs"
-          color="#007458"
-          disabled
-          className={classes.button}
-        >
-          <IconSum />
-        </Button>
-        <DataExportButton
-          w={30}
-          h={30}
-          p={5}
-          radius={"xs"}
-          color={"#007458"}
-          parameters={parameters}
-        />
-        <Tooltip label="Фильтр" withArrow>
+          {link === "/business-partner" ||
+          link === "/business-partner-accounts" ? (
+            <Checkbox
+              classNames={{
+                label: classes.checkboxLabel,
+              }}
+              size={"xs"}
+              color={"#007458"}
+              checked={checked}
+              label={`Показать все ${link === "/business-partner-accounts" ? "счета" : "банки"}, включая закрытые`}
+              onChange={handleCheckboxChange}
+            />
+          ) : (
+            <></>
+          )}
+        </Group>
+        <Flex gap={"5"} direction={"row"} align={"center"}>
           <Button
             w={30}
             h={30}
             p={5}
-            className={classes.button}
             radius="xs"
             color="#007458"
-            onClick={() => setShowColumnFilters(!showColumnFilters)}
+            disabled
+            className={classes.button}
           >
-            <IconFilter />
+            <IconDetails />
           </Button>
-        </Tooltip>
-        <MRT_GlobalFilterTextInput
-          placeholder={"Поиск по таблице"}
-          size={"xs"}
-          w={"240px"}
-          table={table}
-        />
-        {/*<MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />*/}
+          <Button
+            w={30}
+            h={30}
+            p={5}
+            radius="xs"
+            color="#007458"
+            disabled
+            className={classes.button}
+          >
+            <IconDoubleSum />
+          </Button>
+          <Button
+            w={30}
+            h={30}
+            p={5}
+            radius="xs"
+            color="#007458"
+            disabled
+            className={classes.button}
+          >
+            <IconSum />
+          </Button>
+          <DataExportButton
+            w={30}
+            h={30}
+            p={5}
+            radius={"xs"}
+            color={"#007458"}
+            parameters={parameters}
+          />
+          <Tooltip label="Фильтр" withArrow>
+            <Button
+              w={30}
+              h={30}
+              p={5}
+              className={classes.button}
+              radius="xs"
+              color="#007458"
+              onClick={() => setShowColumnFilters(!showColumnFilters)}
+            >
+              <IconFilter />
+            </Button>
+          </Tooltip>
+          <MRT_GlobalFilterTextInput
+            placeholder={"Поиск по таблице"}
+            size={"xs"}
+            w={"240px"}
+            table={table}
+          />
+          {/*<MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />*/}
+        </Flex>
       </Flex>
-    </Flex>
+      <CreateCalendarRowModal
+        opened={openedCalendarRowCreateModal}
+        setOpened={setOpenedCalendarRowCreateModal}
+      />
+    </>
   );
 };
 

@@ -61,20 +61,18 @@ const Header: FC<HeaderProperties> = ({
 
   const filteredItems = flatMenuItems.filter((item) => {
     const hasPermission = permissions.includes(`${item.key}:read`);
-    const hasHref = item.href !== undefined; // Проверка наличия поля href
+    const hasHref = item.href !== undefined;
     return (
       hasPermission &&
-      hasHref && // Убедитесь, что элемент имеет поле href
+      hasHref &&
       t(item.name).toLowerCase().includes(searchTerm.toLowerCase().trim())
     );
   });
+
   const options = filteredItems.map((item) => (
     <Link
       key={item.key + item.href}
       to={item.href}
-      // params={{
-      //   slug: item.href ?? "",
-      // }}
       style={{
         textDecoration: "none",
         color: colorScheme.colorScheme === "light" ? "#333333" : "#CCCCCC",
