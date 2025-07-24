@@ -30,7 +30,6 @@ import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
-import { usePermissionsStore } from "@shared/store/permissionStore";
 import {
   useInfiniteQuery,
   useQuery,

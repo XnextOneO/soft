@@ -10,7 +10,6 @@ import IconSC360 from "@public/assets/IconSC360.svg?react";
 import IconSum from "@public/assets/sum.svg?react";
 import menuData from "@public/menuItems.json";
 import { syncDataSCBank } from "@shared/api/mutation/bpAPI.ts";
-import { useCreateCalendarRow } from "@shared/api/mutation/calendarAPI";
 import { DataExportButton } from "@shared/components/DataExportButton/DataExportButton.tsx";
 import {
   ClientStatus,
@@ -70,7 +69,6 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   parameters,
   setOpened,
   table,
-  canCreate,
   updateTable,
   setClientStatus,
   setShowColumnFilters,
@@ -87,7 +85,6 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   const menuItems = menuData as MenuItem[];
   const [openedCalendarRowCreateModal, setOpenedCalendarRowCreateModal] =
     useState(false);
-  const { mutate } = useCreateCalendarRow();
 
   const findPermissionKey = (items: MenuItem[], pathname: string): string => {
     for (const item of items) {
@@ -158,8 +155,6 @@ const TopToolbar: FC<TopToolbarProperties> = ({
 
   const create = (): void => {
     setOpenedCalendarRowCreateModal(true);
-
-    // mutate();
   };
 
   return (
