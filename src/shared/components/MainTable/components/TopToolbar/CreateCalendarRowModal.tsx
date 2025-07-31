@@ -7,14 +7,33 @@ import {
   Modal,
   ScrollArea,
   Stack,
+  Text,
   TextInput,
-  Title,
   useCombobox,
 } from "@mantine/core";
-import { getCountries } from "@shared/api/mutation/calendarAPI";
+import { DateInput } from "@mantine/dates";
+import { notifications } from "@mantine/notifications";
+import {
+  getCountries,
+  useCreateCalendarRow,
+} from "@shared/api/mutation/calendarAPI";
 import { useQuery } from "@tanstack/react-query";
 
 import classes from "./CalendarModals.module.scss";
+
+const formatDate = (inputDate: string): string => {
+  const date = new Date(inputDate);
+
+  if (Number.isNaN(date.getTime())) {
+    throw new TypeError("Неверный формат даты.");
+  }
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${day}.${month}.${year}`;
+};
 
 export const CreateCalendarRowModal = ({
   opened,
@@ -26,7 +45,19 @@ export const CreateCalendarRowModal = ({
   const handleCloseCalendarCreateModal = (): void => {
     setOpened(false);
   };
-  const [country, setCountry] = useState("");
+  const { mutate } = useCreateCalendarRow();
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const currentDay = String(currentDate.getDate()).padStart(2, "0");
+
+  const formattedDate = `${currentYear}-${currentMonth}-${currentDay}`;
+
+  const [countryName, setCountryName] = useState("");
+  const [countryId, setCountryId] = useState<string>("");
+  const [weekendDate, setWeekendDate] = useState<string | null>();
+  const [caption, setCaption] = useState<string>("");
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -47,19 +78,52 @@ export const CreateCalendarRowModal = ({
   }
 
   const filteredItems = data?.filter((item) => {
-    return item.shortName.toLowerCase().includes(country.toLowerCase().trim());
+    return item.shortName
+      .toLowerCase()
+      .includes(countryName.toLowerCase().trim());
   });
 
   const options = Array.isArray(filteredItems)
     ? filteredItems.map((item) => ({
-        value: item.code,
+        value: item.code.toString(),
         label: item.shortName,
       }))
     : [];
 
-  console.log(country);
+  const submitForm = async (): Promise<void> => {
+    if (!weekendDate || !countryId) {
+      // Проверка на валидность страны и даты
+      notifications.show({
+        title: "Ошибка",
+        message: "Пожалуйста, выберите валидную страну и дату.",
+        color: "red",
+        autoClose: 5000,
+      });
+      return;
+    }
 
-  return data ? (
+    mutate(
+      {
+        countryId: Number(countryId),
+        weekendDate: formatDate(weekendDate),
+        note: caption,
+      },
+      {
+        onSuccess: (_data) => {
+          setCountryId("");
+          setCountryName("");
+          setWeekendDate("");
+          setCaption("");
+          return _data;
+        },
+        onError: (createError) => {
+          console.log(createError);
+        },
+      },
+    );
+  };
+
+  return (
     <Modal
       opened={opened}
       onClose={handleCloseCalendarCreateModal}
@@ -78,11 +142,19 @@ export const CreateCalendarRowModal = ({
       size={"xs"}
     >
       <Stack gap={16} p={"16px"}>
-        <Flex direction="column">
-          <Title order={5}>Выбор страны</Title>
+        <Flex direction="column" gap={"4px"}>
+          <Text fw={400} size={"14px"} lh={"100%"}>
+            Выбор страны
+          </Text>
           <Combobox
             onOptionSubmit={(option) => {
-              setCountry(option);
+              const selectedOption = options.find(
+                (opt) => opt.value === option,
+              );
+              if (selectedOption) {
+                setCountryName(selectedOption.label);
+                setCountryId(selectedOption.value);
+              }
               combobox.closeDropdown();
             }}
             store={combobox}
@@ -96,9 +168,9 @@ export const CreateCalendarRowModal = ({
                 }}
                 radius={"2px"}
                 placeholder={"Выберите страну"}
-                value={country}
+                value={countryName}
                 onChange={(event) => {
-                  setCountry(event.currentTarget.value);
+                  setCountryName(event.currentTarget.value);
                   combobox.openDropdown();
                   combobox.updateSelectedOptionIndex();
                 }}
@@ -130,21 +202,39 @@ export const CreateCalendarRowModal = ({
             </Combobox.Dropdown>
           </Combobox>
         </Flex>
-        <Flex direction="column">
-          <Title order={5}>Примечание</Title>
-          <TextInput />
+        <Flex direction="column" gap={"4px"}>
+          <Text fw={400} size={"14px"} lh={"100%"}>
+            Дата календаря
+          </Text>
+          <DateInput
+            defaultDate={formattedDate}
+            value={weekendDate}
+            onChange={setWeekendDate}
+            valueFormat="DD.MM.YYYY"
+            placeholder="Введите дату"
+          />
+        </Flex>
+        <Flex direction="column" gap={"4px"}>
+          <Text fw={400} size={"14px"} lh={"100%"}>
+            Примечание
+          </Text>
+          <TextInput
+            value={caption}
+            onChange={(event) => setCaption(event.currentTarget.value)}
+          />
         </Flex>
       </Stack>
-      <Group gap={8} px={"16px"} py={"8px"}>
-        <Button className={classes.button} disabled>
-          Финансовые условия
+      <Group w={"100%"} justify="flex-end" gap={8} px={"16px"} py={"8px"}>
+        <Button
+          className={classes.button}
+          onClick={handleCloseCalendarCreateModal}
+        >
+          Отменить
         </Button>
-        <Button className={classes.button} disabled>
-          Прочее
+        <Button className={classes.button} onClick={submitForm}>
+          Сохранить
         </Button>
       </Group>
     </Modal>
-  ) : (
-    <></>
   );
 };

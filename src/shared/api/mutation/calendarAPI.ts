@@ -6,13 +6,13 @@ import { $authHost } from "..";
 
 interface CalendarParameters {
   countryId: number;
-  weekendDate: string;
+  weekendDate: string | null | undefined;
   note: string;
 }
 
 interface CalendarResponse {
   countryId: number;
-  weekendDate: string;
+  weekendDate: string | null | undefined;
   note: string;
 }
 
@@ -22,6 +22,7 @@ const createCalendarRow = async ({
   note,
 }: CalendarParameters): Promise<CalendarResponse> => {
   try {
+    console.log(typeof countryId, typeof weekendDate, typeof note);
     const response: AxiosResponse<CalendarResponse> = await $authHost.post(
       "/calendar/create",
       { countryId, weekendDate, note },
@@ -29,16 +30,29 @@ const createCalendarRow = async ({
     );
     return response.data;
   } catch (error) {
+    const errorMessages: Record<number, string> = {
+      409: "Запись с такой Страной и Датой уже существует",
+      400: "Возникла непредвиденная ошибка",
+    };
+
     if (error instanceof AxiosError) {
-      notifications.show({
-        title: "Ошибка",
-        message:
-          error.response?.data?.message ||
-          "Запись с такой Страной и Датой уже существует",
-        color: "red",
-        autoClose: 5000,
-      });
+      const status = error.response?.status;
+
+      const message =
+        status !== undefined && errorMessages[`${status}`]
+          ? errorMessages[`${status}`]
+          : error.response?.data?.message || "Неизвестная ошибка";
+
+      if (status === 409 || status === 400) {
+        notifications.show({
+          title: "Ошибка",
+          message: message,
+          color: "red",
+          autoClose: 5000,
+        });
+      }
     }
+
     return {
       countryId: 0,
       weekendDate: "",
@@ -80,5 +94,24 @@ export const getCountries = async (): Promise<
         shortName: "",
       },
     ];
+  }
+};
+
+export const prefillCalendar = async (prefillYear: number): Promise<number> => {
+  try {
+    const response = await $authHost.post("calendar/prefill", undefined, {
+      params: {
+        prefillYear,
+      },
+    });
+    return response.status;
+  } catch (error) {
+    notifications.show({
+      title: "Ошибка",
+      message: `Календарь выходных дней на ${prefillYear} год уже имеет записи. Использование предзаполнения невозможно`,
+      color: "red",
+      autoClose: 5000,
+    });
+    throw error;
   }
 };

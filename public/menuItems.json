@@ -5,7 +5,7 @@
     "name": "nav-menu-stack:nav-menu-stack.business-partner.name",
     "items": [
       {
-        "key": "businessPartner",
+        "key": "business-partner",
         "name": "nav-menu-stack:nav-menu-stack.business-partner.items.customer-file",
         "href": "/business-partner/customer-file"
       }

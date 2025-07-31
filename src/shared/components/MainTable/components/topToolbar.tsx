@@ -26,6 +26,7 @@ import { MRT_GlobalFilterTextInput } from "mantine-react-table";
 import classes from "../MainTable.module.scss";
 
 import { CreateCalendarRowModal } from "./TopToolbar/CreateCalendarRowModal";
+import { PrefillCalendarModal } from "./TopToolbar/PrefillCalendarModal";
 
 interface TopToolbarProperties {
   refetch: () => void;
@@ -78,13 +79,15 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   const location = useLocation();
   const [t] = useTranslation(["top-toolbar"]);
   const [checked, setChecked] = useState(parameters.status === "ALL");
+  const [openedCalendarRowCreateModal, setOpenedCalendarRowCreateModal] =
+    useState(false);
+  const [openedCalendarPrefillModal, setOpenedCalendarPrefillModal] =
+    useState(false);
   const { link } = parameters;
   const isSmallScreen = useMediaQuery(
     link === "/calendar" ? "(max-width: 1100px)" : "(max-width: 1341px)",
   );
   const menuItems = menuData as MenuItem[];
-  const [openedCalendarRowCreateModal, setOpenedCalendarRowCreateModal] =
-    useState(false);
 
   const findPermissionKey = (items: MenuItem[], pathname: string): string => {
     for (const item of items) {
@@ -155,6 +158,10 @@ const TopToolbar: FC<TopToolbarProperties> = ({
 
   const create = (): void => {
     setOpenedCalendarRowCreateModal(true);
+  };
+
+  const preFill = (): void => {
+    setOpenedCalendarPrefillModal(true);
   };
 
   return (
@@ -236,26 +243,48 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           )}
           {link !== "/business-partner" &&
             hasCreatePermission(permissions, permissionKey) && (
-              <Tooltip label="Добавить" withArrow>
-                <Button
-                  className={classes.button}
-                  h={30}
-                  w={"auto"}
-                  px={"16"}
-                  color="#007458"
-                  size="sm"
-                  style={{
-                    fontSize: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  radius="xs"
-                  onClick={create}
-                >
-                  {t("top-toolbar:top-toolbar.create-new-row")}
-                </Button>
-              </Tooltip>
+              <Group gap={8}>
+                <Tooltip label="Предзаполнение" withArrow>
+                  <Button
+                    className={classes.button}
+                    h={30}
+                    w={"auto"}
+                    px={"16"}
+                    color="#007458"
+                    size="sm"
+                    style={{
+                      fontSize: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    radius="xs"
+                    onClick={preFill}
+                  >
+                    {t("top-toolbar:top-toolbar.pre-filling")}
+                  </Button>
+                </Tooltip>
+                <Tooltip label="Добавить" withArrow>
+                  <Button
+                    className={classes.button}
+                    h={30}
+                    w={"auto"}
+                    px={"16"}
+                    color="#007458"
+                    size="sm"
+                    style={{
+                      fontSize: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    radius="xs"
+                    onClick={create}
+                  >
+                    {t("top-toolbar:top-toolbar.create-new-row")}
+                  </Button>
+                </Tooltip>
+              </Group>
             )}
           {link === "/business-partner" ||
           link === "/business-partner-accounts" ? (
@@ -340,6 +369,10 @@ const TopToolbar: FC<TopToolbarProperties> = ({
       <CreateCalendarRowModal
         opened={openedCalendarRowCreateModal}
         setOpened={setOpenedCalendarRowCreateModal}
+      />
+      <PrefillCalendarModal
+        opened={openedCalendarPrefillModal}
+        setOpened={setOpenedCalendarPrefillModal}
       />
     </>
   );
