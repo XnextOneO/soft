@@ -46,13 +46,8 @@ export const PrefillCalendarModal = ({
         });
       }
     },
-    onError: () => {
-      notifications.show({
-        title: "Ошибка",
-        message: "Произошла ошибка при предзаполнении календаря.",
-        color: "red",
-        autoClose: 5000,
-      });
+    onError: (error) => {
+      console.log(error);
     },
   });
 

@@ -92,7 +92,6 @@ export const CreateCalendarRowModal = ({
 
   const submitForm = async (): Promise<void> => {
     if (!weekendDate || !countryId) {
-      // Проверка на валидность страны и даты
       notifications.show({
         title: "Ошибка",
         message: "Пожалуйста, выберите валидную страну и дату.",
@@ -114,6 +113,7 @@ export const CreateCalendarRowModal = ({
           setCountryName("");
           setWeekendDate("");
           setCaption("");
+          setOpened(false);
           return _data;
         },
         onError: (createError) => {

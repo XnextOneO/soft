@@ -420,7 +420,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     displayColumnDefOptions: {
       "mrt-row-actions": {
         header: "",
-        size: 50,
+        size: 80,
       },
     },
     manualFiltering: true,
@@ -430,8 +430,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       overscan: 30,
       estimateSize: () => 100,
     },
-    // enableEditing: isEdit && link !== "/business-partner",
-    enableEditing: false,
+    enableEditing:
+      link !== "/business-partner" && link !== "/business-partner-accounts",
     columns: processedColumns,
     data: cellValues,
     state: {
