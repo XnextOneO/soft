@@ -1,18 +1,19 @@
-workflow:
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
-      variables:
-        RUNNER_TAG: "sca-iis-dev"
-    - if: '$CI_COMMIT_BRANCH == "dev"'
-      variables:
-        RUNNER_TAG: "sca-iis-dev"
-    - if: '$CI_COMMIT_TAG'
-      variables:
-        RUNNER_TAG: "sca-iis-dev"
+#workflow:
+#  rules:
+#    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"'
+#      variables:
+#        RUNNER_TAG: "sca-iis-dev"
+#    - if: '$CI_COMMIT_BRANCH == "dev"'
+#      variables:
+#        RUNNER_TAG: "sca-iis-dev"
+#    - if: '$CI_COMMIT_TAG'
+#      variables:
+#        RUNNER_TAG: "sca-iis-dev"
 
 variables:
   #DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
+  RUNNER_TAG: "sca-iis-dev"
   #VERSION_TAG: latest
 
 
@@ -74,6 +75,8 @@ push_dev_job:
   stage: push
   variables:
     GIT_STRATEGY: none
+  needs:
+    - build_dev_job
   script:
     - echo "Pushing Docker image to local registry..."
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
@@ -89,12 +92,8 @@ push_dev_job:
         docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
         docker rmi $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
        fi
-  needs:
-    - build_dev_job
-  rules:
-    - if: '$CI_PIPELINE_STATUS == "success"'
-      when: on_success
-    - when: manual
+
+
 
 push_test_job:
   stage: push
@@ -108,7 +107,7 @@ push_test_job:
   needs:
     - build_test_job
   rules:
-    - if: '$CI_PIPELINE_STATUS == "success"'
+    - if: '$CI_JOB_STATUS == "success"'
       when: on_success
     - when: manual
 
@@ -119,8 +118,8 @@ deploy_dev_job:
     GIT_STRATEGY: none
 
   script:
-    - cp ~/iis_configs_test/$CI_PROJECT_NAME/.* . -a -f #-v
-    - cp ~/iis_configs_test/$CI_PROJECT_NAME/* . -a -f #-v
+    - cp ~/iis_configs/$CI_PROJECT_NAME/.* . -a -f #-v
+    - cp ~/iis_configs/$CI_PROJECT_NAME/* . -a -f #-v
     - echo "Pull Docker image from registry..."
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
     - docker compose down --rmi all || true
@@ -161,13 +160,12 @@ deploy_test_job:
     - docker tag $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID $CI_PROJECT_NAME
     - docker rmi $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
     - docker compose up -d
-  dependencies:
-    - build_test_job
+  needs:
     - push_test_job
   rules:
-#   - if: '$CI_PIPELINE_STATUS == "success"'
-#    when: on_success
-   - when: manual
+    - if: '$CI_JOB_STATUS == "success"'
+      when: on_success
+    - when: manual
 
 
 cleanup_job:
