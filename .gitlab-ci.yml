@@ -77,8 +77,6 @@ push_dev_job:
   script:
     - echo "Pushing Docker image to local registry..."
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
- 
- 
     - |
        if [ -n "$CI_COMMIT_TAG" ]; then
        echo "Commit tags found: $CI_COMMIT_TAG"
@@ -91,8 +89,12 @@ push_dev_job:
         docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
         docker rmi $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
        fi
-  dependencies:
+  needs:
     - build_dev_job
+  rules:
+    - if: '$CI_PIPELINE_STATUS == "success"'
+      when: on_success
+    - when: manual
 
 push_test_job:
   stage: push
@@ -103,9 +105,12 @@ push_test_job:
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
     - docker push $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
     - docker rmi $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
-
-  dependencies:
+  needs:
     - build_test_job
+  rules:
+    - if: '$CI_PIPELINE_STATUS == "success"'
+      when: on_success
+    - when: manual
 
 
 deploy_dev_job:
