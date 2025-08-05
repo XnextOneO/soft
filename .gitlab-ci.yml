@@ -68,8 +68,7 @@ build_test_job:
     - pwd
     - cp ~/iis_configs/$CI_PROJECT_NAME/.* . -a -f #-v
     - cp ~/iis_configs/$CI_PROJECT_NAME/* . -a -f #-v
-    - docker build --env-file .env_test -t $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID .
-
+    - docker build --build-arg PORT=3000 --build-arg VITE_API_URL=http://sca-iis-t.bb.asb:8080 -t $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID .
 
 push_dev_job:
   stage: push
@@ -175,3 +174,6 @@ cleanup_job:
   script:
     - echo "Build dir is $CI_PROJECT_DIR"
    #- rm -rf $CI_PROJECT_DIR
+
+  rules:
+    - when: always
