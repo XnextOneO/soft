@@ -13,7 +13,7 @@ workflow:
 variables:
   #DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
-  VERSION_TAG: latest
+  #VERSION_TAG: latest
 
 
 before_script:
@@ -22,17 +22,16 @@ before_script:
 
 stages:
   - build
-  - execute
-  - test
   - push
-  - tagspush
+  - deploy
   - cleanup
 
 default:
   tags:
     - $RUNNER_TAG
 
-build_job:
+
+build_dev_job:
   stage: build
   rules:
     - if: '$CI_COMMIT_BRANCH == "dev"'
@@ -42,7 +41,6 @@ build_job:
     - if: '$CI_COMMIT_TAG'
       when: on_success
     - when: manual
-
 
   script:
     - echo "The job's stage is '$CI_JOB_STAGE'"
@@ -55,87 +53,115 @@ build_job:
     - docker compose down --rmi all || true
     - docker compose build
 
-execute_job:
-  stage: execute
-  variables:
-    GIT_STRATEGY: none
 
-  script:
-    - cp ~/iis_configs/$CI_PROJECT_NAME/.* . -a -f #-v
-    - cp ~/iis_configs/$CI_PROJECT_NAME/* . -a -f #-v
-    - docker compose down || true
-    - docker compose up -d
-    - sleep 12
-  dependencies:
-    - build_job
+build_test_job:
+  stage: build
+  rules:
+    - when: manual
 
-
-test_job:
-  stage: test  
-  variables:
-    GIT_STRATEGY: none
-  
   script:
     - echo "The job's stage is '$CI_JOB_STAGE'"
-    - echo "Checking HTTP response for http://localhost:3000"
-    - |
-      RESPONSE=$(curl --write-out "%{http_code}" --silent --output /dev/null http://localhost:3000)
-      if [ "$RESPONSE" -ne 200 ]; then
-        echo "Error: Received HTTP response code $RESPONSE"
-        exit 1
-      else
-        echo "Success: Received HTTP response code $RESPONSE"
-      fi
-    - docker logs --tail 50 $CI_PROJECT_NAME
-  dependencies:
-   - build_job
-   - execute_job
+    - echo "The job's REGISTRY is '$CI_REGISTRY'"
+    - echo "The job's REGISTRY IMAGE is '$CI_REGISTRY_IMAGE'"
+    - echo "The job's CI PIPELINE ID is '$CI_PIPELINE_ID'"
+    - pwd
+    - cp ~/iis_configs/$CI_PROJECT_NAME/.* . -a -f #-v
+    - cp ~/iis_configs/$CI_PROJECT_NAME/* . -a -f #-v
+    - docker build --env-file .env_test -t $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID .
 
-push_image_job:
+
+push_dev_job:
   stage: push
   variables:
     GIT_STRATEGY: none
   script:
     - echo "Pushing Docker image to local registry..."
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
-    #- VERSION_TAG=$(git describe --tags --abbrev=0 | sed 's/-.*//')
-    #- echo "Current version '$VERSION_TAG'"
-    #- FULL_VERSION="$VERSION_TAG.$CI_PIPELINE_ID"
-    #- echo "Full version '$FULL_VERSION'"
-    - docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
-    #- docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:$FULL_VERSION-$CI_COMMIT_BRANCH
-    - docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
-    #- docker push $CI_REGISTRY_IMAGE:$FULL_VERSION-$CI_COMMIT_BRANCH
-
+ 
+ 
+    - |
+       if [ -n "$CI_COMMIT_TAG" ]; then
+       echo "Commit tags found: $CI_COMMIT_TAG"
+        docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH-$CI_COMMIT_TAG
+        docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH-$CI_COMMIT_TAG
+        docker rmi $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH-$CI_COMMIT_TAG
+       else
+        echo "Commit tags not found"
+        docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
+        docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
+        docker rmi $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
+       fi
   dependencies:
-   - build_job
-   - execute_job
-   - test_job
+    - build_dev_job
 
-tagspush_job:
-  stage: tagspush
+push_test_job:
+  stage: push
   variables:
     GIT_STRATEGY: none
-  rules:
-    - if: '$CI_COMMIT_TAG'
-
   script:
-    - echo "Pushing Docker Tagged image to local registry..."
+    - echo "Pushing Docker image to local registry..."
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
-    #- VERSION_TAG=$(git describe --tags --abbrev=0 | sed 's/-.*//')
-    #- echo "Current version '$VERSION_TAG'"
-    #- FULL_VERSION="$VERSION_TAG.$CI_PIPELINE_ID"
-    #- echo "Full version '$FULL_VERSION'"
-    #- docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
-    #- docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
-    - docker tag $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
-    - docker push $CI_REGISTRY_IMAGE:$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - docker push $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
+    - docker rmi $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
 
   dependencies:
-   - build_job
-   - execute_job
-   - test_job
-   - push_image_job  
+    - build_test_job
+
+
+deploy_dev_job:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+
+  script:
+    - cp ~/iis_configs_test/$CI_PROJECT_NAME/.* . -a -f #-v
+    - cp ~/iis_configs_test/$CI_PROJECT_NAME/* . -a -f #-v
+    - echo "Pull Docker image from registry..."
+    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
+    - docker compose down --rmi all || true
+    - |
+       if [ -n "$CI_COMMIT_TAG" ]; then
+       echo "Commit tags found: $CI_COMMIT_TAG"      
+        docker pull $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH-$CI_COMMIT_TAG       
+        docker tag $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH-$CI_COMMIT_TAG $CI_PROJECT_NAME
+        docker rmi $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH-$CI_COMMIT_TAG
+
+       else
+        echo "Commit tags not found"
+        docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
+        docker tag $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH $CI_PROJECT_NAME
+        docker rmi $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
+       fi
+
+    - docker compose up -d
+  dependencies:
+    - push_dev_job
+
+
+deploy_test_job:
+  stage: deploy
+  tags:
+    - "sca-iis-t"
+  variables:
+    GIT_STRATEGY: none
+
+  script:
+    - cp ~/iis_configs_test/$CI_PROJECT_NAME/.* . -a -f #-v
+    - cp ~/iis_configs_test/$CI_PROJECT_NAME/* . -a -f #-v
+    - docker compose down --rmi all || true
+    - echo "Pull Docker image from registry..."
+    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
+    - docker pull $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
+    - docker tag $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID $CI_PROJECT_NAME
+    - docker rmi $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
+    - docker compose up -d
+  dependencies:
+    - push_test_job
+  rules:
+#   - if: '$CI_PIPELINE_STATUS == "success"'
+#    when: on_success
+   - when: manual
+
 
 cleanup_job:
   stage: cleanup
@@ -143,4 +169,4 @@ cleanup_job:
     GIT_STRATEGY: none
   script:
     - echo "Build dir is $CI_PROJECT_DIR"
-    - rm -rf $CI_PROJECT_DIR
+   #- rm -rf $CI_PROJECT_DIR
