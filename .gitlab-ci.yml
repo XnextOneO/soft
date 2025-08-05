@@ -132,7 +132,7 @@ deploy_dev_job:
 
        else
         echo "Commit tags not found"
-        docker push $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
+        docker pull $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
         docker tag $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH $CI_PROJECT_NAME
         docker rmi $CI_REGISTRY_IMAGE:latest-$CI_COMMIT_BRANCH
        fi
