@@ -139,7 +139,8 @@ deploy_dev_job:
        fi
 
     - docker compose up -d
-  dependencies:
+  needs:
+    - build_dev_job
     - push_dev_job
 
 
@@ -161,6 +162,7 @@ deploy_test_job:
     - docker rmi $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
     - docker compose up -d
   dependencies:
+    - build_test_job
     - push_test_job
   rules:
 #   - if: '$CI_PIPELINE_STATUS == "success"'
