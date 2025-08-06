@@ -147,15 +147,15 @@ deploy_test_job:
     GIT_STRATEGY: none
 
   script:
-    - cp ~/iis_configs_test/$CI_PROJECT_NAME/.* . -a -f #-v
-    - cp ~/iis_configs_test/$CI_PROJECT_NAME/* . -a -f #-v
+   # - cp ~/iis_configs_test/$CI_PROJECT_NAME/.* . -a -f #-v
+   # - cp ~/iis_configs_test/$CI_PROJECT_NAME/* . -a -f #-v
     - docker compose down --rmi all || true
     - echo "Pull Docker image from registry..."
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
     - docker pull $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
     - docker tag $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID $CI_PROJECT_NAME
     - docker rmi $CI_REGISTRY_IMAGE:test-$CI_COMMIT_TAG$CI_PIPELINE_ID
-    - docker compose up -d
+    - docker compose -f ~/iis_configs_test/$CI_PROJECT_NAME/docker-compose.yml up -d
   needs:
     - push_test_job
   rules:
