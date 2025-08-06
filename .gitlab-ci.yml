@@ -150,8 +150,8 @@ deploy_test_job:
     GIT_STRATEGY: none
 
   script:
-    - cp ~/iis_configs_test/$CI_PROJECT_NAME/.* . -a -f #-v
-    - cp ~/iis_configs_test/$CI_PROJECT_NAME/* . -a -f #-v
+    - cp ~/iis_configs_test/.* . -a -f #-v
+    - cp ~/iis_configs_test/* . -a -f #-v
     - docker compose down --rmi all || true
     - echo "Pull Docker image from registry..."
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin git.asb.by:5050
