@@ -1,4 +1,4 @@
-import { JSX, useState } from "react";
+import React, { JSX, useState } from "react";
 import {
   Button,
   Flex,
@@ -83,6 +83,9 @@ export const PrefillCalendarModal = ({
       size={"xs"}
     >
       <Stack gap={16} p={"16px"}>
+        <Text size={"14px"} fw={400}>
+          Предзаполнение календаря выходных дней для всех стран
+        </Text>
         <Flex direction="column" gap={"4px"}>
           <Text fw={400} size={"14px"} lh={"100%"}>
             Год

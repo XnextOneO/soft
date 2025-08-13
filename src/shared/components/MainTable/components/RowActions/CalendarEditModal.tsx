@@ -16,46 +16,22 @@ import { notifications } from "@mantine/notifications";
 import IconCalendar from "@public/assets/IconCalendar.svg?react";
 import {
   getCountries,
-  useCreateCalendarRow,
+  useUpdateCalendarRow,
 } from "@shared/api/mutation/calendarAPI";
+import { formatDate } from "@shared/components/MainTable/components/TopToolbar/CreateCalendarRowModal.tsx";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import { useQuery } from "@tanstack/react-query";
+import { MRT_RowData } from "mantine-react-table";
 
-import classes from "./CalendarModals.module.scss";
+import classes from "../TopToolbar/CalendarModals.module.scss";
 
-export const formatDate = (
-  inputDate: string,
-  outputFormat: "dd.mm.yyyy" | "yyyy-mm-dd",
-): string => {
-  let date: Date;
-
-  if (inputDate.includes("-")) {
-    date = new Date(inputDate);
-  } else if (inputDate.includes(".")) {
-    const parts = inputDate.split(".");
-    date = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
-  } else {
-    throw new TypeError("Неверный формат даты.");
-  }
-
-  if (Number.isNaN(date.getTime())) {
-    throw new TypeError("Неверный формат даты.");
-  }
-
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-
-  return outputFormat === "dd.mm.yyyy"
-    ? `${day}.${month}.${year}`
-    : `${year}-${month}-${day}`;
-};
-
-export const CreateCalendarRowModal = ({
+export const CalendarEditModal = ({
+  row,
   opened,
   setOpened,
   refetch,
 }: {
+  row: MRT_RowData;
   opened: boolean;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: () => void;
@@ -67,18 +43,24 @@ export const CreateCalendarRowModal = ({
     setWeekendDate("");
     setCaption("");
   };
-  const { mutate } = useCreateCalendarRow();
+  const { mutate } = useUpdateCalendarRow();
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
   const currentDay = String(currentDate.getDate()).padStart(2, "0");
 
   const formattedDate = `${currentYear}-${currentMonth}-${currentDay}`;
-
-  const [countryName, setCountryName] = useState("");
+  const [countryName, setCountryName] = useState(
+    row.getAllCells()[0].row.original.country,
+  );
   const [countryId, setCountryId] = useState<string>("");
-  const [weekendDate, setWeekendDate] = useState<string | null>();
-  const [caption, setCaption] = useState<string>("");
+  const [weekendDate, setWeekendDate] = useState<string | null>(
+    formatDate(row.getAllCells()[0].row.original.weekendDate, "yyyy-mm-dd"),
+  );
+  const [caption, setCaption] = useState<string>(
+    row.getAllCells()[0].row.original.note,
+  );
+  const weekendId: number = row.getAllCells()[0].row.original.weekendId;
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -127,9 +109,15 @@ export const CreateCalendarRowModal = ({
       setOpened(false);
       return;
     }
-
+    console.log(
+      weekendId,
+      Number(countryId),
+      formatDate(weekendDate, "dd.mm.yyyy"),
+      caption,
+    );
     mutate(
       {
+        id: weekendId,
         countryId: Number(countryId),
         weekendDate: formatDate(weekendDate, "dd.mm.yyyy"),
         note: caption,
@@ -142,12 +130,6 @@ export const CreateCalendarRowModal = ({
           setCaption("");
           setOpened(false);
           refetch();
-          notifications.show({
-            title: "Успешно",
-            message: `Новая запись добавлена в Календарь выходных дней`,
-            color: "green",
-            autoClose: 5000,
-          });
           return _data;
         },
         onError: (createError) => {
@@ -161,7 +143,7 @@ export const CreateCalendarRowModal = ({
     <Modal
       opened={opened}
       onClose={handleCloseCalendarCreateModal}
-      title={"Добавить запись"}
+      title={"Редактировать запись"}
       overlayProps={{
         backgroundOpacity: 0.55,
       }}

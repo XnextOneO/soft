@@ -366,14 +366,19 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           {/*<MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />*/}
         </Flex>
       </Flex>
-      <CreateCalendarRowModal
-        opened={openedCalendarRowCreateModal}
-        setOpened={setOpenedCalendarRowCreateModal}
-      />
-      <PrefillCalendarModal
-        opened={openedCalendarPrefillModal}
-        setOpened={setOpenedCalendarPrefillModal}
-      />
+      {link === "/calendar" && (
+        <>
+          <CreateCalendarRowModal
+            opened={openedCalendarRowCreateModal}
+            setOpened={setOpenedCalendarRowCreateModal}
+            refetch={refetch}
+          />
+          <PrefillCalendarModal
+            opened={openedCalendarPrefillModal}
+            setOpened={setOpenedCalendarPrefillModal}
+          />
+        </>
+      )}
     </>
   );
 };

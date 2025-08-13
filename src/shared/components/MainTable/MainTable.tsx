@@ -23,8 +23,6 @@ import {
 } from "@shared/api/mutation/fetchTableData.ts";
 import { BusinessPartnerAccountsInfoModal } from "@shared/components/BusinessPartnerAccountsInfoModal/BusinessPartnerAccountsInfoModal.tsx";
 import { BusinessPartnerInfoModal } from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
-import CreateRowModalContent from "@shared/components/MainTable/components/CreateRowModalContent.tsx";
-import EditRowModalContent from "@shared/components/MainTable/components/EditRowModalContent.tsx";
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
 import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
@@ -95,8 +93,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const rowVirtualizerInstanceReference = useRef<MRT_RowVirtualizer>(null);
   const [showColumnFilters, setShowColumnFilters] = useState<boolean>(false);
   const [localization, setLocalization] = useState(MRT_Localization_RU_Custom);
-  const [deleteModalOpened, setDeleteModalOpened] = useState(false);
-  const [createModalOpened, setCreateModalOpened] = useState(false);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [filters, setFilters] = useState<MRT_ColumnFiltersState>([]);
   const [openedUpdateModal, setOpenedUpdateModal] = useState(false);
@@ -350,30 +346,12 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   };
   const table = useMantineReactTable({
     onGlobalFilterChange: handleGlobalFilterChange,
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    renderCreateRowModalContent: ({ table, row }) => (
-      <CreateRowModalContent
-        table={table}
-        row={row}
-        processedColumns={processedColumns}
-        classes={classes}
-        createRowModalOpened={createModalOpened}
-        setCreateRowModalOpened={setCreateModalOpened}
-      />
-    ),
-    renderEditRowModalContent: ({ row }) => (
-      <EditRowModalContent
-        row={row}
-        deleteModalOpened={deleteModalOpened}
-        setDeleteModalOpened={setDeleteModalOpened}
-        canDelete={false}
-        table={table}
-        classes={classes}
-      />
-    ),
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    renderRowActions: ({ row, table }) => (
-      <RowActions row={row} table={table} />
+    renderRowActions: ({ row }) => (
+      <>
+        {link === "/calendar" && (
+          <RowActions row={row} refetch={refetch} link={link} />
+        )}
+      </>
     ),
     renderTopToolbar: () => (
       <TopToolbar
@@ -392,26 +370,33 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       exitCreatingMode();
     },
     mantineTableBodyRowProps: ({ row }) => {
-      if (link === "/business-partner") {
-        return {
-          onClick: async (): Promise<void> => {
-            setClientId(row.original.clientId);
-            setOpenedBPInfoModal(true);
-          },
-          style: {
-            cursor: "pointer",
-          },
-        };
-      } else if (link === "/business-partner-accounts") {
-        return {
-          onDoubleClick: async (): Promise<void> => {
-            setClientId(row.original.accountInternalId);
-            setOpenedBPAInfoModal(true);
-          },
-          style: {
-            cursor: "pointer",
-          },
-        };
+      switch (link) {
+        case "/business-partner": {
+          return {
+            onClick: async (): Promise<void> => {
+              setClientId(row.original.clientId);
+              setOpenedBPInfoModal(true);
+            },
+            style: {
+              cursor: "pointer",
+            },
+          };
+        }
+        case "/business-partner-accounts": {
+          return {
+            onDoubleClick: async (): Promise<void> => {
+              setClientId(row.original.accountInternalId);
+              setOpenedBPAInfoModal(true);
+            },
+            style: {
+              cursor: "pointer",
+            },
+          };
+        }
+        case "/calendar": {
+          break;
+        }
+        default:
       }
       return {};
     },
@@ -420,7 +405,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     displayColumnDefOptions: {
       "mrt-row-actions": {
         header: "",
-        size: 80,
+        size: link === "/calendar" ? 80 : 0,
       },
     },
     manualFiltering: true,
