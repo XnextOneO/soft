@@ -88,6 +88,7 @@ export const BusinessPartnerInfoModal = ({
       throw new Error("Данные отсутствуют");
     },
     enabled: !!clientId && opened,
+    staleTime: 0,
   });
 
   const columnsTranslated = columnsCardData ?? [];

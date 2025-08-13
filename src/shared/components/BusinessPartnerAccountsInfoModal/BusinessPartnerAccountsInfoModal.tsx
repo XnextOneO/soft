@@ -74,6 +74,7 @@ export const BusinessPartnerAccountsInfoModal = ({
       throw new Error("Данные отсутствуют");
     },
     enabled: !!accountInternalId && opened,
+    staleTime: 0,
   });
 
   const columnsTranslated = columnsCardData ?? [];
