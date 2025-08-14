@@ -157,7 +157,10 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           <>
             {link === "/business-partner" ||
             link === "/business-partner-accounts" ? (
-              <Tooltip label="SC360" withArrow>
+              <Tooltip
+                label="Обновление счетов из SC-Bank.360.Corporate"
+                withArrow
+              >
                 <Button
                   disabled={
                     !hasSyncPermission(permissions, permissionKey) ||
