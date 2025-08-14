@@ -120,10 +120,13 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   }
 
   const debouncedGlobalFilter = useDebouncedCallback((value: string) => {
-    setGlobalFilter(value);
+    if (value !== globalFilter) {
+      setGlobalFilter(value);
+    }
   }, 400);
 
   const handleGlobalFilterChange = (value: string): void => {
+    setGlobalFilter(value);
     debouncedGlobalFilter(value);
   };
 
