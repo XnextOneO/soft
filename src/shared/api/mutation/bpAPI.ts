@@ -21,7 +21,7 @@ export const syncDataSCBank = async (link: string): Promise<any> => {
         title: "Ошибка",
         message:
           error.response?.data?.message ||
-          "Произошла ошибка при синхронищации данных",
+          "Произошла ошибка при синхронизации данных",
         color: "red",
         autoClose: 5000,
       });

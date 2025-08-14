@@ -13,14 +13,14 @@ export const CalendarDeleteModal = ({
   setOpened,
   refetch,
 }: {
-  row: MRT_RowData;
+  row: MRT_RowData | undefined;
   opened: boolean;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: () => void;
 }): JSX.Element => {
-  const weekendId: number = row.getAllCells()[0].row.original.weekendId;
-  const countryName: string = row.getAllCells()[0].row.original.country;
-  const weekendDate: string = row.getAllCells()[0].row.original.weekendDate;
+  const weekendId: number = row?.getAllCells()[0].row.original.weekendId;
+  const countryName: string = row?.getAllCells()[0].row.original.country;
+  const weekendDate: string = row?.getAllCells()[0].row.original.weekendDate;
   const mutation = useMutation({
     mutationFn: async () => {
       return await deleteCalendarRow(weekendId);
@@ -62,7 +62,7 @@ export const CalendarDeleteModal = ({
         title: classes.title,
         close: classes.close,
       }}
-      size={"xs"}
+      size={"450px"}
     >
       <Stack gap={16} p={"16px"}>
         <Text size={"14px"} fw={400}>

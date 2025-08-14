@@ -25,6 +25,8 @@ import { BusinessPartnerAccountsInfoModal } from "@shared/components/BusinessPar
 import { BusinessPartnerInfoModal } from "@shared/components/BusinessPartnerInfoModal/BusinessPartnerInfoModal.tsx";
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
 import RowActions from "@shared/components/MainTable/components/rowActions.tsx";
+import { CalendarDeleteModal } from "@shared/components/MainTable/components/RowActions/CalendarDeleteModal.tsx";
+import { CalendarEditModal } from "@shared/components/MainTable/components/RowActions/CalendarEditModal.tsx";
 import TopToolbar from "@shared/components/MainTable/components/topToolbar.tsx";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import UpdateTableModal from "@shared/components/UpdateTableModal/UpdateTableModal.tsx";
@@ -37,6 +39,7 @@ import {
   MantineReactTable,
   MRT_ColumnFiltersState,
   MRT_Icons,
+  MRT_RowData,
   MRT_RowVirtualizer,
   MRT_SortingState,
   useMantineReactTable,
@@ -98,6 +101,8 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [openedUpdateModal, setOpenedUpdateModal] = useState(false);
   const [openedBPInfoModal, setOpenedBPInfoModal] = useState(false);
   const [openedBPAInfoModal, setOpenedBPAInfoModal] = useState(false);
+  const [openedEditModal, setOpenedEditModal] = useState<boolean>(false);
+  const [openedDeleteModal, setOpenedDeleteModal] = useState<boolean>(false);
   const [globalFilter, setGlobalFilter] = useState("");
   const [clientStatus, setClientStatus] = useState<ClientStatus>("OPEN");
   const { i18n } = useTranslation();
@@ -105,6 +110,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [columnsFromData, setColumnsFromData] = useState<string[]>([]);
   const [error, setError] = useState<string | undefined>();
   const [clientId, setClientId] = useState<number | undefined>();
+  const [currentRow, setCurrentRow] = useState<MRT_RowData>();
 
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
@@ -347,11 +353,15 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const table = useMantineReactTable({
     onGlobalFilterChange: handleGlobalFilterChange,
     renderRowActions: ({ row }) => (
-      <>
-        {link === "/calendar" && (
-          <RowActions row={row} refetch={refetch} link={link} />
-        )}
-      </>
+      <RowActions
+        row={row}
+        setRow={setCurrentRow}
+        refetch={refetch}
+        link={link}
+        setOpenedDeleteModal={setOpenedDeleteModal}
+        setOpenedEditModal={setOpenedEditModal}
+        setCurrentRow={setCurrentRow}
+      />
     ),
     renderTopToolbar: () => (
       <TopToolbar
@@ -394,7 +404,15 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           };
         }
         case "/calendar": {
-          break;
+          return {
+            onDoubleClick: async (): Promise<void> => {
+              setOpenedEditModal(true);
+              setCurrentRow(row);
+            },
+            style: {
+              cursor: "pointer",
+            },
+          };
         }
         default:
       }
@@ -405,7 +423,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     displayColumnDefOptions: {
       "mrt-row-actions": {
         header: "",
-        size: link === "/calendar" ? 80 : 0,
+        size: 80,
       },
     },
     manualFiltering: true,
@@ -415,8 +433,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       overscan: 30,
       estimateSize: () => 100,
     },
-    enableEditing:
-      link !== "/business-partner" && link !== "/business-partner-accounts",
+    enableEditing: link === "/calendar",
     columns: processedColumns,
     data: cellValues,
     state: {
@@ -524,6 +541,22 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           opened={openedBPAInfoModal}
           setOpened={setOpenedBPAInfoModal}
         />
+      )}
+      {link === "/calendar" && currentRow && (
+        <>
+          <CalendarEditModal
+            row={currentRow}
+            opened={openedEditModal}
+            setOpened={setOpenedEditModal}
+            refetch={refetch}
+          />
+          <CalendarDeleteModal
+            row={currentRow}
+            opened={openedDeleteModal}
+            setOpened={setOpenedDeleteModal}
+            refetch={refetch}
+          />
+        </>
       )}
     </Flex>
   );

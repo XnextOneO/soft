@@ -1,27 +1,44 @@
-import { JSX, useState } from "react";
+import React, { JSX, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ActionIcon, Flex, Tooltip } from "@mantine/core";
 import IconDelete from "@public/assets/IconDelete.svg?react";
 import IconEdit from "@public/assets/IconEdit.svg?react";
-import { CalendarDeleteModal } from "@shared/components/MainTable/components/RowActions/CalendarDeleteModal.tsx";
-import { CalendarEditModal } from "@shared/components/MainTable/components/RowActions/CalendarEditModal.tsx";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton";
+import { MRT_RowData } from "mantine-react-table";
 
 interface RowActionsProperties {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  row: any;
+  row: MRT_RowData;
+  setRow: (row: MRT_RowData) => void;
   refetch: () => void;
   link: string;
+  setOpenedEditModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenedDeleteModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentRow: React.Dispatch<React.SetStateAction<MRT_RowData | undefined>>; // New prop
 }
 
 const RowActions = ({
   row,
-  refetch,
-  link,
+  setRow,
+  setOpenedEditModal,
+  setOpenedDeleteModal,
+  setCurrentRow,
 }: RowActionsProperties): JSX.Element => {
   const { t } = useTranslation(["row-actions"]);
-  const [openedEditModal, setOpenedEditModal] = useState<boolean>(false);
-  const [openedDeleteModal, setOpenedDeleteModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    setRow(row);
+  }, [row, setRow]);
+
+  const handleEditClick = (): void => {
+    setCurrentRow(row);
+    setOpenedEditModal(true);
+  };
+
+  const handleDeleteClick = (): void => {
+    setCurrentRow(row);
+    setOpenedDeleteModal(true);
+  };
+
   return (
     <>
       <Flex justify={"center"} align={"center"} gap={8}>
@@ -29,7 +46,7 @@ const RowActions = ({
           <ActionIcon
             variant="transparent"
             color={"dimmed"}
-            onClick={() => setOpenedEditModal(true)}
+            onClick={handleEditClick}
           >
             <SvgButton SvgIcon={IconEdit} fillColor="#999999" />
           </ActionIcon>
@@ -38,28 +55,12 @@ const RowActions = ({
           <ActionIcon
             variant="transparent"
             color={"dimmed"}
-            onClick={() => setOpenedDeleteModal(true)}
+            onClick={handleDeleteClick}
           >
             <SvgButton SvgIcon={IconDelete} fillColor="#999999" />
           </ActionIcon>
         </Tooltip>
       </Flex>
-      {link === "/calendar" && (
-        <>
-          <CalendarEditModal
-            row={row}
-            opened={openedEditModal}
-            setOpened={setOpenedEditModal}
-            refetch={refetch}
-          />
-          <CalendarDeleteModal
-            row={row}
-            opened={openedDeleteModal}
-            setOpened={setOpenedDeleteModal}
-            refetch={refetch}
-          />
-        </>
-      )}
     </>
   );
 };

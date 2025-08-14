@@ -68,16 +68,11 @@ export const CreateCalendarRowModal = ({
     setCaption("");
   };
   const { mutate } = useCreateCalendarRow();
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
-  const currentDay = String(currentDate.getDate()).padStart(2, "0");
-
-  const formattedDate = `${currentYear}-${currentMonth}-${currentDay}`;
+  const currentDate = formatDate(new Date().toLocaleDateString(), "yyyy-mm-dd");
 
   const [countryName, setCountryName] = useState("");
   const [countryId, setCountryId] = useState<string>("");
-  const [weekendDate, setWeekendDate] = useState<string | null>();
+  const [weekendDate, setWeekendDate] = useState<string | null>(currentDate);
   const [caption, setCaption] = useState<string>("");
 
   const combobox = useCombobox({
@@ -244,7 +239,6 @@ export const CreateCalendarRowModal = ({
             rightSection={
               <SvgButton SvgIcon={IconCalendar} fillColor={"#999999"} />
             }
-            defaultDate={formattedDate}
             value={weekendDate}
             onChange={setWeekendDate}
             valueFormat="DD.MM.YYYY"

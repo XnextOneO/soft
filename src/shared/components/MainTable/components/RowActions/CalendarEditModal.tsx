@@ -1,4 +1,4 @@
-import React, { JSX, useState } from "react";
+import React, { JSX, useEffect, useState } from "react";
 import {
   Button,
   Combobox,
@@ -31,18 +31,15 @@ export const CalendarEditModal = ({
   setOpened,
   refetch,
 }: {
-  row: MRT_RowData;
+  row: MRT_RowData | undefined;
   opened: boolean;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
   refetch: () => void;
 }): JSX.Element => {
-  const handleCloseCalendarCreateModal = (): void => {
+  const handleCloseCalendarEditModal = (): void => {
     setOpened(false);
-    setCountryId("");
-    setCountryName("");
-    setWeekendDate("");
-    setCaption("");
   };
+
   const { mutate } = useUpdateCalendarRow();
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -50,17 +47,22 @@ export const CalendarEditModal = ({
   const currentDay = String(currentDate.getDate()).padStart(2, "0");
 
   const formattedDate = `${currentYear}-${currentMonth}-${currentDay}`;
-  const [countryName, setCountryName] = useState(
-    row.getAllCells()[0].row.original.country,
-  );
+  const [countryName, setCountryName] = useState("");
   const [countryId, setCountryId] = useState<string>("");
-  const [weekendDate, setWeekendDate] = useState<string | null>(
-    formatDate(row.getAllCells()[0].row.original.weekendDate, "yyyy-mm-dd"),
-  );
-  const [caption, setCaption] = useState<string>(
-    row.getAllCells()[0].row.original.note,
-  );
-  const weekendId: number = row.getAllCells()[0].row.original.weekendId;
+  const [weekendDate, setWeekendDate] = useState<string | null>("");
+  const [caption, setCaption] = useState<string>("");
+  const weekendId: number = row?.getAllCells()[0].row.original.weekendId;
+
+  useEffect(() => {
+    if (row) {
+      setCountryName(row.getAllCells()[0].row.original.country);
+      setCountryId("");
+      setWeekendDate(
+        formatDate(row.getAllCells()[0].row.original.weekendDate, "yyyy-mm-dd"),
+      );
+      setCaption(row.getAllCells()[0].row.original.note);
+    }
+  }, [row]);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -109,12 +111,6 @@ export const CalendarEditModal = ({
       setOpened(false);
       return;
     }
-    console.log(
-      weekendId,
-      Number(countryId),
-      formatDate(weekendDate, "dd.mm.yyyy"),
-      caption,
-    );
     mutate(
       {
         id: weekendId,
@@ -142,7 +138,7 @@ export const CalendarEditModal = ({
   return (
     <Modal
       opened={opened}
-      onClose={handleCloseCalendarCreateModal}
+      onClose={handleCloseCalendarEditModal}
       title={"Редактировать запись"}
       overlayProps={{
         backgroundOpacity: 0.55,
@@ -246,7 +242,7 @@ export const CalendarEditModal = ({
       <Group w={"100%"} justify="flex-end" gap={8} px={"16px"} py={"8px"}>
         <Button
           className={classes.button}
-          onClick={handleCloseCalendarCreateModal}
+          onClick={handleCloseCalendarEditModal}
         >
           Отменить
         </Button>
