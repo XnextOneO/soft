@@ -121,10 +121,13 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   }
 
   const debouncedGlobalFilter = useDebouncedCallback((value: string) => {
-    setGlobalFilter(value);
+    if (value !== globalFilter) {
+      setGlobalFilter(value);
+    }
   }, 400);
 
   const handleGlobalFilterChange = (value: string): void => {
+    setGlobalFilter(value);
     debouncedGlobalFilter(value);
   };
 
@@ -190,10 +193,10 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       },
       initialPageParam: 0,
       refetchOnWindowFocus: false,
+      staleTime: 0,
     });
 
   const queryClient = useQueryClient();
-
   const handleRefetch = async (): Promise<void> => {
     queryClient.setQueryData(
       ["apiData", parametersPost],
@@ -473,7 +476,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     },
     mantineEditRowModalProps: {
       closeOnClickOutside: true,
-      withCloseButton: true,
     },
     localization: localization,
     enableFullScreenToggle: false,

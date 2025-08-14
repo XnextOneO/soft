@@ -2,14 +2,19 @@ import { FC, useEffect, useState } from "react";
 import { Container, Group, Stack, useMantineColorScheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import IconCalendar from "@public/assets/calendar.svg";
+import { checkApiData } from "@shared/api/query/check.ts";
 import NewsComponent from "@shared/components/NewsComponent/NewsComponent.tsx";
 import { SimpleMainTable } from "@shared/components/SimpleMainTable/SimpleMainTable.tsx";
+import { useQuery } from "@tanstack/react-query";
 
 import styles from "./index.module.scss";
 
 export const IndexPage: FC = () => {
   const colorScheme = useMantineColorScheme();
   const [backgroundState, setBackgroundState] = useState<string>("");
+
+  const { data } = useQuery({ queryKey: ["check"], queryFn: checkApiData });
+
   useEffect(() => {
     if (colorScheme.colorScheme === "light") {
       setBackgroundState(styles.mainContainerLight);
@@ -22,6 +27,8 @@ export const IndexPage: FC = () => {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const matches = useMediaQuery("(min-width: 1410px)");
+
+  console.log(data);
 
   return (
     <Stack>
