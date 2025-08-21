@@ -2,7 +2,12 @@ import { FC, useEffect, useState } from "react";
 import { Container, Group, Stack, useMantineColorScheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import IconCalendar from "@public/assets/calendar.svg";
+import {
+  getWeekends,
+  WeekendDaysResponse,
+} from "@shared/api/mutation/calendarAPI.ts";
 import { checkApiData } from "@shared/api/query/check.ts";
+import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
 import NewsComponent from "@shared/components/NewsComponent/NewsComponent.tsx";
 import { SimpleMainTable } from "@shared/components/SimpleMainTable/SimpleMainTable.tsx";
 import { useQuery } from "@tanstack/react-query";
@@ -14,6 +19,11 @@ export const IndexPage: FC = () => {
   const [backgroundState, setBackgroundState] = useState<string>("");
 
   const { data } = useQuery({ queryKey: ["check"], queryFn: checkApiData });
+  console.log(data);
+  const { data: weekendDays } = useQuery<WeekendDaysResponse>({
+    queryKey: ["getWeekends"],
+    queryFn: () => getWeekends(2),
+  });
 
   useEffect(() => {
     if (colorScheme.colorScheme === "light") {
@@ -23,12 +33,13 @@ export const IndexPage: FC = () => {
     }
   }, [colorScheme.colorScheme]);
 
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
   const matches = useMediaQuery("(min-width: 1410px)");
-
-  console.log(data);
+  if (!weekendDays) {
+    return <MainLoader />;
+  }
+  const keys = weekendDays ? Object.keys(weekendDays) : [];
+  const firstKeyData = keys.length > 0 ? weekendDays[keys[0]] : [];
+  const secondKeyData = keys.length > 1 ? weekendDays[keys[1]] : [];
 
   return (
     <Stack>
@@ -51,26 +62,30 @@ export const IndexPage: FC = () => {
                 <Group align={"flex-start"} justify={"flex-start"}>
                   <SimpleMainTable
                     headerIcon={IconCalendar}
-                    headerTitle={`Выходные в банках корреспондентах "${new Date().toLocaleDateString()}"`}
+                    headerTitle={`Выходные в банках корреспондентах "${new Date(keys[0]).toLocaleDateString()}"`}
                     width={"25vw"}
+                    data={firstKeyData}
                   />
                   <SimpleMainTable
                     headerIcon={IconCalendar}
-                    headerTitle={`Выходные в банках корреспондентах "${tomorrow.toLocaleDateString()}"`}
+                    headerTitle={`Выходные в банках корреспондентах "${new Date(keys[1]).toLocaleDateString()}"`}
                     width={"25vw"}
+                    data={secondKeyData}
                   />
                 </Group>
               ) : (
                 <Stack align={"flex-start"} justify={"flex-start"}>
                   <SimpleMainTable
                     headerIcon={IconCalendar}
-                    headerTitle={`Выходные в банках корреспондентах "${new Date().toLocaleDateString()}"`}
+                    headerTitle={`Выходные в банках корреспондентах "${new Date(keys[0]).toLocaleDateString()}"`}
                     width={"45vw"}
+                    data={firstKeyData}
                   />
                   <SimpleMainTable
                     headerIcon={IconCalendar}
-                    headerTitle={`Выходные в банках корреспондентах "${tomorrow.toLocaleDateString()}"`}
+                    headerTitle={`Выходные в банках корреспондентах "${new Date(keys[1]).toLocaleDateString()}"`}
                     width={"45vw"}
+                    data={secondKeyData}
                   />
                 </Stack>
               )}

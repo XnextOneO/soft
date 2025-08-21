@@ -12,12 +12,13 @@ import {
   useCombobox,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { notifications } from "@mantine/notifications";
+import IconArrows from "@public/assets/IconArrows.svg?react";
 import IconCalendar from "@public/assets/IconCalendar.svg?react";
 import {
   getCountries,
   useUpdateCalendarRow,
 } from "@shared/api/mutation/calendarAPI";
+import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
 import { formatDate } from "@shared/components/MainTable/components/TopToolbar/CreateCalendarRowModal.tsx";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import { useQuery } from "@tanstack/react-query";
@@ -41,28 +42,18 @@ export const CalendarEditModal = ({
   };
 
   const { mutate } = useUpdateCalendarRow();
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = String(currentDate.getMonth() + 1).padStart(2, "0");
-  const currentDay = String(currentDate.getDate()).padStart(2, "0");
-
-  const formattedDate = `${currentYear}-${currentMonth}-${currentDay}`;
   const [countryName, setCountryName] = useState("");
   const [countryId, setCountryId] = useState<string>("");
   const [weekendDate, setWeekendDate] = useState<string | null>("");
   const [caption, setCaption] = useState<string>("");
+  const [errors, setErrors] = useState<{
+    countryId: string;
+    weekendDate: string;
+  }>({
+    countryId: "",
+    weekendDate: "",
+  });
   const weekendId: number = row?.getAllCells()[0].row.original.weekendId;
-
-  useEffect(() => {
-    if (row) {
-      setCountryName(row.getAllCells()[0].row.original.country);
-      setCountryId("");
-      setWeekendDate(
-        formatDate(row.getAllCells()[0].row.original.weekendDate, "yyyy-mm-dd"),
-      );
-      setCaption(row.getAllCells()[0].row.original.note);
-    }
-  }, [row]);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -75,8 +66,25 @@ export const CalendarEditModal = ({
     },
   });
 
+  useEffect(() => {
+    if (row && data) {
+      const countryNameFromRow = row.getAllCells()[0].row.original.country;
+      setCountryName(countryNameFromRow);
+
+      const country = data.find(
+        (item) => item.shortName === countryNameFromRow,
+      );
+      setCountryId(country ? country.code.toString() : "");
+
+      setWeekendDate(
+        formatDate(row.getAllCells()[0].row.original.weekendDate, "yyyy-mm-dd"),
+      );
+      setCaption(row.getAllCells()[0].row.original.note);
+    }
+  }, [row, data]);
+
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <MainLoader />;
   }
 
   if (isError) {
@@ -97,42 +105,46 @@ export const CalendarEditModal = ({
     : [];
 
   const submitForm = async (): Promise<void> => {
-    if (!weekendDate || !countryId) {
-      notifications.show({
-        title: "Ошибка",
-        message: "Пожалуйста, выберите валидную страну и дату.",
-        color: "red",
-        autoClose: 5000,
-      });
-      setCountryId("");
-      setCountryName("");
-      setWeekendDate("");
-      setCaption("");
-      setOpened(false);
+    let hasError = false;
+    const newErrors = { countryId: "", weekendDate: "" };
+
+    if (!countryId) {
+      newErrors.countryId = "Пожалуйста, выберите валидную страну.";
+      hasError = true;
+    }
+
+    if (!weekendDate) {
+      newErrors.weekendDate = "Пожалуйста, выберите дату.";
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
+      console.log(errors);
+
       return;
     }
-    mutate(
-      {
-        id: weekendId,
-        countryId: Number(countryId),
-        weekendDate: formatDate(weekendDate, "dd.mm.yyyy"),
-        note: caption,
-      },
-      {
-        onSuccess: (_data) => {
-          setCountryId("");
-          setCountryName("");
-          setWeekendDate("");
-          setCaption("");
-          setOpened(false);
-          refetch();
-          return _data;
+
+    if (weekendDate && !hasError) {
+      mutate(
+        {
+          id: weekendId,
+          countryId: Number(countryId),
+          weekendDate: formatDate(weekendDate, "dd.mm.yyyy"),
+          note: caption,
         },
-        onError: (createError) => {
-          console.log(createError);
+        {
+          onSuccess: (_data) => {
+            setOpened(false);
+            refetch();
+            return _data;
+          },
+          onError: (createError) => {
+            console.log(createError);
+          },
         },
-      },
-    );
+      );
+    }
   };
 
   return (
@@ -166,6 +178,7 @@ export const CalendarEditModal = ({
               if (selectedOption) {
                 setCountryName(selectedOption.label);
                 setCountryId(selectedOption.value);
+                setErrors((previous) => ({ ...previous, countryId: "" }));
               }
               combobox.closeDropdown();
             }}
@@ -178,17 +191,43 @@ export const CalendarEditModal = ({
                   wrapper: classes.searchInput,
                   input: classes.searchInput,
                 }}
+                rightSection={
+                  <SvgButton SvgIcon={IconArrows} fillColor={"#999999"} />
+                }
                 radius={"2px"}
                 placeholder={"Выберите страну"}
                 value={countryName}
                 onChange={(event) => {
-                  setCountryName(event.currentTarget.value);
+                  const value = event.currentTarget.value;
+                  setCountryName(value);
                   combobox.openDropdown();
                   combobox.updateSelectedOptionIndex();
+                  const selectedOption = options.find(
+                    (opt) => opt.label.toLowerCase() === value.toLowerCase(),
+                  );
+                  if (selectedOption) {
+                    setCountryId(selectedOption.value);
+                    setErrors((previous) => ({ ...previous, countryId: "" }));
+                  } else {
+                    setCountryId("");
+                    setErrors((previous) => ({ ...previous, countryId: "" }));
+                  }
                 }}
                 onClick={() => combobox.openDropdown()}
                 onFocus={() => combobox.openDropdown()}
-                onBlur={() => combobox.closeDropdown()}
+                onBlur={() => {
+                  combobox.closeDropdown();
+                  const selectedOption = options.find(
+                    (opt) =>
+                      opt.label.toLowerCase() === countryName.toLowerCase(),
+                  );
+                  if (selectedOption) {
+                    setCountryId(selectedOption.value);
+                  } else {
+                    setCountryId("");
+                  }
+                }}
+                error={errors.countryId}
               />
             </Combobox.Target>
 
@@ -222,11 +261,11 @@ export const CalendarEditModal = ({
             rightSection={
               <SvgButton SvgIcon={IconCalendar} fillColor={"#999999"} />
             }
-            defaultDate={formattedDate}
             value={weekendDate}
             onChange={setWeekendDate}
             valueFormat="DD.MM.YYYY"
             placeholder="Введите дату"
+            error={errors.weekendDate}
           />
         </Flex>
         <Flex direction="column" gap={"4px"}>

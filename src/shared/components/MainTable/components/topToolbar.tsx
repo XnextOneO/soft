@@ -19,7 +19,7 @@ import { MenuItem } from "@shared/components/Menu";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import { usePermissionsStore } from "@shared/store/permissionStore.ts";
 import { IconReload } from "@tabler/icons-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { useLocation } from "@tanstack/react-router";
 import { MRT_GlobalFilterTextInput } from "mantine-react-table";
 
@@ -48,7 +48,7 @@ export const hasSyncPermission = (
   return permissions.includes(`${key}:sync`);
 };
 
-export const hasUpdatePermission = (
+export const hasFileUpdatePermission = (
   permissions: string[],
   key: string | undefined,
 ): boolean => {
@@ -63,6 +63,197 @@ export const hasCreatePermission = (
   key: string | undefined,
 ): boolean => {
   return permissions.includes(`${key}:create`);
+};
+
+export const hasUpdatePermission = (
+  permissions: string[],
+  key: string | undefined,
+): boolean => {
+  return permissions.includes(`${key}:update`);
+};
+
+export const hasDeletePermission = (
+  permissions: string[],
+  key: string | undefined,
+): boolean => {
+  return permissions.includes(`${key}:delete`);
+};
+
+export const hasPrefillPermission = (
+  permissions: string[],
+  key: string | undefined,
+): boolean => {
+  return permissions.includes(`${key}:pre-filling`);
+};
+export const findPermissionKey = (
+  items: MenuItem[],
+  pathname: string,
+): string => {
+  for (const item of items) {
+    if (item.href === pathname) {
+      return item.key;
+    }
+
+    if (item.items && Array.isArray(item.items)) {
+      const foundKey = findPermissionKey(item.items, pathname);
+      if (foundKey) {
+        return foundKey;
+      }
+    }
+  }
+  return "";
+};
+
+const StatusCheckbox: FC<{
+  checked: boolean;
+  setChecked: React.Dispatch<React.SetStateAction<boolean>>;
+  setClientStatus: React.Dispatch<React.SetStateAction<ClientStatus>>;
+  link: string | undefined;
+  classNameLabel: string;
+}> = ({ checked, setChecked, setClientStatus, link, classNameLabel }) => {
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    const newChecked = event.currentTarget.checked;
+    setChecked(newChecked);
+    setClientStatus(newChecked ? "ALL" : "OPEN");
+  };
+  return (
+    <Checkbox
+      classNames={{
+        label: classNameLabel,
+      }}
+      size={"xs"}
+      color={"#007458"}
+      checked={checked}
+      label={`Показать все ${
+        link === "/business-partner-accounts" ? "счета" : "банки"
+      }, включая закрытые`}
+      onChange={handleCheckboxChange}
+    />
+  );
+};
+
+const SyncButton: FC<{
+  link: string | undefined;
+  isSmallScreen: boolean | undefined;
+  permissions: string[];
+  permissionKey: string;
+  mutation: UseMutationResult<unknown, unknown, string, unknown>;
+  t: (key: string) => string;
+}> = ({ link, isSmallScreen, permissions, permissionKey, mutation, t }) => {
+  const renderSyncButtonLabel = (): string | ReactElement => {
+    if (mutation.isPending) {
+      return <Loader color="#fff" size={15} />;
+    }
+    if (isSmallScreen) {
+      return <SvgButton SvgIcon={IconSC360} fillColor={"#fff"} />;
+    }
+    switch (link) {
+      case "/business-partner": {
+        return t("top-toolbar:top-toolbar.sync-clients");
+      }
+      case "/business-partner-accounts": {
+        return t("top-toolbar:top-toolbar.sync-accounts");
+      }
+      default: {
+        return "";
+      }
+    }
+  };
+
+  return (
+    <Tooltip label="SC360" withArrow>
+      <Button
+        disabled={
+          !hasSyncPermission(permissions, permissionKey) || mutation.isPending
+        }
+        className={classes.button}
+        h={30}
+        w={isSmallScreen ? 30 : "auto"}
+        px={isSmallScreen ? "0" : "16"}
+        color="#007458"
+        size="sm"
+        style={{
+          fontSize: "12px",
+          minWidth: isSmallScreen ? 30 : 320,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        radius="xs"
+        onClick={() => mutation.mutate(link!)}
+      >
+        {renderSyncButtonLabel()}
+      </Button>
+    </Tooltip>
+  );
+};
+
+const CreatePrefillGroup: FC<{
+  link: string | undefined;
+  permissions: string[];
+  permissionKey: string;
+  t: (key: string) => string;
+  onCreate: () => void;
+  onPreFill: () => void;
+}> = ({ link, permissions, permissionKey, t, onCreate, onPreFill }) => {
+  if (
+    !link ||
+    link === "/business-partner" ||
+    link === "/business-partner-accounts" ||
+    link.includes("reference-book")
+  ) {
+    // eslint-disable-next-line unicorn/no-null
+    return null;
+  }
+
+  return (
+    <Group gap={8}>
+      <Tooltip label="Предзаполнение" withArrow>
+        <Button
+          disabled={!hasPrefillPermission(permissions, permissionKey)}
+          className={classes.button}
+          h={30}
+          w={"auto"}
+          px={"16"}
+          color="#007458"
+          size="sm"
+          style={{
+            fontSize: "12px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          radius="xs"
+          onClick={onPreFill}
+        >
+          {t("top-toolbar:top-toolbar.pre-filling")}
+        </Button>
+      </Tooltip>
+      <Tooltip label="Добавить" withArrow>
+        <Button
+          disabled={!hasCreatePermission(permissions, permissionKey)}
+          className={classes.button}
+          h={30}
+          w={"auto"}
+          px={"16"}
+          color="#007458"
+          size="sm"
+          style={{
+            fontSize: "12px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          radius="xs"
+          onClick={onCreate}
+        >
+          {t("top-toolbar:top-toolbar.create-new-row")}
+        </Button>
+      </Tooltip>
+    </Group>
+  );
 };
 
 const TopToolbar: FC<TopToolbarProperties> = ({
@@ -89,44 +280,21 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   );
   const menuItems = menuData as MenuItem[];
 
-  const findPermissionKey = (items: MenuItem[], pathname: string): string => {
-    for (const item of items) {
-      if (item.href === pathname) {
-        return item.key;
-      }
-
-      if (item.items && Array.isArray(item.items)) {
-        const foundKey = findPermissionKey(item.items, pathname);
-        if (foundKey) {
-          return foundKey;
-        }
-      }
-    }
-    return "";
-  };
-
   const permissionKey = findPermissionKey(menuItems, location.pathname);
 
   useEffect(() => {
     setChecked(parameters.status === "ALL");
   }, [parameters.status]);
 
-  const handleCheckboxChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    const newChecked = event.currentTarget.checked;
-    setChecked(newChecked);
-    setClientStatus(newChecked ? "ALL" : "OPEN");
-  };
-
-  const mutation = useMutation({
+  const mutation = useMutation<unknown, unknown, string>({
     mutationFn: async (_link: string) => {
       return await syncDataSCBank(_link);
     },
     onSuccess: () => {
       refetch();
     },
-    onError: (error) => {
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
       notifications.show({
         title: "Ошибка",
         message: error.message || "Произошла ошибка при синхронизации данных",
@@ -135,26 +303,6 @@ const TopToolbar: FC<TopToolbarProperties> = ({
       });
     },
   });
-
-  const renderSyncButtonLabel = (): string | ReactElement => {
-    if (mutation.isPending) {
-      return <Loader color="#fff" size={15} />;
-    }
-    if (isSmallScreen) {
-      return <SvgButton SvgIcon={IconSC360} fillColor={"#fff"} />;
-    }
-    switch (link) {
-      case "/business-partner": {
-        return t("top-toolbar:top-toolbar.sync-clients");
-      }
-      case "/business-partner-accounts": {
-        return t("top-toolbar:top-toolbar.sync-accounts");
-      }
-      default: {
-        return "";
-      }
-    }
-  };
 
   const create = (): void => {
     setOpenedCalendarRowCreateModal(true);
@@ -186,39 +334,22 @@ const TopToolbar: FC<TopToolbarProperties> = ({
               <IconReload width={20} height={20} />
             </Button>
           </Tooltip>
+
           {updateTable && (
             <>
               {link === "/business-partner" ||
               link === "/business-partner-accounts" ? (
-                <Tooltip label="SC360" withArrow>
-                  <Button
-                    disabled={
-                      !hasSyncPermission(permissions, permissionKey) ||
-                      mutation.isPending
-                    }
-                    className={classes.button}
-                    h={30}
-                    w={isSmallScreen ? 30 : "auto"}
-                    px={isSmallScreen ? "0" : "16"}
-                    color="#007458"
-                    size="sm"
-                    style={{
-                      fontSize: "12px",
-                      minWidth: isSmallScreen ? 30 : 320,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    radius="xs"
-                    onClick={() => mutation.mutate(link)}
-                  >
-                    {renderSyncButtonLabel()}
-                  </Button>
-                </Tooltip>
+                <SyncButton
+                  link={link}
+                  isSmallScreen={isSmallScreen}
+                  permissions={permissions}
+                  permissionKey={permissionKey}
+                  mutation={mutation}
+                  t={t}
+                />
               ) : (
                 <Tooltip label="Обновить из файла" withArrow>
                   <Button
-                    // disabled={!hasUpdatePermission(permissions, permissionKey)}
                     disabled={true}
                     className={classes.button}
                     h={30}
@@ -241,67 +372,28 @@ const TopToolbar: FC<TopToolbarProperties> = ({
               )}
             </>
           )}
-          {link !== "/business-partner" &&
-            hasCreatePermission(permissions, permissionKey) && (
-              <Group gap={8}>
-                <Tooltip label="Предзаполнение" withArrow>
-                  <Button
-                    className={classes.button}
-                    h={30}
-                    w={"auto"}
-                    px={"16"}
-                    color="#007458"
-                    size="sm"
-                    style={{
-                      fontSize: "12px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    radius="xs"
-                    onClick={preFill}
-                  >
-                    {t("top-toolbar:top-toolbar.pre-filling")}
-                  </Button>
-                </Tooltip>
-                <Tooltip label="Добавить" withArrow>
-                  <Button
-                    className={classes.button}
-                    h={30}
-                    w={"auto"}
-                    px={"16"}
-                    color="#007458"
-                    size="sm"
-                    style={{
-                      fontSize: "12px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    radius="xs"
-                    onClick={create}
-                  >
-                    {t("top-toolbar:top-toolbar.create-new-row")}
-                  </Button>
-                </Tooltip>
-              </Group>
-            )}
-          {link === "/business-partner" ||
-          link === "/business-partner-accounts" ? (
-            <Checkbox
-              classNames={{
-                label: classes.checkboxLabel,
-              }}
-              size={"xs"}
-              color={"#007458"}
+
+          <CreatePrefillGroup
+            link={link}
+            permissions={permissions}
+            permissionKey={permissionKey}
+            t={t}
+            onCreate={create}
+            onPreFill={preFill}
+          />
+
+          {(link === "/business-partner" ||
+            link === "/business-partner-accounts") && (
+            <StatusCheckbox
               checked={checked}
-              label={`Показать все ${link === "/business-partner-accounts" ? "счета" : "банки"}, включая закрытые`}
-              onChange={handleCheckboxChange}
+              setChecked={setChecked}
+              setClientStatus={setClientStatus}
+              link={link}
+              classNameLabel={classes.checkboxLabel}
             />
-          ) : (
-            <></>
           )}
         </Group>
+
         <Flex gap={"5"} direction={"row"} align={"center"}>
           <Button
             w={30}
@@ -366,6 +458,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           {/*<MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />*/}
         </Flex>
       </Flex>
+
       {link === "/calendar" && (
         <>
           <CreateCalendarRowModal

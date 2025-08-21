@@ -17,6 +17,16 @@ interface CalendarResponse {
   note: string;
 }
 
+export interface BankData {
+  isoCode: string;
+  bankCode: string | null;
+  bankName: string;
+}
+
+export interface WeekendDaysResponse {
+  [date: string]: BankData[];
+}
+
 const createCalendarRow = async ({
   countryId,
   weekendDate,
@@ -45,12 +55,15 @@ const createCalendarRow = async ({
           : error.response?.data?.message || "Неизвестная ошибка";
 
       if (status === 409 || status === 400) {
+        console.log(message);
+
         notifications.show({
           title: "Ошибка",
           message: message,
           color: "red",
           autoClose: 5000,
         });
+        throw error;
       }
     }
 
@@ -181,6 +194,25 @@ export const deleteCalendarRow = async (id: number): Promise<number> => {
     notifications.show({
       title: "Ошибка",
       message: `Ошибка удаления записи`,
+      color: "red",
+      autoClose: 5000,
+    });
+    throw error;
+  }
+};
+
+export const getWeekends = async (
+  workdaysCount: number,
+): Promise<WeekendDaysResponse> => {
+  try {
+    const response = await $authHost.post(
+      `calendar/weekends-business-partner/${workdaysCount}`,
+    );
+    return response.data;
+  } catch (error) {
+    notifications.show({
+      title: "Ошибка",
+      message: `Ошибка получения выходных дней`,
       color: "red",
       autoClose: 5000,
     });

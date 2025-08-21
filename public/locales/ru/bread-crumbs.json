@@ -1,7 +1,7 @@
 {
   "bread-crumbs": {
     "main-page": "Главная страница",
-    "directories": "Справочники",
+    "reference-book": "Справочники",
     "transfer-destination-category-code": "Справочник кодов категории назначения перевода",
     "organization-identification-code": "Справочник кодов идентификации организации",
     "transfer-cancellation-code": "Справочник кодов отмены перевода",
@@ -31,6 +31,7 @@
     "business-partner": "Деловой партнер",
     "customer-file": "Картотека клиентов",
     "business-partner-accounts": "Счета",
-    "accounts-file": "Картотека счетов"
+    "accounts-file": "Картотека счетов",
+    "calendar": "Календарь выходных дней"
   }
 }

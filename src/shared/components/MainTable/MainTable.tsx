@@ -76,17 +76,25 @@ interface InfiniteTableDataResponse {
 }
 
 export type ClientStatus = "ALL" | "CLOSED" | "OPEN";
-
 export const translateColumns = (
   tableColumnsRaw: string[],
   tableColumnsTranslated: Record<string, string> | undefined,
 ): { header: string; accessorKey: string }[] => {
-  return tableColumnsRaw.map((column) => {
-    return {
-      accessorKey: column,
-      header: tableColumnsTranslated?.[`${column}`] || column,
-    };
-  });
+  return tableColumnsRaw
+    .map((column) => {
+      if (column === "weekendId") {
+        // eslint-disable-next-line unicorn/no-null
+        return null;
+      }
+      return {
+        accessorKey: column,
+        header: tableColumnsTranslated?.[`${column}`] || column,
+      };
+    })
+    .filter(
+      (column): column is { header: string; accessorKey: string } =>
+        column !== null,
+    );
 };
 
 // eslint-disable-next-line complexity
@@ -111,6 +119,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [error, setError] = useState<string | undefined>();
   const [clientId, setClientId] = useState<number | undefined>();
   const [currentRow, setCurrentRow] = useState<MRT_RowData>();
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
@@ -198,6 +207,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
 
   const queryClient = useQueryClient();
   const handleRefetch = async (): Promise<void> => {
+    setIsLoadingMore(true);
     queryClient.setQueryData(
       ["apiData", parametersPost],
       (content: InfiniteTableDataResponse) => ({
@@ -211,6 +221,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     if (tableContainerReference.current) {
       tableContainerReference.current.scrollTo(0, 0);
     }
+    setIsLoadingMore(false);
   };
 
   const { data: columnsTableData } = useQuery({
@@ -237,8 +248,9 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const totalDBRowCount = data?.pages?.[0]?.page?.totalElements ?? 0;
   const totalFetched = cellValues.length;
   const fetchMoreOnBottomReached = useCallback(
+    // eslint-disable-next-line consistent-return
     (containerReferenceElement?: HTMLDivElement | null) => {
-      if (containerReferenceElement) {
+      if (containerReferenceElement && !isLoadingMore) {
         const { scrollHeight, scrollTop, clientHeight } =
           containerReferenceElement;
         if (
@@ -246,11 +258,22 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           !isRefetching &&
           totalFetched < totalDBRowCount
         ) {
-          fetchNextPage();
+          setIsLoadingMore(true);
+          return fetchNextPage()
+            .then((_data) => {
+              return _data;
+            })
+            .catch((_error) => {
+              console.error("Error fetching next page:", _error);
+              throw _error;
+            })
+            .finally(() => {
+              setIsLoadingMore(false);
+            });
         }
       }
     },
-    [fetchNextPage, isRefetching, totalFetched, totalDBRowCount],
+    [isLoadingMore, isRefetching, totalFetched, totalDBRowCount, fetchNextPage],
   );
 
   useEffect(() => {
@@ -406,17 +429,19 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
             },
           };
         }
-        case "/calendar": {
-          return {
-            onDoubleClick: async (): Promise<void> => {
-              setOpenedEditModal(true);
-              setCurrentRow(row);
-            },
-            style: {
-              cursor: "pointer",
-            },
-          };
-        }
+        // case "/calendar": {
+        //   return {
+        //     onDoubleClick: async (): Promise<void> => {
+        //       if (!openedDeleteModal) {
+        //         setOpenedEditModal(true);
+        //       }
+        //       setCurrentRow(row);
+        //     },
+        //     style: {
+        //       cursor: "pointer",
+        //     },
+        //   };
+        // }
         default:
       }
       return {};

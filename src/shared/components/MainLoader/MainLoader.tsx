@@ -13,7 +13,7 @@ export const MainLoader = (): React.ReactElement => {
       }}
     >
       <div style={{ position: "absolute", top: "50%", left: "50%" }}>
-        <Loader type="bars" color="green" size="lg" />
+        <Loader type="bars" color="#006040" size="lg" />
       </div>
     </Container>
   );

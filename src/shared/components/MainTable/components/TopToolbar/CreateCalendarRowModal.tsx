@@ -1,4 +1,4 @@
-import React, { JSX, useState } from "react";
+import React, { JSX, useEffect, useState } from "react";
 import {
   Button,
   Combobox,
@@ -13,11 +13,13 @@ import {
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { notifications } from "@mantine/notifications";
+import IconArrows from "@public/assets/IconArrows.svg?react";
 import IconCalendar from "@public/assets/IconCalendar.svg?react";
 import {
   getCountries,
   useCreateCalendarRow,
 } from "@shared/api/mutation/calendarAPI";
+import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import { useQuery } from "@tanstack/react-query";
 
@@ -62,11 +64,17 @@ export const CreateCalendarRowModal = ({
 }): JSX.Element => {
   const handleCloseCalendarCreateModal = (): void => {
     setOpened(false);
+    resetForm();
+  };
+
+  const resetForm = (): void => {
     setCountryId("");
     setCountryName("");
-    setWeekendDate("");
+    setWeekendDate(currentDate);
     setCaption("");
+    setErrors({ countryId: "", weekendDate: "", caption: "" });
   };
+
   const { mutate } = useCreateCalendarRow();
   const currentDate = formatDate(new Date().toLocaleDateString(), "yyyy-mm-dd");
 
@@ -74,6 +82,17 @@ export const CreateCalendarRowModal = ({
   const [countryId, setCountryId] = useState<string>("");
   const [weekendDate, setWeekendDate] = useState<string | null>(currentDate);
   const [caption, setCaption] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [errors, setErrors] = useState<{
+    countryId: string;
+    weekendDate: string;
+    caption: string;
+  }>({
+    countryId: "",
+    weekendDate: "",
+    caption: "",
+  });
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -86,8 +105,26 @@ export const CreateCalendarRowModal = ({
     },
   });
 
+  useEffect(() => {
+    if (data && countryName && isSubmitting) {
+      const country = data.find(
+        (item) => item.shortName.toLowerCase() === countryName.toLowerCase(),
+      );
+      if (country) {
+        setCountryId(country.code.toString());
+        setErrors((previous) => ({ ...previous, countryId: "" }));
+      } else {
+        setCountryId("");
+        setErrors((previous) => ({
+          ...previous,
+          countryId: "Пожалуйста, выберите валидную страну.",
+        }));
+      }
+    }
+  }, [countryName, data, isSubmitting]);
+
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <MainLoader />;
   }
 
   if (isError) {
@@ -108,48 +145,59 @@ export const CreateCalendarRowModal = ({
     : [];
 
   const submitForm = async (): Promise<void> => {
-    if (!weekendDate || !countryId) {
-      notifications.show({
-        title: "Ошибка",
-        message: "Пожалуйста, выберите валидную страну и дату.",
-        color: "red",
-        autoClose: 5000,
-      });
-      setCountryId("");
-      setCountryName("");
-      setWeekendDate("");
-      setCaption("");
-      setOpened(false);
-      return;
+    setIsSubmitting(true);
+    let hasError = false;
+    const newErrors = { countryId: "", weekendDate: "", caption: "" };
+
+    const country = data?.find(
+      (item) => item.shortName.toLowerCase() === countryName.toLowerCase(),
+    );
+
+    if (country) {
+      setCountryId(country.code.toString());
+    } else {
+      newErrors.countryId = "Пожалуйста, выберите валидную страну.";
+      hasError = true;
     }
 
-    mutate(
-      {
-        countryId: Number(countryId),
-        weekendDate: formatDate(weekendDate, "dd.mm.yyyy"),
-        note: caption,
-      },
-      {
-        onSuccess: (_data) => {
-          setCountryId("");
-          setCountryName("");
-          setWeekendDate("");
-          setCaption("");
-          setOpened(false);
-          refetch();
-          notifications.show({
-            title: "Успешно",
-            message: `Новая запись добавлена в Календарь выходных дней`,
-            color: "green",
-            autoClose: 5000,
-          });
-          return _data;
+    if (!weekendDate) {
+      newErrors.weekendDate = "Пожалуйста, выберите дату.";
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
+      setIsSubmitting(false);
+      return;
+    }
+    if (weekendDate) {
+      mutate(
+        {
+          countryId: Number(countryId),
+          weekendDate: formatDate(weekendDate, "dd.mm.yyyy"),
+          note: caption,
         },
-        onError: (createError) => {
-          console.log(createError);
+        {
+          onSuccess: (_data) => {
+            resetForm();
+            setOpened(false);
+            refetch();
+            notifications.show({
+              title: "Успешно",
+              message: `Новая запись добавлена в Календарь выходных дней`,
+              color: "green",
+              autoClose: 5000,
+            });
+            setIsSubmitting(false);
+            return _data;
+          },
+          onError: (createError) => {
+            console.log(createError);
+            setIsSubmitting(false);
+          },
         },
-      },
-    );
+      );
+    }
   };
 
   return (
@@ -183,6 +231,7 @@ export const CreateCalendarRowModal = ({
               if (selectedOption) {
                 setCountryName(selectedOption.label);
                 setCountryId(selectedOption.value);
+                setErrors((previous) => ({ ...previous, countryId: "" }));
               }
               combobox.closeDropdown();
             }}
@@ -195,6 +244,9 @@ export const CreateCalendarRowModal = ({
                   wrapper: classes.searchInput,
                   input: classes.searchInput,
                 }}
+                rightSection={
+                  <SvgButton SvgIcon={IconArrows} fillColor={"#999999"} />
+                }
                 radius={"2px"}
                 placeholder={"Выберите страну"}
                 value={countryName}
@@ -202,10 +254,12 @@ export const CreateCalendarRowModal = ({
                   setCountryName(event.currentTarget.value);
                   combobox.openDropdown();
                   combobox.updateSelectedOptionIndex();
+                  setErrors((previous) => ({ ...previous, countryId: "" }));
                 }}
                 onClick={() => combobox.openDropdown()}
                 onFocus={() => combobox.openDropdown()}
                 onBlur={() => combobox.closeDropdown()}
+                error={errors.countryId}
               />
             </Combobox.Target>
 
@@ -243,6 +297,7 @@ export const CreateCalendarRowModal = ({
             onChange={setWeekendDate}
             valueFormat="DD.MM.YYYY"
             placeholder="Введите дату"
+            error={errors.weekendDate}
           />
         </Flex>
         <Flex direction="column" gap={"4px"}>
@@ -251,7 +306,9 @@ export const CreateCalendarRowModal = ({
           </Text>
           <TextInput
             value={caption}
-            onChange={(event) => setCaption(event.currentTarget.value)}
+            onChange={(event) => {
+              setCaption(event.currentTarget.value);
+            }}
           />
         </Flex>
       </Stack>

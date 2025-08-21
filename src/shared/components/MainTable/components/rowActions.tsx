@@ -3,7 +3,16 @@ import { useTranslation } from "react-i18next";
 import { ActionIcon, Flex, Tooltip } from "@mantine/core";
 import IconDelete from "@public/assets/IconDelete.svg?react";
 import IconEdit from "@public/assets/IconEdit.svg?react";
+import menuData from "@public/menuItems.json";
+import {
+  findPermissionKey,
+  hasDeletePermission,
+  hasUpdatePermission,
+} from "@shared/components/MainTable/components/topToolbar.tsx";
+import { MenuItem } from "@shared/components/Menu";
 import SvgButton from "@shared/components/SvgWrapper/SvgButton";
+import { usePermissionsStore } from "@shared/store/permissionStore.ts";
+import { useLocation } from "@tanstack/react-router";
 import { MRT_RowData } from "mantine-react-table";
 
 interface RowActionsProperties {
@@ -24,6 +33,10 @@ const RowActions = ({
   setCurrentRow,
 }: RowActionsProperties): JSX.Element => {
   const { t } = useTranslation(["row-actions"]);
+  const { permissions } = usePermissionsStore();
+  const location = useLocation();
+  const menuItems = menuData as MenuItem[];
+  const permissionKey = findPermissionKey(menuItems, location.pathname);
 
   useEffect(() => {
     setRow(row);
@@ -44,6 +57,7 @@ const RowActions = ({
       <Flex justify={"center"} align={"center"} gap={8}>
         <Tooltip label={t("row-actions:row-actions.edit")} withArrow>
           <ActionIcon
+            disabled={!hasUpdatePermission(permissions, permissionKey)}
             variant="transparent"
             color={"dimmed"}
             onClick={handleEditClick}
@@ -53,6 +67,7 @@ const RowActions = ({
         </Tooltip>
         <Tooltip label={t("row-actions:row-actions.delete")} withArrow>
           <ActionIcon
+            disabled={!hasDeletePermission(permissions, permissionKey)}
             variant="transparent"
             color={"dimmed"}
             onClick={handleDeleteClick}

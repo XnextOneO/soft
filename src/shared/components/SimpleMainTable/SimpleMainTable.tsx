@@ -11,8 +11,10 @@ import {
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
+import { BankData } from "@shared/api/mutation/calendarAPI.ts";
 import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
+import { translateColumns } from "@shared/components/MainTable/MainTable.tsx";
 import {
   MantineReactTable,
   MRT_ColumnFiltersState,
@@ -27,11 +29,13 @@ interface SimpleMainTableProperties {
   headerTitle: string;
   headerIcon?: string;
   width: string;
+  data: BankData[];
 }
 export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
   headerTitle,
   headerIcon,
   width,
+  data,
 }) => {
   const [localization, setLocalization] = useState(MRT_Localization_RU);
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
@@ -48,13 +52,12 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
   interface FilterCriteria {
     [key: string]: string;
   }
-
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
     const formattedColumn = sort.id
       .replace(/([a-z])([A-Z])/g, "$1_$2")
       .toUpperCase();
-    sortCriteria[formattedColumn] = sort.desc ? "DESC" : "ASC";
+    sortCriteria[`${formattedColumn}`] = sort.desc ? "DESC" : "ASC";
   }
 
   const columnSearchCriteria: FilterCriteria = {};
@@ -63,7 +66,7 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
       const formattedColumn = columnFilter.id
         .replace(/([a-z])([A-Z])/g, "$1_$2")
         .toUpperCase();
-      columnSearchCriteria[formattedColumn] = String(columnFilter.value);
+      columnSearchCriteria[`${formattedColumn}`] = String(columnFilter.value);
     }
   }
 
@@ -80,111 +83,24 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
       i18n.off("languageChanged", handleLanguageChange);
     };
   }, [i18n]);
-  const data = {
-    content: [
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "Agricultural Bank of China (ABC)",
-      },
-      {
-        country: "CN",
-        bankCode: "BKCHCNBJS00",
-        bankName: "Bank of China",
-      },
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "KLB",
-      },
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "Agricultural Bank of China (ABC)",
-      },
-      {
-        country: "CN",
-        bankCode: "BKCHCNBJS00",
-        bankName: "Bank of China",
-      },
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "KLB",
-      },
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "Agricultural Bank of China (ABC)",
-      },
-      {
-        country: "CN",
-        bankCode: "BKCHCNBJS00",
-        bankName: "Bank of China",
-      },
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "KLB",
-      },
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "Agricultural Bank of China (ABC)",
-      },
-      {
-        country: "CN",
-        bankCode: "BKCHCNBJS00",
-        bankName: "Bank of China",
-      },
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "KLB",
-      },
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "Agricultural Bank of China (ABC)",
-      },
-      {
-        country: "CN",
-        bankCode: "BKCHCNBJS00",
-        bankName: "Bank of China",
-      },
-      {
-        country: "CN",
-        bankCode: "ABOCCNBJ090",
-        bankName: "KLB",
-      },
-    ],
-  };
 
-  const columns = data?.content[0] ? Object.keys(data.content[0]) : [];
+  const columns = data ? Object.keys(data[0]) : [];
 
-  const translateColumns = (
-    tableColumns: string[],
-    // eslint-disable-next-line unicorn/consistent-function-scoping
-  ): { accessorKey: string; header: string }[] => {
-    return tableColumns.map((column) => {
-      return {
-        accessorKey: column,
-        header: column,
-      };
-    });
-  };
-
-  const cellValues = data?.content
-    ? data.content.map((item: Record<string, string>) => {
-        const object: Record<string, string | boolean> = {};
+  const cellValues = data
+    ? data.map((item: BankData) => {
+        const object: BankData = { isoCode: "", bankCode: "", bankName: "" };
         for (const key of Object.keys(item)) {
-          object[key as string] = item[key as string];
+          object[key as keyof BankData] = item[key as keyof BankData] ?? "";
         }
         return object;
       })
     : [];
 
-  const columnsWithAccessorKey = translateColumns(columns);
+  const columnsWithAccessorKey = translateColumns(columns, {
+    isoCode: "Стр",
+    bankCode: "Код банка",
+    bankName: "Наименование банка",
+  });
 
   const processedColumns = columnsWithAccessorKey.map((column) => {
     return {
@@ -202,7 +118,6 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
       sortDescFirst: true,
     };
   });
-  console.log(columns);
 
   const table = useMantineReactTable({
     enableFilters: true,
