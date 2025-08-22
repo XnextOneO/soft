@@ -26,7 +26,7 @@ export const CalendarDeleteModal = ({
       return await deleteCalendarRow(weekendId);
     },
     onSuccess: (response) => {
-      if (response === 200) {
+      if (response === 204) {
         setOpened(false);
         notifications.show({
           title: "Успешно",
