@@ -75,11 +75,16 @@ interface InfiniteTableDataResponse {
   pageParams: number[];
 }
 
+export interface ColumnParameters {
+  header: string;
+  accessorKey: string;
+}
+
 export type ClientStatus = "ALL" | "CLOSED" | "OPEN";
 export const translateColumns = (
   tableColumnsRaw: string[],
   tableColumnsTranslated: Record<string, string> | undefined,
-): { header: string; accessorKey: string }[] => {
+): ColumnParameters[] => {
   return tableColumnsRaw
     .map((column) => {
       if (column === "weekendId") {

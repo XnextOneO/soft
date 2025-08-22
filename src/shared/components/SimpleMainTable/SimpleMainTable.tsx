@@ -1,4 +1,4 @@
-import { FC, JSX, useEffect, useState } from "react";
+import React, { FC, JSX, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Accordion,
@@ -9,16 +9,24 @@ import {
   Text,
   useMantineColorScheme,
 } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
+import IconSort from "@public/assets/IconSort.svg?react";
+import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
+import IconSortDescending from "@public/assets/IconSortDescending.svg?react";
 import { MRT_Localization_BY } from "@public/locales/MRT_Localization_BY.ts";
 import { BankData } from "@shared/api/mutation/calendarAPI.ts";
 import { MainLoader } from "@shared/components/MainLoader/MainLoader.tsx";
 import PopoverCell from "@shared/components/MainTable/components/PopoverCell.tsx";
-import { translateColumns } from "@shared/components/MainTable/MainTable.tsx";
+import {
+  ColumnParameters,
+  translateColumns,
+} from "@shared/components/MainTable/MainTable.tsx";
+import SvgButton from "@shared/components/SvgWrapper/SvgButton.tsx";
 import {
   MantineReactTable,
-  MRT_ColumnFiltersState,
+  MRT_Icons,
+  MRT_Localization,
   MRT_SortingState,
+  MRT_TableInstance,
   useMantineReactTable,
 } from "mantine-react-table";
 import { MRT_Localization_RU } from "mantine-react-table/locales/ru/index.esm.mjs";
@@ -31,44 +39,9 @@ interface SimpleMainTableProperties {
   width: string;
   data: BankData[];
 }
-export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
-  headerTitle,
-  headerIcon,
-  width,
-  data,
-}) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const useLocalization = (i18n: any): MRT_Localization => {
   const [localization, setLocalization] = useState(MRT_Localization_RU);
-  const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  const [filter, setFilter] = useState<MRT_ColumnFiltersState>([]);
-  const debouncedColumnFilter = useDebouncedValue(filter, 200);
-  const colorScheme = useMantineColorScheme();
-  const { i18n } = useTranslation();
-  // eslint-disable-next-line unicorn/no-null
-  const [error] = useState<string | null>(null);
-
-  interface SortCriteria {
-    [key: string]: "ASC" | "DESC";
-  }
-  interface FilterCriteria {
-    [key: string]: string;
-  }
-  const sortCriteria: SortCriteria = {};
-  for (const sort of sorting) {
-    const formattedColumn = sort.id
-      .replace(/([a-z])([A-Z])/g, "$1_$2")
-      .toUpperCase();
-    sortCriteria[`${formattedColumn}`] = sort.desc ? "DESC" : "ASC";
-  }
-
-  const columnSearchCriteria: FilterCriteria = {};
-  for (const columnFilter of debouncedColumnFilter[0]) {
-    if (columnFilter.value) {
-      const formattedColumn = columnFilter.id
-        .replace(/([a-z])([A-Z])/g, "$1_$2")
-        .toUpperCase();
-      columnSearchCriteria[`${formattedColumn}`] = String(columnFilter.value);
-    }
-  }
 
   useEffect(() => {
     const handleLanguageChange = (lng: string): void => {
@@ -76,7 +49,6 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
     };
 
     handleLanguageChange(i18n.language);
-
     i18n.on("languageChanged", handleLanguageChange);
 
     return (): void => {
@@ -84,9 +56,14 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
     };
   }, [i18n]);
 
-  const columns = data ? Object.keys(data[0]) : [];
+  return localization;
+};
 
-  const cellValues = data
+const getColumns = (data: BankData[]): string[] =>
+  data && data.length > 0 ? Object.keys(data[0]) : [];
+
+const getCellValues = (data: BankData[]): BankData[] =>
+  data && data.length > 0
     ? data.map((item: BankData) => {
         const object: BankData = { isoCode: "", bankCode: "", bankName: "" };
         for (const key of Object.keys(item)) {
@@ -96,57 +73,61 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
       })
     : [];
 
-  const columnsWithAccessorKey = translateColumns(columns, {
-    isoCode: "Стр",
-    bankCode: "Код банка",
-    bankName: "Наименование банка",
-  });
+const getProcessedColumns = (
+  columnsWithAccessorKey: ColumnParameters[],
+): ColumnParameters[] =>
+  columnsWithAccessorKey.map((column) => ({
+    ...column,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Cell: ({ cell }: { cell: any }): JSX.Element => {
+      const cellValue = cell.getValue();
+      return (
+        <div>
+          <PopoverCell>{cellValue}</PopoverCell>
+        </div>
+      );
+    },
+    size: column.header.length > 7 ? 160 : 100,
+    sortDescFirst: true,
+  }));
 
-  const processedColumns = columnsWithAccessorKey.map((column) => {
-    return {
-      ...column,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Cell: ({ cell }: { cell: any }): JSX.Element => {
-        const cellValue = cell.getValue();
-        return (
-          <div>
-            <PopoverCell>{cellValue}</PopoverCell>
-          </div>
-        );
-      },
-      size: column.header.length > 7 ? 160 : 100,
-      sortDescFirst: true,
-    };
-  });
+const getCustomIcons: Partial<MRT_Icons> = {
+  IconArrowsSort: () => <SvgButton SvgIcon={IconSort} fillColor={"#999999"} />,
+  IconSortAscending: () => (
+    <SvgButton SvgIcon={IconSortAscending} fillColor={"#006040"} />
+  ),
+  IconSortDescending: () => (
+    <SvgButton SvgIcon={IconSortDescending} fillColor={"#006040"} />
+  ),
+};
 
-  const table = useMantineReactTable({
-    enableFilters: true,
-    columns: processedColumns,
-    data: cellValues,
-    state: {
-      // isLoading: isLoading,
-      // showProgressBars: isFetching,
-      sorting,
-    },
-    initialState: {
-      density: "xs",
-      // showGlobalFilter: true,
-      // showColumnFilters: false,
-    },
-    mantineTableBodyCellProps: {
-      h: "35px",
-      p: "4px 10px",
-    },
+const useTableInstance = ({
+  columns,
+  data,
+  sorting,
+  setSorting,
+  localization,
+}: {
+  columns: ColumnParameters[];
+  data: BankData[];
+  sorting: MRT_SortingState;
+  setSorting: React.Dispatch<React.SetStateAction<MRT_SortingState>>;
+  localization: MRT_Localization;
+}): MRT_TableInstance<BankData> =>
+  useMantineReactTable({
+    icons: getCustomIcons,
+    columns,
+    data,
+    state: { sorting },
+    initialState: { density: "xs" },
+    mantineTableBodyCellProps: { h: "35px", p: "4px 10px" },
     mantineLoadingOverlayProps: {
       loaderProps: { color: "#006040", type: "bars" },
     },
     mantineTableContainerProps: {
-      style: {
-        height: "30vh",
-        overflowY: "auto",
-      },
+      style: { height: "30vh", overflowY: "auto" },
     },
-    localization: localization,
+    localization,
     enableColumnResizing: true,
     enableFullScreenToggle: false,
     enableBottomToolbar: false,
@@ -157,15 +138,49 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
     enableBatchRowSelection: false,
     enablePagination: false,
     enableColumnActions: false,
-    mantineTableProps: {
-      striped: "even",
-      withColumnBorders: true,
-    },
-    manualSorting: true,
+    mantineTableProps: { striped: "even", withColumnBorders: true },
+    manualSorting: false,
     manualPagination: true,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setFilter,
     isMultiSortEvent: () => true,
+  });
+
+export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
+  headerTitle,
+  headerIcon,
+  width,
+  data,
+}) => {
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
+  const colorScheme = useMantineColorScheme();
+  const { i18n } = useTranslation();
+  // eslint-disable-next-line unicorn/no-null
+  const [error] = useState<string | null>(null);
+
+  const localization = useLocalization(i18n);
+  const columns = getColumns(data);
+  const cellValues = getCellValues(data);
+  const columnsWithAccessorKey: ColumnParameters[] = translateColumns(columns, {
+    isoCode: "Стр",
+    bankCode: "Код банка",
+    bankName: "Наименование банка",
+  });
+  const processedColumns = getProcessedColumns(columnsWithAccessorKey);
+
+  const table = useTableInstance({
+    columns: processedColumns,
+    data: cellValues,
+    sorting,
+    setSorting,
+    localization,
+  });
+
+  const emptyTable = useTableInstance({
+    columns: [],
+    data: [],
+    sorting,
+    setSorting,
+    localization,
   });
 
   if (error) {
@@ -184,8 +199,51 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
     );
   }
 
+  if (!data || data.length === 0) {
+    return (
+      <Flex direction={"column"} style={{ width }}>
+        <Accordion
+          chevronPosition="right"
+          variant="contained"
+          defaultValue={"table"}
+          classNames={{ content: styles.content, chevron: styles.chevron }}
+        >
+          <Accordion.Item value={"table"} p={0} style={{ borderRadius: "2px" }}>
+            <Accordion.Control
+              bg={colorScheme.colorScheme === "light" ? "#999999" : "#777778"}
+              style={{
+                borderTopLeftRadius: "2px",
+                borderTopRightRadius: "2px",
+                borderBottomLeftRadius: "0",
+                borderBottomRightRadius: "0",
+              }}
+            >
+              <Container p={0} mr={"sm"}>
+                <Group align={"center"} wrap={"nowrap"}>
+                  {headerIcon && <Image w={20} h={20} src={headerIcon} />}
+                  <Text
+                    c={
+                      colorScheme.colorScheme === "light"
+                        ? "#FFFFFF"
+                        : "#CCCCCC"
+                    }
+                  >
+                    {headerTitle}
+                  </Text>
+                </Group>
+              </Container>
+            </Accordion.Control>
+            <Accordion.Panel>
+              <MantineReactTable table={emptyTable} />
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
+      </Flex>
+    );
+  }
+
   return data ? (
-    <Flex direction={"column"} style={{ width: width }}>
+    <Flex direction={"column"} style={{ width }}>
       <Accordion
         chevronPosition="right"
         variant="contained"
@@ -220,7 +278,6 @@ export const SimpleMainTable: FC<SimpleMainTableProperties> = ({
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
-      {/*<LoadingOverlay visible={isLoading} />*/}
     </Flex>
   ) : (
     <MainLoader />
