@@ -62,13 +62,13 @@ export const IndexPage: FC = () => {
                 <Group align={"flex-start"} justify={"flex-start"}>
                   <SimpleMainTable
                     headerIcon={IconCalendar}
-                    headerTitle={`Выходные в банках корреспондентах "${new Date(keys[0]).toLocaleDateString()}"`}
+                    headerTitle={`Выходные в банках корреспондентах "${keys[0]}"`}
                     width={"25vw"}
                     data={firstKeyData}
                   />
                   <SimpleMainTable
                     headerIcon={IconCalendar}
-                    headerTitle={`Выходные в банках корреспондентах "${new Date(keys[1]).toLocaleDateString()}"`}
+                    headerTitle={`Выходные в банках корреспондентах "${keys[1]}"`}
                     width={"25vw"}
                     data={secondKeyData}
                   />
@@ -77,13 +77,13 @@ export const IndexPage: FC = () => {
                 <Stack align={"flex-start"} justify={"flex-start"}>
                   <SimpleMainTable
                     headerIcon={IconCalendar}
-                    headerTitle={`Выходные в банках корреспондентах "${new Date(keys[0]).toLocaleDateString()}"`}
+                    headerTitle={`Выходные в банках корреспондентах "${keys[0]}"`}
                     width={"45vw"}
                     data={firstKeyData}
                   />
                   <SimpleMainTable
                     headerIcon={IconCalendar}
-                    headerTitle={`Выходные в банках корреспондентах "${new Date(keys[1]).toLocaleDateString()}"`}
+                    headerTitle={`Выходные в банках корреспондентах "${keys[1]}"`}
                     width={"45vw"}
                     data={secondKeyData}
                   />

@@ -39,6 +39,7 @@ export const CalendarEditModal = ({
 }): JSX.Element => {
   const handleCloseCalendarEditModal = (): void => {
     setOpened(false);
+    setErrors({ countryId: "", weekendDate: "" });
   };
 
   const { mutate } = useUpdateCalendarRow();
@@ -266,6 +267,24 @@ export const CalendarEditModal = ({
             valueFormat="DD.MM.YYYY"
             placeholder="Введите дату"
             error={errors.weekendDate}
+            onKeyDown={(event) => {
+              const allowedKeys = [
+                "Backspace",
+                "Delete",
+                "ArrowLeft",
+                "ArrowRight",
+                "Tab",
+                "Home",
+                "End",
+              ];
+              if (
+                !allowedKeys.includes(event.key) &&
+                !/[0-9.]/.test(event.key)
+              ) {
+                event.preventDefault();
+              }
+            }}
+            clearable
           />
         </Flex>
         <Flex direction="column" gap={"4px"}>
