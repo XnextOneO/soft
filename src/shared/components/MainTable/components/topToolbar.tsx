@@ -163,7 +163,10 @@ const SyncButton: FC<{
   };
 
   return (
-    <Tooltip label="SC360" withArrow>
+    <Tooltip
+      label={`Обновление ${link === "/business-partner" ? "клиентов" : "счетов"} из SC-Bank.360.Corporate`}
+      withArrow
+    >
       <Button
         disabled={
           !hasSyncPermission(permissions, permissionKey) || mutation.isPending
