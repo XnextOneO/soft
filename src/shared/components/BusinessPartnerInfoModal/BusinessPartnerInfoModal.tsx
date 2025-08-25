@@ -37,7 +37,7 @@ export interface BusinessPartnerData {
   addressBuilding?: string;
   addressApartmentNum?: string;
   swiftRusName?: string;
-  clientNameEng?: string;
+  swiftName?: string;
   swiftRusAddress?: string;
   swiftAddress?: string;
   clientId?: string;
@@ -122,7 +122,7 @@ export const BusinessPartnerInfoModal = ({
       "addressBuilding",
       "addressApartmentNum",
     ],
-    ["swiftRusName", "clientNameEng"],
+    ["swiftRusName", "swiftName"],
     ["swiftRusAddress", "swiftAddress"],
     ["clientId", "registrationNumber", "foreignClientCode"],
   ];
