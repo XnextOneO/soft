@@ -6,7 +6,6 @@ import menuData from "@public/menuItems.json";
 import MyBreadcrumbs from "@shared/components/Breadcrumbs";
 import Header from "@shared/components/Header/Header.tsx";
 import { MenuItem, NavMenu } from "@shared/components/Menu";
-import { AppContextProvider } from "@shared/providers/AppContextProvider.tsx";
 import AuthProvider from "@shared/providers/AuthProvider.tsx";
 import { ThemeManager } from "@shared/providers/ThemeProvider.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -46,35 +45,33 @@ const RootComponent: React.FC = () => {
         <DatesProvider settings={{ locale: "ru" }}>
           <ThemeManager>
             <AuthProvider>
-              <AppContextProvider>
-                {!isLoginPage && (
-                  <Header
-                    isBurger={true}
-                    isProfile={true}
-                    link={true}
-                    toggleMenu={toggleMenu}
-                    isMenuOpen={isMenuOpen}
-                  />
-                )}
-                <Container
-                  fluid
-                  className={styles.mainContainer}
-                  m={0}
-                  p={0}
-                  maw="100vw"
-                  mih={isLoginPage ? "100vh" : "calc(100vh - 52px)"}
-                >
-                  <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
-                    {!isLoginPage && (
-                      <NavMenu isMenuOpen={isMenuOpen} menuItems={menuItems} />
-                    )}
-                    <div className={styles.contentWrapper}>
-                      {!isLoginPage && !isNotFoundRoute && <MyBreadcrumbs />}
-                      <Outlet />
-                    </div>
-                  </Flex>
-                </Container>
-              </AppContextProvider>
+              {!isLoginPage && (
+                <Header
+                  isBurger={true}
+                  isProfile={true}
+                  link={true}
+                  toggleMenu={toggleMenu}
+                  isMenuOpen={isMenuOpen}
+                />
+              )}
+              <Container
+                fluid
+                className={styles.mainContainer}
+                m={0}
+                p={0}
+                maw="100vw"
+                mih={isLoginPage ? "100vh" : "calc(100vh - 52px)"}
+              >
+                <Flex maw="100%" miw="100%" w="100%" h="100%" direction="row">
+                  {!isLoginPage && (
+                    <NavMenu isMenuOpen={isMenuOpen} menuItems={menuItems} />
+                  )}
+                  <div className={styles.contentWrapper}>
+                    {!isLoginPage && !isNotFoundRoute && <MyBreadcrumbs />}
+                    <Outlet />
+                  </div>
+                </Flex>
+              </Container>
             </AuthProvider>
           </ThemeManager>
         </DatesProvider>

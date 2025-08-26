@@ -192,7 +192,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     searchCriteria: columnSearchCriteria,
     status: clientStatus,
   };
-  const { data, refetch, fetchNextPage, isRefetching, isLoading } =
+  const { data, refetch, fetchNextPage, isRefetching, isLoading, isFetching } =
     useInfiniteQuery<ITableDataResponse>({
       queryKey: ["apiData", parametersPost],
       queryFn: async ({ pageParam: pageParameter = 0 }) => {
@@ -552,7 +552,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   }
   return (
     <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"}>
-      <MantineReactTable table={table} />
+      {isFetching ? <></> : <MantineReactTable table={table} />}
       {updateTable && (
         <UpdateTableModal
           link={link}
