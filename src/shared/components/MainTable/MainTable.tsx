@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { Flex, Text, useMantineColorScheme } from "@mantine/core";
+import { Flex, Loader, Text, useMantineColorScheme } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import IconSort from "@public/assets/IconSort.svg?react";
 import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
@@ -125,6 +125,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [clientId, setClientId] = useState<number | undefined>();
   const [currentRow, setCurrentRow] = useState<MRT_RowData>();
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
@@ -192,7 +193,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     searchCriteria: columnSearchCriteria,
     status: clientStatus,
   };
-  const { data, refetch, fetchNextPage, isRefetching, isLoading, isFetching } =
+  const { data, refetch, fetchNextPage, isRefetching, isLoading } =
     useInfiniteQuery<ITableDataResponse>({
       queryKey: ["apiData", parametersPost],
       queryFn: async ({ pageParam: pageParameter = 0 }) => {
@@ -235,6 +236,14 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       return await getColumnsTable(link);
     },
   });
+
+  useEffect(() => {
+    if (isLoading) {
+      setIsInitialLoading(true); // Установите состояние загрузки в true при первоначальной загрузке
+    } else {
+      setIsInitialLoading(false); // Установите состояние загрузки в false после завершения загрузки
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     if (data?.pages?.[0]?.content?.[0]) {
@@ -550,9 +559,25 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       </Flex>
     );
   }
+
+  if (isInitialLoading) {
+    return (
+      <Flex
+        direction={"column"}
+        p={0}
+        m={0}
+        h={"100%"}
+        w={"100%"}
+        align="center"
+        justify="center"
+      >
+        <Loader color="#006040" />{" "}
+      </Flex>
+    );
+  }
   return (
     <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"}>
-      {isFetching ? <></> : <MantineReactTable table={table} />}
+      <MantineReactTable table={table} />
       {updateTable && (
         <UpdateTableModal
           link={link}
