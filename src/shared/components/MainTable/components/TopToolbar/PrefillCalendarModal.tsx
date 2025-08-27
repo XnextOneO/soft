@@ -46,6 +46,7 @@ export const PrefillCalendarModal = ({
           color: "green",
           autoClose: 5000,
         });
+        refetch();
       }
     },
     onError: (error) => {
@@ -64,7 +65,6 @@ export const PrefillCalendarModal = ({
       return;
     }
     mutation.mutate();
-    refetch();
   };
 
   return (
