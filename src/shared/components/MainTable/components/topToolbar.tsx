@@ -472,6 +472,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           <PrefillCalendarModal
             opened={openedCalendarPrefillModal}
             setOpened={setOpenedCalendarPrefillModal}
+            refetch={refetch}
           />
         </>
       )}

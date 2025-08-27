@@ -103,6 +103,7 @@ export const CreateCalendarRowModal = ({
     queryFn: async () => {
       return await getCountries();
     },
+    staleTime: 0,
   });
 
   useEffect(() => {
