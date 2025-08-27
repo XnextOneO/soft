@@ -31,6 +31,8 @@ $authHost.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       globalThis.location.href = "/login";
+    } else if (error.response && error.response.status === 403) {
+      globalThis.location.href = "/";
     }
     return Promise.reject(error);
   },
