@@ -229,7 +229,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     setIsLoadingMore(false);
   };
 
-  const { data: columnsTableData } = useQuery({
+  const { data: columnsTableData, isLoading: isLoadingColimns } = useQuery({
     queryKey: ["getColumnsTable", link],
     queryFn: async () => {
       return await getColumnsTable(link);
@@ -404,6 +404,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         table={table}
         updateTable={updateTable}
         setClientStatus={setClientStatus}
+        isLoading={isLoadingColimns}
       />
     ),
     onCreatingRowSave: async ({ exitCreatingMode }) => {

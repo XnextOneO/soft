@@ -39,6 +39,7 @@ interface TopToolbarProperties {
   setClientStatus: React.Dispatch<React.SetStateAction<ClientStatus>>;
   setShowColumnFilters: React.Dispatch<React.SetStateAction<boolean>>;
   showColumnFilters: boolean;
+  isLoading: boolean;
 }
 
 export const hasSyncPermission = (
@@ -268,6 +269,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   setClientStatus,
   setShowColumnFilters,
   showColumnFilters,
+  isLoading,
 }) => {
   const { permissions } = usePermissionsStore();
   const location = useLocation();
@@ -314,6 +316,10 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   const preFill = (): void => {
     setOpenedCalendarPrefillModal(true);
   };
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>
@@ -458,7 +464,6 @@ const TopToolbar: FC<TopToolbarProperties> = ({
             w={"240px"}
             table={table}
           />
-          {/*<MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />*/}
         </Flex>
       </Flex>
 
