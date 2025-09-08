@@ -15,6 +15,17 @@ a {
   text-decoration: inherit;
 }
 
+//noinspection ALL
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+//noinspection ALL
+input[type="number"] {
+  appearance: textfield;
+}
 
 body {
   margin: 0;
@@ -22,6 +33,7 @@ body {
   min-height: 100vh;
   justify-content: center;
 }
+
 //noinspection ALL
 .mantine-Menu-itemSection {
   display: none;
@@ -43,33 +55,40 @@ body {
   padding: 0;
   width: 100% !important;
 }
+
 //noinspection ALL
 .mantine-Menu-item:hover {
   border-radius: 0;
   width: 100% !important;
 }
+
 //noinspection ALL
 .mantine-Popover-dropdown {
   box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 20%) !important;
 }
+
 //noinspection ALL
 .MRT_TablePaper-module_root__q0v5L {
   border-radius: 0 !important;
 }
+
 //noinspection ALL
 .mantine-Avatar-placeholder {
   background: white;
 }
+
 //noinspection ALL
-.ant-menu-sub{
+.ant-menu-sub {
   max-height: 364px !important;
   width: 450px !important;
   border-radius: 0 !important;
 }
+
 //noinspection ALL
 .ant-menu-submenu-popup {
   padding-left: 0 !important;
 }
+
 //noinspection ALL
 .ant-menu-submenu-title {
   width: 100% !important;

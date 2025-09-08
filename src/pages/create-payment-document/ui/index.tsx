@@ -1,6 +1,7 @@
 import { FC } from "react";
-import { Button, Tabs } from "@mantine/core";
+import { Button, Group, Tabs } from "@mantine/core";
 import { Index } from "@pages/create-payment-document/ui/children-panel";
+import { PayementDocumentInput } from "@pages/create-payment-document/ui/components/payment-document-input/payement-document-input.tsx";
 
 import styles from "./index.module.scss";
 
@@ -32,9 +33,20 @@ export const CreatePaymentDocument: FC = () => {
             Административные данные
           </Tabs.Tab>
         </Tabs.List>
-        <Tabs.Panel value="main-details">
-          <Index title={"test"}>
-            <span>dsa</span>
+        <Tabs.Panel value="main-details" pl={16}>
+          <Index title={"Основные реквизиты"}>
+            <>
+              <PayementDocumentInput
+                width={100}
+                title={"Вид документа"}
+                rightSection={true}
+                rightSectionText={"ПЛАТЕЖНОЕ ПОРУЧЕНИЕ"}
+              />
+              <Group>
+                <PayementDocumentInput width={228} title={"№ документа"} />
+                <PayementDocumentInput width={275} title={"Дата документа"} />
+              </Group>
+            </>
           </Index>
         </Tabs.Panel>
         <Tabs.Panel value="payment-details">Messages tab content</Tabs.Panel>

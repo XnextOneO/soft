@@ -10,7 +10,7 @@ interface IChildrenPanel {
 export const Index: FC<IChildrenPanel> = ({ children, title }) => {
   return (
     <div className={styles.wrapper}>
-      <span>{title}</span>
+      <span className={styles.blockHeader}>{title}</span>
       {children}
     </div>
   );
