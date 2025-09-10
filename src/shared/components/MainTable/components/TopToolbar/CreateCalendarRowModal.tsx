@@ -222,7 +222,7 @@ export const CreateCalendarRowModal = ({
       <Stack gap={16} p={"16px"}>
         <Flex direction="column" gap={"4px"}>
           <Text fw={400} size={"14px"} lh={"100%"}>
-            Выбор страны
+            Страна
           </Text>
           <Combobox
             onOptionSubmit={(option) => {
