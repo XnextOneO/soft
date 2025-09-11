@@ -534,7 +534,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     onColumnFiltersChange: handleColumnFilterChange,
     isMultiSortEvent: () => true,
   });
-  console.log(link);
 
   if (error) {
     return (
