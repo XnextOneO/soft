@@ -206,7 +206,7 @@ export const getWeekends = async (
 ): Promise<WeekendDaysResponse> => {
   try {
     const response = await $authHost.post(
-      `calendar/weekends-business-partner/${workdaysCount}`,
+      `reference-book/calendar/weekends-business-partner/${workdaysCount}`,
     );
     return response.data;
   } catch (error) {
