@@ -35,7 +35,7 @@ const createCalendarRow = async ({
   try {
     console.log(typeof countryId, typeof weekendDate, typeof note);
     const response: AxiosResponse<CalendarResponse> = await $authHost.post(
-      "/calendar/create",
+      "/reference-book/calendar/create",
       { countryId, weekendDate, note },
       { withCredentials: true },
     );
@@ -84,7 +84,7 @@ const updateCalendarRow = async ({
   try {
     console.log(typeof countryId, typeof weekendDate, typeof note);
     const response: AxiosResponse<CalendarResponse> = await $authHost.put(
-      `/calendar/${id}`,
+      `/reference-book/calendar/${id}`,
       { countryId, weekendDate, note },
       { withCredentials: true },
     );
@@ -169,11 +169,15 @@ export const getCountries = async (): Promise<
 
 export const prefillCalendar = async (prefillYear: number): Promise<number> => {
   try {
-    const response = await $authHost.post("calendar/prefill", undefined, {
-      params: {
-        prefillYear,
+    const response = await $authHost.post(
+      "/reference-book/calendar/prefill",
+      undefined,
+      {
+        params: {
+          prefillYear,
+        },
       },
-    });
+    );
     return response.status;
   } catch (error) {
     notifications.show({
@@ -188,7 +192,7 @@ export const prefillCalendar = async (prefillYear: number): Promise<number> => {
 
 export const deleteCalendarRow = async (id: number): Promise<number> => {
   try {
-    const response = await $authHost.delete(`calendar/${id}`);
+    const response = await $authHost.delete(`/reference-book/calendar/${id}`);
     return response.status;
   } catch (error) {
     notifications.show({
