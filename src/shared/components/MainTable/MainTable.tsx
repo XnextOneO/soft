@@ -475,7 +475,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       overscan: 30,
       estimateSize: () => 100,
     },
-    enableEditing: link === "/calendar",
+    enableEditing: link === "/reference-book/calendar",
     columns: processedColumns,
     data: cellValues,
     state: {
@@ -543,6 +543,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     onColumnFiltersChange: handleColumnFilterChange,
     isMultiSortEvent: () => true,
   });
+  console.log(link);
 
   if (error) {
     return (
@@ -599,7 +600,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           setOpened={setOpenedBPAInfoModal}
         />
       )}
-      {link === "/calendar" && currentRow && (
+      {link === "/reference-book/calendar" && currentRow && (
         <>
           <CalendarEditModal
             row={currentRow}

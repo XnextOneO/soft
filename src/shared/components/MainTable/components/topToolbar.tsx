@@ -205,7 +205,7 @@ const CreatePrefillGroup: FC<{
     !link ||
     link === "/business-partner" ||
     link === "/business-partner-accounts" ||
-    link.includes("reference-book")
+    (link.includes("reference-book") && link !== "/reference-book/calendar")
   ) {
     // eslint-disable-next-line unicorn/no-null
     return null;
@@ -279,7 +279,9 @@ const TopToolbar: FC<TopToolbarProperties> = ({
     useState(false);
   const { link } = parameters;
   const isSmallScreen = useMediaQuery(
-    link === "/calendar" ? "(max-width: 1100px)" : "(max-width: 1341px)",
+    link === "/reference-book/calendar"
+      ? "(max-width: 1100px)"
+      : "(max-width: 1341px)",
   );
   const menuItems = menuData as MenuItem[];
 
@@ -462,7 +464,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
         </Flex>
       </Flex>
 
-      {link === "/calendar" && (
+      {link === "/reference-book/calendar" && (
         <>
           <CreateCalendarRowModal
             opened={openedCalendarRowCreateModal}
