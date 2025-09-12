@@ -7,7 +7,7 @@ interface IChildrenPanel {
   title: string;
 }
 
-export const Index: FC<IChildrenPanel> = ({ children, title }) => {
+export const ChildrenPanel: FC<IChildrenPanel> = ({ children, title }) => {
   return (
     <div className={styles.wrapper}>
       <span className={styles.blockHeader}>{title}</span>
