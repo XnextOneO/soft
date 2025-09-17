@@ -182,7 +182,7 @@ export const prefillCalendar = async (prefillYear: number): Promise<number> => {
   } catch (error) {
     notifications.show({
       title: "Ошибка",
-      message: `Календарь выходных дней на ${prefillYear} год уже имеет записи. Использование предзаполнения невозможно`,
+      message: `Календарь выходных дней для всех стран на ${prefillYear} год уже имеет записи. Использование предзаполнения невозможно`,
       color: "red",
       autoClose: 5000,
     });

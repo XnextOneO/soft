@@ -154,15 +154,18 @@ export const CreateCalendarRowModal = ({
       (item) => item.shortName.toLowerCase() === countryName.toLowerCase(),
     );
 
-    if (country) {
+    if (!countryName.trim()) {
+      newErrors.countryId = "Поле не может быть пустым";
+      hasError = true;
+    } else if (country) {
       setCountryId(country.code.toString());
     } else {
-      newErrors.countryId = "Пожалуйста, выберите валидную страну.";
+      newErrors.countryId = "Пожалуйста, выберите валидную страну";
       hasError = true;
     }
 
     if (!weekendDate) {
-      newErrors.weekendDate = "Пожалуйста, выберите дату.";
+      newErrors.weekendDate = "Поле не может быть пустым";
       hasError = true;
     }
 
@@ -295,10 +298,31 @@ export const CreateCalendarRowModal = ({
               <SvgButton SvgIcon={IconCalendar} fillColor={"#999999"} />
             }
             value={weekendDate}
-            onChange={setWeekendDate}
+            onChange={(value) => {
+              setWeekendDate(value);
+              setErrors((previous) => ({ ...previous, weekendDate: "" }));
+            }}
             valueFormat="DD.MM.YYYY"
             placeholder="Введите дату"
             error={errors.weekendDate}
+            onKeyDown={(event) => {
+              const allowedKeys = [
+                "Backspace",
+                "Delete",
+                "ArrowLeft",
+                "ArrowRight",
+                "Tab",
+                "Home",
+                "End",
+              ];
+              if (
+                !allowedKeys.includes(event.key) &&
+                !/[0-9.]/.test(event.key)
+              ) {
+                event.preventDefault();
+              }
+            }}
+            clearable
           />
         </Flex>
         <Flex direction="column" gap={"4px"}>

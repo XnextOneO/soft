@@ -40,6 +40,7 @@ export const CalendarEditModal = ({
   const handleCloseCalendarEditModal = (): void => {
     setOpened(false);
     setErrors({ countryId: "", weekendDate: "" });
+    setIsSubmitting(false);
   };
 
   const { mutate } = useUpdateCalendarRow();
@@ -54,6 +55,7 @@ export const CalendarEditModal = ({
     countryId: "",
     weekendDate: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const weekendId: number = row?.getAllCells()[0].row.original.weekendId;
 
   const combobox = useCombobox({
@@ -106,11 +108,15 @@ export const CalendarEditModal = ({
     : [];
 
   const submitForm = async (): Promise<void> => {
+    setIsSubmitting(true);
     let hasError = false;
     const newErrors = { countryId: "", weekendDate: "" };
 
-    if (!countryId) {
-      newErrors.countryId = "Пожалуйста, выберите валидную страну.";
+    if (!countryName.trim()) {
+      newErrors.countryId = "Поле не может быть пустым";
+      hasError = true;
+    } else if (!countryId) {
+      newErrors.countryId = "Пожалуйста, выберите валидную страну";
       hasError = true;
     }
 
@@ -119,10 +125,9 @@ export const CalendarEditModal = ({
       hasError = true;
     }
 
-    if (hasError) {
-      setErrors(newErrors);
-      console.log(errors);
+    setErrors(newErrors);
 
+    if (hasError) {
       return;
     }
 
@@ -138,10 +143,12 @@ export const CalendarEditModal = ({
           onSuccess: (_data) => {
             setOpened(false);
             refetch();
+            setIsSubmitting(false);
             return _data;
           },
           onError: (createError) => {
             console.log(createError);
+            setIsSubmitting(false);
           },
         },
       );
@@ -179,7 +186,9 @@ export const CalendarEditModal = ({
               if (selectedOption) {
                 setCountryName(selectedOption.label);
                 setCountryId(selectedOption.value);
-                setErrors((previous) => ({ ...previous, countryId: "" }));
+                if (isSubmitting) {
+                  setErrors((previous) => ({ ...previous, countryId: "" }));
+                }
               }
               combobox.closeDropdown();
             }}
@@ -203,16 +212,29 @@ export const CalendarEditModal = ({
                   setCountryName(value);
                   combobox.openDropdown();
                   combobox.updateSelectedOptionIndex();
+
                   const selectedOption = options.find(
                     (opt) => opt.label.toLowerCase() === value.toLowerCase(),
                   );
                   if (selectedOption) {
                     setCountryId(selectedOption.value);
-                    setErrors((previous) => ({ ...previous, countryId: "" }));
+                    if (isSubmitting) {
+                      setErrors((previous) => ({ ...previous, countryId: "" }));
+                    }
                   } else {
                     setCountryId("");
-                    setErrors((previous) => ({ ...previous, countryId: "" }));
+                    if (isSubmitting) {
+                      setErrors((previous) => ({
+                        ...previous,
+                        countryId: value.trim()
+                          ? "Пожалуйста, выберите валидную страну"
+                          : "Поле не может быть пустым",
+                      }));
+                    }
                   }
+
+                  // Сбрасываем isSubmitting при любом вводе
+                  if (isSubmitting) setIsSubmitting(false);
                 }}
                 onClick={() => combobox.openDropdown()}
                 onFocus={() => combobox.openDropdown()}
@@ -228,7 +250,7 @@ export const CalendarEditModal = ({
                     setCountryId("");
                   }
                 }}
-                error={errors.countryId}
+                error={isSubmitting ? errors.countryId : ""}
               />
             </Combobox.Target>
 
@@ -263,10 +285,16 @@ export const CalendarEditModal = ({
               <SvgButton SvgIcon={IconCalendar} fillColor={"#999999"} />
             }
             value={weekendDate}
-            onChange={setWeekendDate}
+            onChange={(value) => {
+              setWeekendDate(value);
+              if (isSubmitting) {
+                setErrors((previous) => ({ ...previous, weekendDate: "" }));
+              }
+              if (isSubmitting) setIsSubmitting(false);
+            }}
             valueFormat="DD.MM.YYYY"
             placeholder="Введите дату"
-            error={errors.weekendDate}
+            error={isSubmitting ? errors.weekendDate : ""}
             onKeyDown={(event) => {
               const allowedKeys = [
                 "Backspace",
