@@ -12,3 +12,9 @@
   padding: 10px 15px;
   border-bottom: 1px solid #DFDFDF;
 }
+
+.content {
+  overflow-y: auto;
+  height: calc(100vh - 170px);
+  padding-bottom: 20px;
+}

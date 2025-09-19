@@ -7,8 +7,8 @@ import styles from "./index.module.scss";
 
 interface IPayementDocumentInput {
   width: number;
-  title: string;
-  type: "date" | "copy" | "select" | "text"; // Добавлен тип text
+  title: JSX.Element;
+  type: "date" | "copy" | "select" | "text";
   icon: boolean;
 }
 
@@ -56,7 +56,7 @@ export const PaymentDocumentInput: FC<IPayementDocumentInput> = ({
                 className={styles.icon}
                 alt={""}
                 onClick={handleCopy}
-                style={{ cursor: "pointer" }} // Добавляем курсор указателя
+                style={{ cursor: "pointer" }}
               />
             )}
           </div>
@@ -65,9 +65,7 @@ export const PaymentDocumentInput: FC<IPayementDocumentInput> = ({
       case "select": {
         return (
           <div style={{ position: "relative" }}>
-            <select className={styles.input} style={{ width: width }}>
-              {/* Здесь можно добавить опции для select */}
-            </select>
+            <select className={styles.input} style={{ width: width }}></select>
             {icon && <img src={CopyIcon} className={styles.icon} alt={""} />}
           </div>
         );
