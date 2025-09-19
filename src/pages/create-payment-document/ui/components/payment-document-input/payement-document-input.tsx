@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, JSX } from "react";
 import { DateInput } from "@mantine/dates";
 import CopyIcon from "@public/assets/copy-icon.svg";
 import DateIcon from "@public/assets/date-icon.svg";
@@ -12,17 +12,24 @@ interface IPayementDocumentInput {
   icon: boolean;
 }
 
+const handleCopy = (event: React.MouseEvent<HTMLImageElement>): void => {
+  const input = event.currentTarget.previousElementSibling as HTMLInputElement;
+  if (input) {
+    input.select();
+    document.execCommand("copy");
+  }
+};
+
 export const PaymentDocumentInput: FC<IPayementDocumentInput> = ({
   width,
   title,
   type,
   icon,
 }) => {
-  return (
-    <div className={styles.inputBlock}>
-      <span>{title}</span>
-      <div className={styles.inputWithIconWrapper}>
-        {type === "date" ? (
+  const renderInput = (): JSX.Element => {
+    switch (type) {
+      case "date": {
+        return (
           <div style={{ position: "relative" }}>
             <DateInput
               valueFormat="DD.MM.YYYY"
@@ -33,26 +40,40 @@ export const PaymentDocumentInput: FC<IPayementDocumentInput> = ({
             />
             {icon && <img src={DateIcon} className={styles.icon} alt={""} />}
           </div>
-        ) : // eslint-disable-next-line sonarjs/no-nested-conditional
-        type === "copy" ? (
+        );
+      }
+      case "copy": {
+        return (
           <div style={{ position: "relative" }}>
             <input
               type="text"
               className={styles.input}
               style={{ width: width }}
             />
-            {icon && <img src={CopyIcon} className={styles.icon} alt={""} />}
+            {icon && (
+              <img
+                src={CopyIcon}
+                className={styles.icon}
+                alt={""}
+                onClick={handleCopy}
+                style={{ cursor: "pointer" }} // Добавляем курсор указателя
+              />
+            )}
           </div>
-        ) : // eslint-disable-next-line sonarjs/no-nested-conditional
-        type === "select" ? (
+        );
+      }
+      case "select": {
+        return (
           <div style={{ position: "relative" }}>
             <select className={styles.input} style={{ width: width }}>
               {/* Здесь можно добавить опции для select */}
             </select>
             {icon && <img src={CopyIcon} className={styles.icon} alt={""} />}
           </div>
-        ) : // eslint-disable-next-line sonarjs/no-nested-conditional
-        type === "text" ? ( // Добавлен блок для типа text
+        );
+      }
+      case "text": {
+        return (
           <div style={{ position: "relative" }}>
             <textarea
               className={styles.textInput}
@@ -64,8 +85,18 @@ export const PaymentDocumentInput: FC<IPayementDocumentInput> = ({
             />
             {icon && <img src={CopyIcon} className={styles.icon} alt={""} />}
           </div>
-        ) : undefined}
-      </div>
+        );
+      }
+      default: {
+        return <></>;
+      }
+    }
+  };
+
+  return (
+    <div className={styles.inputBlock}>
+      <span>{title}</span>
+      <div className={styles.inputWithIconWrapper}>{renderInput()}</div>
     </div>
   );
 };
