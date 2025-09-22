@@ -1,4 +1,5 @@
 import { FC, JSX } from "react";
+import { Select } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import CopyIcon from "@public/assets/copy-icon.svg";
 import DateIcon from "@public/assets/date-icon.svg";
@@ -8,7 +9,7 @@ import styles from "./index.module.scss";
 interface IPaymentDocumentInput {
   width: number;
   title?: JSX.Element;
-  type: "date" | "copy" | "select" | "text"; // Уберите radioGroup
+  type: "date" | "copy" | "select" | "text" | "dropdown";
   icon: boolean;
 }
 
@@ -83,6 +84,17 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
             />
             {icon && <img src={CopyIcon} className={styles.icon} alt={""} />}
           </div>
+        );
+      }
+      case "dropdown": {
+        return (
+          <>
+            <Select
+              placeholder="Выберите значение"
+              data={["React", "Angular", "Vue", "Svelte"]}
+              w={width}
+            />
+          </>
         );
       }
       default: {

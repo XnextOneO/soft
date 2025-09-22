@@ -1,5 +1,13 @@
 import { FC, useState } from "react";
-import { Button, Group, Radio, RadioGroup, Tabs } from "@mantine/core";
+import {
+  Button,
+  Checkbox,
+  Group,
+  Radio,
+  RadioGroup,
+  Stack,
+  Tabs,
+} from "@mantine/core";
 import { ChildrenPanel } from "@pages/create-payment-document/ui/children-panel";
 import { PaymentDocumentInput } from "@pages/create-payment-document/ui/components/payment-document-input/payement-document-input.tsx";
 
@@ -546,6 +554,23 @@ export const CreatePaymentDocument: FC = () => {
                     title={<span>Дата оказания услуги</span>}
                     icon={true}
                     type={"copy"}
+                  />
+                </Group>
+                <Group mt={8} align={"start"}>
+                  <Stack>
+                    <Checkbox label="Игнорировать блокир" />
+                    <Checkbox label="Не формировать MT в SWIFT" />
+                    <Checkbox
+                      label="Платеж в счет забронированной суммы"
+                      disabled
+                    />
+                    <Checkbox label="Без комиссии" />
+                  </Stack>
+                  <PaymentDocumentInput
+                    type={"dropdown"}
+                    width={306}
+                    icon={false}
+                    title={<span>Дополнительный параметр</span>}
                   />
                 </Group>
               </>
