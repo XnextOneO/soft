@@ -56,6 +56,14 @@
   }
 }
 
+.check-box-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
+
 .input-with-icon-wrapper {
   width: max-content;
   display: flex;

@@ -5,10 +5,10 @@ import DateIcon from "@public/assets/date-icon.svg";
 
 import styles from "./index.module.scss";
 
-interface IPayementDocumentInput {
+interface IPaymentDocumentInput {
   width: number;
-  title: JSX.Element;
-  type: "date" | "copy" | "select" | "text";
+  title?: JSX.Element;
+  type: "date" | "copy" | "select" | "text"; // Уберите radioGroup
   icon: boolean;
 }
 
@@ -20,7 +20,7 @@ const handleCopy = (event: React.MouseEvent<HTMLImageElement>): void => {
   }
 };
 
-export const PaymentDocumentInput: FC<IPayementDocumentInput> = ({
+export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
   width,
   title,
   type,

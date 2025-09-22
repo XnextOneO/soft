@@ -1,11 +1,13 @@
-import { FC } from "react";
-import { Button, Group, Tabs } from "@mantine/core";
+import { FC, useState } from "react";
+import { Button, Group, Radio, RadioGroup, Tabs } from "@mantine/core";
 import { ChildrenPanel } from "@pages/create-payment-document/ui/children-panel";
 import { PaymentDocumentInput } from "@pages/create-payment-document/ui/components/payment-document-input/payement-document-input.tsx";
 
 import styles from "./index.module.scss";
 
 export const CreatePaymentDocument: FC = () => {
+  // eslint-disable-next-line unicorn/no-null
+  const [selectedValue, setSelectedValue] = useState<string | null>(null);
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.header}>
@@ -500,6 +502,48 @@ export const CreatePaymentDocument: FC = () => {
                   <PaymentDocumentInput
                     width={644}
                     title={<span>Наименование банка</span>}
+                    icon={true}
+                    type={"copy"}
+                  />
+                </Group>
+              </>
+            </ChildrenPanel>
+            <ChildrenPanel title={"Признаки"}>
+              <>
+                <span style={{ paddingTop: "8px", marginBottom: "-8px" }}>
+                  Расходы по переводу
+                </span>
+                <RadioGroup
+                  value={selectedValue}
+                  onChange={setSelectedValue}
+                  required
+                >
+                  <Group mt={8}>
+                    <Radio value="OUR" label="Плательщик (OUR)" />
+                    <Radio value="FRE" label="Не взимается (FRE)" />
+                    <Radio value="SHA" label="Плательщик/Бенефициар (SHA)" />
+                  </Group>
+                  <Group mt={8}>
+                    <Radio value="BEN" label="Бенефициар (BEN)" />
+                    <Radio value="OUROUR" label="Гарант (OUROUR)" />
+                  </Group>
+                </RadioGroup>
+                <Group>
+                  <PaymentDocumentInput
+                    width={322}
+                    title={<span>Счет комиссии</span>}
+                    icon={true}
+                    type={"copy"}
+                  />
+                  <PaymentDocumentInput
+                    width={120}
+                    title={<span>Валюта комиссии</span>}
+                    icon={true}
+                    type={"copy"}
+                  />
+                  <PaymentDocumentInput
+                    width={170}
+                    title={<span>Дата оказания услуги</span>}
                     icon={true}
                     type={"copy"}
                   />
