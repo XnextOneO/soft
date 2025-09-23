@@ -577,7 +577,64 @@ export const CreatePaymentDocument: FC = () => {
             </ChildrenPanel>
           </div>
         </Tabs.Panel>
-        <Tabs.Panel value="payment-details">Messages tab content</Tabs.Panel>
+        <Tabs.Panel value="payment-details" pl={16}>
+          <div className={styles.content}>
+            <ChildrenPanel title={"Детали платежа"}>
+              <>
+                <Stack>
+                  <PaymentDocumentInput
+                    type={"copy"}
+                    width={644}
+                    title={<span>Детали платежа</span>}
+                    icon={false}
+                  />
+                  <PaymentDocumentInput
+                    type={"copy"}
+                    width={644}
+                    title={<span>Детали платежа</span>}
+                    icon={false}
+                  />
+                  <PaymentDocumentInput
+                    type={"copy"}
+                    width={644}
+                    title={<span>Детали платежа</span>}
+                    icon={false}
+                  />
+                  <PaymentDocumentInput
+                    type={"copy"}
+                    width={644}
+                    title={<span>Детали платежа</span>}
+                    icon={false}
+                  />
+                  <PaymentDocumentInput
+                    type={"copy"}
+                    width={644}
+                    title={<span>Детали платежа</span>}
+                    icon={false}
+                  />
+                </Stack>
+              </>
+            </ChildrenPanel>
+            <ChildrenPanel title={"Документы ВЭД"}>
+              <>
+                <Group>
+                  <PaymentDocumentInput
+                    type={"copy"}
+                    width={314}
+                    title={<span>Номер документа ВЭД</span>}
+                    icon={false}
+                  />
+                  <PaymentDocumentInput
+                    type={"copy"}
+                    width={314}
+                    title={<span>Код ТН ВЭД</span>}
+                    icon={false}
+                  />
+                </Group>
+              </>
+            </ChildrenPanel>
+          </div>
+        </Tabs.Panel>
         <Tabs.Panel value="rf-kz-india">Settings tab content</Tabs.Panel>
         <Tabs.Panel value="automatic-details">Settings tab content</Tabs.Panel>
         <Tabs.Panel value="administrative-data">
