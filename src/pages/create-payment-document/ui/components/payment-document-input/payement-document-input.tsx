@@ -50,6 +50,7 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
               type="text"
               className={styles.input}
               style={{ width: width }}
+              readOnly
             />
             {icon && (
               <img
