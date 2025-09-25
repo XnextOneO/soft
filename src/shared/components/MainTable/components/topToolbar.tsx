@@ -39,6 +39,7 @@ interface TopToolbarProperties {
   setClientStatus: React.Dispatch<React.SetStateAction<ClientStatus>>;
   setShowColumnFilters: React.Dispatch<React.SetStateAction<boolean>>;
   showColumnFilters: boolean;
+  isLoading: boolean;
 }
 
 export const hasSyncPermission = (
@@ -205,7 +206,7 @@ const CreatePrefillGroup: FC<{
     !link ||
     link === "/business-partner" ||
     link === "/business-partner-accounts" ||
-    link.includes("reference-book")
+    (link.includes("reference-book") && link !== "/reference-book/calendar")
   ) {
     // eslint-disable-next-line unicorn/no-null
     return null;
@@ -268,6 +269,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   setClientStatus,
   setShowColumnFilters,
   showColumnFilters,
+  isLoading,
 }) => {
   const { permissions } = usePermissionsStore();
   const location = useLocation();
@@ -279,7 +281,9 @@ const TopToolbar: FC<TopToolbarProperties> = ({
     useState(false);
   const { link } = parameters;
   const isSmallScreen = useMediaQuery(
-    link === "/calendar" ? "(max-width: 1100px)" : "(max-width: 1341px)",
+    link === "/reference-book/calendar"
+      ? "(max-width: 1100px)"
+      : "(max-width: 1341px)",
   );
   const menuItems = menuData as MenuItem[];
 
@@ -314,6 +318,10 @@ const TopToolbar: FC<TopToolbarProperties> = ({
   const preFill = (): void => {
     setOpenedCalendarPrefillModal(true);
   };
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>
@@ -458,11 +466,10 @@ const TopToolbar: FC<TopToolbarProperties> = ({
             w={"240px"}
             table={table}
           />
-          {/*<MRT_ShowHideColumnsButton size={"30px"} h={30} table={table} />*/}
         </Flex>
       </Flex>
 
-      {link === "/calendar" && (
+      {link === "/reference-book/calendar" && (
         <>
           <CreateCalendarRowModal
             opened={openedCalendarRowCreateModal}
@@ -472,6 +479,7 @@ const TopToolbar: FC<TopToolbarProperties> = ({
           <PrefillCalendarModal
             opened={openedCalendarPrefillModal}
             setOpened={setOpenedCalendarPrefillModal}
+            refetch={refetch}
           />
         </>
       )}

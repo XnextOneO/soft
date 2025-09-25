@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { Flex, Loader, Text, useMantineColorScheme } from "@mantine/core";
+import { Flex, Text, useMantineColorScheme } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import IconSort from "@public/assets/IconSort.svg?react";
 import IconSortAscending from "@public/assets/IconSortAscending.svg?react";
@@ -125,7 +125,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
   const [clientId, setClientId] = useState<number | undefined>();
   const [currentRow, setCurrentRow] = useState<MRT_RowData>();
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   const sortCriteria: SortCriteria = {};
   for (const sort of sorting) {
@@ -230,21 +229,12 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     setIsLoadingMore(false);
   };
 
-  const { data: columnsTableData } = useQuery({
+  const { data: columnsTableData, isLoading: isLoadingColimns } = useQuery({
     queryKey: ["getColumnsTable", link],
     queryFn: async () => {
       return await getColumnsTable(link);
     },
   });
-
-  useEffect(() => {
-    if (isLoading) {
-      setIsInitialLoading(true); // Установите состояние загрузки в true при первоначальной загрузке
-    } else {
-      setIsInitialLoading(false); // Установите состояние загрузки в false после завершения загрузки
-    }
-  }, [isLoading]);
-
   useEffect(() => {
     if (data?.pages?.[0]?.content?.[0]) {
       const newColumnsFromData = Object.keys(data.pages[0].content[0]);
@@ -414,6 +404,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
         table={table}
         updateTable={updateTable}
         setClientStatus={setClientStatus}
+        isLoading={isLoadingColimns}
       />
     ),
     onCreatingRowSave: async ({ exitCreatingMode }) => {
@@ -475,7 +466,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
       overscan: 30,
       estimateSize: () => 100,
     },
-    enableEditing: link === "/calendar",
+    enableEditing: link === "/reference-book/calendar",
     columns: processedColumns,
     data: cellValues,
     state: {
@@ -560,21 +551,6 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
     );
   }
 
-  if (isInitialLoading) {
-    return (
-      <Flex
-        direction={"column"}
-        p={0}
-        m={0}
-        h={"100%"}
-        w={"100%"}
-        align="center"
-        justify="center"
-      >
-        <Loader color="#006040" />{" "}
-      </Flex>
-    );
-  }
   return (
     <Flex direction={"column"} p={0} m={0} h={"100%"} w={"100%"}>
       <MantineReactTable table={table} />
@@ -599,7 +575,7 @@ export const MainTable: FC<MainTableProperties> = ({ updateTable, link }) => {
           setOpened={setOpenedBPAInfoModal}
         />
       )}
-      {link === "/calendar" && currentRow && (
+      {link === "/reference-book/calendar" && currentRow && (
         <>
           <CalendarEditModal
             row={currentRow}

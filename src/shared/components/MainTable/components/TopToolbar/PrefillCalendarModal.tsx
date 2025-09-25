@@ -17,9 +17,11 @@ import classes from "./CalendarModals.module.scss";
 export const PrefillCalendarModal = ({
   opened,
   setOpened,
+  refetch,
 }: {
   opened: boolean;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: () => void;
 }): JSX.Element => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -44,6 +46,7 @@ export const PrefillCalendarModal = ({
           color: "green",
           autoClose: 5000,
         });
+        refetch();
       }
     },
     onError: (error) => {
