@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Modal } from "@mantine/core";
+import { FC, useState } from "react";
+import { Button, Group, Modal } from "@mantine/core";
 import {
   MantineReactTable,
   MRT_ColumnDef,
@@ -18,6 +18,14 @@ const data: DataRow[] = [
   { id: 1, name: "Item 1", value: 10 },
   { id: 2, name: "Item 2", value: 20 },
   { id: 3, name: "Item 3", value: 30 },
+  { id: 4, name: "Item 3", value: 30 },
+  { id: 5, name: "Item 3", value: 30 },
+  { id: 6, name: "Item 3", value: 30 },
+  { id: 7, name: "Item 3", value: 30 },
+  { id: 8, name: "Item 3", value: 30 },
+  { id: 9, name: "Item 3", value: 30 },
+  { id: 10, name: "Item 3", value: 30 },
+  { id: 11, name: "Item 3", value: 30 },
 ];
 
 const columns: MRT_ColumnDef<DataRow>[] = [
@@ -35,15 +43,21 @@ const columns: MRT_ColumnDef<DataRow>[] = [
 
 interface ModalTableProperties {
   isOpen: boolean;
-  onClose: () => void;
+  close: () => void;
   title: string;
 }
 
 export const ModalTable: FC<ModalTableProperties> = ({
   isOpen,
-  onClose,
   title,
+  close,
 }) => {
+  const [selectedRowId, setSelectedRowId] = useState<number | null>();
+
+  const handleRowClick = (row: DataRow): void => {
+    setSelectedRowId(row.id);
+  };
+
   const table = useMantineReactTable({
     data,
     columns,
@@ -70,16 +84,44 @@ export const ModalTable: FC<ModalTableProperties> = ({
     manualSorting: false,
     manualPagination: true,
     isMultiSortEvent: () => true,
+    mantineTableBodyRowProps: ({ row }) => ({
+      onClick: (): void => handleRowClick(row.original),
+      style: {
+        backgroundColor: selectedRowId === row.original.id ? "#999" : "",
+      },
+    }),
+    mantineTableFooterProps: {
+      children: (
+        <tr>
+          <td colSpan={2} style={{ textAlign: "right" }}>
+            <strong>Итого:</strong>{" "}
+            {data.reduce((accumulator, item) => accumulator + item.value, 0)}
+          </td>
+        </tr>
+      ),
+    },
   });
 
   return (
     <Modal
-      onClose={onClose}
       opened={isOpen}
       title={title}
-      classNames={{ header: styles.header }}
+      onClose={close}
+      classNames={{
+        header: styles.header,
+        close: styles.closeButton,
+        content: styles.content,
+        body: styles.mantineModalBody,
+      }}
     >
       <MantineReactTable table={table} />
+      <div className={styles.footer}>
+        <Group w={"100%"} justify={"end"}>
+          <Button className={styles.chooseBtn} color="blue">
+            Выбрать
+          </Button>
+        </Group>
+      </div>
     </Modal>
   );
 };

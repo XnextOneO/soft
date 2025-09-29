@@ -3,11 +3,11 @@ import { Checkbox, Group, Radio, RadioGroup, Stack, Tabs } from "@mantine/core";
 import { PaymentDocumentInput } from "@pages/create-payment-document/ui/components/payment-document-input/payement-document-input.tsx";
 import styles from "@pages/create-payment-document/ui/index.module.scss";
 import { ChildrenPanel } from "@shared/components/ChildrenPanel";
-import { ModalTable } from "@shared/components/ModalTable";
 
 export const MainDetailsTab: FC = () => {
   // eslint-disable-next-line unicorn/no-null
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
+
   return (
     <Tabs.Panel value="main-details" pl={16}>
       <div className={styles.content}>
@@ -538,7 +538,6 @@ export const MainDetailsTab: FC = () => {
           </>
         </ChildrenPanel>
       </div>
-      <ModalTable isOpen={true} title={"title"} />
     </Tabs.Panel>
   );
 };

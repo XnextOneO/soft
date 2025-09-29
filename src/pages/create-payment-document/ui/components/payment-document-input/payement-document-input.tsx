@@ -1,8 +1,9 @@
-import { FC, JSX } from "react";
+import { FC, JSX, useState } from "react";
 import { Select } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import CopyIcon from "@public/assets/copy-icon.svg";
 import DateIcon from "@public/assets/date-icon.svg";
+import { ModalTable } from "@shared/components/ModalTable";
 
 import styles from "./index.module.scss";
 
@@ -27,6 +28,7 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
   type,
   icon,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const renderInput = (): JSX.Element => {
     switch (type) {
       case "date": {
@@ -51,6 +53,7 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
               className={styles.input}
               style={{ width: width }}
               readOnly
+              onClick={() => setIsOpen(true)}
             />
             {icon && (
               <img
@@ -108,6 +111,11 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
     <div className={styles.inputBlock}>
       <span>{title}</span>
       <div className={styles.inputWithIconWrapper}>{renderInput()}</div>
+      <ModalTable
+        isOpen={isOpen}
+        title={"title"}
+        close={() => setIsOpen(false)}
+      />
     </div>
   );
 };
