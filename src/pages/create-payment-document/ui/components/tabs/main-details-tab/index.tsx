@@ -19,8 +19,8 @@ export const MainDetailsTab: FC = () => {
                 title={<span>Вид документа</span>}
                 type={"copy"}
                 icon={true}
+                rightText={"ПЛАТЕЖНОЕ ПОРУЧЕНИЕ"}
               />
-              <span style={{ marginBottom: "4px" }}>ПЛАТЕЖНОЕ ПОРУЧЕНИЕ</span>
             </Group>
             <Group>
               <PaymentDocumentInput
@@ -98,10 +98,8 @@ export const MainDetailsTab: FC = () => {
                 title={<span>Код банка</span>}
                 icon={true}
                 type={"copy"}
+                rightText={"Г. МИНСК, ОАО “АСБ БЕЛАРУСБАНК”"}
               />
-              <span style={{ marginTop: "30px" }}>
-                Г. МИНСК, ОАО “АСБ БЕЛАРУСБАНК”
-              </span>
             </Group>
             <Group>
               <PaymentDocumentInput
@@ -123,8 +121,8 @@ export const MainDetailsTab: FC = () => {
                 title={<span>Деловой партнер</span>}
                 icon={true}
                 type={"copy"}
+                rightText={"ИП Иванов Иван Иванович"}
               />
-              <span style={{ marginTop: "30px" }}>ИП Иванов Иван Иванович</span>
             </Group>
           </>
         </ChildrenPanel>

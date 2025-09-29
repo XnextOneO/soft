@@ -1,5 +1,5 @@
 import { FC, JSX, useState } from "react";
-import { Select } from "@mantine/core";
+import { Flex, Select } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import CopyIcon from "@public/assets/copy-icon.svg";
 import DateIcon from "@public/assets/date-icon.svg";
@@ -13,6 +13,7 @@ interface IPaymentDocumentInput {
   type: "date" | "copy" | "select" | "text" | "dropdown";
   icon: boolean;
   onValueSelect?: (value: string) => void;
+  rightText?: string;
 }
 
 export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
@@ -21,6 +22,7 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
   type,
   icon,
   onValueSelect,
+  rightText,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -52,29 +54,39 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
       case "copy": {
         return (
           <div style={{ position: "relative" }}>
-            <input
-              type="text"
-              className={styles.input}
-              style={{ width: width }}
-              value={inputValue}
-              onChange={(event): void => {
-                setInputValue(event.target.value);
-                if (onValueSelect) {
-                  onValueSelect(event.target.value);
-                }
-              }}
-            />
-            {icon && (
-              <img
-                src={CopyIcon}
-                className={styles.icon}
-                alt={""}
-                onClick={() => {
-                  setIsOpen(true);
-                }}
-                style={{ cursor: "pointer" }}
-              />
-            )}
+            <Flex
+              gap={"10px"}
+              align={"center"}
+              style={{ position: "relative" }}
+              w={width}
+            >
+              <div style={{ position: "relative" }}>
+                <input
+                  type="text"
+                  className={styles.input}
+                  style={{ width: width }}
+                  value={inputValue}
+                  onChange={(event): void => {
+                    setInputValue(event.target.value);
+                    if (onValueSelect) {
+                      onValueSelect(event.target.value);
+                    }
+                  }}
+                />
+                {icon && (
+                  <img
+                    src={CopyIcon}
+                    className={styles.icon}
+                    alt={""}
+                    onClick={() => {
+                      setIsOpen(true);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  />
+                )}
+              </div>
+              <span className={styles.rightText}>{rightText}</span>
+            </Flex>
           </div>
         );
       }
@@ -122,6 +134,10 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
     <div className={styles.inputBlock}>
       <span>{title}</span>
       <div className={styles.inputWithIconWrapper}>{renderInput()}</div>
+      <div className={styles.error} style={{ width: width }}>
+        Польз. сообщения об ошибке из программного расширения в BAdI
+        CUSTOMER_EXIT
+      </div>
       <ModalTable
         isOpen={isOpen}
         title={"title"}
