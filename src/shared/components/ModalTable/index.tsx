@@ -45,17 +45,29 @@ interface ModalTableProperties {
   isOpen: boolean;
   close: () => void;
   title: string;
+  onValueSelect: (value: string) => void;
 }
 
 export const ModalTable: FC<ModalTableProperties> = ({
   isOpen,
   title,
   close,
+  onValueSelect,
 }) => {
   const [selectedRowId, setSelectedRowId] = useState<number | null>();
 
   const handleRowClick = (row: DataRow): void => {
     setSelectedRowId(row.id);
+  };
+
+  const handleRowSelect = (): void => {
+    if (selectedRowId !== null) {
+      const selectedRow = data.find((row) => row.id === selectedRowId);
+      if (selectedRow) {
+        onValueSelect(selectedRow.name); // Передаем значение из выбранной строки
+      }
+    }
+    close(); // Закрываем модальное окно
   };
 
   const table = useMantineReactTable({
@@ -117,7 +129,11 @@ export const ModalTable: FC<ModalTableProperties> = ({
       <MantineReactTable table={table} />
       <div className={styles.footer}>
         <Group w={"100%"} justify={"end"}>
-          <Button className={styles.chooseBtn} color="blue" onClick={close}>
+          <Button
+            className={styles.chooseBtn}
+            color="blue"
+            onClick={handleRowSelect}
+          >
             Выбрать
           </Button>
         </Group>

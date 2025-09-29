@@ -12,6 +12,7 @@ interface IPaymentDocumentInput {
   title?: JSX.Element;
   type: "date" | "copy" | "select" | "text" | "dropdown";
   icon: boolean;
+  onValueSelect?: (value: string) => void;
 }
 
 export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
@@ -19,8 +20,19 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
   title,
   type,
   icon,
+  onValueSelect,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleValueSelect = (value: string): void => {
+    setInputValue(value);
+    if (onValueSelect) {
+      onValueSelect(value);
+    }
+    setIsOpen(false);
+  };
+
   const renderInput = (): JSX.Element => {
     switch (type) {
       case "date": {
@@ -44,6 +56,13 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
               type="text"
               className={styles.input}
               style={{ width: width }}
+              value={inputValue}
+              onChange={(event): void => {
+                setInputValue(event.target.value);
+                if (onValueSelect) {
+                  onValueSelect(event.target.value);
+                }
+              }}
             />
             {icon && (
               <img
@@ -107,6 +126,7 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
         isOpen={isOpen}
         title={"title"}
         close={() => setIsOpen(false)}
+        onValueSelect={handleValueSelect}
       />
     </div>
   );
