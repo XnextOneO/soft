@@ -52,8 +52,12 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
               type="text"
               className={styles.input}
               style={{ width: width }}
-              readOnly
-              onClick={() => setIsOpen(true)}
+              readOnly={icon}
+              onClick={() => {
+                if (icon) {
+                  setIsOpen(true);
+                }
+              }}
             />
             {icon && (
               <img

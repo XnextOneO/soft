@@ -117,7 +117,7 @@ export const ModalTable: FC<ModalTableProperties> = ({
       <MantineReactTable table={table} />
       <div className={styles.footer}>
         <Group w={"100%"} justify={"end"}>
-          <Button className={styles.chooseBtn} color="blue">
+          <Button className={styles.chooseBtn} color="blue" onClick={close}>
             Выбрать
           </Button>
         </Group>
