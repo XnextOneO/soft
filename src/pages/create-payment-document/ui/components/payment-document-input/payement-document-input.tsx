@@ -14,14 +14,6 @@ interface IPaymentDocumentInput {
   icon: boolean;
 }
 
-const handleCopy = (event: React.MouseEvent<HTMLImageElement>): void => {
-  const input = event.currentTarget.previousElementSibling as HTMLInputElement;
-  if (input) {
-    input.select();
-    document.execCommand("copy");
-  }
-};
-
 export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
   width,
   title,
@@ -52,19 +44,15 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
               type="text"
               className={styles.input}
               style={{ width: width }}
-              readOnly={icon}
-              onClick={() => {
-                if (icon) {
-                  setIsOpen(true);
-                }
-              }}
             />
             {icon && (
               <img
                 src={CopyIcon}
                 className={styles.icon}
                 alt={""}
-                onClick={handleCopy}
+                onClick={() => {
+                  setIsOpen(true);
+                }}
                 style={{ cursor: "pointer" }}
               />
             )}
