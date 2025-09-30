@@ -1,8 +1,8 @@
 import { FC, JSX, useState } from "react";
 import { Flex, Select } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import CopyIcon from "@public/assets/copy-icon.svg";
 import DateIcon from "@public/assets/date-icon.svg";
+import CopyIcon from "@public/assets/open-modal-icon.svg";
 import { ModalTable } from "@shared/components/ModalTable";
 
 import styles from "./index.module.scss";
@@ -134,10 +134,10 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
     <div className={styles.inputBlock}>
       <span>{title}</span>
       <div className={styles.inputWithIconWrapper}>{renderInput()}</div>
-      <div className={styles.error} style={{ width: width }}>
-        Польз. сообщения об ошибке из программного расширения в BAdI
-        CUSTOMER_EXIT
-      </div>
+      {/*<div className={styles.error} style={{ width: width }}>*/}
+      {/*  Польз. сообщения об ошибке из программного расширения в BAdI*/}
+      {/*  CUSTOMER_EXIT*/}
+      {/*</div>*/}
       <ModalTable
         isOpen={isOpen}
         title={"title"}
