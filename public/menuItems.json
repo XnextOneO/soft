@@ -52,23 +52,38 @@
   },
   {
     "icon": "TCA",
-    "key": "accounts-operations",
+    "key": "menu-accounts-operations",
     "name": "nav-menu-stack:nav-menu-stack.accounts-operations.name",
     "items": [
       {
-        "key": "making-transactions-on-personal-account",
-        "name": "nav-menu-stack:nav-menu-stack.accounts-operations.items.making-transactions-on-personal-account",
-        "href": "/accounts-operations/making-transactions-on-personal-account"
+        "key": "create-payment-document",
+        "name": "nav-menu-stack:nav-menu-stack.accounts-operations.items.create-payment-document",
+        "href": "/account-transactions/create-payment-document/"
       },
       {
-        "key": "operation-cancellation",
-        "name": "nav-menu-stack:nav-menu-stack.accounts-operations.items.operation-cancellation",
-        "href": "/accounts-operations/operation-cancellation"
+        "key": "view-transactions",
+        "name": "nav-menu-stack:nav-menu-stack.accounts-operations.items.view-transactions",
+        "href": ""
+      },
+      {
+        "key": "electronic-documents",
+        "name": "nav-menu-stack:nav-menu-stack.accounts-operations.items.electronic-documents",
+        "href": ""
+      },
+      {
+        "key": "postponed-documents",
+        "name": "nav-menu-stack:nav-menu-stack.accounts-operations.items.postponed-documents",
+        "href": ""
+      },
+      {
+        "key": "reversing-transaction",
+        "name": "nav-menu-stack:nav-menu-stack.accounts-operations.items.reversing-transaction",
+        "href": ""
       },
       {
         "key": "personal-account",
         "name": "nav-menu-stack:nav-menu-stack.accounts-operations.items.personal-account",
-        "href": "/accounts-operations/personal-account"
+        "href": ""
       }
     ]
   },

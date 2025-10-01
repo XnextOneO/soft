@@ -25,8 +25,11 @@
     "accounts-operations": {
       "name": "Операции со счетами",
       "items": {
-        "making-transactions-on-personal-account": "Совершение операций по лицевым счетам",
-        "operation-cancellation": "Сторнирование операции",
+        "create-payment-document": "Создание платежного документа",
+        "view-transactions": "Просмотр операций",
+        "electronic-documents": "Электронные документы",
+        "postponed-documents": "Отложенные документы",
+        "reversing-transaction": "Сторнирование операции",
         "personal-account": "Лицевой счет"
       }
     },
@@ -142,7 +145,6 @@
         "generate-MT940-950": "Формирование MT940/950"
       }
     },
-
     "reporting": {
       "name": "Отчетность",
       "items": {
@@ -173,7 +175,6 @@
         "outgoing-payments-report": "Отчет по исходящим платежам"
       }
     },
-
     "operational-archive": {
       "name": "Оперативный архив",
       "items": {
@@ -194,7 +195,6 @@
         "compliance-control-monitoring": "Комплаенс-контроль (мониторинг)"
       }
     },
-
     "payment-transport-system": {
       "name": "Платежно-транспортная система",
       "items": {
@@ -213,7 +213,6 @@
         "analytics": "Аналитика"
       }
     },
-
     "statuses": "Журнал загрузок",
     "logout": "Выход"
   }
