@@ -58,7 +58,7 @@
       {
         "key": "create-payment-document",
         "name": "nav-menu-stack:nav-menu-stack.accounts-operations.items.create-payment-document",
-        "href": "/account-transactions/create-payment-document/"
+        "href": "/account-transactions/create-payment-document"
       },
       {
         "key": "view-transactions",
