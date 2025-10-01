@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Button, Tabs } from "@mantine/core";
-import { MainDetailsTab } from "@pages/create-payment-document/ui/components/tabs/main-details-tab";
+import { MainDetailsTab } from "@pages/account-transactions/create-payment-document/ui/components/tabs/main-details-tab";
 
 import { AdministrativeDataTab } from "./components/tabs/administrative-data-tab";
 import { AutomaticDetailsTab } from "./components/tabs/automatic-details-tab";

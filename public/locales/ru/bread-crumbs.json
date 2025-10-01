@@ -32,6 +32,8 @@
     "customer-file": "Картотека клиентов",
     "business-partner-accounts": "Счета",
     "accounts-file": "Картотека счетов",
-    "calendar": "Календарь выходных дней"
+    "calendar": "Календарь выходных дней",
+    "create-payment-document" : "Создание платежного документа",
+    "account-transactions": "Операции со счетами"
   }
 }

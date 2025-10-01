@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Group, Stack, Tabs } from "@mantine/core";
-import { PaymentDocumentInput } from "@pages/create-payment-document/ui/components/payment-document-input/payement-document-input.tsx";
-import styles from "@pages/create-payment-document/ui/index.module.scss";
+import { PaymentDocumentInput } from "@pages/account-transactions/create-payment-document/ui/components/payment-document-input/payment-document-input.tsx";
+import styles from "@pages/account-transactions/create-payment-document/ui/index.module.scss";
 import { ChildrenPanel } from "@shared/components/ChildrenPanel";
 
 export const PaymentDetailsTab: FC = () => {
