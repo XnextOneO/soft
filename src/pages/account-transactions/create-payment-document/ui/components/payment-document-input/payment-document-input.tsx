@@ -93,7 +93,9 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
       case "select": {
         return (
           <div style={{ position: "relative" }}>
-            <select className={styles.input} style={{ width: width }}></select>
+            <select className={styles.input} style={{ width: width }}>
+              <option value="">EUR • BY11 AKBB 1502 0000 0123 3000 0000</option>
+            </select>
             {icon && <img src={CopyIcon} className={styles.icon} alt={""} />}
           </div>
         );
@@ -117,9 +119,10 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
         return (
           <>
             <Select
-              placeholder="Выберите значение"
-              data={["React", "Angular", "Vue", "Svelte"]}
+              placeholder=""
+              data={["EUR • BY11 AKBB 1502 0000 0123 3000 0000"]}
               w={width}
+              className={styles.customDropdown}
             />
           </>
         );
@@ -134,10 +137,6 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
     <div className={styles.inputBlock}>
       <span>{title}</span>
       <div className={styles.inputWithIconWrapper}>{renderInput()}</div>
-      {/*<div className={styles.error} style={{ width: width }}>*/}
-      {/*  Польз. сообщения об ошибке из программного расширения в BAdI*/}
-      {/*  CUSTOMER_EXIT*/}
-      {/*</div>*/}
       <ModalTable
         isOpen={isOpen}
         title={"title"}

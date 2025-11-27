@@ -12,6 +12,7 @@
     "no-descending-specificity": null,
     "no-duplicate-selectors": null,
     "length-zero-no-unit": null,
-    "color-function-notation": null
+    "color-function-notation": null,
+    "property-no-vendor-prefix": null
   }
 }

@@ -106,7 +106,7 @@ export const MainDetailsTab: FC = () => {
                 width={400}
                 title={<span>№ счета</span>}
                 icon={true}
-                type={"copy"}
+                type={"select"}
               />
               <PaymentDocumentInput
                 width={118}
@@ -516,7 +516,7 @@ export const MainDetailsTab: FC = () => {
                 type={"copy"}
               />
             </Group>
-            <Group mt={8} align={"start"}>
+            <Group mt={8} align={"start"} gap={50}>
               <Stack>
                 <Checkbox label="Игнорировать блокир" />
                 <Checkbox label="Не формировать MT в SWIFT" />
@@ -527,7 +527,7 @@ export const MainDetailsTab: FC = () => {
                 <Checkbox label="Без комиссии" />
               </Stack>
               <PaymentDocumentInput
-                type={"dropdown"}
+                type={"copy"}
                 width={306}
                 icon={false}
                 title={<span>Дополнительный параметр</span>}

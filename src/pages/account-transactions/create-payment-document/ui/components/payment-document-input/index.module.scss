@@ -24,11 +24,15 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 
   &:focus {
     outline: none;
   }
 }
+
 
 .text-input {
   border: none;
@@ -91,3 +95,4 @@
 .right-text {
   text-wrap: nowrap;
 }
+
