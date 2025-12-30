@@ -14,6 +14,8 @@ interface IPaymentDocumentInput {
   icon: boolean;
   onValueSelect?: (value: string) => void;
   rightText?: string;
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
 export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({

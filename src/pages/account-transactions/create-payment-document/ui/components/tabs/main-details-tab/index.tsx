@@ -2,11 +2,22 @@ import { FC, useState } from "react";
 import { Checkbox, Group, Radio, RadioGroup, Stack, Tabs } from "@mantine/core";
 import { PaymentDocumentInput } from "@pages/account-transactions/create-payment-document/ui/components/payment-document-input/payment-document-input.tsx";
 import styles from "@pages/account-transactions/create-payment-document/ui/index.module.scss";
+import { MainDetailsPayload } from "@shared/api/mutation/account-transactions-api.ts";
 import { ChildrenPanel } from "@shared/components/ChildrenPanel";
 
-export const MainDetailsTab: FC = () => {
-  // eslint-disable-next-line unicorn/no-null
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+type MainDetailsTabProperties = {
+  value: Partial<MainDetailsPayload>;
+  onChange: (patch: Partial<MainDetailsPayload>) => void;
+  errors?: Record<string, string>;
+};
+
+export const MainDetailsTab: FC<MainDetailsTabProperties> = ({
+  value,
+  onChange,
+}) => {
+  const [selectedValue, setSelectedValue] = useState(
+    String(value.signChargeBearerType ?? ""),
+  );
 
   return (
     <Tabs.Panel value="main-details" pl={16}>
@@ -28,12 +39,19 @@ export const MainDetailsTab: FC = () => {
                 title={<span>№ документа</span>}
                 type={"copy"}
                 icon={false}
+                value={value.documentNumber ?? "123"}
+                onValueSelect={(v) => {
+                  console.log("MainDetailsTab onChange documentNumber:", v);
+                  onChange({ documentNumber: v });
+                }}
               />
               <PaymentDocumentInput
                 width={275}
+                icon={false}
                 title={<span>Дата документа</span>}
                 type={"date"}
-                icon={true}
+                value={value.documentDate ?? ""}
+                onChange={(v: string) => onChange({ documentDate: v })}
               />
             </Group>
           </>
