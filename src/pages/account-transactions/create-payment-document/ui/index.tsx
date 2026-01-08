@@ -56,23 +56,20 @@ export const CreatePaymentDocument: FC = () => {
 
   const onCheck = async (): Promise<void> => {
     const payload = {
-      // поля из mainDetails (распаковать)
       ...form.mainDetails,
-      // если нужно установить id/даты/значения по умолчанию:
-      id: form.mainDetails.id ?? 12,
-      documentType: form.mainDetails.documentType ?? 13,
-      // поля из paymentDetails вложенные в paymentDetails
-      paymentDetails: {
-        ...form.paymentDetails,
-      },
-      autoPaymentDetails: {
-        ...form.autoDetails,
-      },
-      paymentRuKzIn: {
-        ...form.rfKzIndia,
-      },
+      paymentDetails: { ...form.paymentDetails },
+      autoPaymentDetails: { ...form.autoDetails },
+      paymentRuKzIn: { ...form.rfKzIndia },
       administrativeData: {
-        ...form.administrativeData,
+        paymentOrderId: form.administrativeData?.paymentOrderId ?? "",
+        creator: form.administrativeData?.creator ?? "",
+        editor: form.administrativeData?.editor ?? "",
+        unlocker: form.administrativeData?.unlocker ?? "",
+        messageId: form.administrativeData?.messageId ?? "",
+        instructionId: form.administrativeData?.instructionId ?? "",
+        endToEndId: form.administrativeData?.endToEndId ?? "",
+        uetr: form.administrativeData?.uetr ?? "",
+        status: form.administrativeData?.status ?? "POSTED",
       },
     };
 

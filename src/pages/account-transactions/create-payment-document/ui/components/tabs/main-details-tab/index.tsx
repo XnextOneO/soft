@@ -39,7 +39,7 @@ export const MainDetailsTab: FC<MainDetailsTabProperties> = ({
                 title={<span>№ документа</span>}
                 type={"copy"}
                 icon={false}
-                value={value.documentNumber ?? "123"}
+                value={value.documentNumber ?? ""}
                 onValueSelect={(v) => {
                   console.log("MainDetailsTab onChange documentNumber:", v);
                   onChange({ documentNumber: v });

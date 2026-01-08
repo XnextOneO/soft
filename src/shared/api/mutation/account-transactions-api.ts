@@ -64,6 +64,17 @@ export interface MainDetailsPayload {
   signSuppressSwiftMtGeneration?: boolean;
   signPayFromReservedFunds?: boolean;
   signNoCommission?: boolean;
+  administrativeData: {
+    paymentOrderId: string;
+    creator: string;
+    editor: string;
+    unlocker: string;
+    messageId: string;
+    instructionId: string;
+    endToEndId: string;
+    uetr: string;
+    status: string;
+  };
 }
 
 // eslint-disable-next-line complexity
@@ -150,6 +161,7 @@ export const postPaymentInstruction = async (
     signSuppressSwiftMtGeneration: !!payload.signSuppressSwiftMtGeneration,
     signPayFromReservedFunds: !!payload.signPayFromReservedFunds,
     signNoCommission: !!payload.signNoCommission,
+    administrativeData: payload.administrativeData || {},
   };
 
   try {
