@@ -123,7 +123,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
               </div>
             }
             expandIcon={<></>}
-            disabled={!itemHasPermission}
+            disabled={itemHasPermission}
           >
             {item.search && (
               <Menu.Item key={`${item.key}-search`} className={"topSearch"}>
@@ -149,7 +149,7 @@ export const NavMenu: FC<NavMenuProperties> = ({ menuItems, isMenuOpen }) => {
         return (
           <Menu.Item
             key={item.key}
-            disabled={!itemHasPermission}
+            disabled={itemHasPermission}
             className={"subMenuItem"}
             onClick={() => handleMenuItemClick(parentKey ?? item.key)}
           >

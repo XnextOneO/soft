@@ -1,5 +1,5 @@
 import { FC, JSX, useState } from "react";
-import { Flex, Select } from "@mantine/core";
+import { Flex, Select, Tooltip } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import DateIcon from "@public/assets/date-icon.svg";
 import CopyIcon from "@public/assets/open-modal-icon.svg";
@@ -16,6 +16,7 @@ interface IPaymentDocumentInput {
   rightText?: string;
   value?: string;
   onChange?: (value: string) => void;
+  error?: string; // Проп для текста ошибки
 }
 
 export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
@@ -25,6 +26,7 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
   icon,
   onValueSelect,
   rightText,
+  error,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -37,6 +39,9 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
     setIsOpen(false);
   };
 
+  // Вспомогательный класс для подсвечивания ошибок
+  const inputErrorClass = error ? styles.inputError : "";
+
   const renderInput = (): JSX.Element => {
     switch (type) {
       case "date": {
@@ -47,7 +52,8 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
               placeholder="Введите дату"
               w={width}
               variant={"unstyled"}
-              className={styles.input}
+              // Добавляем класс ошибки к DateInput
+              className={`${styles.input} ${inputErrorClass}`}
             />
             {icon && <img src={DateIcon} className={styles.icon} alt={""} />}
           </div>
@@ -65,7 +71,7 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
               <div style={{ position: "relative" }}>
                 <input
                   type="text"
-                  className={styles.input}
+                  className={`${styles.input} ${inputErrorClass}`}
                   style={{ width: width }}
                   value={inputValue}
                   onChange={(event): void => {
@@ -95,7 +101,10 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
       case "select": {
         return (
           <div style={{ position: "relative" }}>
-            <select className={styles.input} style={{ width: width }}>
+            <select
+              className={`${styles.input} ${inputErrorClass}`}
+              style={{ width: width }}
+            >
               <option value="">EUR • BY11 AKBB 1502 0000 0123 3000 0000</option>
             </select>
             {icon && <img src={CopyIcon} className={styles.icon} alt={""} />}
@@ -106,7 +115,7 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
         return (
           <div style={{ position: "relative" }}>
             <textarea
-              className={styles.textInput}
+              className={`${styles.textInput} ${inputErrorClass}`}
               style={{ width: width }}
               disabled={true}
               value={
@@ -119,14 +128,14 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
       }
       case "dropdown": {
         return (
-          <>
-            <Select
-              placeholder=""
-              data={["EUR • BY11 AKBB 1502 0000 0123 3000 0000"]}
-              w={width}
-              className={styles.customDropdown}
-            />
-          </>
+          <Select
+            placeholder=""
+            data={["EUR • BY11 AKBB 1502 0000 0123 3000 0000"]}
+            w={width}
+            // Для компонента Mantine используем и класс, и проп error
+            className={`${styles.customDropdown} ${inputErrorClass}`}
+            error={!!error}
+          />
         );
       }
       default: {
@@ -137,8 +146,28 @@ export const PaymentDocumentInput: FC<IPaymentDocumentInput> = ({
 
   return (
     <div className={styles.inputBlock}>
-      <span>{title}</span>
-      <div className={styles.inputWithIconWrapper}>{renderInput()}</div>
+      {title && <span style={error ? { color: "red" } : {}}>{title}</span>}
+
+      {/* Обертка для позиционирования иконки ошибки поверх любого инпута */}
+      <div className={styles.inputContainer}>
+        <div className={styles.inputWithIconWrapper}>{renderInput()}</div>
+
+        {error && (
+          <div className={styles.errorIconWrapper}>
+            <Tooltip
+              label={error}
+              withArrow
+              position="right-end"
+              color="dark"
+              multiline
+              w={220}
+            >
+              <div className={styles.errorBadge}>?</div>
+            </Tooltip>
+          </div>
+        )}
+      </div>
+
       <ModalTable
         isOpen={isOpen}
         title={"title"}

@@ -79,6 +79,7 @@ export const RfKzIndiaTab: FC = () => {
                   icon={true}
                   type={"date"}
                   width={149}
+                  error={"erer"}
                 />
                 <PaymentDocumentInput
                   title={

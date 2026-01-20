@@ -31,6 +31,7 @@ export const MainDetailsTab: FC<MainDetailsTabProperties> = ({
                 type={"copy"}
                 icon={true}
                 rightText={"ПЛАТЕЖНОЕ ПОРУЧЕНИЕ"}
+                error={"ошибка"}
               />
             </Group>
             <Group>
