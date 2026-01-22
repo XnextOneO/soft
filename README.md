@@ -12,6 +12,11 @@
 - `npm run build`
 - `npm run start:prod`
 
+## Environment
+
+- `VITE_API_URL`: Backend API URL
+- `VITE_ENABLE_AUTH_PROVIDER`: `true` by default; set to `false` to skip wrapping the app with AuthProvider when auth is handled externally
+
 **Docker compose:**
 
 first launch 
@@ -31,5 +36,4 @@ rebuild and launch
 ## License
 
 LiteFront is licensed under the MIT License.
-
 
