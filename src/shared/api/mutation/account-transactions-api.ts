@@ -367,7 +367,7 @@ export const checkPaymentInstruction = async (
 ): Promise<any> => {
   try {
     const response = await $authHost.put(
-      "/payment/payment-instruction/check",
+      "http://127.0.0.1/payment/payment-instruction/check",
       payload,
     );
 
