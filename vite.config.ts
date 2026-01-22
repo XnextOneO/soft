@@ -77,6 +77,11 @@ const viteConfig = (): UserConfig => {
         },
       },
     },
+    resolve: {
+      alias: {
+        "@tabler/icons-react": "@tabler/icons-react/dist/esm/icons/index.mjs",
+      },
+    },
   };
 };
 
