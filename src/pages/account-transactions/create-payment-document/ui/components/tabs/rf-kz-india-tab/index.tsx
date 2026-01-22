@@ -2,9 +2,24 @@ import { FC } from "react";
 import { Group, Tabs } from "@mantine/core";
 import { PaymentDocumentInput } from "@pages/account-transactions/create-payment-document/ui/components/payment-document-input/payment-document-input.tsx";
 import styles from "@pages/account-transactions/create-payment-document/ui/index.module.scss";
+import { PaymentRuKzInFormState } from "@pages/account-transactions/create-payment-document/ui/types";
 import { ChildrenPanel } from "@shared/components/ChildrenPanel";
 
-export const RfKzIndiaTab: FC = () => {
+type RfKzIndiaTabProperties = {
+  value: PaymentRuKzInFormState;
+  onChange: (patch: Partial<PaymentRuKzInFormState>) => void;
+};
+
+export const RfKzIndiaTab: FC<RfKzIndiaTabProperties> = ({
+  value,
+  onChange,
+}) => {
+  const handleChange =
+    (field: keyof PaymentRuKzInFormState) =>
+    (nextValue: string): void => {
+      onChange({ [field]: nextValue });
+    };
+
   return (
     <>
       <Tabs.Panel value="rf-kz-india" pl={16}>
@@ -17,12 +32,16 @@ export const RfKzIndiaTab: FC = () => {
                   width={149}
                   title={<span>Код операции</span>}
                   icon={true}
+                  value={value.rfOperationCode}
+                  onChange={handleChange("rfOperationCode")}
                 />
                 <PaymentDocumentInput
                   type={"copy"}
                   width={314}
                   title={<span>Код основного налогового плательщика</span>}
                   icon={true}
+                  value={value.rfMainTaxPayerCode}
+                  onChange={handleChange("rfMainTaxPayerCode")}
                 />
               </Group>
               <Group>
@@ -31,18 +50,24 @@ export const RfKzIndiaTab: FC = () => {
                   width={149}
                   title={<span>Код выплат</span>}
                   icon={true}
+                  value={value.rfPaymentCode}
+                  onChange={handleChange("rfPaymentCode")}
                 />
                 <PaymentDocumentInput
                   type={"copy"}
                   width={149}
                   title={<span>КПП получателя</span>}
                   icon={false}
+                  value={value.rfRecipientKpp}
+                  onChange={handleChange("rfRecipientKpp")}
                 />
                 <PaymentDocumentInput
                   type={"copy"}
                   width={314}
                   title={<span>Уникальный идентификатор платежа</span>}
                   icon={false}
+                  value={value.rfUniquePaymentId}
+                  onChange={handleChange("rfUniquePaymentId")}
                 />
               </Group>
               <Group>
@@ -51,12 +76,16 @@ export const RfKzIndiaTab: FC = () => {
                   width={314}
                   title={<span>Код бюджетной классификации</span>}
                   icon={false}
+                  value={value.rfBudgetClassificationCode}
+                  onChange={handleChange("rfBudgetClassificationCode")}
                 />
                 <PaymentDocumentInput
                   type={"copy"}
                   width={149}
                   title={<span>Код ОКТМО</span>}
                   icon={false}
+                  value={value.rfOktmoCode}
+                  onChange={handleChange("rfOktmoCode")}
                 />
               </Group>
               <Group>
@@ -69,6 +98,8 @@ export const RfKzIndiaTab: FC = () => {
                   icon={false}
                   type={"copy"}
                   width={314}
+                  value={value.rfTaxPeriodCode}
+                  onChange={handleChange("rfTaxPeriodCode")}
                 />
                 <PaymentDocumentInput
                   title={
@@ -79,6 +110,8 @@ export const RfKzIndiaTab: FC = () => {
                   icon={true}
                   type={"date"}
                   width={149}
+                  value={value.rfTaxDocumentDate}
+                  onChange={handleChange("rfTaxDocumentDate")}
                 />
                 <PaymentDocumentInput
                   title={
@@ -89,6 +122,8 @@ export const RfKzIndiaTab: FC = () => {
                   icon={false}
                   type={"copy"}
                   width={149}
+                  value={value.rfTaxDocumentNumber}
+                  onChange={handleChange("rfTaxDocumentNumber")}
                 />
               </Group>
             </>
@@ -99,6 +134,8 @@ export const RfKzIndiaTab: FC = () => {
               icon={false}
               type={"copy"}
               width={149}
+              value={value.rfIncomeTypeCode}
+              onChange={handleChange("rfIncomeTypeCode")}
             />
           </ChildrenPanel>
           <ChildrenPanel title={"Платежи в Казахстан"}>
@@ -114,6 +151,8 @@ export const RfKzIndiaTab: FC = () => {
                   icon={false}
                   type={"copy"}
                   width={149}
+                  value={value.kzPaymentPurposeCode}
+                  onChange={handleChange("kzPaymentPurposeCode")}
                 />
                 <PaymentDocumentInput
                   title={
@@ -124,12 +163,16 @@ export const RfKzIndiaTab: FC = () => {
                   icon={true}
                   type={"copy"}
                   width={149}
+                  value={value.kzSentFundsCode}
+                  onChange={handleChange("kzSentFundsCode")}
                 />
                 <PaymentDocumentInput
                   title={<span>Код бенефициара</span>}
                   icon={true}
                   type={"copy"}
                   width={149}
+                  value={value.kzBeneficiaryCode}
+                  onChange={handleChange("kzBeneficiaryCode")}
                 />
                 <PaymentDocumentInput
                   title={
@@ -141,6 +184,8 @@ export const RfKzIndiaTab: FC = () => {
                   icon={false}
                   type={"copy"}
                   width={149}
+                  value={value.kzBudgetClassificationCode}
+                  onChange={handleChange("kzBudgetClassificationCode")}
                 />
               </Group>
               <Group>
@@ -149,12 +194,16 @@ export const RfKzIndiaTab: FC = () => {
                   icon={true}
                   type={"copy"}
                   width={314}
+                  value={value.kzIdNumberType}
+                  onChange={handleChange("kzIdNumberType")}
                 />
                 <PaymentDocumentInput
                   title={<span>Идентификационный номер</span>}
                   icon={false}
                   type={"copy"}
                   width={314}
+                  value={value.kzIdNumber}
+                  onChange={handleChange("kzIdNumber")}
                 />
               </Group>
             </>
@@ -170,12 +219,16 @@ export const RfKzIndiaTab: FC = () => {
                   title={<span>LEI</span>}
                   type={"copy"}
                   icon={false}
+                  value={value.payerLei}
+                  onChange={handleChange("payerLei")}
                 />
                 <PaymentDocumentInput
                   width={149}
                   title={<span>БИК</span>}
                   type={"copy"}
                   icon={false}
+                  value={value.payerBic}
+                  onChange={handleChange("payerBic")}
                 />
               </Group>
             </ChildrenPanel>
@@ -189,12 +242,16 @@ export const RfKzIndiaTab: FC = () => {
                   title={<span>LEI</span>}
                   type={"copy"}
                   icon={false}
+                  value={value.beneficiaryLei}
+                  onChange={handleChange("beneficiaryLei")}
                 />
                 <PaymentDocumentInput
                   width={149}
                   title={<span>БИК</span>}
                   type={"copy"}
                   icon={false}
+                  value={value.beneficiaryBic}
+                  onChange={handleChange("beneficiaryBic")}
                 />
               </Group>
             </ChildrenPanel>

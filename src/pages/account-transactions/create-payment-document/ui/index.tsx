@@ -2,7 +2,12 @@ import { FC, useCallback, useState } from "react";
 import { Button, Tabs } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { MainDetailsTab } from "@pages/account-transactions/create-payment-document/ui/components/tabs/main-details-tab";
-import { postPaymentInstruction } from "@shared/api/mutation/account-transactions-api.ts";
+import { mapStateToPayload } from "@pages/account-transactions/create-payment-document/ui/map-state-to-payload";
+import {
+  createInitialPaymentFormState,
+  PaymentFormState,
+} from "@pages/account-transactions/create-payment-document/ui/types";
+import { checkPaymentInstruction } from "@shared/api/mutation/account-transactions-api.ts";
 import { useMutation } from "@tanstack/react-query";
 
 import { AdministrativeDataTab } from "./components/tabs/administrative-data-tab";
@@ -11,27 +16,62 @@ import { PaymentDetailsTab } from "./components/tabs/payment-details-tab";
 import { RfKzIndiaTab } from "./components/tabs/rf-kz-india-tab";
 import styles from "./index.module.scss";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type PartialAny = Record<string, any>;
-
 export const CreatePaymentDocument: FC = () => {
-  const [form, setForm] = useState({
-    mainDetails: {} as PartialAny,
-    paymentDetails: {} as PartialAny,
-    autoDetails: {} as PartialAny,
-    rfKzIndia: {} as PartialAny,
-    administrativeData: {} as PartialAny,
-  });
+  const [form, setForm] = useState<PaymentFormState>(
+    createInitialPaymentFormState(),
+  );
 
-  const setMainDetails = useCallback((patch: PartialAny) => {
-    console.log("setMainDetails patch:", patch);
-    setForm((s) => ({ ...s, mainDetails: { ...s.mainDetails, ...patch } }));
-  }, []);
+  const setPaymentMain = useCallback(
+    (patch: Partial<PaymentFormState["paymentMain"]>) => {
+      setForm((s) => ({ ...s, paymentMain: { ...s.paymentMain, ...patch } }));
+    },
+    [],
+  );
+
+  const setPaymentDetails = useCallback(
+    (patch: Partial<PaymentFormState["paymentDetails"]>) => {
+      setForm((s) => ({
+        ...s,
+        paymentDetails: { ...s.paymentDetails, ...patch },
+      }));
+    },
+    [],
+  );
+
+  const setAutoDetails = useCallback(
+    (patch: Partial<PaymentFormState["autoPaymentDetails"]>) => {
+      setForm((s) => ({
+        ...s,
+        autoPaymentDetails: { ...s.autoPaymentDetails, ...patch },
+      }));
+    },
+    [],
+  );
+
+  const setRfKzIndia = useCallback(
+    (patch: Partial<PaymentFormState["paymentRuKzIn"]>) => {
+      setForm((s) => ({
+        ...s,
+        paymentRuKzIn: { ...s.paymentRuKzIn, ...patch },
+      }));
+    },
+    [],
+  );
+
+  const setAdministrativeData = useCallback(
+    (patch: Partial<PaymentFormState["administrativeData"]>) => {
+      setForm((s) => ({
+        ...s,
+        administrativeData: { ...s.administrativeData, ...patch },
+      }));
+    },
+    [],
+  );
 
   const mutation = useMutation({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mutationFn: async (payload: any) => {
-      return await postPaymentInstruction(payload);
+    mutationFn: async (payload: PaymentFormState) => {
+      const dto = mapStateToPayload(payload);
+      return await checkPaymentInstruction(dto);
     },
     onSuccess: (data) => {
       // postPaymentInstruction показывает уведомления сам, но можно обработать data здесь
@@ -55,26 +95,7 @@ export const CreatePaymentDocument: FC = () => {
   });
 
   const onCheck = async (): Promise<void> => {
-    const payload = {
-      ...form.mainDetails,
-      paymentDetails: { ...form.paymentDetails },
-      autoPaymentDetails: { ...form.autoDetails },
-      paymentRuKzIn: { ...form.rfKzIndia },
-      administrativeData: {
-        paymentOrderId: form.administrativeData?.paymentOrderId ?? "",
-        creator: form.administrativeData?.creator ?? "",
-        editor: form.administrativeData?.editor ?? "",
-        unlocker: form.administrativeData?.unlocker ?? "",
-        messageId: form.administrativeData?.messageId ?? "",
-        instructionId: form.administrativeData?.instructionId ?? "",
-        endToEndId: form.administrativeData?.endToEndId ?? "",
-        uetr: form.administrativeData?.uetr ?? "",
-        status: form.administrativeData?.status ?? "POSTED",
-      },
-    };
-
-    console.log("Payload to send:", payload);
-    mutation.mutate(payload);
+    mutation.mutate(form);
   };
 
   return (
@@ -114,11 +135,20 @@ export const CreatePaymentDocument: FC = () => {
         </Tabs.List>
 
         {/* Важно: передаём value и onChange во все табы */}
-        <MainDetailsTab value={form.mainDetails} onChange={setMainDetails} />
-        <PaymentDetailsTab />
-        <RfKzIndiaTab />
-        <AutomaticDetailsTab />
-        <AdministrativeDataTab />
+        <MainDetailsTab value={form.paymentMain} onChange={setPaymentMain} />
+        <PaymentDetailsTab
+          value={form.paymentDetails}
+          onChange={setPaymentDetails}
+        />
+        <RfKzIndiaTab value={form.paymentRuKzIn} onChange={setRfKzIndia} />
+        <AutomaticDetailsTab
+          value={form.autoPaymentDetails}
+          onChange={setAutoDetails}
+        />
+        <AdministrativeDataTab
+          value={form.administrativeData}
+          onChange={setAdministrativeData}
+        />
       </Tabs>
     </div>
   );

@@ -3,6 +3,166 @@ import { AxiosError } from "axios";
 
 import { $authHost } from "../index";
 
+export type ChargeBearerType = "OUR" | "FRE" | "SHA" | "BEN" | "OUROUR";
+
+export interface PaymentMainDto {
+  documentNumber: string;
+  documentDate: string; // YYYY-MM-DD
+  transactionCurrency: string;
+  currencyExchangeRate: number;
+  transactionAmount: number;
+  transactionAmountInWords: string;
+  transactionCommissionAmount: number;
+  priority: string;
+  payerBankCountryAlphaCode: string;
+  payerBic: string;
+  payerAccount: string;
+  payerCurrency: string;
+  payerName: string;
+  payerDataRegCountry: string;
+  payerDataIdentificationNumber: string;
+  payerDataActualName: string;
+  payerDataCountry: string;
+  payerDataSettlementName: string;
+  payerDataAddress: string;
+  beneficiaryBankCountryAlphaCode: string;
+  beneficiaryBic: string;
+  beneficiarySwiftCode: string;
+  beneficiaryBankAccount: string;
+  beneficiaryBankName: string;
+  beneficiaryAccount: string;
+  beneficiaryCurrency: string;
+  beneficiaryAmount: number;
+  beneficiaryName: string;
+  beneficiaryCountry: string;
+  beneficiaryIdentificationNumber: string;
+  beneficiaryDataCountry: string;
+  beneficiarySettlementName: string;
+  beneficiaryAddress: string;
+  paymentDescription: string;
+  payerUnp: string;
+  beneficiaryUnp: string;
+  thirdPartyUnp: string;
+  paymentCode: number;
+  paymentPriorityCode: number;
+  currencyOperationCode: string;
+  dtOperationType: string;
+  ktOperationType: string;
+  beneficiaryCorrespondentBankCountry: string;
+  beneficiaryCorrespondentBankBic: string;
+  beneficiaryCorrespondentBankSwiftCode: string;
+  beneficiaryCorrespondentBankAccount: string;
+  beneficiaryCorrespondentBankName: string;
+  senderCorrespondentBankCountry: string;
+  senderCorrespondentBankBic: string;
+  senderCorrespondentBankSwiftCode: string;
+  senderCorrespondentBankAccount: string;
+  senderCorrespondentBankName: string;
+  intermediaryBankCountry: string;
+  intermediaryBankBic: string;
+  intermediaryBankSwiftCode: string;
+  intermediaryBankAccount: string;
+  intermediaryBankName: string;
+  signChargeBearerType: ChargeBearerType;
+  signCommissionAccount: string;
+  signCommissionCurrency: string;
+  signCommissionDate: string;
+  signIgnoreAccountLock: boolean;
+  signSuppressSwiftMtGeneration: boolean;
+  signPayFromReservedFunds: boolean;
+  signNoCommission: boolean;
+  additionalParameter: string;
+}
+
+export interface PaymentDetailsDto {
+  description1: string;
+  description2: string;
+  description3: string;
+  description4: string;
+  description5: string;
+  vedDocumentNumber: string;
+  tnVedCode: string;
+}
+
+export interface AutoPaymentDetailsDto {
+  arrivalDateTime: string;
+  executionDate: string;
+  debitValueDate: string;
+  creditValueDate: string;
+  settlementDocumentNumber: string;
+  settlementDocumentDate: string;
+  representationMethod: string;
+  paymentMethod: string;
+  reference20: string;
+  reference21: string;
+  sourceMessageType: string;
+  bissOperationCode: string;
+  bissPaymentType: string;
+  bissExpenseDetails: string;
+  isoPurposeCodeAlpha: string;
+  isoPurposeCodeNumeric: string;
+  isoPaymentType: string;
+  isoTransferPriority: string;
+  isoProcessingPriority: string;
+  isoPayerCommissionType: string;
+  isoMessageType: string;
+  isoSequenceType: string;
+  payerDocumentCode: string;
+  payerDocumentSeriesAndNumber: string;
+  payerDocumentIdNumber: string;
+  payerDocumentIssueDate: string;
+  payerDocumentIssuer: string;
+  beneficiaryDocumentCode: string;
+  beneficiaryDocumentSeriesAndNumber: string;
+  beneficiaryDocumentIdNumber: string;
+  beneficiaryDocumentIssueDate: string;
+  beneficiaryDocumentIssuer: string;
+}
+
+export interface PaymentRuKzInDto {
+  rfOperationCode: string;
+  rfMainTaxPayerCode: string;
+  rfPaymentCode: string;
+  rfRecipientKpp: string;
+  rfUniquePaymentId: string;
+  rfBudgetClassificationCode: string;
+  rfOktmoCode: string;
+  rfTaxPeriodCode: string;
+  rfTaxDocumentDate: string;
+  rfTaxDocumentNumber: string;
+  rfIncomeTypeCode: string;
+  kzPaymentPurposeCode: string;
+  kzSentFundsCode: string;
+  kzBeneficiaryCode: string;
+  kzBudgetClassificationCode: string;
+  kzIdNumberType: string;
+  kzIdNumber: string;
+  payerLei: string;
+  payerBic: string;
+  beneficiaryLei: string;
+  beneficiaryBic: string;
+}
+
+export interface AdministrativeDataDto {
+  paymentOrderId: string;
+  creator: string;
+  editor: string;
+  unlocker: string;
+  messageId: string;
+  instructionId: string;
+  endToEndId: string;
+  uetr: string;
+  status: string;
+}
+
+export interface CheckPaymentInstructionPayload {
+  paymentMainDto: PaymentMainDto;
+  paymentDetails: PaymentDetailsDto;
+  autoPaymentDetails: AutoPaymentDetailsDto;
+  paymentRuKzIn: PaymentRuKzInDto;
+  administrativeData: AdministrativeDataDto;
+}
+
 export interface MainDetailsPayload {
   documentNumber: string;
   documentDate: string; // YYYY-MM-DD
@@ -197,6 +357,53 @@ export const postPaymentInstruction = async (
       color: "red",
       autoClose: 7000,
     });
+    return { error: true };
+  }
+};
+
+export const checkPaymentInstruction = async (
+  payload: CheckPaymentInstructionPayload,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> => {
+  try {
+    const response = await $authHost.put(
+      "/payment/payment-instruction/check",
+      payload,
+    );
+
+    notifications.show({
+      title: "Проверка",
+      message: "Поручение отправлено на проверку",
+      color: "green",
+      autoClose: 5000,
+    });
+
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const message =
+        error.response?.data?.message ||
+        "Произошла ошибка при проверке платежного поручения";
+      notifications.show({
+        title: "Ошибка",
+        message,
+        color: "red",
+        autoClose: 7000,
+      });
+      return {
+        error: true,
+        // eslint-disable-next-line unicorn/no-null
+        details: error.response?.data || null,
+      };
+    }
+
+    notifications.show({
+      title: "Ошибка",
+      message: "Неизвестная ошибка",
+      color: "red",
+      autoClose: 7000,
+    });
+
     return { error: true };
   }
 };
